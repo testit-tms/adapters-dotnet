@@ -10,4 +10,4 @@ The repository contains new versions of adaptors for dotnet test frameworks.
 
 Supported test frameworks :
 
-1. [MsTest/NUnit](https://github.com/testit-tms/adapters-dotnet/tree/main/TmsRunner)
+1. [MsTest/NUnit](https://github.com/testit-tms/adapters-dotnet/tree/main/Tms.Adapter)
