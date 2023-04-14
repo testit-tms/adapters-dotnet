@@ -13,12 +13,11 @@
         <RepositoryUrl>https://github.com/testit-tms/adapters-dotnet</RepositoryUrl>
         <PackageProjectUrl>https://testit.software</PackageProjectUrl>
         <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
-        <PackageIcon>icon.png</PackageIcon>
     </PropertyGroup>
 
     <ItemGroup>
-        <None Include="../TmsRunner/README.md" Pack="true" PackagePath="$(PackageReadmeFile)" />
         <None Include="../LICENSE.md" Pack="true" PackagePath="$(PackageLicenseFile)" />
+        <None Include="./README.md" Pack="true" PackagePath="$(PackageReadmeFile)" />
     </ItemGroup>
 
     <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
