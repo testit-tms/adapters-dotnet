@@ -1,4 +1,4 @@
-# TestIT Dotnet Integrations
+# Test IT Dotnet Integrations
 
 The repository contains new versions of adaptors for dotnet test frameworks.
 
