@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <Version>1.0.0</Version>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <Nullable>enable</Nullable>
+        <IsPackable>true</IsPackable>
+        <Title>Test IT MSTest/UNit adapter</Title>
+        <PackageId>TestIT.Adapter</PackageId>
+        <Authors>Integration team</Authors>
+        <Description>Test IT MSTest/UNit adapter</Description>
+        <Copyright>Copyright (c) 2019 - 2023 Test IT</Copyright>
+        <RepositoryUrl>https://github.com/testit-tms/adapters-dotnet</RepositoryUrl>
+        <PackageProjectUrl>https://testit.software</PackageProjectUrl>
+        <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+        <PackageIcon>icon.png</PackageIcon>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="../TmsRunner/README.md" Pack="true" PackagePath="$(PackageReadmeFile)" />
+        <None Include="../LICENSE.md" Pack="true" PackagePath="$(PackageLicenseFile)" />
+    </ItemGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+        <LangVersion>preview</LangVersion>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+        <LangVersion>preview</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Fody" Version="6.6.4" />
+        <PackageReference Include="MethodBoundaryAspect.Fody" Version="2.0.148" />
+        <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="17.5.0" />
+        <PackageReference Include="System.Text.Json" Version="7.0.2" />
+    </ItemGroup>
+
+</Project>

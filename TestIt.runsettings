@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RunSettings>
+  <RunConfiguration>
+    <TestAdaptersPaths>.</TestAdaptersPaths>
+  </RunConfiguration>
+  <LoggerRunSettings>
+    <Loggers>
+      <Logger friendlyName="TestIt" enabled="True">
+        <Configuration>
+          <Key1>Value1</Key1>
+          <Key2>Value2</Key2>
+        </Configuration>
+      </Logger>
+    </Loggers>
+  </LoggerRunSettings>
+</RunSettings>

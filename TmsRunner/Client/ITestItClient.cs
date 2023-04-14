@@ -1,0 +1,16 @@
+using TestIt.Client.Model;
+using TmsRunner.Models;
+
+namespace TmsRunner.Client;
+
+public interface ITestItClient
+{
+    Task<string> CreateTestRun();
+    Task<List<string>> GetAutoTestsForRun(string testRunId);
+    Task SubmitResultToTestRun(string guid, AutoTestResult result);
+    Task<AttachmentModel> UploadAttachment(string fileName, Stream content);
+    Task<AutoTestModel?> GetAutotestByExternalId(string externalId);
+    Task<AutoTestModel> CreateAutotest(AutoTest model);
+    Task UpdateAutotest(AutoTest model);
+    Task LinkAutoTestToWorkItem(string autotestId, string workItemId);
+}
