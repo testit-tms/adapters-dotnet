@@ -43,41 +43,43 @@ jobs:
         with:
           name: NuGet-package
           path: ${{ env.NUGET_DIR }}/*.nupkg
-
-#  publish:
-#    runs-on: ubuntu-latest
-#    needs: [ build ]
-#    steps:
-#      - name: Download artifacts
-#        uses: actions/download-artifact@v3
-#        with:
-#          name: NuGet-package
-#          path: ${{ env.NUGET_DIR }}
-#
-#      - name: Publish to NuGet.org
-#        run: |
-#          dotnet nuget push ${{ env.NUGET_DIR }}/*.nupkg \
-#          --skip-duplicate \
-#          --source https://api.nuget.org/v3/index.json \
-#          --api-key ${{ secrets.NUGET_PUBLISH_KEY }}
-#
-#      - name: Publish to GitHub Packages
-#        run: |
-#          dotnet nuget push ${{ env.NUGET_DIR }}/*.nupkg \
-#          --skip-duplicate \
-#          --source https://nuget.pkg.github.com/testit-tms/index.json \
-#          --api-key ${{ secrets.GITHUB_TOKEN }}
+  
+  #  publish:
+  #    runs-on: ubuntu-latest
+  #    needs: [ build ]
+  #    steps:
+  #      - name: Download artifacts
+  #        uses: actions/download-artifact@v3
+  #        with:
+  #          name: NuGet-package
+  #          path: ${{ env.NUGET_DIR }}
+  #
+  #      - name: Publish to NuGet.org
+  #        run: |
+  #          dotnet nuget push ${{ env.NUGET_DIR }}/*.nupkg \
+  #          --skip-duplicate \
+  #          --source https://api.nuget.org/v3/index.json \
+  #          --api-key ${{ secrets.NUGET_PUBLISH_KEY }}
+  #
+  #      - name: Publish to GitHub Packages
+  #        run: |
+  #          dotnet nuget push ${{ env.NUGET_DIR }}/*.nupkg \
+  #          --skip-duplicate \
+  #          --source https://nuget.pkg.github.com/testit-tms/index.json \
+  #          --api-key ${{ secrets.GITHUB_TOKEN }}
   
   runner_build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        os: [
-          win-x64,
-          linux-x64,
-          osx-x64
-        ]
-#    needs: [ publish ]
+        include:
+          - os: win-x64
+            artifact_name: TmsRunner.exe
+          - os: linux-x64
+            artifact_name: TmsRunner
+          - os: osx-x64
+            artifact_name: TmsRunner
+    #    needs: [ publish ]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -100,17 +102,13 @@ jobs:
           --self-contained true \
           --output ./publish \
           --no-restore ${{ env.RUNNER_DIR }} 
-      
-      - name: Remove files
-        run: |
-          rm ./publish/*.pdb
-          rm ./publish/*.xml
-          
-      - name: Create NuGet package
-        uses: AButler/upload-release-assets@v2.0
-        with:
-          files: './publish/*;'
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-          release-tag: ${{ github.event.release.tag_name }}
 
-      
+      - name: Upload binaries to release
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: publish/${{ matrix.artifact_name }}
+          asset_name: ${{ matrix.artifact_name }}-${{ matrix.os }}-${{ github.ref }}
+          tag: ${{ github.ref }}
+          overwrite: true
+    
