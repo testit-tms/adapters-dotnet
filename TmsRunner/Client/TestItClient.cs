@@ -119,6 +119,7 @@ namespace TmsRunner.Client
             _logger.Debug("Creating autotest {@Autotest}", dto);
 
             var model = Converter.ConvertAutoTestDtoToPostModel(dto, _settings.ProjectId);
+            model.ShouldCreateWorkItem = _settings.AutomaticCreationTestCases;
             var response = await _autoTests.CreateAutoTestAsync(model);
 
             _logger.Debug("Create autotest {@Autotest} is successfully", response);

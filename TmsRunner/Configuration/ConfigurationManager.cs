@@ -66,7 +66,7 @@ namespace TmsRunner.Configuration
                 throw new ConfigurationErrorsException("Configuration id is empty");
             }
 
-            if (!string.IsNullOrWhiteSpace(settings.RunSettings) && !IsValidXML(settings.RunSettings))
+            if (!string.IsNullOrWhiteSpace(settings.RunSettings) && !IsValidXml(settings.RunSettings))
             {
                 throw new ConfigurationErrorsException("Run settings is invalid");
             }
@@ -97,7 +97,7 @@ namespace TmsRunner.Configuration
             }
         }
 
-        private static bool IsValidXML(string xmlStr)
+        private static bool IsValidXml(string xmlStr)
         {
             try
             {

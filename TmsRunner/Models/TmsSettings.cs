@@ -17,4 +17,5 @@ public class TmsSettings
     public string TestRunName { get; set; }
     public int AdapterMode { get; set; }
     public string RunSettings { get; set; }
+    public bool AutomaticCreationTestCases { get; set; }
 }

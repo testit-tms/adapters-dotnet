@@ -53,6 +53,9 @@ public class AdapterConfig
     [Option("TmsRunSettings", Required = false, HelpText = "Set run settings.")]
     public string TmsRunSettings { get; set; }
 
+    [Option("TmsAutomaticCreationTestCases", Required = false, HelpText = "Set automatic creation test cases.")]
+    public string TmsAutomaticCreationTestCases { get; set; }
+
     public Config ToInternalConfig()
     {
         return new Config
@@ -65,7 +68,8 @@ public class AdapterConfig
             TmsTestRunName = TmsTestRunName,
             TmsAdapterMode = TmsAdapterMode,
             TmsConfigFile = TmsConfigFile,
-            TmsRunSettings = TmsRunSettings
+            TmsRunSettings = TmsRunSettings,
+            TmsAutomaticCreationTestCases = TmsAutomaticCreationTestCases
         };
     }
 }

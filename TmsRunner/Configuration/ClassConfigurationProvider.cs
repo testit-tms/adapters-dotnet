@@ -24,7 +24,8 @@ public class ClassConfigurationProvider : ConfigurationProvider
             { "TestRunName", _config.TmsTestRunName },
             { "AdapterMode", _config.TmsAdapterMode },
             { "ConfigFile", _config.TmsConfigFile },
-            { "RunSettings", _config.TmsRunSettings }
+            { "RunSettings", _config.TmsRunSettings },
+            { "AutomaticCreationTestCases", _config.TmsAutomaticCreationTestCases }
         };
 
         Data = data
