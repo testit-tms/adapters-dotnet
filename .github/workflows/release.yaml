@@ -44,29 +44,29 @@ jobs:
           name: NuGet-package
           path: ${{ env.NUGET_DIR }}/*.nupkg
   
-  #  publish:
-  #    runs-on: ubuntu-latest
-  #    needs: [ build ]
-  #    steps:
-  #      - name: Download artifacts
-  #        uses: actions/download-artifact@v3
-  #        with:
-  #          name: NuGet-package
-  #          path: ${{ env.NUGET_DIR }}
-  #
-  #      - name: Publish to NuGet.org
-  #        run: |
-  #          dotnet nuget push ${{ env.NUGET_DIR }}/*.nupkg \
-  #          --skip-duplicate \
-  #          --source https://api.nuget.org/v3/index.json \
-  #          --api-key ${{ secrets.NUGET_PUBLISH_KEY }}
-  #
-  #      - name: Publish to GitHub Packages
-  #        run: |
-  #          dotnet nuget push ${{ env.NUGET_DIR }}/*.nupkg \
-  #          --skip-duplicate \
-  #          --source https://nuget.pkg.github.com/testit-tms/index.json \
-  #          --api-key ${{ secrets.GITHUB_TOKEN }}
+    publish:
+      runs-on: ubuntu-latest
+      needs: [ build ]
+      steps:
+        - name: Download artifacts
+          uses: actions/download-artifact@v3
+          with:
+            name: NuGet-package
+            path: ${{ env.NUGET_DIR }}
+
+        - name: Publish to NuGet.org
+          run: |
+            dotnet nuget push ${{ env.NUGET_DIR }}/*.nupkg \
+            --skip-duplicate \
+            --source https://api.nuget.org/v3/index.json \
+            --api-key ${{ secrets.NUGET_PUBLISH_KEY }}
+
+        - name: Publish to GitHub Packages
+          run: |
+            dotnet nuget push ${{ env.NUGET_DIR }}/*.nupkg \
+            --skip-duplicate \
+            --source https://nuget.pkg.github.com/testit-tms/index.json \
+            --api-key ${{ secrets.GITHUB_TOKEN }}
   
   runner_build:
     runs-on: ubuntu-latest
