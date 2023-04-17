@@ -21,4 +21,6 @@ public class Config
     public string TmsRunSettings { get; set; }
     
     public string TmsAutomaticCreationTestCases { get; set; }
+
+    public string TmsCertValidation { get; set; }
 }

@@ -18,4 +18,5 @@ public class TmsSettings
     public int AdapterMode { get; set; }
     public string RunSettings { get; set; }
     public bool AutomaticCreationTestCases { get; set; }
+    public bool CertValidation { get; set; }
 }
