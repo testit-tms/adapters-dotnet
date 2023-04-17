@@ -75,13 +75,13 @@ jobs:
         include:
           - os: win-x64
             artifact_name: TmsRunner.exe
-            asset_name: TmsRunner-${{ matrix.os }}-${{ github.event.release.tag_name }}.exe
+            asset_name: TmsRunner-win-x64-${{ github.event.release.tag_name }}.exe
           - os: linux-x64
             artifact_name: TmsRunner
-            asset_name: TmsRunner-${{ matrix.os }}-${{ github.event.release.tag_name }}
+            asset_name: TmsRunner-linux-x64-${{ github.event.release.tag_name }}
           - os: osx-x64
             artifact_name: TmsRunner
-            asset_name: TmsRunner-${{ matrix.os }}-${{ github.event.release.tag_name }}
+            asset_name: TmsRunner-osx-x64-${{ github.event.release.tag_name }}
     #    needs: [ publish ]
     steps:
       - name: Checkout
