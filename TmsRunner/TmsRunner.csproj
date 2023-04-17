@@ -12,6 +12,9 @@
     <Copyright>Copyright (c) 2019 - 2023 Test IT</Copyright>
     <RepositoryUrl>https://github.com/testit-tms/adapters-dotnet</RepositoryUrl>
     <PackageProjectUrl>https://testit.software</PackageProjectUrl>
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>true</SelfContained>
+    <RuntimeIdentifiers>win-x64;linux-x64;osx-x64</RuntimeIdentifiers>
   </PropertyGroup>
 
   <ItemGroup>
