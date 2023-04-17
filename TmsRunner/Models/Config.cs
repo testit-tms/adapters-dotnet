@@ -19,4 +19,8 @@ public class Config
     public string TmsConfigFile { get; set; }
 
     public string TmsRunSettings { get; set; }
+    
+    public string TmsAutomaticCreationTestCases { get; set; }
+
+    public string TmsCertValidation { get; set; }
 }

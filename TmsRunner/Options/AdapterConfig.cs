@@ -44,7 +44,7 @@ public class AdapterConfig
     [Option("tmsTestRunName", Required = false, HelpText = "Set test run name.")]
     public string TmsTestRunName { get; set; }
 
-    [Option("tmsAdapterMode", Required = false, HelpText = "Set adapter mode.")]
+    [Option("tmsAdapterMode", Default = "2", Required = false, HelpText = "Set adapter mode.")]
     public string TmsAdapterMode { get; set; }
 
     [Option("TmsConfigFile", Required = false, HelpText = "Set configuration file name.")]
@@ -52,6 +52,12 @@ public class AdapterConfig
 
     [Option("TmsRunSettings", Required = false, HelpText = "Set run settings.")]
     public string TmsRunSettings { get; set; }
+
+    [Option("TmsAutomaticCreationTestCases", Required = false, HelpText = "Set automatic creation test cases.")]
+    public string TmsAutomaticCreationTestCases { get; set; }
+
+    [Option("TmsCertValidation", Default = "true", Required = false, HelpText = "Set certificate validation.")]
+    public string TmsCertValidation { get; set; }
 
     public Config ToInternalConfig()
     {
@@ -65,7 +71,9 @@ public class AdapterConfig
             TmsTestRunName = TmsTestRunName,
             TmsAdapterMode = TmsAdapterMode,
             TmsConfigFile = TmsConfigFile,
-            TmsRunSettings = TmsRunSettings
+            TmsRunSettings = TmsRunSettings,
+            TmsAutomaticCreationTestCases = TmsAutomaticCreationTestCases,
+            TmsCertValidation = TmsCertValidation
         };
     }
 }

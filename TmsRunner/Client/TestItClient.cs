@@ -24,9 +24,12 @@ namespace TmsRunner.Client
             cfg.AddApiKeyPrefix("Authorization", "PrivateToken");
             cfg.AddApiKey("Authorization", settings.PrivateToken);
 
-            _testRuns = new TestRunsApi(cfg);
-            _attachments = new AttachmentsApi(cfg);
-            _autoTests = new AutoTestsApi(cfg);
+            var httpClientHandler = new HttpClientHandler();
+            httpClientHandler.ServerCertificateCustomValidationCallback = (_, _, _, _) => _settings.CertValidation;
+
+            _testRuns = new TestRunsApi(new HttpClient(), cfg, httpClientHandler);
+            _attachments = new AttachmentsApi(new HttpClient(), cfg, httpClientHandler);
+            _autoTests = new AutoTestsApi(new HttpClient(), cfg, httpClientHandler);
         }
 
         public async Task<string> CreateTestRun()
@@ -119,6 +122,7 @@ namespace TmsRunner.Client
             _logger.Debug("Creating autotest {@Autotest}", dto);
 
             var model = Converter.ConvertAutoTestDtoToPostModel(dto, _settings.ProjectId);
+            model.ShouldCreateWorkItem = _settings.AutomaticCreationTestCases;
             var response = await _autoTests.CreateAutoTestAsync(model);
 
             _logger.Debug("Create autotest {@Autotest} is successfully", response);
