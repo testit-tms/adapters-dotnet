@@ -3,7 +3,7 @@ using TmsRunner.Models;
 
 namespace TmsRunner.Client;
 
-public interface ITestItClient
+public interface ITmsClient
 {
     Task<string> CreateTestRun();
     Task<List<string>> GetAutoTestsForRun(string testRunId);

@@ -40,7 +40,7 @@ internal class Program
             return 1;
         }
 
-        ITestItClient apiClient = new TestItClient(settings);
+        ITmsClient apiClient = new TmsClient(settings);
 
         var replacer = new Replacer();
 

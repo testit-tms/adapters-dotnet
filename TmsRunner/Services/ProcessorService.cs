@@ -16,8 +16,8 @@ namespace TmsRunner.Services
 {
     public class ProcessorService
     {
-        private readonly ITestItClient _apiClient;
-        private readonly TmsSettings _testItSettings;
+        private readonly ITmsClient _apiClient;
+        private readonly TmsSettings _tmsSettings;
         private readonly LogParser _parser;
         private readonly IMapper _mapper;
         private readonly Dictionary<string, List<Step>> _autoTestSteps = new();
@@ -25,12 +25,12 @@ namespace TmsRunner.Services
         private readonly ILogger _logger = LoggerFactory.GetLogger().ForContext<ProcessorService>();
 
         public ProcessorService(
-            ITestItClient apiClient,
-            TmsSettings testItSettings,
+            ITmsClient apiClient,
+            TmsSettings tmsSettings,
             LogParser parser)
         {
             _apiClient = apiClient;
-            _testItSettings = testItSettings;
+            _tmsSettings = tmsSettings;
             _parser = parser;
             _mapper = MapperFactory.ConfigureMapper();
         }
@@ -256,7 +256,7 @@ namespace TmsRunner.Services
             var autoTestResultRequestBody = GetAutoTestResultsForTestRunModel(testResult, testCaseSteps, autoTest,
                 traceJson, parameters, attachmentIds);
 
-            await _apiClient.SubmitResultToTestRun(_testItSettings.TestRunId, autoTestResultRequestBody);
+            await _apiClient.SubmitResultToTestRun(_tmsSettings.TestRunId, autoTestResultRequestBody);
         }
 
         private AutoTestResult GetAutoTestResultsForTestRunModel(TestResult testResult,
