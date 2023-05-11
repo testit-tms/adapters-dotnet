@@ -33,15 +33,15 @@ dotnet package add TestIt.Adapter
 
     ``` json
     {
-      "url": "{%URL%}",
-      "privateToken": "{%USER_PRIVATE_TOKEN%} ",
-      "projectId": "{%PROJECT_ID%}",
-      "configurationId": "{%CONFIGURATION_ID%}",
-      "testRunId": "{%TEST_RUN_ID%}",
-      "testRunName": "{%TEST_RUN_NAME%}",
-      "adapterMode": {%ADAPTER_MODE%},
-      "automaticCreationTestCases": {%AUTOMATIC_CREATION_TEST_CASES%},
-      "certValidation": {%CERT_VALIDATION%}
+      "url": "URL",
+      "privateToken": "USER_PRIVATE_TOKEN",
+      "projectId": "PROJECT_ID",
+      "configurationId": "CONFIGURATION_ID",
+      "testRunId": "TEST_RUN_ID",
+      "testRunName": "TEST_RUN_NAME",
+      "adapterMode": ADAPTER_MODE,
+      "automaticCreationTestCases": AUTOMATIC_CREATION_TEST_CASES,
+      "certValidation": CERT_VALIDATION
     }
     ```
 
