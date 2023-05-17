@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <PackageId>TestIT.Adapter.XUnit</PackageId>
+        <Version>1.0.0</Version>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <LangVersion>latest</LangVersion>
+        <IsPackable>true</IsPackable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="AspectInjector" Version="2.8.1" />
+      <PackageReference Include="xunit.core" Version="2.4.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Tms.Adapter.Core\Tms.Adapter.Core.csproj" />
+    </ItemGroup>
+
+</Project>

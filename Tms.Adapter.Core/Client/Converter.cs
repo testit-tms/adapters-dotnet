@@ -1,0 +1,158 @@
+using TestIt.Client.Model;
+using Tms.Adapter.Core.Models;
+using LinkType = Tms.Adapter.Core.Models.LinkType;
+
+namespace Tms.Adapter.Core.Client;
+
+public static class Converter
+{
+    public static AutoTestPostModel ConvertAutoTestDtoToPostModel(TestResult result, TestResultContainer container,
+        string projectId)
+    {
+        return new AutoTestPostModel(externalId: result.ExternalId, name: result.DisplayName)
+        {
+            ExternalId = result.ExternalId,
+            Links = ConvertLinksToPostModel(result.Links),
+            ProjectId = new Guid(projectId),
+            Namespace = result.Namespace,
+            Classname = result.ClassName,
+            Steps = ConvertStepsToModel(result.Steps),
+            Setup = ConvertFixturesToModel(container.Befores),
+            Teardown = ConvertFixturesToModel(container.Afters),
+            Title = result.Title,
+            Description = result.Description,
+            Labels = ConvertLabelsToPostModel(result.Labels)
+        };
+    }
+    
+    public static AutoTestPutModel ConvertAutoTestDtoToPutModel(TestResult result, TestResultContainer container,
+        string projectId)
+    {
+        return new AutoTestPutModel(externalId: result.ExternalId, name: result.DisplayName)
+        {
+            ExternalId = result.ExternalId,
+            Links = ConvertLinksToPutModel(result.Links),
+            ProjectId = new Guid(projectId),
+            Namespace = result.Namespace,
+            Classname = result.ClassName,
+            Steps = ConvertStepsToModel(result.Steps),
+            Setup = ConvertFixturesToModel(container.Befores),
+            Teardown = ConvertFixturesToModel(container.Afters),
+            Title = result.Title,
+            Description = result.Description,
+            Labels = ConvertLabelsToPostModel(result.Labels)
+        };
+    }
+
+    public static AutoTestResultsForTestRunModel ConvertResultToModel(TestResult result, TestResultContainer container, string configurationId)
+    {
+        var links = result.Links?.Select(l =>
+            new LinkPostModel(
+                l.Title,
+                l.Url,
+                l.Description,
+                (TestIt.Client.Model.LinkType?)Enum.Parse<LinkType>(l.Type.ToString()!))
+        ).ToList();
+
+        return new AutoTestResultsForTestRunModel(
+            autoTestExternalId: result.ExternalId,
+            outcome: Enum.Parse<AvailableTestResultOutcome>(result.Status.ToString()))
+        {
+            ConfigurationId = new Guid(configurationId),
+            Links = links,
+            Message = result.Message,
+            Traces = result.Trace,
+            StartedOn = DateTimeOffset.FromUnixTimeMilliseconds(result.Start).UtcDateTime,
+            CompletedOn = DateTimeOffset.FromUnixTimeMilliseconds(result.Stop).UtcDateTime,
+            Duration = result.Stop - result.Start,
+            Attachments = result.Attachments.Select(a => new AttachmentPutModel(new Guid(a))).ToList(),
+            Parameters = result.Parameters,
+            StepResults = ConvertResultStepToModel(result.Steps),
+            SetupResults = ConvertResultFixtureToModel(container.Befores),
+            TeardownResults = ConvertResultFixtureToModel(container.Afters)
+        };
+    }
+    
+    private static List<AttachmentPutModelAutoTestStepResultsModel> ConvertResultStepToModel(
+        IEnumerable<StepResult> dtos)
+    {
+        return dtos
+            .Select(s => new AttachmentPutModelAutoTestStepResultsModel
+            {
+                Title = s.DisplayName,
+                Description = s.Description,
+                StartedOn = DateTimeOffset.FromUnixTimeMilliseconds(s.Start).UtcDateTime,
+                CompletedOn = DateTimeOffset.FromUnixTimeMilliseconds(s.Stop).UtcDateTime,
+                Duration = s.Stop - s.Start,
+                Attachments = s.Attachments.Select(a => new AttachmentPutModel(new Guid(a))).ToList(),
+                Parameters = s.Parameters,
+                StepResults = ConvertResultStepToModel(s.Steps),
+                Outcome = Enum.Parse<AvailableTestResultOutcome>(s.Status.ToString())
+            }).ToList();
+    }
+    
+    private static List<AttachmentPutModelAutoTestStepResultsModel> ConvertResultFixtureToModel(
+        IEnumerable<FixtureResult> dtos)
+    {
+        return dtos
+            .Select(s => new AttachmentPutModelAutoTestStepResultsModel
+            {
+                Title = s.DisplayName,
+                Description = s.Description,
+                StartedOn = DateTimeOffset.FromUnixTimeMilliseconds(s.Start).UtcDateTime,
+                CompletedOn = DateTimeOffset.FromUnixTimeMilliseconds(s.Stop).UtcDateTime,
+                Duration = s.Stop - s.Start,
+                Attachments = s.Attachments.Select(a => new AttachmentPutModel(new Guid(a))).ToList(),
+                Parameters = s.Parameters,
+                StepResults = ConvertResultStepToModel(s.Steps),
+                Outcome = Enum.Parse<AvailableTestResultOutcome>(s.Status.ToString())
+            }).ToList();
+    }
+    
+    private static List<LinkPostModel> ConvertLinksToPostModel(IEnumerable<Link> links)
+    {
+        return links.Select(l =>
+            new LinkPostModel(
+                l.Title,
+                l.Url,
+                l.Description,
+                (TestIt.Client.Model.LinkType?)Enum.Parse(typeof(TestIt.Client.Model.LinkType), l.Type.ToString()))
+        ).ToList();
+    }
+    
+    private static List<LinkPutModel> ConvertLinksToPutModel(IEnumerable<Link> links)
+    {
+        return links.Select(l =>
+            new LinkPutModel(
+                title: l.Title,
+                url:l.Url,
+                description:l.Description,
+                type:(TestIt.Client.Model.LinkType?)Enum.Parse(typeof(TestIt.Client.Model.LinkType), l.Type.ToString()))
+        ).ToList();
+    }
+
+    private static List<LabelPostModel> ConvertLabelsToPostModel(IEnumerable<string> labels)
+    {
+        return labels.Select(l =>
+                new LabelPostModel(l))
+            .ToList();
+    }
+
+    private static List<AutoTestStepModel> ConvertStepsToModel(IEnumerable<StepResult> stepDtos)
+    {
+        return stepDtos
+            .Select(s => new AutoTestStepModel(
+                s.DisplayName,
+                s.Description,
+                ConvertStepsToModel(s.Steps))).ToList();
+    }
+    
+    private static List<AutoTestStepModel> ConvertFixturesToModel(IEnumerable<FixtureResult> fixtures)
+    {
+        return fixtures
+            .Select(s => new AutoTestStepModel(
+                s.DisplayName,
+                s.Description,
+                ConvertStepsToModel(s.Steps))).ToList();
+    }
+}

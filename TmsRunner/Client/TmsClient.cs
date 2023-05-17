@@ -11,9 +11,9 @@ namespace TmsRunner.Client
     {
         private readonly TmsSettings _settings;
         private readonly ILogger _logger;
-        private readonly TestRunsApi _testRuns;
-        private readonly AttachmentsApi _attachments;
-        private readonly AutoTestsApi _autoTests;
+            private readonly TestRunsApi _testRuns;
+            private readonly AttachmentsApi _attachments;
+            private readonly AutoTestsApi _autoTests;
 
         public TmsClient(TmsSettings settings)
         {

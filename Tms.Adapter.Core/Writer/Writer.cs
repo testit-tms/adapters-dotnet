@@ -15,31 +15,39 @@ public class Writer : IWriter
         _client = client;
     }
 
-    public void Write(TestResult result)
+    public async Task Write(TestResult result, TestResultContainer container)
     {
         _logger.LogDebug("Write autotest {@Autotest}", result);
+
         try
         {
-            var autotest = _client.GetAutotestExist(result.ExternalId);
+            var autotest = await _client.IsAutotestExist(result.ExternalId);
 
-            if (autotest != null)
+            if (autotest)
             {
                 if (result.Status != Status.Failed)
                 {
-                    _client.UpdateAutotest(result);
+                    await _client.UpdateAutotest(result, container);
                 }
                 else
                 {
-                    autotest.Links = result.Links;
-                    _client.UpdateAutotest(autotest);
+                    if (result.Links.Count != 0)
+                    {
+                        await _client.UpdateAutotest(result.ExternalId, result.Links);
+                    }
                 }
             }
             else
             {
-                _client.CreateAutotest(result);
+                await _client.CreateAutotest(result, container);
             }
 
-            result.WorkItemIds.ForEach(id => _client.LinkAutoTestToWorkItem(result.ExternalId, id));
+            if (result.WorkItemIds.Count > 0)
+            {
+                await _client.LinkAutoTestToWorkItems(result.ExternalId, result.WorkItemIds);
+            }
+
+            await _client.SubmitTestCaseResult(result, container);
 
             _logger.LogDebug("Autotest with ID {ID} successfully written", result.ExternalId);
         }
@@ -47,5 +55,10 @@ public class Writer : IWriter
         {
             _logger.LogError(e, "Can not write autotest with ID {ID}", result.ExternalId);
         }
+    }
+
+    public void Write(TestResultContainer resultContainer)
+    {
+        _logger.LogDebug("Write container: {@Result}", resultContainer);
     }
 }
