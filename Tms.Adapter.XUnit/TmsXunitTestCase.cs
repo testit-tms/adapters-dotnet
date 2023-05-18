@@ -5,11 +5,11 @@ using Xunit.Sdk;
 
 namespace Tms.Adapter.XUnit;
 
-public class TmsXunitTestCase : XunitTestCase, ITestResultAccessor
+public class TmsXunitTestCase : XunitTestCase, ITmsAccessor
 {
-    public TestResultContainer TestResultContainer { get; set; }
+    public ClassContainer ClassContainer { get; set; }
 
-    public TestResult TestResult { get; set; }
+    public TestContainer TestResult { get; set; }
 
 #pragma warning disable CS0618
     [EditorBrowsable(EditorBrowsableState.Never)]

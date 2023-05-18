@@ -42,13 +42,14 @@ public class AdapterManager
 
     public AdapterManager()
     {
-        var logger = LoggerFactory.GetLogger(true);
-        _client = new TmsClient(logger.CreateLogger<TmsClient>(), Configurator.Configurator.GetConfig());
+        var config = Configurator.Configurator.GetConfig();
+        var logger = LoggerFactory.GetLogger(config.IsDebug);
+        _client = new TmsClient(logger.CreateLogger<TmsClient>(), config);
         _storage = new ResultStorage();
         _writer = new Writer.Writer(logger.CreateLogger<Writer.Writer>(), _client);
     }
 
-    public virtual AdapterManager StartTestContainer(TestResultContainer container)
+    public virtual AdapterManager StartTestContainer(ClassContainer container)
     {
         if (!_isCreateTestRun)
         {
@@ -62,7 +63,7 @@ public class AdapterManager
         return this;
     }
 
-    public virtual AdapterManager StartTestContainer(string parentUuid, TestResultContainer container)
+    public virtual AdapterManager StartTestContainer(string parentUuid, ClassContainer container)
     {
         UpdateTestContainer(parentUuid, c => c.Children.Add(container.Id));
         StartTestContainer(container);
@@ -70,9 +71,9 @@ public class AdapterManager
         return this;
     }
 
-    public virtual AdapterManager UpdateTestContainer(string uuid, Action<TestResultContainer> update)
+    public virtual AdapterManager UpdateTestContainer(string uuid, Action<ClassContainer> update)
     {
-        update.Invoke(_storage.Get<TestResultContainer>(uuid));
+        update.Invoke(_storage.Get<ClassContainer>(uuid));
         return this;
     }
 
@@ -84,7 +85,7 @@ public class AdapterManager
 
     public virtual AdapterManager WriteTestContainer(string uuid)
     {
-        _writer.Write(_storage.Remove<TestResultContainer>(uuid));
+        _writer.Write(_storage.Remove<ClassContainer>(uuid));
         return this;
     }
 
@@ -152,13 +153,13 @@ public class AdapterManager
         return this;
     }
 
-    public virtual AdapterManager StartTestCase(string containerUuid, TestResult testResult)
+    public virtual AdapterManager StartTestCase(string containerUuid, TestContainer testResult)
     {
         UpdateTestContainer(containerUuid, c => c.Children.Add(testResult.Id));
         return StartTestCase(testResult);
     }
 
-    public virtual AdapterManager StartTestCase(TestResult testResult)
+    public virtual AdapterManager StartTestCase(TestContainer testResult)
     {
         testResult.Stage = Stage.Running;
         testResult.Start = DateTimeOffset.Now.ToUnixTimeMilliseconds();
@@ -168,18 +169,18 @@ public class AdapterManager
         return this;
     }
 
-    public virtual AdapterManager UpdateTestCase(string uuid, Action<TestResult> update)
+    public virtual AdapterManager UpdateTestCase(string uuid, Action<TestContainer> update)
     {
-        update.Invoke(_storage.Get<TestResult>(uuid));
+        update.Invoke(_storage.Get<TestContainer>(uuid));
         return this;
     }
 
-    public virtual AdapterManager UpdateTestCase(Action<TestResult> update)
+    public virtual AdapterManager UpdateTestCase(Action<TestContainer> update)
     {
         return UpdateTestCase(_storage.GetRootStep(), update);
     }
 
-    public virtual AdapterManager StopTestCase(Action<TestResult> beforeStop)
+    public virtual AdapterManager StopTestCase(Action<TestContainer> beforeStop)
     {
         UpdateTestCase(beforeStop);
         return StopTestCase(_storage.GetRootStep());
@@ -187,7 +188,7 @@ public class AdapterManager
 
     public virtual AdapterManager StopTestCase(string uuid)
     {
-        var testResult = _storage.Get<TestResult>(uuid);
+        var testResult = _storage.Get<TestContainer>(uuid);
         
         if (_currentMessage != null)
         {
@@ -213,8 +214,8 @@ public class AdapterManager
 
     public virtual AdapterManager WriteTestCase(string uuid, string containerId)
     {
-        _writer.Write(_storage.Remove<TestResult>(uuid),
-            _storage.Remove<TestResultContainer>(containerId)).Wait();
+        _writer.Write(_storage.Remove<TestContainer>(uuid),
+            _storage.Remove<ClassContainer>(containerId)).Wait();
         return this;
     }
 

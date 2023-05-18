@@ -1,6 +1,6 @@
 namespace Tms.Adapter.Core.Models;
 
-public class TestResult : ExecutableItem
+public class TestContainer : ExecutableItem
 {
     public string Id { get; set; }
     public string ExternalId { get; set; }
@@ -14,7 +14,7 @@ public class TestResult : ExecutableItem
     public string Message { get; set; }
     public string? Trace { get; set; }
 
-    public TestResult()
+    public TestContainer()
     {
         WorkItemIds = new List<string>();
         Labels = new List<string>();

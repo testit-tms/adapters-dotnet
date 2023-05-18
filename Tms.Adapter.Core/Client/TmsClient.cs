@@ -2,8 +2,8 @@ using Microsoft.Extensions.Logging;
 using TestIt.Client.Api;
 using TestIt.Client.Client;
 using TestIt.Client.Model;
+using Tms.Adapter.Core.Configurator;
 using Tms.Adapter.Core.Models;
-using TmsRunner.Models;
 using LinkType = TestIt.Client.Model.LinkType;
 
 namespace Tms.Adapter.Core.Client;
@@ -64,7 +64,7 @@ public class TmsClient : ITmsClient
         return autotest != null;
     }
 
-    public async Task CreateAutotest(TestResult result, TestResultContainer container)
+    public async Task CreateAutotest(TestContainer result, ClassContainer container)
     {
         _logger.LogDebug("Creating autotest {ExternalId}", result.ExternalId);
 
@@ -75,7 +75,7 @@ public class TmsClient : ITmsClient
         _logger.LogDebug("Create autotest {ExternalId} is successfully", result.ExternalId);
     }
 
-    public async Task UpdateAutotest(TestResult result, TestResultContainer container)
+    public async Task UpdateAutotest(TestContainer result, ClassContainer container)
     {
         _logger.LogDebug("Updating autotest {ExternalId}", result.ExternalId);
 
@@ -149,7 +149,7 @@ public class TmsClient : ITmsClient
         }
     }
 
-    public async Task SubmitTestCaseResult(TestResult result, TestResultContainer container)
+    public async Task SubmitTestCaseResult(TestContainer result, ClassContainer container)
     {
         _logger.LogDebug("Submitting test result {@Result} to test run {Id}", result, _settings.TestRunId);
 

@@ -9,7 +9,7 @@ public static class TmsXunitHelper
 {
     public static void StartTestContainer(ITestCaseStarting testCaseStarting)
     {
-        if (testCaseStarting.TestCase is not ITestResultAccessor testResults)
+        if (testCaseStarting.TestCase is not ITmsAccessor testResults)
         {
             return;
         }
@@ -19,13 +19,13 @@ public static class TmsXunitHelper
 
     public static void StartTestCase(ITestCaseMessage testCaseMessage)
     {
-        if (testCaseMessage.TestCase is not ITestResultAccessor testResults)
+        if (testCaseMessage.TestCase is not ITmsAccessor testResults)
         {
             return;
         }
 
         var testCase = testCaseMessage.TestCase;
-        testResults.TestResult = new TestResult
+        testResults.TestResult = new TestContainer
         {
             Id = NewUuid(testCase.DisplayName),
             ClassName = GetClassName(testCase.TestMethod.TestClass.Class.Name),
@@ -39,12 +39,12 @@ public static class TmsXunitHelper
                 .ToDictionary(x => x.parameter.Name, x => x.value.ToString())
         };
         UpdateTestDataFromAttributes(testResults.TestResult, testCase);
-        AdapterManager.Instance.StartTestCase(testResults.TestResultContainer.Id, testResults.TestResult);
+        AdapterManager.Instance.StartTestCase(testResults.ClassContainer.Id, testResults.TestResult);
     }
 
     public static void MarkTestCaseAsFailed(ITestFailed testFailed)
     {
-        if (testFailed.TestCase is not ITestResultAccessor testResults)
+        if (testFailed.TestCase is not ITmsAccessor testResults)
         {
             return;
         }
@@ -56,7 +56,7 @@ public static class TmsXunitHelper
 
     public static void MarkTestCaseAsPassed(ITestPassed testPassed)
     {
-        if (testPassed.TestCase is not ITestResultAccessor testResults)
+        if (testPassed.TestCase is not ITmsAccessor testResults)
         {
             return;
         }
@@ -66,7 +66,7 @@ public static class TmsXunitHelper
 
     public static void MarkTestCaseAsSkipped(ITestCaseMessage testCaseMessage)
     {
-        if (testCaseMessage.TestCase is not ITestResultAccessor testResults)
+        if (testCaseMessage.TestCase is not ITmsAccessor testResults)
         {
             return;
         }
@@ -77,25 +77,24 @@ public static class TmsXunitHelper
 
     public static void FinishTestCase(ITestCaseMessage testCaseMessage)
     {
-        if (testCaseMessage.TestCase is not ITestResultAccessor testResults)
+        if (testCaseMessage.TestCase is not ITmsAccessor testResults)
         {
             return;
         }
 
         AdapterManager.Instance.StopTestCase(testResults.TestResult.Id);
-        AdapterManager.Instance.StopTestContainer(testResults.TestResultContainer.Id);
-        AdapterManager.Instance.WriteTestCase(testResults.TestResult.Id, testResults.TestResultContainer.Id);
+        AdapterManager.Instance.StopTestContainer(testResults.ClassContainer.Id);
+        AdapterManager.Instance.WriteTestCase(testResults.TestResult.Id, testResults.ClassContainer.Id);
     }
 
-    private static void StartTestContainer(ITestClass testClass, ITestResultAccessor testResult)
+    private static void StartTestContainer(ITestClass testClass, ITmsAccessor testResult)
     {
         var uuid = NewUuid(testClass.Class.Name);
-        testResult.TestResultContainer = new()
+        testResult.ClassContainer = new()
         {
-            Id = uuid,
-            Name = testClass.Class.Name
+            Id = uuid
         };
-        AdapterManager.Instance.StartTestContainer(testResult.TestResultContainer);
+        AdapterManager.Instance.StartTestContainer(testResult.ClassContainer);
     }
 
     private static string NewUuid(string name)
@@ -112,7 +111,7 @@ public static class TmsXunitHelper
         return BitConverter.ToString(hash).Replace("-", String.Empty);
     }
 
-    private static void UpdateTestDataFromAttributes(TestResult testResult, ITestCase testCase)
+    private static void UpdateTestDataFromAttributes(TestContainer testResult, ITestCase testCase)
     {
         var methodAttributes = testCase.TestMethod.Method.GetCustomAttributes(typeof(ITmsAttribute));
 

@@ -6,10 +6,10 @@ public interface ITmsClient
 {
     Task CreatTestRun();
     Task<bool> IsAutotestExist(string externalId);
-    Task CreateAutotest(TestResult result, TestResultContainer container);
-    Task UpdateAutotest(TestResult result, TestResultContainer container);
+    Task CreateAutotest(TestContainer result, ClassContainer container);
+    Task UpdateAutotest(TestContainer result, ClassContainer container);
     Task UpdateAutotest(string externalId, List<Link> links);
     Task LinkAutoTestToWorkItems(string externalId, IEnumerable<string> workItemIds);
-    Task SubmitTestCaseResult(TestResult result, TestResultContainer container);
+    Task SubmitTestCaseResult(TestContainer result, ClassContainer container);
     Task<string> UploadAttachment(string fileName, Stream content);
 }

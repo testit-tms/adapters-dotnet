@@ -5,9 +5,9 @@ namespace Tms.Adapter.XUnit
 {
     public static class Steps
     {
-        private static readonly AsyncLocal<ITestResultAccessor> TestResultAccessorAsyncLocal = new();
+        private static readonly AsyncLocal<ITmsAccessor> TestResultAccessorAsyncLocal = new();
 
-        internal static ITestResultAccessor TestResultAccessor
+        internal static ITmsAccessor TestResultAccessor
         {
             get => TestResultAccessorAsyncLocal.Value;
             set => TestResultAccessorAsyncLocal.Value = value;
@@ -24,7 +24,7 @@ namespace Tms.Adapter.XUnit
                 Start = DateTimeOffset.Now.ToUnixTimeMilliseconds()
             };
 
-            AdapterManager.Instance.StartBeforeFixture(TestResultAccessor.TestResultContainer.Id, fixtureResult,
+            AdapterManager.Instance.StartBeforeFixture(TestResultAccessor.ClassContainer.Id, fixtureResult,
                 out var uuid);
             return uuid;
         }
@@ -38,7 +38,7 @@ namespace Tms.Adapter.XUnit
                 Start = DateTimeOffset.Now.ToUnixTimeMilliseconds()
             };
 
-            AdapterManager.Instance.StartAfterFixture(TestResultAccessor.TestResultContainer.Id, fixtureResult,
+            AdapterManager.Instance.StartAfterFixture(TestResultAccessor.ClassContainer.Id, fixtureResult,
                 out var uuid);
             return uuid;
         }
@@ -57,7 +57,7 @@ namespace Tms.Adapter.XUnit
         {
             var newTestResult = TestResultAccessor.TestResult;
             StopFixture(updateResults);
-            AdapterManager.Instance.StartTestCase(TestResultAccessor.TestResultContainer.Id, newTestResult);
+            AdapterManager.Instance.StartTestCase(TestResultAccessor.ClassContainer.Id, newTestResult);
         }
 
         #endregion

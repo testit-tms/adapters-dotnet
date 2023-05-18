@@ -1,4 +1,4 @@
-namespace TmsRunner.Models;
+namespace Tms.Adapter.Core.Configurator;
 
 public class TmsSettings
 {
@@ -16,7 +16,7 @@ public class TmsSettings
     public string TestRunId { get; set; }
     public string TestRunName { get; set; }
     public int AdapterMode { get; set; }
-    public string RunSettings { get; set; }
     public bool AutomaticCreationTestCases { get; set; }
     public bool CertValidation { get; set; }
+    public bool IsDebug { get; set; }
 }

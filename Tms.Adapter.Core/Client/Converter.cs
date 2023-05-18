@@ -6,7 +6,7 @@ namespace Tms.Adapter.Core.Client;
 
 public static class Converter
 {
-    public static AutoTestPostModel ConvertAutoTestDtoToPostModel(TestResult result, TestResultContainer container,
+    public static AutoTestPostModel ConvertAutoTestDtoToPostModel(TestContainer result, ClassContainer container,
         string projectId)
     {
         return new AutoTestPostModel(externalId: result.ExternalId, name: result.DisplayName)
@@ -25,7 +25,7 @@ public static class Converter
         };
     }
 
-    public static AutoTestPutModel ConvertAutoTestDtoToPutModel(TestResult result, TestResultContainer container,
+    public static AutoTestPutModel ConvertAutoTestDtoToPutModel(TestContainer result, ClassContainer container,
         string projectId)
     {
         return new AutoTestPutModel(externalId: result.ExternalId, name: result.DisplayName)
@@ -44,7 +44,7 @@ public static class Converter
         };
     }
 
-    public static AutoTestResultsForTestRunModel ConvertResultToModel(TestResult result, TestResultContainer container,
+    public static AutoTestResultsForTestRunModel ConvertResultToModel(TestContainer result, ClassContainer container,
         string configurationId)
     {
         return new AutoTestResultsForTestRunModel(
@@ -55,8 +55,8 @@ public static class Converter
             Links = ConvertLinksToPostModel(result.ResultLinks),
             Message = result.Message,
             Traces = result.Trace,
-            StartedOn = DateTimeOffset.FromUnixTimeMilliseconds(result.Start).UtcDateTime,
-            CompletedOn = DateTimeOffset.FromUnixTimeMilliseconds(result.Stop).UtcDateTime,
+            StartedOn = DateTimeOffset.FromUnixTimeMilliseconds(container.Start).UtcDateTime,
+            CompletedOn = DateTimeOffset.FromUnixTimeMilliseconds(container.Stop).UtcDateTime,
             Duration = result.Stop - result.Start,
             Attachments = result.Attachments.Select(a => new AttachmentPutModel(new Guid(a))).ToList(),
             Parameters = result.Parameters,

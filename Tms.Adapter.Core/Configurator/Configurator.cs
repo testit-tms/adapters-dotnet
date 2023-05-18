@@ -1,5 +1,4 @@
 using System.Text.Json;
-using TmsRunner.Models;
 
 namespace Tms.Adapter.Core.Configurator;
 

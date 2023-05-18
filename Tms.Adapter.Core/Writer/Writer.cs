@@ -15,7 +15,7 @@ public class Writer : IWriter
         _client = client;
     }
 
-    public async Task Write(TestResult result, TestResultContainer container)
+    public async Task Write(TestContainer result, ClassContainer container)
     {
         _logger.LogDebug("Write autotest {@Autotest}", result);
 
@@ -57,7 +57,7 @@ public class Writer : IWriter
         }
     }
 
-    public void Write(TestResultContainer resultContainer)
+    public void Write(ClassContainer resultContainer)
     {
         _logger.LogDebug("Write container: {@Result}", resultContainer);
     }

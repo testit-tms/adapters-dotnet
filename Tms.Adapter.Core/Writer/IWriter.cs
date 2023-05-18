@@ -4,6 +4,6 @@ namespace Tms.Adapter.Core.Writer;
 
 public interface IWriter
 {
-    Task Write(TestResult result, TestResultContainer resultContainer);
-    void Write(TestResultContainer resultContainer);
+    Task Write(TestContainer result, ClassContainer resultContainer);
+    void Write(ClassContainer resultContainer);
 }
