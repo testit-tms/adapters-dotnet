@@ -35,7 +35,6 @@ public class StepAspect
             .ToDictionary(x => x.parameter.Name, x => x.value.ToString());
 
         var stepName = metadata.GetCustomAttribute<TitleAttribute>()?.Value ?? name;
-
         stepName = Replacer.ReplaceParameters(stepName, stepParameters);
 
         try
@@ -48,10 +47,10 @@ public class StepAspect
             PassStep(metadata);
             PassFixture(metadata);
         }
-        catch (Exception e)
+        catch (Exception)
         {
-            ThrowStep(metadata, e);
-            ThrowFixture(metadata, e);
+            ThrowStep(metadata);
+            ThrowFixture(metadata);
             throw;
         }
 
@@ -62,7 +61,7 @@ public class StepAspect
     {
         if (metadata.GetCustomAttribute<StepAttribute>() != null)
         {
-            Steps.StartStep(stepName, step =>
+            StepManager.StartStep(stepName, step =>
             {
                 step.Parameters = stepParameters;
                 var description = metadata.GetCustomAttribute<DescriptionAttribute>();
@@ -78,15 +77,15 @@ public class StepAspect
     {
         if (metadata.GetCustomAttribute<StepAttribute>() != null)
         {
-            Steps.PassStep();
+            StepManager.PassStep();
         }
     }
 
-    private static void ThrowStep(MethodBase metadata, Exception e)
+    private static void ThrowStep(MethodBase metadata)
     {
         if (metadata.GetCustomAttribute<StepAttribute>() != null)
         {
-            Steps.FailStep();
+            StepManager.FailStep();
         }
     }
 
@@ -94,44 +93,29 @@ public class StepAspect
     {
         if (metadata.GetCustomAttribute<BeforeAttribute>() != null)
         {
-            Steps.StartBeforeFixture(stepName);
+            StepManager.StartBeforeFixture(stepName);
         }
 
         if (metadata.GetCustomAttribute<AfterAttribute>() != null)
         {
-            Steps.StartAfterFixture(stepName);
+            StepManager.StartAfterFixture(stepName);
         }
     }
 
     private static void PassFixture(MethodBase metadata)
     {
-        if (metadata.GetCustomAttribute<BeforeAttribute>() != null ||
-            metadata.GetCustomAttribute<AfterAttribute>() != null)
-        {
-            if (metadata.Name == "InitializeAsync")
-            {
-                Steps.StopFixtureSuppressTestCase(result => result.Status = Status.Passed);
-            }
-            else
-            {
-                Steps.StopFixture(result => result.Status = Status.Passed);
-            }
-        }
-    }
-
-    private static void ThrowFixture(MethodBase metadata, Exception e)
-    {
         if (metadata.GetCustomAttribute<BeforeAttribute>() == null &&
             metadata.GetCustomAttribute<AfterAttribute>() == null) return;
 
-        if (metadata.Name == "InitializeAsync")
-        {
-            Steps.StopFixtureSuppressTestCase(result => { result.Status = Status.Failed; });
-        }
-        else
-        {
-            Steps.StopFixture(result => { result.Status = Status.Failed; });
-        }
+        StepManager.StopFixture(result => result.Status = Status.Passed);
+    }
+
+    private static void ThrowFixture(MethodBase metadata)
+    {
+        if (metadata.GetCustomAttribute<BeforeAttribute>() == null &&
+            metadata.GetCustomAttribute<AfterAttribute>() == null) return;
+        
+        StepManager.StopFixture(result => { result.Status = Status.Failed; });
     }
 
     private object GetStepExecutionResult(Type returnType, Func<object[], object> target, object[] args)

@@ -9,7 +9,7 @@ namespace Tms.Adapter.Core.Service;
 
 public class AdapterManager
 {
-    public static Func<string> CurrentTestIdGetter { get; set; } =
+    public static Func<string> CurrentTestIdGetter { get; } =
         () => Thread.CurrentThread.ManagedThreadId.ToString();
 
     private static readonly object Obj = new();
@@ -63,14 +63,6 @@ public class AdapterManager
         return this;
     }
 
-    public virtual AdapterManager StartTestContainer(string parentUuid, ClassContainer container)
-    {
-        UpdateTestContainer(parentUuid, c => c.Children.Add(container.Id));
-        StartTestContainer(container);
-
-        return this;
-    }
-
     public virtual AdapterManager UpdateTestContainer(string uuid, Action<ClassContainer> update)
     {
         update.Invoke(_storage.Get<ClassContainer>(uuid));
@@ -83,15 +75,9 @@ public class AdapterManager
         return this;
     }
 
-    public virtual AdapterManager WriteTestContainer(string uuid)
+    public virtual AdapterManager StartBeforeFixture(string parentUuid, FixtureResult result)
     {
-        _writer.Write(_storage.Remove<ClassContainer>(uuid));
-        return this;
-    }
-
-    public virtual AdapterManager StartBeforeFixture(string parentUuid, FixtureResult result, out string uuid)
-    {
-        uuid = Guid.NewGuid().ToString("N");
+        var uuid = Guid.NewGuid().ToString("N");
         StartBeforeFixture(parentUuid, uuid, result);
         return this;
     }
@@ -103,9 +89,9 @@ public class AdapterManager
         return this;
     }
 
-    public virtual AdapterManager StartAfterFixture(string parentUuid, FixtureResult result, out string uuid)
+    public virtual AdapterManager StartAfterFixture(string parentUuid, FixtureResult result)
     {
-        uuid = Guid.NewGuid().ToString("N");
+        var uuid = Guid.NewGuid().ToString("N");
         StartAfterFixture(parentUuid, uuid, result);
         return this;
     }
@@ -180,16 +166,10 @@ public class AdapterManager
         return UpdateTestCase(_storage.GetRootStep(), update);
     }
 
-    public virtual AdapterManager StopTestCase(Action<TestContainer> beforeStop)
-    {
-        UpdateTestCase(beforeStop);
-        return StopTestCase(_storage.GetRootStep());
-    }
-
     public virtual AdapterManager StopTestCase(string uuid)
     {
         var testResult = _storage.Get<TestContainer>(uuid);
-        
+
         if (_currentMessage != null)
         {
             if (testResult.Status != Status.Failed)
@@ -205,7 +185,7 @@ public class AdapterManager
             testResult.ResultLinks.AddRange(_currentLinks);
             _currentLinks.Clear();
         }
-        
+
         testResult.Stage = Stage.Finished;
         testResult.Stop = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         _storage.ClearStepContext();
@@ -219,15 +199,9 @@ public class AdapterManager
         return this;
     }
 
-    public virtual AdapterManager StartStep(StepResult result, out string uuid)
+    public virtual AdapterManager StartStep(StepResult result)
     {
-        uuid = Guid.NewGuid().ToString("N");
-        StartStep(_storage.GetCurrentStep(), uuid, result);
-        return this;
-    }
-
-    public virtual AdapterManager StartStep(string uuid, StepResult result)
-    {
+        var uuid = Guid.NewGuid().ToString("N");
         StartStep(_storage.GetCurrentStep(), uuid, result);
         return this;
     }
@@ -268,18 +242,12 @@ public class AdapterManager
         return this;
     }
 
-    public virtual AdapterManager StopStep()
-    {
-        StopStep(_storage.GetCurrentStep());
-        return this;
-    }
-
     public AdapterManager AddMessage(string message)
     {
         _currentMessage = message;
         return this;
     }
-    
+
     public AdapterManager AddLinks(IEnumerable<Link> links)
     {
         _currentLinks.AddRange(links);

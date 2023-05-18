@@ -90,7 +90,7 @@ public static class TmsXunitHelper
     private static void StartTestContainer(ITestClass testClass, ITmsAccessor testResult)
     {
         var uuid = NewUuid(testClass.Class.Name);
-        testResult.ClassContainer = new()
+        testResult.ClassContainer = new ClassContainer
         {
             Id = uuid
         };

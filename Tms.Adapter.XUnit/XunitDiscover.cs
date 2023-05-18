@@ -15,9 +15,9 @@ public class XunitDiscover : IXunitTestCaseDiscoverer
     public IEnumerable<IXunitTestCase> Discover(ITestFrameworkDiscoveryOptions discoveryOptions, ITestMethod testMethod,
         IAttributeInfo factAttribute)
     {
-        var testCase = new TmsXunitTestCase(_diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(),
+        var tmsTestCase = new TmsXunitTestCase(_diagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(),
             TestMethodDisplayOptions.None, testMethod);
 
-        return new[] { testCase };
+        return new[] { tmsTestCase };
     }
 }

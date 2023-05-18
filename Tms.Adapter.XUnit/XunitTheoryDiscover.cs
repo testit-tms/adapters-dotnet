@@ -14,29 +14,29 @@ public class XunitTheoryDiscover : TheoryDiscoverer
     {
         var testCases = base.Discover(discoveryOptions, testMethod, factAttribute);
 
-        foreach (var item in testCases)
+        foreach (var testCase in testCases)
         {
-            var dataAttribute = item.TestMethod.Method
+            var dataAttribute = testCase.TestMethod.Method
                 .GetCustomAttributes(typeof(DataAttribute)).FirstOrDefault() as IReflectionAttributeInfo;
 
-            if (dataAttribute?.Attribute is DataAttribute memberDataAttribute && item.TestMethodArguments is null)
+            if (dataAttribute?.Attribute is DataAttribute memberDataAttribute && testCase.TestMethodArguments is null)
             {
                 var argumentSets = memberDataAttribute
-                    .GetData(item.TestMethod.Method.ToRuntimeMethod());
+                    .GetData(testCase.TestMethod.Method.ToRuntimeMethod());
 
                 foreach (var arguments in argumentSets)
                 {
-                    var testCase = new TmsXunitTestCase(DiagnosticMessageSink,
+                    var tmsTestCase = new TmsXunitTestCase(DiagnosticMessageSink,
                         discoveryOptions.MethodDisplayOrDefault(),
                         TestMethodDisplayOptions.None, testMethod, arguments);
-                    yield return testCase;
+                    yield return tmsTestCase;
                 }
             }
             else
             {
-                var testCase = new TmsXunitTestCase(DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(),
-                    TestMethodDisplayOptions.None, testMethod, item.TestMethodArguments);
-                yield return testCase;
+                var tmsTestCase = new TmsXunitTestCase(DiagnosticMessageSink, discoveryOptions.MethodDisplayOrDefault(),
+                    TestMethodDisplayOptions.None, testMethod, testCase.TestMethodArguments);
+                yield return tmsTestCase;
             }
         }
     }

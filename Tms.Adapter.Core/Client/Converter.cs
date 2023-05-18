@@ -1,6 +1,6 @@
 using TestIt.Client.Model;
 using Tms.Adapter.Core.Models;
-using LinkType = Tms.Adapter.Core.Models.LinkType;
+using LinkType = TestIt.Client.Model.LinkType;
 
 namespace Tms.Adapter.Core.Client;
 
@@ -110,7 +110,7 @@ public static class Converter
                 Title = l.Title,
                 Description = l.Description,
                 Type = l.Type != null
-                    ? (TestIt.Client.Model.LinkType?)Enum.Parse(typeof(TestIt.Client.Model.LinkType), l.Type.ToString())
+                    ? (LinkType?)Enum.Parse(typeof(LinkType), l.Type.ToString())
                     : null
             }
         ).ToList();
@@ -124,7 +124,7 @@ public static class Converter
                 Title = l.Title,
                 Description = l.Description,
                 Type = l.Type != null
-                    ? (TestIt.Client.Model.LinkType?)Enum.Parse(typeof(TestIt.Client.Model.LinkType), l.Type.ToString())
+                    ? (LinkType?)Enum.Parse(typeof(LinkType), l.Type.ToString())
                     : null
             }
         ).ToList();

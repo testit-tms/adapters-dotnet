@@ -3,7 +3,7 @@ using Tms.Adapter.Core.Models;
 
 namespace Tms.Adapter.Core.Service;
 
-public class Adapter
+public static class Adapter
 {
     public static void AddMessage(string message)
     {
@@ -35,10 +35,9 @@ public class Adapter
         }
     }
 
-    public static void AddAttachments(string content, string? name = null)
+    public static void AddAttachments(string content, string filename)
     {
         using var ms = new MemoryStream(Encoding.UTF8.GetBytes(content));
-        var filename = name ?? $"{new Guid().ToString()}-attachment.txt";
 
         AdapterManager.Instance.AddAttachments(filename, ms);
     }

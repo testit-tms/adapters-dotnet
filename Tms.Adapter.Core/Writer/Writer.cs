@@ -56,9 +56,4 @@ public class Writer : IWriter
             _logger.LogError(e, "Can not write autotest with ID {ID}", result.ExternalId);
         }
     }
-
-    public void Write(ClassContainer resultContainer)
-    {
-        _logger.LogDebug("Write container: {@Result}", resultContainer);
-    }
 }

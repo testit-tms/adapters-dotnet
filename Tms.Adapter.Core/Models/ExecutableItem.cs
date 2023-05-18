@@ -12,7 +12,7 @@ public abstract class ExecutableItem
 
     public List<string> Attachments { get; set; }
 
-    public Dictionary<string, string?> Parameters { get; set; }
+    public Dictionary<string, string> Parameters { get; set; }
 
     public long Start { get; set; }
 
