@@ -17,7 +17,9 @@ public class AdapterManager
     private readonly ResultStorage _storage;
     private readonly IWriter _writer;
     private readonly ITmsClient _client;
-    private bool _isCreateTestRun = false;
+    private bool _isCreateTestRun;
+    private string? _currentMessage;
+    private readonly List<Link> _currentLinks = new();
 
     public static AdapterManager Instance
     {
@@ -45,7 +47,7 @@ public class AdapterManager
         _storage = new ResultStorage();
         _writer = new Writer.Writer(logger.CreateLogger<Writer.Writer>(), _client);
     }
-    
+
     public virtual AdapterManager StartTestContainer(TestResultContainer container)
     {
         if (!_isCreateTestRun)
@@ -53,10 +55,10 @@ public class AdapterManager
             _client.CreatTestRun().Wait();
             _isCreateTestRun = true;
         }
-        
+
         container.Start = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         _storage.Put(container.Id, container);
-        
+
         return this;
     }
 
@@ -64,7 +66,7 @@ public class AdapterManager
     {
         UpdateTestContainer(parentUuid, c => c.Children.Add(container.Id));
         StartTestContainer(container);
-        
+
         return this;
     }
 
@@ -149,7 +151,7 @@ public class AdapterManager
         fixture.Stop = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         return this;
     }
-    
+
     public virtual AdapterManager StartTestCase(string containerUuid, TestResult testResult)
     {
         UpdateTestContainer(containerUuid, c => c.Children.Add(testResult.Id));
@@ -186,6 +188,23 @@ public class AdapterManager
     public virtual AdapterManager StopTestCase(string uuid)
     {
         var testResult = _storage.Get<TestResult>(uuid);
+        
+        if (_currentMessage != null)
+        {
+            if (testResult.Status != Status.Failed)
+            {
+                testResult.Message = _currentMessage;
+            }
+
+            _currentMessage = null;
+        }
+
+        if (_currentLinks.Count > 0)
+        {
+            testResult.ResultLinks.AddRange(_currentLinks);
+            _currentLinks.Clear();
+        }
+        
         testResult.Stage = Stage.Finished;
         testResult.Stop = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         _storage.ClearStepContext();
@@ -198,14 +217,14 @@ public class AdapterManager
             _storage.Remove<TestResultContainer>(containerId)).Wait();
         return this;
     }
-    
+
     public virtual AdapterManager StartStep(StepResult result, out string uuid)
     {
         uuid = Guid.NewGuid().ToString("N");
         StartStep(_storage.GetCurrentStep(), uuid, result);
         return this;
     }
-        
+
     public virtual AdapterManager StartStep(string uuid, StepResult result)
     {
         StartStep(_storage.GetCurrentStep(), uuid, result);
@@ -254,5 +273,22 @@ public class AdapterManager
         return this;
     }
 
+    public AdapterManager AddMessage(string message)
+    {
+        _currentMessage = message;
+        return this;
+    }
+    
+    public AdapterManager AddLinks(IEnumerable<Link> links)
+    {
+        _currentLinks.AddRange(links);
+        return this;
+    }
 
+    public AdapterManager AddAttachments(string filename, Stream content)
+    {
+        var attachId = _client.UploadAttachment(filename, content).Result;
+        _storage.Get<ExecutableItem>(_storage.GetCurrentStep()).Attachments.Add(attachId);
+        return this;
+    }
 }

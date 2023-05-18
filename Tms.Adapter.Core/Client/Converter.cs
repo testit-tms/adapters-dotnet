@@ -24,7 +24,7 @@ public static class Converter
             Labels = ConvertLabelsToPostModel(result.Labels)
         };
     }
-    
+
     public static AutoTestPutModel ConvertAutoTestDtoToPutModel(TestResult result, TestResultContainer container,
         string projectId)
     {
@@ -44,22 +44,15 @@ public static class Converter
         };
     }
 
-    public static AutoTestResultsForTestRunModel ConvertResultToModel(TestResult result, TestResultContainer container, string configurationId)
+    public static AutoTestResultsForTestRunModel ConvertResultToModel(TestResult result, TestResultContainer container,
+        string configurationId)
     {
-        var links = result.Links?.Select(l =>
-            new LinkPostModel(
-                l.Title,
-                l.Url,
-                l.Description,
-                (TestIt.Client.Model.LinkType?)Enum.Parse<LinkType>(l.Type.ToString()!))
-        ).ToList();
-
         return new AutoTestResultsForTestRunModel(
             autoTestExternalId: result.ExternalId,
             outcome: Enum.Parse<AvailableTestResultOutcome>(result.Status.ToString()))
         {
             ConfigurationId = new Guid(configurationId),
-            Links = links,
+            Links = ConvertLinksToPostModel(result.ResultLinks),
             Message = result.Message,
             Traces = result.Trace,
             StartedOn = DateTimeOffset.FromUnixTimeMilliseconds(result.Start).UtcDateTime,
@@ -72,7 +65,7 @@ public static class Converter
             TeardownResults = ConvertResultFixtureToModel(container.Afters)
         };
     }
-    
+
     private static List<AttachmentPutModelAutoTestStepResultsModel> ConvertResultStepToModel(
         IEnumerable<StepResult> dtos)
     {
@@ -90,7 +83,7 @@ public static class Converter
                 Outcome = Enum.Parse<AvailableTestResultOutcome>(s.Status.ToString())
             }).ToList();
     }
-    
+
     private static List<AttachmentPutModelAutoTestStepResultsModel> ConvertResultFixtureToModel(
         IEnumerable<FixtureResult> dtos)
     {
@@ -108,26 +101,32 @@ public static class Converter
                 Outcome = Enum.Parse<AvailableTestResultOutcome>(s.Status.ToString())
             }).ToList();
     }
-    
+
     private static List<LinkPostModel> ConvertLinksToPostModel(IEnumerable<Link> links)
     {
         return links.Select(l =>
-            new LinkPostModel(
-                l.Title,
-                l.Url,
-                l.Description,
-                (TestIt.Client.Model.LinkType?)Enum.Parse(typeof(TestIt.Client.Model.LinkType), l.Type.ToString()))
+            new LinkPostModel(url: l.Url)
+            {
+                Title = l.Title,
+                Description = l.Description,
+                Type = l.Type != null
+                    ? (TestIt.Client.Model.LinkType?)Enum.Parse(typeof(TestIt.Client.Model.LinkType), l.Type.ToString())
+                    : null
+            }
         ).ToList();
     }
-    
+
     private static List<LinkPutModel> ConvertLinksToPutModel(IEnumerable<Link> links)
     {
         return links.Select(l =>
-            new LinkPutModel(
-                title: l.Title,
-                url:l.Url,
-                description:l.Description,
-                type:(TestIt.Client.Model.LinkType?)Enum.Parse(typeof(TestIt.Client.Model.LinkType), l.Type.ToString()))
+            new LinkPutModel(url: l.Url)
+            {
+                Title = l.Title,
+                Description = l.Description,
+                Type = l.Type != null
+                    ? (TestIt.Client.Model.LinkType?)Enum.Parse(typeof(TestIt.Client.Model.LinkType), l.Type.ToString())
+                    : null
+            }
         ).ToList();
     }
 
@@ -146,7 +145,7 @@ public static class Converter
                 s.Description,
                 ConvertStepsToModel(s.Steps))).ToList();
     }
-    
+
     private static List<AutoTestStepModel> ConvertFixturesToModel(IEnumerable<FixtureResult> fixtures)
     {
         return fixtures

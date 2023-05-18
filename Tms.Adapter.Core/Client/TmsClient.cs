@@ -91,13 +91,16 @@ public class TmsClient : ITmsClient
     public async Task UpdateAutotest(string externalId, List<Link> links)
     {
         _logger.LogDebug("Updating links property for autotest {ExternalId}: {@Links}", externalId, links);
-        
+
         var autotest = await GetAutotestByExternalId(externalId);
-        var putLinks = links.Select(l => new LinkPutModel(
-            title: l.Title,
-            url: l.Url,
-            description: l.Description,
-            type: (LinkType?)Enum.Parse(typeof(LinkType), l.Type.ToString()))
+        var putLinks = links.Select(l => new LinkPutModel(url: l.Url)
+            {
+                Title = l.Title,
+                Description = l.Description,
+                Type = l.Type != null
+                    ? (LinkType?)Enum.Parse(typeof(LinkType), l.Type.ToString())
+                    : null
+            }
         ).ToList();
 
         var operations = new List<Operation>
@@ -155,6 +158,18 @@ public class TmsClient : ITmsClient
             new List<AutoTestResultsForTestRunModel> { model });
 
         _logger.LogDebug("Submit test result to test run {Id} is successfully", _settings.TestRunId);
+    }
+
+    public async Task<string> UploadAttachment(string fileName, Stream content)
+    {
+        _logger.LogDebug("Uploading attachment {Name}", fileName);
+
+        var response = await _attachments.ApiV2AttachmentsPostAsync(
+            new FileParameter(Path.GetFileName(fileName), content));
+
+        _logger.LogDebug("Upload attachment {@Attachment} is successfully", response);
+
+        return response.Id.ToString();
     }
 
     private async Task<AutoTestModel?> GetAutotestByExternalId(string externalId)

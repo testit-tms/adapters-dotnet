@@ -25,7 +25,7 @@ public class StepAspect
         [Argument(Source.ReturnType)] Type returnType)
     {
         object executionResult;
-        
+
         var stepParameters = metadata.GetParameters()
             .Zip(args, (parameter, value) => new
             {
@@ -37,7 +37,7 @@ public class StepAspect
         var stepName = metadata.GetCustomAttribute<TitleAttribute>()?.Value ?? name;
 
         stepName = Replacer.ReplaceParameters(stepName, stepParameters);
-        
+
         try
         {
             StartFixture(metadata, stepName);
@@ -68,7 +68,7 @@ public class StepAspect
                 var description = metadata.GetCustomAttribute<DescriptionAttribute>();
 
                 if (description == null) return;
-                
+
                 step.Description = Replacer.ReplaceParameters(description.Value, stepParameters);
             });
         }
@@ -86,7 +86,7 @@ public class StepAspect
     {
         if (metadata.GetCustomAttribute<StepAttribute>() != null)
         {
-            Steps.FailStep(e.Message, e.StackTrace);
+            Steps.FailStep();
         }
     }
 
@@ -110,11 +110,11 @@ public class StepAspect
         {
             if (metadata.Name == "InitializeAsync")
             {
-                Steps.StopFixtureSuppressTestCase(string.Empty, null, result => result.Status = Status.Passed);
+                Steps.StopFixtureSuppressTestCase(result => result.Status = Status.Passed);
             }
             else
             {
-                Steps.StopFixture(string.Empty, null, result => result.Status = Status.Passed);
+                Steps.StopFixture(result => result.Status = Status.Passed);
             }
         }
     }
@@ -126,11 +126,11 @@ public class StepAspect
 
         if (metadata.Name == "InitializeAsync")
         {
-            Steps.StopFixtureSuppressTestCase(e.Message, e.StackTrace, result => { result.Status = Status.Failed; });
+            Steps.StopFixtureSuppressTestCase(result => { result.Status = Status.Failed; });
         }
         else
         {
-            Steps.StopFixture(e.Message, e.StackTrace, result => { result.Status = Status.Failed; });
+            Steps.StopFixture(result => { result.Status = Status.Failed; });
         }
     }
 

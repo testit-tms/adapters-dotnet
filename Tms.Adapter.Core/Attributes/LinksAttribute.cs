@@ -9,12 +9,11 @@ public class LinksAttribute : Attribute, ITmsAttribute
 
     public LinksAttribute(string url, string title, string description, LinkType type)
     {
-        Link = new Link
-        {
-            Title = title,
-            Url = url,
-            Description = description,
-            Type = type
-        };
+        Link = new Link(url, title, description, type);
+    }
+    
+    public LinksAttribute(string url)
+    {
+        Link = new Link(url);
     }
 }

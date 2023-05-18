@@ -43,11 +43,8 @@ namespace Tms.Adapter.XUnit
             return uuid;
         }
 
-        public static void StopFixture(string message, string? trace, Action<FixtureResult> updateResults = null)
+        public static void StopFixture(Action<FixtureResult> updateResults = null)
         {
-            TestResultAccessor.TestResultContainer.Message = message;
-            TestResultAccessor.TestResultContainer.Trace = trace;
-
             AdapterManager.Instance.StopFixture(result =>
             {
                 result.Stage = Stage.Finished;
@@ -56,13 +53,10 @@ namespace Tms.Adapter.XUnit
             });
         }
 
-        public static void StopFixtureSuppressTestCase(string message, string? trace,
-            Action<FixtureResult> updateResults = null)
+        public static void StopFixtureSuppressTestCase(Action<FixtureResult> updateResults = null)
         {
             var newTestResult = TestResultAccessor.TestResult;
-            newTestResult.Message = message;
-            newTestResult.Trace = trace;
-            StopFixture(message, trace, updateResults);
+            StopFixture(updateResults);
             AdapterManager.Instance.StartTestCase(TestResultAccessor.TestResultContainer.Id, newTestResult);
         }
 
@@ -103,11 +97,8 @@ namespace Tms.Adapter.XUnit
             AdapterManager.Instance.StopStep(uuid);
         }
 
-        public static void FailStep(string message, string? trace)
+        public static void FailStep()
         {
-            TestResultAccessor.TestResult.Message = message;
-            TestResultAccessor.TestResult.Trace = trace;
-
             AdapterManager.Instance.StopStep(result => { result.Status = Status.Failed; });
         }
 
@@ -246,7 +237,7 @@ namespace Tms.Adapter.XUnit
             }
             catch (Exception e)
             {
-                FailStep(e.Message, e.StackTrace);
+                FailStep();
                 throw;
             }
 
@@ -263,7 +254,7 @@ namespace Tms.Adapter.XUnit
             }
             catch (Exception e)
             {
-                FailStep(e.Message, e.StackTrace);
+                FailStep();
                 throw new StepFailedException(name, e);
             }
 
