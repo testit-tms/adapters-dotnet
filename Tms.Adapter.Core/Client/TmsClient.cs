@@ -33,30 +33,6 @@ public class TmsClient : ITmsClient
         _autoTests = new AutoTestsApi(new HttpClient(), cfg, httpClientHandler);
     }
 
-    public async Task CreatTestRun()
-    {
-        var createTestRunRequestBody = new TestRunV2PostShortModel
-        {
-            ProjectId = new Guid(_settings.ProjectId),
-            Name = (string.IsNullOrEmpty(_settings.TestRunName) ? null : _settings.TestRunName)!
-        };
-
-        _logger.LogDebug("Creating test run {@TestRun}", createTestRunRequestBody);
-
-        var testRun = await _testRuns.CreateEmptyAsync(createTestRunRequestBody);
-
-        if (testRun is null)
-        {
-            throw new Exception($"Could not find project with id: {_settings.ProjectId}");
-        }
-
-        _logger.LogDebug("Create test run {@TestRun} is successfully", testRun);
-
-        await _testRuns.StartTestRunAsync(testRun.Id);
-
-        _settings.TestRunId = testRun.Id.ToString();
-    }
-
     public async Task<bool> IsAutotestExist(string externalId)
     {
         var autotest = await GetAutotestByExternalId(externalId);
@@ -69,6 +45,7 @@ public class TmsClient : ITmsClient
         _logger.LogDebug("Creating autotest {ExternalId}", result.ExternalId);
 
         var model = Converter.ConvertAutoTestDtoToPostModel(result, container, _settings.ProjectId);
+        model.ShouldCreateWorkItem = _settings.AutomaticCreationTestCases;
 
         await _autoTests.CreateAutoTestAsync(model);
 
@@ -165,7 +142,11 @@ public class TmsClient : ITmsClient
         _logger.LogDebug("Uploading attachment {Name}", fileName);
 
         var response = await _attachments.ApiV2AttachmentsPostAsync(
-            new FileParameter(Path.GetFileName(fileName), content));
+            new FileParameter(
+                filename: Path.GetFileName(fileName),
+                content: content,
+                contentType: MimeTypes.GetMimeType(fileName))
+            );
 
         _logger.LogDebug("Upload attachment {@Attachment} is successfully", response);
 

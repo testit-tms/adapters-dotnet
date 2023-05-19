@@ -151,7 +151,7 @@ public static class TmsXunitHelper
 
         if (string.IsNullOrEmpty(testResult.DisplayName))
         {
-            testResult.DisplayName = testCase.DisplayName;
+            testResult.DisplayName = testCase.DisplayName.Split('.')[^1];
         }
 
         if (string.IsNullOrEmpty(testResult.ExternalId))

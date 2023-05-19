@@ -8,20 +8,13 @@ public abstract class ExecutableItem
 
     public Stage Stage { get; set; }
 
-    public List<StepResult> Steps { get; set; }
+    public List<StepResult> Steps { get; set; } = new();
 
-    public List<string> Attachments { get; set; }
+    public List<string> Attachments { get; set; } = new();
 
-    public Dictionary<string, string> Parameters { get; set; }
+    public Dictionary<string, string> Parameters { get; set; } = new();
 
     public long Start { get; set; }
 
     public long Stop { get; set; }
-
-    public ExecutableItem()
-    {
-        Parameters = new Dictionary<string, string>();
-        Attachments = new List<string>();
-        Steps = new List<StepResult>();
-    }
 }

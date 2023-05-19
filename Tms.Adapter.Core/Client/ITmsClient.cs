@@ -4,7 +4,6 @@ namespace Tms.Adapter.Core.Client;
 
 public interface ITmsClient
 {
-    Task CreatTestRun();
     Task<bool> IsAutotestExist(string externalId);
     Task CreateAutotest(TestContainer result, ClassContainer container);
     Task UpdateAutotest(TestContainer result, ClassContainer container);

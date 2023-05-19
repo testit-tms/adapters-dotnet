@@ -17,7 +17,6 @@ public class AdapterManager
     private readonly ResultStorage _storage;
     private readonly IWriter _writer;
     private readonly ITmsClient _client;
-    private bool _isCreateTestRun;
     private string? _currentMessage;
     private readonly List<Link> _currentLinks = new();
 
@@ -51,12 +50,6 @@ public class AdapterManager
 
     public virtual AdapterManager StartTestContainer(ClassContainer container)
     {
-        if (!_isCreateTestRun)
-        {
-            _client.CreatTestRun().Wait();
-            _isCreateTestRun = true;
-        }
-
         container.Start = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         _storage.Put(container.Id, container);
 
