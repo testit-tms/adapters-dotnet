@@ -240,6 +240,8 @@ namespace TmsRunner.Services
             }
             else
             {
+                autoTest.IsFlaky = existAutotest.IsFlaky;
+
                 await _apiClient.UpdateAutotest(autoTest);
             }
 
