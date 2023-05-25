@@ -18,5 +18,6 @@ namespace TmsRunner.Models
         public List<string>? Labels { get; set; }
         public string MethodName { get; set; }
         public string? Message { get; set; }
+        public bool? IsFlaky { get; set; }
     }
 }
