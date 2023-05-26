@@ -22,7 +22,7 @@ public static class LoggerFactory
                     .MinimumLevel.Debug()
                 : new LoggerConfiguration();
 
-           var serilogLogger = logConfig
+            var serilogLogger = logConfig
                 .Enrich.FromLogContext()
                 .Enrich.WithThreadId()
                 .WriteTo.Console(
