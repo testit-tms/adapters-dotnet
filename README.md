@@ -4,9 +4,9 @@ The repository contains new versions of adaptors for dotnet test frameworks.
 
 ## Compatibility
 
-| Test IT | MSTest | NUnit |
-|---------|--------|-------|
-| 4.0     | 1.0    | 1.0   |  
+| Test IT | MSTest | NUnit | XUnit |
+|---------|--------|-------|-------|
+| 4.0     | 1.0    | 1.0   | 1.0   |
 
 Supported test frameworks :
 

@@ -1,13 +1,19 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <PackageId>TestIT.Adapter.XUnit</PackageId>
         <Version>1.0.2</Version>
         <TargetFramework>netstandard2.1</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-        <LangVersion>latest</LangVersion>
         <IsPackable>true</IsPackable>
+        <Title>Test IT XUnit adapter</Title>
+        <PackageId>TestIT.Adapter.XUnit</PackageId>
+        <Authors>Integration team</Authors>
+        <Description>Test IT XUnit adapter</Description>
+        <Copyright>Copyright (c) 2019 - 2023 Test IT</Copyright>
+        <RepositoryUrl>https://github.com/testit-tms/adapters-dotnet</RepositoryUrl>
+        <PackageProjectUrl>https://testit.software</PackageProjectUrl>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <LangVersion>latest</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
