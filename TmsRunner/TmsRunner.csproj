@@ -3,7 +3,6 @@
   <PropertyGroup>
     <Version>1.0.2</Version>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <Title>Test IT runner</Title>
@@ -12,9 +11,10 @@
     <Copyright>Copyright (c) 2019 - 2023 Test IT</Copyright>
     <RepositoryUrl>https://github.com/testit-tms/adapters-dotnet</RepositoryUrl>
     <PackageProjectUrl>https://testit.software</PackageProjectUrl>
-<!--    <PublishSingleFile>true</PublishSingleFile>-->
-<!--    <SelfContained>true</SelfContained>-->
-<!--    <RuntimeIdentifiers>win-x64;linux-x64;osx-x64</RuntimeIdentifiers>-->
+    <TargetFramework>net7.0</TargetFramework>
+    <PublishSingleFile>true</PublishSingleFile>
+    <SelfContained>true</SelfContained>
+    <RuntimeIdentifiers>win-x64;linux-x64;osx-x64</RuntimeIdentifiers>
   </PropertyGroup>
 
   <ItemGroup>
