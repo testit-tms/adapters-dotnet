@@ -4,7 +4,7 @@ public class LabelsAttribute : Attribute, ITmsAttribute
 {
     public List<string> Lables { get; }
 
-    public LabelsAttribute(string[] lables)
+    public LabelsAttribute(params string[] lables)
     {
         Lables = lables.ToList();
     }

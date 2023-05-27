@@ -6,13 +6,19 @@ on:
       - released
 
 env:
-  ADAPTER_DIR: ./Tms.Adapter
   RUNNER_DIR: ./TmsRunner
   NUGET_DIR: ./nuget
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        project: [
+          ./Tms.Adapter,
+          ./Tms.Adapter.Core,
+          ./Tms.Adapter.XUnit
+        ]
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -25,18 +31,18 @@ jobs:
           dotnet-version: 6.0.x
 
       - name: Restore dependencies
-        run: dotnet restore ${{ env.ADAPTER_DIR }}
+        run: dotnet restore ${{ matrix.project }}
 
       - name: Build project
         run: |
           dotnet build --configuration Release \
-          --no-restore ${{ env.ADAPTER_DIR }}
+          --no-restore ${{ matrix.project }}
 
       - name: Create NuGet package
         run: |
           dotnet pack --configuration Release \
           --no-build --output ${{ env.NUGET_DIR }} \
-          ${{ env.ADAPTER_DIR }}
+          ${{ matrix.project }}
 
       - name: Save artifacts
         uses: actions/upload-artifact@v3
