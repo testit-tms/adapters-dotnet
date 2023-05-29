@@ -11,9 +11,9 @@ namespace TmsRunner.Client
     {
         private readonly TmsSettings _settings;
         private readonly ILogger _logger;
-            private readonly TestRunsApi _testRuns;
-            private readonly AttachmentsApi _attachments;
-            private readonly AutoTestsApi _autoTests;
+        private readonly TestRunsApi _testRuns;
+        private readonly AttachmentsApi _attachments;
+        private readonly AutoTestsApi _autoTests;
 
         public TmsClient(TmsSettings settings)
         {
@@ -86,7 +86,11 @@ namespace TmsRunner.Client
             _logger.Debug("Uploading attachment {Name}", fileName);
 
             var response = await _attachments.ApiV2AttachmentsPostAsync(
-                new FileParameter(Path.GetFileName(fileName), content));
+                new FileParameter(
+                    filename: Path.GetFileName(fileName),
+                    content: content,
+                    contentType: MimeTypes.GetMimeType(fileName))
+            );
 
             _logger.Debug("Upload attachment {@Attachment} is successfully", response);
 
