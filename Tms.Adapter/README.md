@@ -13,13 +13,13 @@
 
 #### NuGet CLI
 
-``` bash
+```bash
 Install-Package TestIt.Adapter
 ```
 
 #### .NET CLI
 
-``` bash
+```bash
 dotnet package add TestIt.Adapter
 ```
 
@@ -44,7 +44,7 @@ dotnet package add TestIt.Adapter
 
 Create **Tms.config.json** file in the project directory:
 
-``` json
+```json
 {
     "url": "URL",
     "privateToken": "USER_PRIVATE_TOKEN",
@@ -96,7 +96,7 @@ Description of methods:
 
 #### Simple test
 
-``` c#
+```c#
 using Tms.Adapter;
 using Tms.Adapter.Attributes;
 using Tms.Adapter.Models;
@@ -146,7 +146,7 @@ public class SampleTests {
 
 #### Parameterized test
 
-``` c#
+```c#
 using Tms.Adapter.Attributes;
 
 public class ParameterizedTests {

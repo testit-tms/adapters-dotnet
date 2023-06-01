@@ -33,12 +33,12 @@ namespace TmsRunner.Configuration
 
             configBuilder.AddCustomConfiguration(adapterConfig);
             var config = configBuilder.Build();
-            var testItSettings = new TmsSettings();
-            config.Bind(testItSettings);
+            var tmsSettings = new TmsSettings();
+            config.Bind(tmsSettings);
 
-            Validate(testItSettings);
+            Validate(tmsSettings);
 
-            return testItSettings;
+            return tmsSettings;
         }
 
         private static string GetConfigFileName(string path)

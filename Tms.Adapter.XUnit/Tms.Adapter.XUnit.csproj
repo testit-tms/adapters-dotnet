@@ -5,13 +5,15 @@
         <TargetFramework>netstandard2.1</TargetFramework>
         <Nullable>enable</Nullable>
         <IsPackable>true</IsPackable>
-        <Title>Test IT MSTest/UNit adapter</Title>
-        <PackageId>TestIT.Adapter</PackageId>
+        <Title>Test IT XUnit adapter</Title>
+        <PackageId>TestIT.Adapter.XUnit</PackageId>
         <Authors>Integration team</Authors>
-        <Description>Test IT MSTest/UNit adapter</Description>
+        <Description>Test IT XUnit adapter</Description>
         <Copyright>Copyright (c) 2019 - 2023 Test IT</Copyright>
         <RepositoryUrl>https://github.com/testit-tms/adapters-dotnet</RepositoryUrl>
         <PackageProjectUrl>https://testit.software</PackageProjectUrl>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <LangVersion>latest</LangVersion>
         <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     </PropertyGroup>
 
@@ -19,20 +21,14 @@
         <None Include="../LICENSE.md" Pack="true" PackagePath="$(PackageLicenseFile)" />
         <None Include="./README.md" Pack="true" PackagePath="$(PackageReadmeFile)" />
     </ItemGroup>
-
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-        <LangVersion>preview</LangVersion>
-    </PropertyGroup>
-
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-        <LangVersion>preview</LangVersion>
-    </PropertyGroup>
+    
+    <ItemGroup>
+      <PackageReference Include="AspectInjector" Version="2.8.1" />
+      <PackageReference Include="xunit.core" Version="2.4.1" />
+    </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Fody" Version="6.6.4" />
-        <PackageReference Include="MethodBoundaryAspect.Fody" Version="2.0.148" />
-        <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="17.5.0" />
-        <PackageReference Include="System.Text.Json" Version="7.0.2" />
+      <ProjectReference Include="..\Tms.Adapter.Core\Tms.Adapter.Core.csproj" />
     </ItemGroup>
 
 </Project>

@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <Version>1.0.2</Version>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <Nullable>enable</Nullable>
+        <IsPackable>true</IsPackable>
+        <Title>Test IT Core adapter</Title>
+        <PackageId>TestIT.Adapter.Core</PackageId>
+        <Authors>Integration team</Authors>
+        <Description>Test IT Core adapter</Description>
+        <Copyright>Copyright (c) 2019 - 2023 Test IT</Copyright>
+        <RepositoryUrl>https://github.com/testit-tms/adapters-dotnet</RepositoryUrl>
+        <PackageProjectUrl>https://testit.software</PackageProjectUrl>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <LangVersion>latest</LangVersion>
+        <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <None Include="../LICENSE.md" Pack="true" PackagePath="$(PackageLicenseFile)" />
+        <None Include="./README.md" Pack="true" PackagePath="$(PackageReadmeFile)" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
+      <PackageReference Include="MimeTypes" Version="2.4.1">
+        <PrivateAssets>all</PrivateAssets>
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      </PackageReference>
+      <PackageReference Include="Serilog" Version="2.12.0" />
+      <PackageReference Include="Serilog.Enrichers.Thread" Version="3.1.0" />
+      <PackageReference Include="Serilog.Extensions.Logging" Version="7.0.0" />
+      <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
+      <PackageReference Include="System.Text.Json" Version="7.0.2" />
+      <PackageReference Include="TestIt.ApiClient" Version="2.2.0" />
+    </ItemGroup>
+
+</Project>

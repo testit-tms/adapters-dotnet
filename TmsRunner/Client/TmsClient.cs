@@ -7,7 +7,7 @@ using TmsRunner.Models;
 
 namespace TmsRunner.Client
 {
-    public class TestItClient : ITestItClient
+    public class TmsClient : ITmsClient
     {
         private readonly TmsSettings _settings;
         private readonly ILogger _logger;
@@ -15,9 +15,9 @@ namespace TmsRunner.Client
         private readonly AttachmentsApi _attachments;
         private readonly AutoTestsApi _autoTests;
 
-        public TestItClient(TmsSettings settings)
+        public TmsClient(TmsSettings settings)
         {
-            _logger = LoggerFactory.GetLogger().ForContext<TestItClient>();
+            _logger = LoggerFactory.GetLogger().ForContext<TmsClient>();
             _settings = settings;
 
             var cfg = new TestIt.Client.Client.Configuration { BasePath = settings.Url };
@@ -86,7 +86,11 @@ namespace TmsRunner.Client
             _logger.Debug("Uploading attachment {Name}", fileName);
 
             var response = await _attachments.ApiV2AttachmentsPostAsync(
-                new FileParameter(Path.GetFileName(fileName), content));
+                new FileParameter(
+                    filename: Path.GetFileName(fileName),
+                    content: content,
+                    contentType: MimeTypes.GetMimeType(fileName))
+            );
 
             _logger.Debug("Upload attachment {@Attachment} is successfully", response);
 
