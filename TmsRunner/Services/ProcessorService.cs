@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 using AutoMapper;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Serilog;
@@ -52,7 +53,8 @@ namespace TmsRunner.Services
                     case MessageType.TmsStep:
                     {
                         var step = JsonSerializer.Deserialize<Step>(message.Value);
-                        if ((step.CallerMethodType != null && parentStep == null) || (step.CurrentMethodType != null && parentStep == null))
+                        if ((step.CallerMethodType != null && parentStep == null) ||
+                            (step.CurrentMethodType != null && parentStep == null))
                         {
                             step.NestingLevel = nestingLevel = 1;
                             testCaseStepsHierarchical.Add(step);
@@ -61,7 +63,9 @@ namespace TmsRunner.Services
                         }
                         else
                         {
-                            while (parentStep != null && parentStep?.CurrentMethod != step.CallerMethod)
+                            var calledMethod = GetCalledMethod(step.CallerMethod);
+
+                            while (parentStep != null && parentStep?.CurrentMethod != calledMethod)
                             {
                                 parentStep = parentStep.ParentStep;
                                 nestingLevel--;
@@ -203,6 +207,17 @@ namespace TmsRunner.Services
             }
 
             return (autoTestSteps, testCaseStepsHierarchical);
+        }
+
+        private static string? GetCalledMethod(string? calledMethod)
+        {
+            if (calledMethod == null || !calledMethod.Contains("<")) return calledMethod;
+
+            const string pattern = "(?<=\\<)(.*)(?=\\>)";
+            var regex = new Regex(pattern);
+            var match = regex.Match(calledMethod);
+            
+            return match.Groups[1].Value;
         }
 
         public async Task ProcessAutoTest(TestResult testResult)
