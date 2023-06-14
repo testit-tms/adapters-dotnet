@@ -56,6 +56,13 @@ public class AdapterManager
         return this;
     }
 
+    public virtual AdapterManager StartTestContainer(string parentUuid, ClassContainer container)
+    {
+        UpdateTestContainer(parentUuid, c => c.Children.Add(container.Id));
+        StartTestContainer(container);
+        return this;
+        
+    }
     public virtual AdapterManager UpdateTestContainer(string uuid, Action<ClassContainer> update)
     {
         update.Invoke(_storage.Get<ClassContainer>(uuid));
@@ -159,6 +166,12 @@ public class AdapterManager
         return UpdateTestCase(_storage.GetRootStep(), update);
     }
 
+    public virtual AdapterManager StopTestCase(Action<TestContainer> beforeStop)
+    {
+        UpdateTestCase(beforeStop);
+        return StopTestCase(_storage.GetRootStep());
+    }
+    
     public virtual AdapterManager StopTestCase(string uuid)
     {
         var testResult = _storage.Get<TestContainer>(uuid);
@@ -195,6 +208,12 @@ public class AdapterManager
     public virtual AdapterManager StartStep(StepResult result)
     {
         var uuid = Guid.NewGuid().ToString("N");
+        StartStep(_storage.GetCurrentStep(), uuid, result);
+        return this;
+    }
+    
+    public virtual AdapterManager StartStep(string uuid, StepResult result)
+    {
         StartStep(_storage.GetCurrentStep(), uuid, result);
         return this;
     }

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <Version>1.0.3</Version>
+        <Version>1.0.4</Version>
         <TargetFramework>netstandard2.1</TargetFramework>
         <Nullable>enable</Nullable>
         <IsPackable>true</IsPackable>
@@ -34,6 +34,12 @@
       <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
       <PackageReference Include="System.Text.Json" Version="7.0.2" />
       <PackageReference Include="TestIt.ApiClient" Version="2.2.0" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <Reference Include="Tms.Adapter.Core">
+        <HintPath>..\Tms.Specflow.Examples\bin\Debug\net6.0\Tms.Adapter.Core.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>

@@ -1,6 +1,7 @@
 using Tms.Adapter.Core.Attributes;
 using Tms.Adapter.Core.Models;
 using Tms.Adapter.Core.Service;
+using Tms.Adapter.Core.Utils;
 using Xunit.Abstractions;
 
 namespace Tms.Adapter.XUnit;
@@ -14,7 +15,7 @@ public static class TmsXunitHelper
             return;
         }
 
-        StartTestContainer(testCaseStarting.TestClass, testResults);
+        StartTestContainer(testResults);
     }
 
     public static void StartTestCase(ITestCaseMessage testCaseMessage)
@@ -27,7 +28,7 @@ public static class TmsXunitHelper
         var testCase = testCaseMessage.TestCase;
         testResults.TestResult = new TestContainer
         {
-            Id = NewUuid(testCase.DisplayName),
+            Id = Hash.NewId(),
             ClassName = GetClassName(testCase.TestMethod.TestClass.Class.Name),
             Namespace = GetNameSpace(testCase.TestMethod.TestClass.Class.Name),
             Parameters = testCase.TestMethod.Method.GetParameters()
@@ -87,28 +88,14 @@ public static class TmsXunitHelper
         AdapterManager.Instance.WriteTestCase(testResults.TestResult.Id, testResults.ClassContainer.Id);
     }
 
-    private static void StartTestContainer(ITestClass testClass, ITmsAccessor testResult)
+    private static void StartTestContainer(ITmsAccessor testResult)
     {
-        var uuid = NewUuid(testClass.Class.Name);
+        var uuid = Hash.NewId();
         testResult.ClassContainer = new ClassContainer
         {
             Id = uuid
         };
         AdapterManager.Instance.StartTestContainer(testResult.ClassContainer);
-    }
-
-    private static string NewUuid(string name)
-    {
-        var uuid = string.Concat(Guid.NewGuid().ToString(), "-", name);
-        return uuid;
-    }
-
-    private static string GetStringSha256Hash(string text)
-    {
-        using var sha = new System.Security.Cryptography.SHA256Managed();
-        var textData = System.Text.Encoding.UTF8.GetBytes(text);
-        var hash = sha.ComputeHash(textData);
-        return BitConverter.ToString(hash).Replace("-", String.Empty);
     }
 
     private static void UpdateTestDataFromAttributes(TestContainer testResult, ITestCase testCase)
@@ -157,7 +144,7 @@ public static class TmsXunitHelper
         if (string.IsNullOrEmpty(testResult.ExternalId))
         {
             testResult.ExternalId =
-                GetStringSha256Hash(testResult.Namespace + "." + testResult.ClassName + "." + testResult.DisplayName);
+                Hash.GetStringSha256Hash(testResult.Namespace + "." + testResult.ClassName + "." + testResult.DisplayName);
         }
     }
 
