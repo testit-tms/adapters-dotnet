@@ -115,9 +115,9 @@ Feature: Simple
 Feature: Parameterized
 
   @ExternalId=parametrized_test_{number}_{value}_success
-    @DisplayName=parametrized_test_{number}_{value}_success_display_name
-    @Title=parametrized_test_{number}_{value}_success_title
-    @Description=parametrized_test_{number}_{value}_success
+  @DisplayName=parametrized_test_{number}_{value}_success_display_name
+  @Title=parametrized_test_{number}_{value}_success_title
+  @Description=parametrized_test_{number}_{value}_success
   Scenario Outline: Parametrized test
     When get parameters <number> <value>
     Then return true
