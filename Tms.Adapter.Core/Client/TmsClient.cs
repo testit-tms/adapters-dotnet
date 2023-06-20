@@ -146,11 +146,43 @@ public class TmsClient : ITmsClient
                 filename: Path.GetFileName(fileName),
                 content: content,
                 contentType: MimeTypes.GetMimeType(fileName))
-            );
+        );
 
         _logger.LogDebug("Upload attachment {@Attachment} is successfully", response);
 
         return response.Id.ToString();
+    }
+
+    public async Task CreateTestRun()
+    {
+        if (!string.IsNullOrEmpty(_settings.TestRunId))
+        {
+            return;
+        }
+
+        var createTestRunRequestBody = new TestRunV2PostShortModel
+        {
+            ProjectId = new Guid(_settings.ProjectId),
+            Name = (string.IsNullOrEmpty(_settings.TestRunName) ? null : _settings.TestRunName)!
+        };
+        var testRun = await _testRuns.CreateEmptyAsync(createTestRunRequestBody);
+
+        _settings.TestRunId = testRun.Id.ToString();
+    }
+
+    public async Task CompleteTestRun()
+    {
+        if (!string.IsNullOrEmpty(_settings.TestRunId))
+        {
+            return;
+        }
+        
+        var testRun = await _testRuns.GetTestRunByIdAsync(new Guid(_settings.TestRunId));
+
+        if (testRun.StateName != TestRunState.Completed)
+        {
+            await _testRuns.CompleteTestRunAsync(new Guid(_settings.TestRunId));
+        }
     }
 
     private async Task<AutoTestModel?> GetAutotestByExternalId(string externalId)

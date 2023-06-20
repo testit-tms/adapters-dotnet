@@ -38,7 +38,8 @@ Also you need to add following lines to `specflow.json`:
 | API secret key [How to getting API secret key?](https://github.com/testit-tms/.github/tree/main/configuration#privatetoken)                                                                                                                                                                                         | privateToken               | TMS_PRIVATE_TOKEN                 | 
 | ID of project in TMS instance [How to getting project ID?](https://github.com/testit-tms/.github/tree/main/configuration#projectid)                                                                                                                                                                                 | projectId                  | TMS_PROJECT_ID                    | 
 | ID of configuration in TMS instance [How to getting configuration ID?](https://github.com/testit-tms/.github/tree/main/configuration#configurationid)                                                                                                                                                               | configurationId            | TMS_CONFIGURATION_ID              | 
-| ID of the created test run in TMS instance.                                                                                                                                                                                                                                                                         | testRunId                  | TMS_TEST_RUN_ID                   | 
+| ID of the created test run in TMS instance. If you don't provide a test run ID, the adapter will automatically create one.                                                                                                                                                                                          | testRunId                  | TMS_TEST_RUN_ID                   | 
+| Parameter for specifying the name of test run in TMS instance (**It's optional**). If it is not provided, it is created automatically                                                                                                                                                                               | testRunName                | TMS_TEST_RUN_NAME                 |
 | It enables/disables certificate validation (**It's optional**). Default value - true                                                                                                                                                                                                                                | certValidation             | TMS_CERT_VALIDATION               | 
 | Mode of automatic creation test cases (**It's optional**). Default value - false. The adapter supports following modes:<br/>true - in this mode, the adapter will create a test case linked to the created autotest (not to the updated autotest)<br/>false - in this mode, the adapter will not create a test case | automaticCreationTestCases | TMS_AUTOMATIC_CREATION_TEST_CASES |
 | Enable debug logs (**It's optional**). Default value - false                                                                                                                                                                                                                                                        | isDebug                    | -                                 |
@@ -49,44 +50,24 @@ Create **Tms.config.json** file in the project directory:
 
 ```json
 {
-    "url": "URL",
-    "privateToken": "USER_PRIVATE_TOKEN",
-    "projectId": "PROJECT_ID",
-    "configurationId": "CONFIGURATION_ID",
-    "testRunId": "TEST_RUN_ID",
-    "automaticCreationTestCases": false,
-    "certValidation": true,
-    "isDebug": true
+  "url": "URL",
+  "privateToken": "USER_PRIVATE_TOKEN",
+  "projectId": "PROJECT_ID",
+  "configurationId": "CONFIGURATION_ID",
+  "testRunId": "TEST_RUN_ID",
+  "testRunName": "TEST_RUN_NAME",
+  "automaticCreationTestCases": false,
+  "certValidation": true,
+  "isDebug": true
 }
 ```
 
 ### How to run
 
-If you specified TestRunId, then just run the command: 
+Just run the command:
 
 ```bash
 dotnet test
-```
-
-To create and complete TestRun you can use the [Test IT CLI](https://docs.testit.software/user-guide/integrations/cli.html):
-
-```bash
-$ export TMS_TOKEN=<YOUR_TOKEN>
-$ testit \
-  --mode create
-  --url https://tms.testit.software \
-  --project-id 5236eb3f-7c05-46f9-a609-dc0278896464 \
-  --testrun-name "New test run" \
-  --output tmp/output.txt
-
-$ export TMS_TEST_RUN_ID=$(cat output.txt)  
-
-$ dotnet test
-
-$ testit \
-  --mode finish
-  --url https://tms.testit.software \
-  --testrun-id $(cat tmp/output.txt) 
 ```
 
 ### Attributes
@@ -115,7 +96,7 @@ Description of methods:
 
 ```gherkin
 Feature: Simple
-  
+
   @ExternalId=With_all_annotations_success
   @DisplayName=With_all_annotations_success_display_name
   @Title=With_all_annotations_success_title
@@ -134,9 +115,9 @@ Feature: Simple
 Feature: Parameterized
 
   @ExternalId=parametrized_test_{number}_{value}_success
-  @DisplayName=parametrized_test_{number}_{value}_success_display_name
-  @Title=parametrized_test_{number}_{value}_success_title
-  @Description=parametrized_test_{number}_{value}_success
+    @DisplayName=parametrized_test_{number}_{value}_success_display_name
+    @Title=parametrized_test_{number}_{value}_success_title
+    @Description=parametrized_test_{number}_{value}_success
   Scenario Outline: Parametrized test
     When get parameters <number> <value>
     Then return true

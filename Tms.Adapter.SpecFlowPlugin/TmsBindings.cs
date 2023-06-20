@@ -21,9 +21,15 @@ namespace Tms.Adapter.SpecFlowPlugin
         [BeforeTestRun]
         public static void BeforeTestRun()
         {
-            
+            Adapter.CreateTestRun().Wait();
         }
-        
+
+        [AfterTestRun]
+        public static void AfterTestRun()
+        {
+            Adapter.CompleteTestRun().Wait();
+        }
+
         [BeforeFeature(Order = int.MinValue)]
         public static void FirstBeforeFeature()
         {
@@ -51,10 +57,10 @@ namespace Tms.Adapter.SpecFlowPlugin
         public void FirstAfterScenario()
         {
             var scenarioId = TmsHelper.GetCurrentTestCase(_scenarioContext).Id;
-            
+
             Adapter
                 .UpdateTestCase(scenarioId,
-                    x => x.Status = x.Status == Status.Undefined ? Status.Passed: x.Status)
+                    x => x.Status = x.Status == Status.Undefined ? Status.Passed : x.Status)
                 .StopTestCase(scenarioId);
         }
     }

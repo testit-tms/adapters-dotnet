@@ -36,10 +36,4 @@
       <PackageReference Include="TestIt.ApiClient" Version="2.2.0" />
     </ItemGroup>
     
-    <ItemGroup>
-      <Reference Include="Tms.Adapter.Core">
-        <HintPath>..\Tms.Specflow.Examples\bin\Debug\net6.0\Tms.Adapter.Core.dll</HintPath>
-      </Reference>
-    </ItemGroup>
-
 </Project>

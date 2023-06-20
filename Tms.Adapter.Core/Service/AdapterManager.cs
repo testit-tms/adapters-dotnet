@@ -272,4 +272,14 @@ public class AdapterManager
         _storage.Get<ExecutableItem>(_storage.GetCurrentStep()).Attachments.Add(attachId);
         return this;
     }
+
+    public async Task CreateTestRun()
+    {
+        await _client.CreateTestRun();
+    }
+    
+    public async Task CompleteTestRun()
+    {
+        await _client.CompleteTestRun();
+    }
 }
