@@ -47,16 +47,16 @@ public class AdapterConfig
     [Option("tmsAdapterMode", Default = "2", Required = false, HelpText = "Set adapter mode.")]
     public string TmsAdapterMode { get; set; }
 
-    [Option("TmsConfigFile", Required = false, HelpText = "Set configuration file name.")]
+    [Option("tmsConfigFile", Required = false, HelpText = "Set configuration file name.")]
     public string TmsConfigFile { get; set; }
 
-    [Option("TmsRunSettings", Required = false, HelpText = "Set run settings.")]
+    [Option("tmsRunSettings", Required = false, HelpText = "Set run settings.")]
     public string TmsRunSettings { get; set; }
 
-    [Option("TmsAutomaticCreationTestCases", Required = false, HelpText = "Set automatic creation test cases.")]
+    [Option("tmsAutomaticCreationTestCases", Required = false, HelpText = "Set automatic creation test cases.")]
     public string TmsAutomaticCreationTestCases { get; set; }
 
-    [Option("TmsCertValidation", Default = "true", Required = false, HelpText = "Set certificate validation.")]
+    [Option("tmsCertValidation", Default = "true", Required = false, HelpText = "Set certificate validation.")]
     public string TmsCertValidation { get; set; }
 
     public Config ToInternalConfig()
