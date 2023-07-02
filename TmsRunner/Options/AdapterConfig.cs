@@ -22,6 +22,9 @@ public class AdapterConfig
         HelpText = "Set path to logger. Example: --logger '/Tests/logger.dll'")]
     public string LoggerPath { get; set; }
 
+    [Option("labelsOfTestsToRun", Required = false, HelpText = "Set labels of autotests to run. Example: --labelsOfTestsToRun smoke OR --labelsOfTestsToRun smoke,prod,cloud")]
+    public string LabelsOfTestsToRun { get; set; }
+
     [Option('d', "debug", Required = false,
         HelpText = "Set debug level for logging. Example: --debug")]
     public bool IsDebug { get; set; }
@@ -73,7 +76,8 @@ public class AdapterConfig
             TmsConfigFile = TmsConfigFile,
             TmsRunSettings = TmsRunSettings,
             TmsAutomaticCreationTestCases = TmsAutomaticCreationTestCases,
-            TmsCertValidation = TmsCertValidation
+            TmsCertValidation = TmsCertValidation,
+            LabelsOfTestsToRun = LabelsOfTestsToRun
         };
     }
 }

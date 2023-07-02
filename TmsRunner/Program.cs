@@ -43,19 +43,25 @@ internal class Program
         ITmsClient apiClient = new TmsClient(settings);
 
         var replacer = new Replacer();
+        var filterService = new FilterService(replacer);
 
         switch (settings.AdapterMode)
         {
             case 0:
             {
                 var testCaseForRun = await apiClient.GetAutoTestsForRun(settings.TestRunId);
-                var filterService = new FilterService(replacer);
                 testCases = filterService.FilterTestCases(config.TestAssemblyPath, testCaseForRun, testCases);
                 break;
             }
             case 2:
             {
                 settings.TestRunId = await apiClient.CreateTestRun();
+
+                if (!string.IsNullOrEmpty(config.LabelsOfTestsToRun))
+                {
+                    testCases = filterService.FilterTestCasesByLabels(config, testCases);
+                }
+                
                 break;
             }
         }
@@ -112,7 +118,8 @@ internal class Program
                     TmsTestRunId = ac.TmsTestRunId,
                     TmsTestRunName = ac.TmsTestRunName,
                     TmsAdapterMode = ac.TmsAdapterMode,
-                    TmsConfigFile = ac.TmsConfigFile
+                    TmsConfigFile = ac.TmsConfigFile,
+                    LabelsOfTestsToRun = ac.LabelsOfTestsToRun
                 };
             });
         return config;

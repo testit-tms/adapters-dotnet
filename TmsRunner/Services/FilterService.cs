@@ -4,6 +4,7 @@ using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Tms.Adapter.Attributes;
 using Tms.Adapter.Utils;
 using TmsRunner.Extensions;
+using TmsRunner.Options;
 
 namespace TmsRunner.Services;
 
@@ -65,6 +66,39 @@ public class FilterService
             {
                 testCasesToRun.Add(testCases.FirstOrDefault(x => x.FullyQualifiedName == fullName));
             }
+        }
+
+        return testCasesToRun;
+    }
+
+    public List<TestCase> FilterTestCasesByLabels(
+        AdapterConfig config,
+        IEnumerable<TestCase> testCases)
+    {
+        var labelsToRun = config.LabelsOfTestsToRun.Split(',').Select(x => x.Trim()).ToList();
+        var testCasesName = testCases.Select(t => t.FullyQualifiedName);
+        var testCasesToRun = new List<TestCase>();
+        var assembly = Assembly.LoadFrom(config.TestAssemblyPath);
+        var testMethods = new List<MethodInfo>(
+            assembly.GetExportedTypes()
+                .SelectMany(type => type.GetMethods())
+                .Where(m => testCasesName.Contains(m.DeclaringType!.FullName + "." + m.Name))
+        );
+
+        foreach (var testMethod in testMethods)
+        {
+            var fullName = testMethod.DeclaringType!.FullName + "." + testMethod.Name;
+
+            foreach (var attribute in testMethod.GetCustomAttributes(false))
+            {
+                if (attribute is LabelsAttribute labelsAttr)
+                {
+                    if (labelsAttr.Value.Any(labelsToRun.Contains))
+                    {
+                        testCasesToRun.Add(testCases.FirstOrDefault(x => x.FullyQualifiedName == fullName));
+                    }
+                }
+            } 
         }
 
         return testCasesToRun;
