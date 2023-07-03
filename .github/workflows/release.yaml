@@ -17,7 +17,8 @@ jobs:
         project: [
           ./Tms.Adapter,
           ./Tms.Adapter.Core,
-          ./Tms.Adapter.XUnit
+          ./Tms.Adapter.XUnit,
+          ./Tms.Adapter.SpecFlowPlugin
         ]
     steps:
       - name: Checkout
