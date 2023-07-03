@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<configuration>
+  <specFlow>
+    <plugins>
+      <add name="Tms" type="Runtime" />
+    </plugins>
+    <stepAssemblies>
+      <stepAssembly assembly="Tms.Adapter.SpecFlow" />
+    </stepAssemblies>
+  </specFlow>
+</configuration>

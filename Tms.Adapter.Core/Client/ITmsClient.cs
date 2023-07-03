@@ -11,4 +11,6 @@ public interface ITmsClient
     Task LinkAutoTestToWorkItems(string externalId, IEnumerable<string> workItemIds);
     Task SubmitTestCaseResult(TestContainer result, ClassContainer container);
     Task<string> UploadAttachment(string fileName, Stream content);
+    Task CreateTestRun();
+    Task CompleteTestRun();
 }

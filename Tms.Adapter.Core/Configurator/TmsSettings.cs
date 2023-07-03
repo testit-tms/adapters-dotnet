@@ -14,6 +14,7 @@ public class TmsSettings
     public string ProjectId { get; set; }
     public string ConfigurationId { get; set; }
     public string TestRunId { get; set; }
+    public string TestRunName { get; set; }
     public bool AutomaticCreationTestCases { get; set; }
     public bool CertValidation { get; set; }
     public bool IsDebug { get; set; }

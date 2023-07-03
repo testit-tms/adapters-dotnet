@@ -5,10 +5,10 @@
         <TargetFramework>netstandard2.1</TargetFramework>
         <Nullable>enable</Nullable>
         <IsPackable>true</IsPackable>
-        <Title>Test IT XUnit adapter</Title>
-        <PackageId>TestIT.Adapter.XUnit</PackageId>
+        <Title>Test IT SpecFlow adapter</Title>
+        <PackageId>TestIT.Adapter.SpecFlowPlugin</PackageId>
         <Authors>Integration team</Authors>
-        <Description>Test IT XUnit adapter</Description>
+        <Description>Test IT SpecFlow adapter</Description>
         <Copyright>Copyright (c) 2019 - 2023 Test IT</Copyright>
         <RepositoryUrl>https://github.com/testit-tms/adapters-dotnet</RepositoryUrl>
         <PackageProjectUrl>https://testit.software</PackageProjectUrl>
@@ -24,8 +24,7 @@
     </ItemGroup>
     
     <ItemGroup>
-      <PackageReference Include="AspectInjector" Version="2.8.1" />
-      <PackageReference Include="xunit.core" Version="2.4.1" />
+      <PackageReference Include="SpecFlow" Version="3.9.74" />
     </ItemGroup>
 
     <ItemGroup>
