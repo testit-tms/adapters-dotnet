@@ -57,7 +57,7 @@ internal class Program
             {
                 settings.TestRunId = await apiClient.CreateTestRun();
 
-                if (!string.IsNullOrEmpty(config.LabelsOfTestsToRun))
+                if (!string.IsNullOrEmpty(config.TmsLabelsOfTestsToRun))
                 {
                     testCases = filterService.FilterTestCasesByLabels(config, testCases);
                 }
@@ -119,9 +119,10 @@ internal class Program
                     TmsTestRunName = ac.TmsTestRunName,
                     TmsAdapterMode = ac.TmsAdapterMode,
                     TmsConfigFile = ac.TmsConfigFile,
-                    LabelsOfTestsToRun = ac.LabelsOfTestsToRun
+                    TmsLabelsOfTestsToRun = ac.TmsLabelsOfTestsToRun
                 };
             });
+        
         return config;
     }
 }

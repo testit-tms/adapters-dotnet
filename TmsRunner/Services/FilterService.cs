@@ -75,7 +75,7 @@ public class FilterService
         AdapterConfig config,
         IEnumerable<TestCase> testCases)
     {
-        var labelsToRun = config.LabelsOfTestsToRun.Split(',').Select(x => x.Trim()).ToList();
+        var labelsToRun = config.TmsLabelsOfTestsToRun.Split(',').Select(x => x.Trim()).ToList();
         var testCasesName = testCases.Select(t => t.FullyQualifiedName);
         var testCasesToRun = new List<TestCase>();
         var assembly = Assembly.LoadFrom(config.TestAssemblyPath);

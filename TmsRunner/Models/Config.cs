@@ -24,5 +24,5 @@ public class Config
 
     public string TmsCertValidation { get; set; }
 
-    public string LabelsOfTestsToRun { get; set; }
+    public string TmsLabelsOfTestsToRun { get; set; }
 }

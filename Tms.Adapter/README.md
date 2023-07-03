@@ -27,7 +27,6 @@ dotnet package add TestIt.Adapter
 
 ### Configuration
 
-
 | Description                                                                                                                                                                                                                                                                                                                                                                            | Property                   | Environment variable              | CLI argument                  |
 |----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------|-----------------------------------|-------------------------------|
 | Location of the TMS instance                                                                                                                                                                                                                                                                                                                                                           | url                        | TMS_URL                           | tmsUrl                        |
@@ -39,6 +38,7 @@ dotnet package add TestIt.Adapter
 | Adapter mode. Default value - 0. The adapter supports following modes:<br/>0 - in this mode, the adapter filters tests by test run ID and configuration ID, and sends the results to the test run<br/>1 - in this mode, the adapter sends all results to the test run without filtering<br/>2 - in this mode, the adapter creates a new test run and sends results to the new test run | adapterMode                | TMS_ADAPTER_MODE                  | tmsAdapterMode                |
 | It enables/disables certificate validation (**It's optional**). Default value - true                                                                                                                                                                                                                                                                                                   | certValidation             | TMS_CERT_VALIDATION               | tmsCertValidation             |
 | Mode of automatic creation test cases (**It's optional**). Default value - false. The adapter supports following modes:<br/>true - in this mode, the adapter will create a test case linked to the created autotest (not to the updated autotest)<br/>false - in this mode, the adapter will not create a test case                                                                    | automaticCreationTestCases | TMS_AUTOMATIC_CREATION_TEST_CASES | tmsAutomaticCreationTestCases |
+| List of labels for filtering tests (**Optional**). It will only work with adapter mode 2.                                                                                                                                                                                                                                                                                              | -                          | -                                 | tmsLabelsOfTestsToRun         |
 
 #### File
 
@@ -46,15 +46,15 @@ Create **Tms.config.json** file in the project directory:
 
 ```json
 {
-    "url": "URL",
-    "privateToken": "USER_PRIVATE_TOKEN",
-    "projectId": "PROJECT_ID",
-    "configurationId": "CONFIGURATION_ID",
-    "testRunId": "TEST_RUN_ID",
-    "testRunName": "TEST_RUN_NAME",
-    "adapterMode": ADAPTER_MODE,
-    "automaticCreationTestCases": AUTOMATIC_CREATION_TEST_CASES,
-    "certValidation": CERT_VALIDATION
+  "url": "URL",
+  "privateToken": "USER_PRIVATE_TOKEN",
+  "projectId": "PROJECT_ID",
+  "configurationId": "CONFIGURATION_ID",
+  "testRunId": "TEST_RUN_ID",
+  "testRunName": "TEST_RUN_NAME",
+  "adapterMode": ADAPTER_MODE,
+  "automaticCreationTestCases": AUTOMATIC_CREATION_TEST_CASES,
+  "certValidation": CERT_VALIDATION
 }
 ```
 
@@ -64,13 +64,13 @@ Create **Tms.config.json** file in the project directory:
 
 ```
 TmsRunner --runner "/usr/local/share/dotnet/sdk/6.0.302/vstest.console.dll" --testassembly "/tests/MsTest.dll" -tmsUrl=http://localhost:8080 -tmsPrivateToken=Token -tmsProjectId=f5da5bab-380a-4382-b36f-600083fdd795 -tmsConfigurationId=3a14fa45-b54e-4859-9998-cc502d4cc8c6
--tmsAdapterMode=0 -DtmsTestRunId=a17269da-bc65-4671-90dd-d3e3da92af80 -tmsTestRunName=Regress -tmsAutomaticCreationTestCases=true -tmsCertValidation=true --debug
+-tmsAdapterMode=0 -DtmsTestRunId=a17269da-bc65-4671-90dd-d3e3da92af80 -tmsTestRunName=Regress -tmsAutomaticCreationTestCases=true -tmsCertValidation=true -tmsLabelsOfTestsToRun smoke,regress --debug
 ```
 
 * `runner` - path to vstest.console.dll or vstest.console.exe
 * `testassembly` - path to dll with tests
 * `debug` - enable debug logs
-  
+
 ### Attributes
 
 Use attributes to specify information about autotest.
@@ -181,11 +181,15 @@ public class ParameterizedTests {
 
 You can help to develop the project. Any contributions are **greatly appreciated**.
 
-* If you have suggestions for adding or removing projects, feel free to [open an issue](https://github.com/testit-tms/adapters-dotnet/issues/new) to discuss it, or create a direct pull request after you edit the *README.md* file with necessary changes.
+* If you have suggestions for adding or removing projects, feel free
+  to [open an issue](https://github.com/testit-tms/adapters-dotnet/issues/new) to discuss it, or create a direct pull
+  request after you edit the *README.md* file with necessary changes.
 * Make sure to check your spelling and grammar.
 * Create individual PR for each suggestion.
-* Read the [Code Of Conduct](https://github.com/testit-tms/adapters-dotnet/blob/main/CODE_OF_CONDUCT.md) before posting your first idea as well.
+* Read the [Code Of Conduct](https://github.com/testit-tms/adapters-dotnet/blob/main/CODE_OF_CONDUCT.md) before posting
+  your first idea as well.
 
 # License
 
-Distributed under the Apache-2.0 License. See [LICENSE](https://github.com/testit-tms/adapters-dotnet/blob/main/LICENSE.md) for more information.
+Distributed under the Apache-2.0 License.
+See [LICENSE](https://github.com/testit-tms/adapters-dotnet/blob/main/LICENSE.md) for more information.
