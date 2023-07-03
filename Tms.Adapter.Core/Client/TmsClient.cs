@@ -58,7 +58,7 @@ public class TmsClient : ITmsClient
 
         var autotest = await GetAutotestByExternalId(result.ExternalId);
         var model = Converter.ConvertAutoTestDtoToPutModel(result, container, _settings.ProjectId);
-        model.IsFlaky = autotest.IsFlaky;
+        model.IsFlaky = autotest?.IsFlaky;
 
         await _autoTests.UpdateAutoTestAsync(model);
 
@@ -70,6 +70,13 @@ public class TmsClient : ITmsClient
         _logger.LogDebug("Updating links property for autotest {ExternalId}: {@Links}", externalId, links);
 
         var autotest = await GetAutotestByExternalId(externalId);
+
+        if (autotest == null)
+        {
+            _logger.LogError("Autotest with {ID} not found", externalId);
+            return;
+        }
+        
         var putLinks = links.Select(l => new LinkPutModel(url: l.Url)
             {
                 Title = l.Title,
@@ -99,10 +106,16 @@ public class TmsClient : ITmsClient
     {
         var autotest = await GetAutotestByExternalId(externalId);
 
+        if (autotest == null)
+        {
+            _logger.LogError("Autotest with {ID} not found", externalId);
+            return;
+        }
+        
         foreach (var workItemId in workItemIds)
         {
             _logger.LogDebug(
-                "Linking autotest {AutotestId} to workitem {WorkitemId}",
+                "Linking autotest {AutotestId} to work item {WorkItemId}",
                 autotest.Id,
                 workItemId);
 
@@ -113,14 +126,14 @@ public class TmsClient : ITmsClient
             catch (ApiException e) when (e.Message.Contains("does not exist"))
             {
                 _logger.LogError(
-                    "Cannot link autotest {AutotestId} to workitem {WorkitemId}: workitem was not found",
+                    "Cannot link autotest {AutotestId} to work item {WorkItemId}: work item was not found",
                     autotest.Id,
                     workItemId);
                 return;
             }
 
             _logger.LogDebug(
-                "Link autotest {AutotestId} to workitem {WorkitemId} is successfully",
+                "Link autotest {AutotestId} to work item {WorkItemId} is successfully",
                 autotest.Id,
                 workItemId);
         }
@@ -146,11 +159,53 @@ public class TmsClient : ITmsClient
                 filename: Path.GetFileName(fileName),
                 content: content,
                 contentType: MimeTypes.GetMimeType(fileName))
-            );
+        );
 
         _logger.LogDebug("Upload attachment {@Attachment} is successfully", response);
 
         return response.Id.ToString();
+    }
+
+    public async Task CreateTestRun()
+    {
+        _logger.LogDebug("Creating test run");
+
+        if (!string.IsNullOrEmpty(_settings.TestRunId))
+        {
+            _logger.LogDebug("Test run id : {ID}", _settings.TestRunId);
+
+            return;
+        }
+
+        var createTestRunRequestBody = new TestRunV2PostShortModel
+        {
+            ProjectId = new Guid(_settings.ProjectId),
+            Name = (string.IsNullOrEmpty(_settings.TestRunName) ? null : _settings.TestRunName)!
+        };
+        var testRun = await _testRuns.CreateEmptyAsync(createTestRunRequestBody);
+
+        _settings.TestRunId = testRun.Id.ToString();
+
+        _logger.LogDebug("Test run id : {ID}", _settings.TestRunId);
+    }
+
+    public async Task CompleteTestRun()
+    {
+        _logger.LogDebug("Completing test run");
+
+        if (!string.IsNullOrEmpty(_settings.TestRunId))
+        {
+            return;
+        }
+
+        var testRun = await _testRuns.GetTestRunByIdAsync(new Guid(_settings.TestRunId));
+
+        if (testRun.StateName != TestRunState.Completed)
+        {
+            await _testRuns.CompleteTestRunAsync(new Guid(_settings.TestRunId));
+        }
+
+        _logger.LogDebug("Complete test run is successfully");
     }
 
     private async Task<AutoTestModel?> GetAutotestByExternalId(string externalId)
