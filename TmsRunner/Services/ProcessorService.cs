@@ -65,7 +65,7 @@ namespace TmsRunner.Services
                         {
                             var calledMethod = GetCalledMethod(step.CallerMethod);
 
-                            while (parentStep != null && parentStep?.CurrentMethod != calledMethod)
+                            while (parentStep != null && calledMethod != null && parentStep?.CurrentMethod != calledMethod)
                             {
                                 parentStep = parentStep.ParentStep;
                                 nestingLevel--;
