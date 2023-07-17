@@ -8,8 +8,8 @@
 
 * MethodBoundaryAspect.Fody 2.0.148+
 * Microsoft.NET.Test.Sdk 17.5.0+
-* MSTest.TestAdapter 3.0.2+ (only for MSTest)
-* MSTest.TestFramework 3.0.2+ (only for MSTest)
+* MSTest.TestAdapter 3.0.2 (only for MSTest)
+* MSTest.TestFramework 3.0.2 (only for MSTest)
 
 #### NuGet CLI
 
