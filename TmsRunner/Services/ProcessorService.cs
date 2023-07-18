@@ -43,7 +43,7 @@ namespace TmsRunner.Services
             var messages = _parser.GetMessages(traceJson);
 
             var testCaseStepsHierarchical = new List<Step>();
-            Step parentStep = null;
+            Step? parentStep = null;
             var nestingLevel = 1;
 
             foreach (var message in messages)
@@ -53,6 +53,12 @@ namespace TmsRunner.Services
                     case MessageType.TmsStep:
                     {
                         var step = JsonSerializer.Deserialize<Step>(message.Value);
+                        if (step == null)
+                        {
+                            _logger.Warning("Can not deserialize step: {Step}", message.Value);
+                            break;
+                        }
+
                         if ((step.CallerMethodType != null && parentStep == null) ||
                             (step.CurrentMethodType != null && parentStep == null))
                         {
@@ -65,9 +71,10 @@ namespace TmsRunner.Services
                         {
                             var calledMethod = GetCalledMethod(step.CallerMethod);
 
-                            while (parentStep != null && calledMethod != null && parentStep?.CurrentMethod != calledMethod)
+                            while (parentStep != null && calledMethod != null &&
+                                   parentStep?.CurrentMethod != calledMethod)
                             {
-                                parentStep = parentStep.ParentStep;
+                                parentStep = parentStep?.ParentStep;
                                 nestingLevel--;
                             }
 
@@ -93,7 +100,14 @@ namespace TmsRunner.Services
                     case MessageType.TmsStepResult:
                     {
                         var stepResult = JsonSerializer.Deserialize<StepResult>(message.Value);
-                        _mapper.Map(stepResult, parentStep);
+
+                        if (stepResult == null)
+                        {
+                            _logger.Warning("Can not deserialize step result: {StepResult}", message.Value);
+                            break;
+                        }
+
+                        parentStep = MapStep(parentStep, stepResult);
 
                         if (parentStep != null)
                         {
@@ -165,8 +179,10 @@ namespace TmsRunner.Services
             }
             else
             {
+                _logger.Debug("Flatten");
+                
                 var flattenAutoTestSteps = autoTestSteps.Flatten(x => x.Steps).ToList();
-
+            
                 foreach (var step in testCaseSteps)
                 {
                     var existedSteps = flattenAutoTestSteps
@@ -176,9 +192,9 @@ namespace TmsRunner.Services
                         .Where(x => x.StackTrace() == step.StackTrace())
                         .ToList();
                     var diff = existedSteps.Count - newSteps.Count;
-
+            
                     if (diff >= 0) continue;
-
+            
                     if (step.CallerMethod == methodName)
                     {
                         var newStep = _mapper.Map<Step>(step);
@@ -216,7 +232,7 @@ namespace TmsRunner.Services
             const string pattern = "(?<=\\<)(.*)(?=\\>)";
             var regex = new Regex(pattern);
             var match = regex.Match(calledMethod);
-            
+
             return match.Groups[1].Value;
         }
 
@@ -334,6 +350,21 @@ namespace TmsRunner.Services
             var traceJson = string.Join("\n", debugTraceMessages);
 
             return traceJson;
+        }
+
+        private static Step? MapStep(Step? step, StepResult stepResult)
+        {
+            if (step == null)
+            {
+                return null;
+            }
+
+            step.CompletedOn = stepResult.CompletedOn;
+            step.Duration = stepResult.Duration;
+            step.Result = stepResult.Result;
+            step.Outcome = stepResult.Outcome;
+
+            return step;
         }
     }
 }
