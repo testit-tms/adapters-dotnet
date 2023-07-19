@@ -9,20 +9,16 @@ public class Reflector
         Dictionary<string, string>? parameters)
     {
         var assembly = Assembly.LoadFrom(assemblyPath);
-
         var fullyQualifiedNameArray = methodName.Split(".");
-
         var type = assembly.GetType(string.Join(".", fullyQualifiedNameArray[..^1]));
-
-        // TODO: need to check parameters name and position
-        //        var para = method.GetParameters();
-        //          var par = para[0];
         var methods = type.GetMethods()
             .Where(m => m.Name.Equals(fullyQualifiedNameArray[^1])).ToList();
 
         if (parameters is not null)
         {
-            methods = methods.Where(m => m.GetParameters().Length == parameters.Count).ToList();
+            methods = methods
+                .Where(m => CompareParameters(parameters, m.GetParameters()))
+                .ToList();
         }
 
         var method = methods.FirstOrDefault();
@@ -37,12 +33,32 @@ public class Reflector
             .Select(a => (Attribute)a)
             .ToList();
 
-        return new MethodMetadata()
+        return new MethodMetadata
         {
             Name = method.Name,
-            Namespace = string.Join(".", fullyQualifiedNameArray[..(fullyQualifiedNameArray.Length - 2)]),
-            Classname = fullyQualifiedNameArray[fullyQualifiedNameArray.Length - 2],
+            Namespace = string.Join(".", fullyQualifiedNameArray[..^2]),
+            Classname = fullyQualifiedNameArray[^2],
             Attributes = attributes
         };
+    }
+
+    private static bool CompareParameters(Dictionary<string, string> parameters,
+        IReadOnlyList<ParameterInfo> methodParameters)
+    {
+        if (methodParameters.Count != parameters.Count)
+            return false;
+
+        var i = 0;
+        foreach (var parameter in parameters)
+        {
+            if (parameter.Key != methodParameters[i].Name)
+            {
+                return false;
+            }
+
+            i++;
+        }
+
+        return true;
     }
 }
