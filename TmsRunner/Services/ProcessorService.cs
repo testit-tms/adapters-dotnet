@@ -1,14 +1,11 @@
 ﻿using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using AutoMapper;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Serilog;
 using Tms.Adapter.Models;
 using TmsRunner.Client;
-using TmsRunner.Extensions;
 using TmsRunner.Logger;
-using TmsRunner.Mapper;
 using TmsRunner.Models;
 using TmsRunner.Utils;
 using File = Tms.Adapter.Models.File;
@@ -19,11 +16,7 @@ namespace TmsRunner.Services
     {
         private readonly ITmsClient _apiClient;
         private readonly TmsSettings _tmsSettings;
-
         private readonly LogParser _parser;
-        // private readonly IMapper _mapper;
-        // private readonly Dictionary<string, List<Step>> _autoTestSteps = new();
-
         private readonly ILogger _logger = LoggerFactory.GetLogger().ForContext<ProcessorService>();
 
         public ProcessorService(
@@ -34,12 +27,10 @@ namespace TmsRunner.Services
             _apiClient = apiClient;
             _tmsSettings = tmsSettings;
             _parser = parser;
-            // _mapper = MapperFactory.ConfigureMapper();
         }
 
         private async Task<List<Step>> GetStepsWithAttachments(
-            string? traceJson,
-            string methodName, string className, ICollection<Guid> attachmentIds)
+            string? traceJson, ICollection<Guid> attachmentIds)
         {
             var messages = _parser.GetMessages(traceJson);
 
@@ -169,62 +160,6 @@ namespace TmsRunner.Services
             }
 
             return testCaseStepsHierarchical;
-            // .Flatten(x => x.Steps)
-            // .OrderBy(x => x.NestingLevel)
-            // .ToList();
-            // _autoTestSteps.TryGetValue($"{className}:{methodName}", out var autoTestSteps);
-            //
-            // if (autoTestSteps == null)
-            // {
-            //     _autoTestSteps.Add($"{className}:{methodName}", testCaseStepsHierarchical);
-            //     autoTestSteps = testCaseStepsHierarchical;
-            // }
-            // else
-            // {
-            //     _logger.Debug("Flatten");
-            //     
-            //     var flattenAutoTestSteps = autoTestSteps.Flatten(x => x.Steps).ToList();
-            //
-            //     foreach (var step in testCaseSteps)
-            //     {
-            //         var existedSteps = flattenAutoTestSteps
-            //             .Where(x => x.StackTrace() == step.StackTrace())
-            //             .ToList();
-            //         var newSteps = testCaseSteps
-            //             .Where(x => x.StackTrace() == step.StackTrace())
-            //             .ToList();
-            //         var diff = existedSteps.Count - newSteps.Count;
-            //
-            //         if (diff >= 0) continue;
-            //
-            //         if (step.CallerMethod == methodName)
-            //         {
-            //             var newStep = _mapper.Map<Step>(step);
-            //             autoTestSteps.Add(newStep);
-            //             flattenAutoTestSteps.Add(newStep);
-            //         }
-            //         else
-            //         {
-            //             var parentStackTrace = step.StackTrace()
-            //                 .Remove(step.StackTrace().LastIndexOf(Environment.NewLine));
-            //             var parentSteps = flattenAutoTestSteps.Where(x => x.StackTrace() == parentStackTrace)
-            //                 .ToList();
-            //             var i = 0;
-            //             do
-            //             {
-            //                 i++;
-            //                 foreach (var parent in parentSteps)
-            //                 {
-            //                     var newStep = _mapper.Map<Step>(step);
-            //                     parent.Steps.Add(newStep);
-            //                     flattenAutoTestSteps.Add(newStep);
-            //                 }
-            //             } while (parentSteps.Count * i + diff < 0);
-            //         }
-            //     }
-            // }
-            //
-            // return (autoTestSteps, testCaseStepsHierarchical);
         }
 
         private static string? GetCalledMethod(string? calledMethod)
@@ -247,7 +182,7 @@ namespace TmsRunner.Services
 
             var attachmentIds = new List<Guid>();
             var testCaseSteps =
-                await GetStepsWithAttachments(traceJson, autoTest.MethodName, autoTest.Classname, attachmentIds);
+                await GetStepsWithAttachments(traceJson, attachmentIds);
 
             autoTest.Setup = testCaseSteps
                 .Where(x => x.CallerMethodType == CallerMethodType.Setup)
