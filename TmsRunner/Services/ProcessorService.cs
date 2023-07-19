@@ -19,9 +19,10 @@ namespace TmsRunner.Services
     {
         private readonly ITmsClient _apiClient;
         private readonly TmsSettings _tmsSettings;
+
         private readonly LogParser _parser;
-        private readonly IMapper _mapper;
-        private readonly Dictionary<string, List<Step>> _autoTestSteps = new();
+        // private readonly IMapper _mapper;
+        // private readonly Dictionary<string, List<Step>> _autoTestSteps = new();
 
         private readonly ILogger _logger = LoggerFactory.GetLogger().ForContext<ProcessorService>();
 
@@ -33,10 +34,10 @@ namespace TmsRunner.Services
             _apiClient = apiClient;
             _tmsSettings = tmsSettings;
             _parser = parser;
-            _mapper = MapperFactory.ConfigureMapper();
+            // _mapper = MapperFactory.ConfigureMapper();
         }
 
-        private async Task<(List<Step> AutoTestSteps, List<Step> TestCaseStep)> GetStepsWithAttachments(
+        private async Task<List<Step>> GetStepsWithAttachments(
             string? traceJson,
             string methodName, string className, ICollection<Guid> attachmentIds)
         {
@@ -167,62 +168,63 @@ namespace TmsRunner.Services
                 }
             }
 
-            var testCaseSteps = testCaseStepsHierarchical.Flatten(x => x.Steps)
-                .OrderBy(x => x.NestingLevel)
-                .ToList();
-            _autoTestSteps.TryGetValue($"{className}:{methodName}", out var autoTestSteps);
-
-            if (autoTestSteps == null)
-            {
-                _autoTestSteps.Add($"{className}:{methodName}", testCaseStepsHierarchical);
-                autoTestSteps = testCaseStepsHierarchical;
-            }
-            else
-            {
-                _logger.Debug("Flatten");
-                
-                var flattenAutoTestSteps = autoTestSteps.Flatten(x => x.Steps).ToList();
-            
-                foreach (var step in testCaseSteps)
-                {
-                    var existedSteps = flattenAutoTestSteps
-                        .Where(x => x.StackTrace() == step.StackTrace())
-                        .ToList();
-                    var newSteps = testCaseSteps
-                        .Where(x => x.StackTrace() == step.StackTrace())
-                        .ToList();
-                    var diff = existedSteps.Count - newSteps.Count;
-            
-                    if (diff >= 0) continue;
-            
-                    if (step.CallerMethod == methodName)
-                    {
-                        var newStep = _mapper.Map<Step>(step);
-                        autoTestSteps.Add(newStep);
-                        flattenAutoTestSteps.Add(newStep);
-                    }
-                    else
-                    {
-                        var parentStackTrace = step.StackTrace()
-                            .Remove(step.StackTrace().LastIndexOf(Environment.NewLine));
-                        var parentSteps = flattenAutoTestSteps.Where(x => x.StackTrace() == parentStackTrace)
-                            .ToList();
-                        var i = 0;
-                        do
-                        {
-                            i++;
-                            foreach (var parent in parentSteps)
-                            {
-                                var newStep = _mapper.Map<Step>(step);
-                                parent.Steps.Add(newStep);
-                                flattenAutoTestSteps.Add(newStep);
-                            }
-                        } while (parentSteps.Count * i + diff < 0);
-                    }
-                }
-            }
-
-            return (autoTestSteps, testCaseStepsHierarchical);
+            return testCaseStepsHierarchical;
+            // .Flatten(x => x.Steps)
+            // .OrderBy(x => x.NestingLevel)
+            // .ToList();
+            // _autoTestSteps.TryGetValue($"{className}:{methodName}", out var autoTestSteps);
+            //
+            // if (autoTestSteps == null)
+            // {
+            //     _autoTestSteps.Add($"{className}:{methodName}", testCaseStepsHierarchical);
+            //     autoTestSteps = testCaseStepsHierarchical;
+            // }
+            // else
+            // {
+            //     _logger.Debug("Flatten");
+            //     
+            //     var flattenAutoTestSteps = autoTestSteps.Flatten(x => x.Steps).ToList();
+            //
+            //     foreach (var step in testCaseSteps)
+            //     {
+            //         var existedSteps = flattenAutoTestSteps
+            //             .Where(x => x.StackTrace() == step.StackTrace())
+            //             .ToList();
+            //         var newSteps = testCaseSteps
+            //             .Where(x => x.StackTrace() == step.StackTrace())
+            //             .ToList();
+            //         var diff = existedSteps.Count - newSteps.Count;
+            //
+            //         if (diff >= 0) continue;
+            //
+            //         if (step.CallerMethod == methodName)
+            //         {
+            //             var newStep = _mapper.Map<Step>(step);
+            //             autoTestSteps.Add(newStep);
+            //             flattenAutoTestSteps.Add(newStep);
+            //         }
+            //         else
+            //         {
+            //             var parentStackTrace = step.StackTrace()
+            //                 .Remove(step.StackTrace().LastIndexOf(Environment.NewLine));
+            //             var parentSteps = flattenAutoTestSteps.Where(x => x.StackTrace() == parentStackTrace)
+            //                 .ToList();
+            //             var i = 0;
+            //             do
+            //             {
+            //                 i++;
+            //                 foreach (var parent in parentSteps)
+            //                 {
+            //                     var newStep = _mapper.Map<Step>(step);
+            //                     parent.Steps.Add(newStep);
+            //                     flattenAutoTestSteps.Add(newStep);
+            //                 }
+            //             } while (parentSteps.Count * i + diff < 0);
+            //         }
+            //     }
+            // }
+            //
+            // return (autoTestSteps, testCaseStepsHierarchical);
         }
 
         private static string? GetCalledMethod(string? calledMethod)
@@ -244,20 +246,20 @@ namespace TmsRunner.Services
             autoTest.Message = _parser.GetMessage(traceJson);
 
             var attachmentIds = new List<Guid>();
-            var (autoTestSteps, testCaseSteps) =
+            var testCaseSteps =
                 await GetStepsWithAttachments(traceJson, autoTest.MethodName, autoTest.Classname, attachmentIds);
 
-            autoTest.Setup = autoTestSteps
+            autoTest.Setup = testCaseSteps
                 .Where(x => x.CallerMethodType == CallerMethodType.Setup)
                 .Select(AutoTestStep.ConvertFromStep)
                 .ToList();
 
-            autoTest.Steps = autoTestSteps
+            autoTest.Steps = testCaseSteps
                 .Where(x => x.CallerMethodType == CallerMethodType.TestMethod)
                 .Select(AutoTestStep.ConvertFromStep)
                 .ToList();
 
-            autoTest.Teardown = autoTestSteps
+            autoTest.Teardown = testCaseSteps
                 .Where(x => x.CallerMethodType == CallerMethodType.Teardown)
                 .Select(AutoTestStep.ConvertFromStep)
                 .ToList();
