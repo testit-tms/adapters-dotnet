@@ -29,13 +29,17 @@ namespace Tms.Adapter.Attributes
             
             foreach (var obj in objects)
             {
-                if (obj is Array array)
+                switch (obj)
                 {
-                    result.Add(string.Join(", ", array.Cast<object>()));
-                }
-                else
-                {
-                    result.Add(obj.ToString());
+                    case null:
+                        result.Add("null");
+                        break;
+                    case Array array:
+                        result.Add(string.Join(", ", array.Cast<object>()));
+                        break;
+                    default:
+                        result.Add(obj.ToString());
+                        break;
                 }
             }
             
