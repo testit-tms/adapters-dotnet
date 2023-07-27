@@ -35,7 +35,7 @@ namespace Tms.Adapter.Attributes
 
             if (type is not null)
             {
-                _callerMethod = type.GetMethod(caller.Groups[2].Value);
+                _callerMethod = type.GetMethod(caller.Groups[2].Value, arg.Method.GetParameters().Select(x => x.ParameterType).ToArray());
                 if (_callerMethod == null)
                     _callerMethod = type.GetMethod(caller.Groups[2].Value,
                         BindingFlags.Instance | BindingFlags.NonPublic);
