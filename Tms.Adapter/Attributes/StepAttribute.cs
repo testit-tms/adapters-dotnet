@@ -42,7 +42,7 @@ namespace Tms.Adapter.Attributes
             }
 
             var arguments = arg.Arguments
-                .Select(x => x.ToString())
+                .Select(x => x == null ? "null" : x.ToString())
                 .ToList();
             var parameters = arg.Method.GetParameters()
                 .Select(x => x.Name.ToString())
