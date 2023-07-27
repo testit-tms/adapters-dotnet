@@ -33,14 +33,6 @@ namespace Tms.Adapter.Attributes
             var caller = regex.Match(stackTrace.ToString().Split(Environment.NewLine)[2]);
             var type = arg.Instance?.GetType();
 
-            if (type is not null)
-            {
-                _callerMethod = type.GetMethod(caller.Groups[2].Value);
-                if (_callerMethod == null)
-                    _callerMethod = type.GetMethod(caller.Groups[2].Value,
-                        BindingFlags.Instance | BindingFlags.NonPublic);
-            }
-
             var arguments = arg.Arguments
                 .Select(x => x == null ? "null" : x.ToString())
                 .ToList();
