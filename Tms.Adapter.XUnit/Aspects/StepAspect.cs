@@ -32,7 +32,7 @@ public class StepAspect
                 parameter,
                 value
             })
-            .ToDictionary(x => x.parameter.Name, x => x.value.ToString());
+            .ToDictionary(x => x.parameter.Name, x => x.value == null ? "null" : x.value.ToString());
 
         var stepName = metadata.GetCustomAttribute<TitleAttribute>()?.Value ?? name;
         stepName = Replacer.ReplaceParameters(stepName, stepParameters);
