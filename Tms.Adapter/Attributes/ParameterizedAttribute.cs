@@ -11,7 +11,7 @@ namespace Tms.Adapter.Attributes
     {
         public override void OnEntry(MethodExecutionArgs arg)
         {
-            var parameterNames = arg.Method.GetParameters().Select(x => x.Name.ToString());
+            var parameterNames = arg.Method.GetParameters().Select(x => x.Name);
             var arguments = arg.Arguments.ToStringList();
             var args = parameterNames
                         .Zip(arguments, (k, v) => new { k, v })
