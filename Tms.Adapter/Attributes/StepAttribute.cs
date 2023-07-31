@@ -35,14 +35,14 @@ namespace Tms.Adapter.Attributes
 
             if (type is not null)
             {
-                _callerMethod = type.GetMethod(caller.Groups[2].Value, arg.Method.GetParameters().Select(x => x.ParameterType).ToArray());
+                _callerMethod = type.GetMethod(caller.Groups[2].Value);
                 if (_callerMethod == null)
                     _callerMethod = type.GetMethod(caller.Groups[2].Value,
                         BindingFlags.Instance | BindingFlags.NonPublic);
             }
 
             var arguments = arg.Arguments
-                .Select(x => x == null ? "null" : x.ToString())
+                .Select(Convert.ToString)
                 .ToList();
             var parameters = arg.Method.GetParameters()
                 .Select(x => x.Name.ToString())
