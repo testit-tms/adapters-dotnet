@@ -47,7 +47,7 @@ public class AdapterConfig
     [Option("tmsTestRunName", Required = false, HelpText = "Set test run name.")]
     public string TmsTestRunName { get; set; }
 
-    [Option("tmsAdapterMode", Default = "2", Required = false, HelpText = "Set adapter mode.")]
+    [Option("tmsAdapterMode", Required = false, HelpText = "Set adapter mode.")]
     public string TmsAdapterMode { get; set; }
 
     [Option("tmsConfigFile", Required = false, HelpText = "Set configuration file name.")]

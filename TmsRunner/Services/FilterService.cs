@@ -64,7 +64,7 @@ public class FilterService
 
             if (externalIds.Contains(id))
             {
-                testCasesToRun.Add(testCases.FirstOrDefault(x => x.FullyQualifiedName == fullName));
+                testCasesToRun.AddRange(testCases.Where(x => x.FullyQualifiedName == fullName).ToList());
             }
         }
 
