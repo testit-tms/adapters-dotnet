@@ -262,7 +262,7 @@ namespace TmsRunner.Services
                 TeardownResults = teardownResults,
                 Links = _parser.GetLinks(traceJson),
                 Message = autoTest.Message!.TrimStart(Environment.NewLine.ToCharArray()),
-                Parameters = parameters!,
+                Parameters = new Dictionary<string, string>(),
                 Attachments = attachmentIds,
             };
             if (!string.IsNullOrEmpty(testResult.ErrorStackTrace))
