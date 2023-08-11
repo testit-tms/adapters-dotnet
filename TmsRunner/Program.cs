@@ -94,6 +94,9 @@ internal class Program
             }
         }
 
+        if (settings.AdapterMode == 2)
+            log.Information("Test run {TestRunId} finished.", settings.TestRunId);
+
         return 0;
     }
 
