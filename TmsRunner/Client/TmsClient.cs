@@ -106,7 +106,8 @@ namespace TmsRunner.Client
                 Filter = new AutotestFilterModel
                 {
                     ExternalIds = new List<string> { externalId },
-                    ProjectIds = new List<Guid> { new Guid(_settings.ProjectId) }
+                    ProjectIds = new List<Guid> { new Guid(_settings.ProjectId) },
+                    IsDeleted = false
                 }
             };
 
