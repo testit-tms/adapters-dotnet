@@ -14,6 +14,7 @@ namespace TmsRunner.Client
         private readonly TestRunsApi _testRuns;
         private readonly AttachmentsApi _attachments;
         private readonly AutoTestsApi _autoTests;
+        private readonly ProjectsApi _projectsApi;
 
         public TmsClient(TmsSettings settings)
         {
@@ -30,6 +31,7 @@ namespace TmsRunner.Client
             _testRuns = new TestRunsApi(new HttpClient(), cfg, httpClientHandler);
             _attachments = new AttachmentsApi(new HttpClient(), cfg, httpClientHandler);
             _autoTests = new AutoTestsApi(new HttpClient(), cfg, httpClientHandler);
+            _projectsApi = new ProjectsApi(new HttpClient(), cfg, httpClientHandler);
         }
 
         public async Task<string> CreateTestRun()
@@ -143,6 +145,11 @@ namespace TmsRunner.Client
             await _autoTests.UpdateAutoTestAsync(model);
 
             _logger.Debug("Update autotest {@Autotest} is successfully", model);
+        }
+
+        public async Task<ProjectModel> GetProjectModel()
+        {
+            return await _projectsApi.GetProjectByIdAsync(_settings.ProjectId);
         }
 
         public async Task LinkAutoTestToWorkItem(string autotestId, string workItemId)

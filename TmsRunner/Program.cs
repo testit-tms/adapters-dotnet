@@ -14,6 +14,7 @@ internal class Program
 {
     public static async Task<int> Main(string[] args)
     {
+        var isError = false;
         var config = GetAdapterConfiguration(args);
         var settings = ConfigurationManager.Configure(config.ToInternalConfig(),
             Path.GetDirectoryName(config.TestAssemblyPath)!);
@@ -90,14 +91,19 @@ internal class Program
             }
             catch (Exception e)
             {
+                isError = true;
                 log.Error(e, "Uploaded test {Name} is failed", testResult.DisplayName);
             }
         }
 
         if (settings.AdapterMode == 2)
-            log.Information("Test run {TestRunId} finished.", settings.TestRunId);
+        {
+            var projectGlobalId = (await apiClient.GetProjectModel()).GlobalId;
+            var testRunUrl = new Uri(new Uri(config.TmsUrl), $"projects/{projectGlobalId}/test-runs/{settings.TestRunId}/test-results");
+            log.Information($"Test run '{testRunUrl}' finished.");
+        }
 
-        return 0;
+        return isError ? 1 : 0;
     }
 
     private static AdapterConfig GetAdapterConfiguration(IEnumerable<string> args)
