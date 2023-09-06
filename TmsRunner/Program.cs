@@ -100,7 +100,7 @@ internal class Program
         {
             var projectGlobalId = (await apiClient.GetProjectModel()).GlobalId;
             var testRunUrl = new Uri(new Uri(settings.Url), $"projects/{projectGlobalId}/test-runs/{settings.TestRunId}/test-results");
-            log.Information($"Test run '{testRunUrl}' finished.");
+            log.Information($"Test run {testRunUrl} finished.");
         }
 
         return isError ? 1 : 0;
