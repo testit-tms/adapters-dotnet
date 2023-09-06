@@ -99,7 +99,7 @@ internal class Program
         if (settings.AdapterMode == 2)
         {
             var projectGlobalId = (await apiClient.GetProjectModel()).GlobalId;
-            var testRunUrl = new Uri(new Uri(config.TmsUrl), $"projects/{projectGlobalId}/test-runs/{settings.TestRunId}/test-results");
+            var testRunUrl = new Uri(new Uri(settings.Url), $"projects/{projectGlobalId}/test-runs/{settings.TestRunId}/test-results");
             log.Information($"Test run '{testRunUrl}' finished.");
         }
 
