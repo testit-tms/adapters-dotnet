@@ -74,16 +74,16 @@ public class LogParser
             switch (attribute)
             {
                 case ExternalIdAttribute externalId:
-                    autoTest.ExternalId = _replacer.ReplaceParameters(externalId.Value, parameters);
+                    autoTest.ExternalId = _replacer.ReplaceParameters(externalId.Value, testResult.DisplayName);
                     break;
                 case DisplayNameAttribute displayName:
-                    autoTest.Name = _replacer.ReplaceParameters(displayName.Value, parameters);
+                    autoTest.Name = _replacer.ReplaceParameters(displayName.Value, testResult.DisplayName);
                     break;
                 case TitleAttribute title:
-                    autoTest.Title = _replacer.ReplaceParameters(title.Value, parameters);
+                    autoTest.Title = _replacer.ReplaceParameters(title.Value, testResult.DisplayName);
                     break;
                 case DescriptionAttribute description:
-                    autoTest.Description = _replacer.ReplaceParameters(description.Value, parameters);
+                    autoTest.Description = _replacer.ReplaceParameters(description.Value, testResult.DisplayName);
                     break;
                 case WorkItemIdsAttribute ids:
                 {

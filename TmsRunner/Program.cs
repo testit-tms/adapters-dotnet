@@ -53,29 +53,31 @@ internal class Program
         switch (settings.AdapterMode)
         {
             case 0:
-            {
-                var testCaseForRun = await apiClient.GetAutoTestsForRun(settings.TestRunId);
-                testRun = await apiClient.GetTestRun(settings.TestRunId);
-                testCases = filterService.FilterTestCases(config.TestAssemblyPath, testCaseForRun, testCases);
-                break;
-            }
-            case 2:
-            {
-                testRun = await apiClient.CreateTestRun();
-                settings.TestRunId = testRun.Id.ToString();
-
-                if (!string.IsNullOrEmpty(config.TmsLabelsOfTestsToRun))
                 {
-                    testCases = filterService.FilterTestCasesByLabels(config, testCases);
+                    var testCaseForRun = await apiClient.GetAutoTestsForRun(settings.TestRunId);
+                    testRun = await apiClient.GetTestRun(settings.TestRunId);
+                    testCases = filterService.FilterTestCases(config.TestAssemblyPath, testCaseForRun, testCases);
+                    break;
                 }
-                
-                break;
-            }
+            case 2:
+                {
+                    testRun = await apiClient.CreateTestRun();
+                    settings.TestRunId = testRun.Id.ToString();
+
+                    if (!string.IsNullOrEmpty(config.TmsLabelsOfTestsToRun))
+                    {
+                        testCases = filterService.FilterTestCasesByLabels(config, testCases);
+                    }
+
+                    break;
+                }
         }
 
         log.Information("Running tests: {Count}", testCases.Count);
 
         var testResults = runner.RunSelectedTests(testCases);
+
+        runner.ReRunTests(testCases, ref testResults);
 
         log.Debug("Run Selected Test Result: {@Results}",
             testResults.Select(t => t.DisplayName));
@@ -137,7 +139,7 @@ internal class Program
                     TmsLabelsOfTestsToRun = ac.TmsLabelsOfTestsToRun
                 };
             });
-        
+
         return config;
     }
 }
