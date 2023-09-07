@@ -34,7 +34,7 @@ namespace TmsRunner.Client
             _projectsApi = new ProjectsApi(new HttpClient(), cfg, httpClientHandler);
         }
 
-        public async Task<string> CreateTestRun()
+        public async Task<TestRunV2GetModel> CreateTestRun()
         {
             var createTestRunRequestBody = new TestRunV2PostShortModel
             {
@@ -53,7 +53,7 @@ namespace TmsRunner.Client
 
             _logger.Debug("Created test run {@TestRun}", testRun);
 
-            return testRun.Id.ToString();
+            return testRun;
         }
 
         public async Task<List<string>> GetAutoTestsForRun(string testRunId)
@@ -72,29 +72,31 @@ namespace TmsRunner.Client
             return autotests;
         }
 
-        public async Task SubmitResultToTestRun(string id, AutoTestResult result)
+        public async Task SubmitResultToTestRun(TestRunV2GetModel testRun, AutoTestResult result)
         {
-            _logger.Debug("Submitting test result {@Result} to test run {@Id}", result, id);
+            _logger.Debug("Submitting test result {@Result} to test run {@Id}", result, testRun.Id);
 
             var model = Converter.ConvertResultToModel(result, _settings.ConfigurationId);
 
-            await _testRuns.SetAutoTestResultsForTestRunAsync(new Guid(id),
+            await _testRuns.SetAutoTestResultsForTestRunAsync(testRun.Id,
                     new List<AutoTestResultsForTestRunModel> { model });
 
-            var testRun = await _testRuns.GetTestRunByIdAsync(new Guid(id));
-            var resultsInTestRun = testRun
-                .TestResults
-                .Where(x => x.AutoTest.ExternalId == result.ExternalId && x.Parameters.Any())
-                .ToList();
-
-            foreach ( var resultInTestRun in resultsInTestRun)
+            if (_settings.AdapterMode == 0)
             {
-                model.Parameters = resultInTestRun.Parameters;
-                await _testRuns.SetAutoTestResultsForTestRunAsync(new Guid(id),
-                    new List<AutoTestResultsForTestRunModel> { model });
+                var resultsInTestRun = testRun
+                    .TestResults
+                    .Where(x => x.AutoTest.ExternalId == result.ExternalId && x.Parameters.Any())
+                    .ToList();
+
+                foreach (var resultInTestRun in resultsInTestRun)
+                {
+                    model.Parameters = resultInTestRun.Parameters;
+                    await _testRuns.SetAutoTestResultsForTestRunAsync(testRun.Id,
+                        new List<AutoTestResultsForTestRunModel> { model });
+                }
             }
 
-            _logger.Debug("Submit test result to test run {Id} is successfully", id);
+            _logger.Debug("Submit test result to test run {Id} is successfully", testRun.Id);
         }
 
         public async Task<AttachmentModel> UploadAttachment(string fileName, Stream content)
@@ -161,9 +163,14 @@ namespace TmsRunner.Client
             _logger.Debug("Update autotest {@Autotest} is successfully", model);
         }
 
-        public async Task<ProjectModel> GetProjectModel()
+        public async Task<ProjectModel> GetProject()
         {
             return await _projectsApi.GetProjectByIdAsync(_settings.ProjectId);
+        }
+
+        public async Task<TestRunV2GetModel> GetTestRun(string id)
+        {
+            return await _testRuns.GetTestRunByIdAsync(new Guid(id));
         }
 
         public async Task LinkAutoTestToWorkItem(string autotestId, string workItemId)

@@ -1,4 +1,5 @@
 ﻿using CommandLine;
+using TestIt.Client.Model;
 using Tms.Adapter.Utils;
 using TmsRunner.Client;
 using TmsRunner.Configuration;
@@ -14,6 +15,7 @@ internal class Program
 {
     public static async Task<int> Main(string[] args)
     {
+        TestRunV2GetModel testRun = new();
         var isError = false;
         var config = GetAdapterConfiguration(args);
         var settings = ConfigurationManager.Configure(config.ToInternalConfig(),
@@ -53,12 +55,14 @@ internal class Program
             case 0:
             {
                 var testCaseForRun = await apiClient.GetAutoTestsForRun(settings.TestRunId);
+                testRun = await apiClient.GetTestRun(settings.TestRunId);
                 testCases = filterService.FilterTestCases(config.TestAssemblyPath, testCaseForRun, testCases);
                 break;
             }
             case 2:
             {
-                settings.TestRunId = await apiClient.CreateTestRun();
+                testRun = await apiClient.CreateTestRun();
+                settings.TestRunId = testRun.Id.ToString();
 
                 if (!string.IsNullOrEmpty(config.TmsLabelsOfTestsToRun))
                 {
@@ -87,7 +91,7 @@ internal class Program
 
             try
             {
-                await processorService.ProcessAutoTest(testResult);
+                await processorService.ProcessAutoTest(testResult, testRun);
 
                 log.Information("Uploaded test {Name}", testResult.DisplayName);
             }
@@ -100,7 +104,7 @@ internal class Program
 
         if (settings.AdapterMode == 2)
         {
-            var projectGlobalId = (await apiClient.GetProjectModel()).GlobalId;
+            var projectGlobalId = (await apiClient.GetProject()).GlobalId;
             var testRunUrl = new Uri(new Uri(settings.Url), $"projects/{projectGlobalId}/test-runs/{settings.TestRunId}/test-results");
             log.Information($"Test run {testRunUrl} finished.");
         }

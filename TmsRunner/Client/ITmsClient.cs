@@ -5,13 +5,14 @@ namespace TmsRunner.Client;
 
 public interface ITmsClient
 {
-    Task<string> CreateTestRun();
+    Task<TestRunV2GetModel> CreateTestRun();
     Task<List<string>> GetAutoTestsForRun(string testRunId);
-    Task SubmitResultToTestRun(string guid, AutoTestResult result);
+    Task SubmitResultToTestRun(TestRunV2GetModel testRun, AutoTestResult result);
     Task<AttachmentModel> UploadAttachment(string fileName, Stream content);
     Task<AutoTestModel?> GetAutotestByExternalId(string externalId);
     Task<AutoTestModel> CreateAutotest(AutoTest model);
     Task UpdateAutotest(AutoTest model);
     Task LinkAutoTestToWorkItem(string autotestId, string workItemId);
-    Task<ProjectModel> GetProjectModel();
+    Task<ProjectModel> GetProject();
+    Task<TestRunV2GetModel> GetTestRun(string id);
 }

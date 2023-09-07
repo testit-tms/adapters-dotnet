@@ -3,6 +3,7 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Serilog;
+using TestIt.Client.Model;
 using Tms.Adapter.Models;
 using TmsRunner.Client;
 using TmsRunner.Logger;
@@ -173,7 +174,7 @@ namespace TmsRunner.Services
             return match.Groups[1].Value;
         }
 
-        public async Task ProcessAutoTest(TestResult testResult)
+        public async Task ProcessAutoTest(TestResult testResult, TestRunV2GetModel testRun)
         {
             var traceJson = GetTraceJson(testResult);
             var parameters = _parser.GetParameters(traceJson);
@@ -226,7 +227,7 @@ namespace TmsRunner.Services
             var autoTestResultRequestBody = GetAutoTestResultsForTestRunModel(testResult, testCaseSteps, autoTest,
                 traceJson, parameters, attachmentIds);
 
-            await _apiClient.SubmitResultToTestRun(_tmsSettings.TestRunId, autoTestResultRequestBody);
+            await _apiClient.SubmitResultToTestRun(testRun, autoTestResultRequestBody);
         }
 
         private AutoTestResult GetAutoTestResultsForTestRunModel(TestResult testResult,
