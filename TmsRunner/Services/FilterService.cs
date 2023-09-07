@@ -103,4 +103,33 @@ public class FilterService
 
         return testCasesToRun;
     }
+
+    public void CheckDuplicatesOfExternalId(
+        AdapterConfig config,
+        IEnumerable<TestCase> testCases)
+    {
+        var externalIds = new List<string>();
+        var testCasesName = testCases.Select(t => t.FullyQualifiedName);
+        var assembly = Assembly.LoadFrom(config.TestAssemblyPath);
+        var testMethods = new List<MethodInfo>(
+            assembly.GetExportedTypes()
+                .SelectMany(type => type.GetMethods())
+                .Where(m => testCasesName.Contains(m.DeclaringType!.FullName + "." + m.Name))
+        );
+
+        foreach (var testMethod in testMethods)
+        {
+            foreach (var attribute in testMethod.GetCustomAttributes(false))
+            {
+                if (attribute is ExternalIdAttribute externalId)
+                {
+                    if (externalIds.Contains(externalId.Value))
+                    {
+                        throw new Exception($"Autotest with ExternalId '{externalId.Value}' has duplicate");
+                    }
+                    externalIds.Add(externalId.Value);
+                }
+            }
+        }
+    }
 }

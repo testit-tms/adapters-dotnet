@@ -46,6 +46,8 @@ internal class Program
         var replacer = new Replacer();
         var filterService = new FilterService(replacer);
 
+        filterService.CheckDuplicatesOfExternalId(config, testCases);
+
         switch (settings.AdapterMode)
         {
             case 0:

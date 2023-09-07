@@ -77,8 +77,22 @@ namespace TmsRunner.Client
             _logger.Debug("Submitting test result {@Result} to test run {@Id}", result, id);
 
             var model = Converter.ConvertResultToModel(result, _settings.ConfigurationId);
+
             await _testRuns.SetAutoTestResultsForTestRunAsync(new Guid(id),
-                new List<AutoTestResultsForTestRunModel> { model });
+                    new List<AutoTestResultsForTestRunModel> { model });
+
+            var testRun = await _testRuns.GetTestRunByIdAsync(new Guid(id));
+            var resultsInTestRun = testRun
+                .TestResults
+                .Where(x => x.AutoTest.ExternalId == result.ExternalId && x.Parameters.Any())
+                .ToList();
+
+            foreach ( var resultInTestRun in resultsInTestRun)
+            {
+                model.Parameters = resultInTestRun.Parameters;
+                await _testRuns.SetAutoTestResultsForTestRunAsync(new Guid(id),
+                    new List<AutoTestResultsForTestRunModel> { model });
+            }
 
             _logger.Debug("Submit test result to test run {Id} is successfully", id);
         }
