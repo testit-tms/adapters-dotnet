@@ -28,6 +28,11 @@ namespace Tms.Adapter
                     Type = type
                 }
             }));
+
+            if (type == LinkType.Defect)
+            {
+                AddMessage($"There is a bug: {url}");
+            }
         }
 
         public static void AddAttachments(string pathToFile)
