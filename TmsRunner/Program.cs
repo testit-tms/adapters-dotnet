@@ -15,7 +15,7 @@ internal class Program
 {
     public static async Task<int> Main(string[] args)
     {
-        TestRunV2GetModel testRun = new();
+        TestRunV2GetModel? testRun = null;
         var isError = false;
         var config = GetAdapterConfiguration(args);
         var settings = ConfigurationManager.Configure(config.ToInternalConfig(),
