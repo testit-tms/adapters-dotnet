@@ -1,4 +1,5 @@
 ﻿using CommandLine;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using TestIt.Client.Model;
 using Tms.Adapter.Utils;
 using TmsRunner.Client;
@@ -8,7 +9,6 @@ using TmsRunner.Logger;
 using TmsRunner.Options;
 using TmsRunner.Services;
 using TmsRunner.Utils;
-
 namespace TmsRunner;
 
 internal class Program
@@ -87,7 +87,21 @@ internal class Program
         var processorService =
             new ProcessorService(apiClient, settings, parser);
 
-        foreach (var testResult in testResults)
+        Parallel.ForEach(
+            testResults,
+            new ParallelOptions { MaxDegreeOfParallelism = 10 },
+            testResult => ProcessAutoTestWithLogging(testResult).Wait());
+
+        if (settings.AdapterMode == 2)
+        {
+            var projectGlobalId = (await apiClient.GetProject()).GlobalId;
+            var testRunUrl = new Uri(new Uri(settings.Url), $"projects/{projectGlobalId}/test-runs/{settings.TestRunId}/test-results");
+            log.Information($"Test run {testRunUrl} finished.");
+        }
+
+        return isError ? 1 : 0;
+
+        async Task ProcessAutoTestWithLogging(TestResult testResult)
         {
             log.Information("Uploading test {Name}", testResult.DisplayName);
 
@@ -103,15 +117,6 @@ internal class Program
                 log.Error(e, "Uploaded test {Name} is failed", testResult.DisplayName);
             }
         }
-
-        if (settings.AdapterMode == 2)
-        {
-            var projectGlobalId = (await apiClient.GetProject()).GlobalId;
-            var testRunUrl = new Uri(new Uri(settings.Url), $"projects/{projectGlobalId}/test-runs/{settings.TestRunId}/test-results");
-            log.Information($"Test run {testRunUrl} finished.");
-        }
-
-        return isError ? 1 : 0;
     }
 
     private static AdapterConfig GetAdapterConfiguration(IEnumerable<string> args)
