@@ -89,7 +89,7 @@ internal class Program
 
         Parallel.ForEach(
             testResults,
-            new ParallelOptions { MaxDegreeOfParallelism = 10 },
+            new ParallelOptions { MaxDegreeOfParallelism = 5 },
             testResult => ProcessAutoTestWithLogging(testResult).Wait());
 
         if (settings.AdapterMode == 2)
