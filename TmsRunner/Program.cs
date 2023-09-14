@@ -77,7 +77,10 @@ internal class Program
 
         var testResults = runner.RunSelectedTests(testCases);
 
-        runner.ReRunTests(testCases, ref testResults);
+        for (int i = 0; i < int.Parse(Environment.GetEnvironmentVariable("ADAPTER_AUTOTESTS_RERUN_COUNT") ?? "0"); i++)
+        {
+            runner.ReRunTests(testCases, ref testResults);
+        }
 
         log.Debug("Run Selected Test Result: {@Results}",
             testResults.Select(t => t.DisplayName));
