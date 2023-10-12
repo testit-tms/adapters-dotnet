@@ -78,20 +78,23 @@ internal class Program
         var processorService =
             new ProcessorService(apiClient, settings, parser);
 
-        foreach (var testResult in testResults)
+        if (testResults.Count > 0) 
         {
-            log.Information("Uploading test {Name}", testResult.DisplayName);
-
-            try
+            await Parallel.ForEachAsync(testResults, async (testResult, _) =>
             {
-                await processorService.ProcessAutoTest(testResult);
+                log.Information("Uploading test {Name}", testResult.DisplayName);
 
-                log.Information("Uploaded test {Name}", testResult.DisplayName);
-            }
-            catch (Exception e)
-            {
-                log.Error(e, "Uploaded test {Name} is failed", testResult.DisplayName);
-            }
+                try
+                {
+                    await processorService.ProcessAutoTest(testResult);
+
+                    log.Information("Uploaded test {Name}", testResult.DisplayName);
+                }
+                catch (Exception e)
+                {
+                    log.Error(e, "Uploaded test {Name} is failed", testResult.DisplayName);
+                }
+            });
         }
 
         if (settings.AdapterMode == 2)
@@ -111,8 +114,8 @@ internal class Program
                 {
                     RunnerPath = ac.RunnerPath.RemoveQuotes(),
                     TestAssemblyPath = ac.TestAssemblyPath.RemoveQuotes(),
-                    TestAdapterPath = ac.TestAdapterPath?.RemoveQuotes() ?? string.Empty,
-                    LoggerPath = ac.LoggerPath?.RemoveQuotes() ?? string.Empty,
+                    TestAdapterPath = ac.TestAdapterPath.RemoveQuotes(),
+                    LoggerPath = ac.LoggerPath.RemoveQuotes(),
                     IsDebug = ac.IsDebug,
                     TmsUrl = ac.TmsUrl,
                     TmsPrivateToken = ac.TmsPrivateToken,
