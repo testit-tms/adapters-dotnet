@@ -82,10 +82,10 @@ internal class Program
         {
             await Parallel.ForEachAsync(testResults, async (testResult, _) =>
             {
-                log.Information("Uploading test {Name}", testResult.DisplayName);
-
                 try
                 {
+                    log.Information("Uploading test {Name}", testResult.DisplayName);
+
                     await processorService.ProcessAutoTest(testResult);
 
                     log.Information("Uploaded test {Name}", testResult.DisplayName);
