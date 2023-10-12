@@ -114,8 +114,8 @@ internal class Program
                 {
                     RunnerPath = ac.RunnerPath.RemoveQuotes(),
                     TestAssemblyPath = ac.TestAssemblyPath.RemoveQuotes(),
-                    TestAdapterPath = ac.TestAdapterPath.RemoveQuotes(),
-                    LoggerPath = ac.LoggerPath.RemoveQuotes(),
+                    TestAdapterPath = ac.TestAdapterPath?.RemoveQuotes() ?? string.Empty,
+                    LoggerPath = ac.LoggerPath?.RemoveQuotes() ?? string.Empty,
                     IsDebug = ac.IsDebug,
                     TmsUrl = ac.TmsUrl,
                     TmsPrivateToken = ac.TmsPrivateToken,
