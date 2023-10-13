@@ -76,7 +76,7 @@ public class Runner
         return handler.DiscoveredTestCases;
     }
 
-    public bool RunSelectedTests(List<TestCase> testCases)
+    public async Task<bool> RunSelectedTests(List<TestCase> testCases)
     {
         var retryCounter = 0;
         var waitHandle = new AutoResetEvent(false);
@@ -104,7 +104,7 @@ public class Runner
         } while (runHandler.FailedTestResults.Any() && retryCounter <= int.Parse(Environment.GetEnvironmentVariable("ADAPTER_AUTOTESTS_RERUN_COUNT") ?? "0"));
 
         waitHandle.WaitOne();
-        runHandler.UploadFailedTestResultsAfterRetry();
+        await runHandler.UploadTestResults(runHandler.FailedTestResults);
 
         return runHandler.HasUploadErrors;
     }

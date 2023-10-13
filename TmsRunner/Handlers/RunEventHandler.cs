@@ -27,7 +27,7 @@ public class RunEventHandler : ITestRunEventsHandler2
         _processorService = processorService;
     }
 
-    public void HandleLogMessage(TestMessageLevel level, string message)
+    public void HandleLogMessage(TestMessageLevel level, string? message)
     {
         _logger.Debug("Run Message: {Message}", message);
     }
@@ -38,7 +38,7 @@ public class RunEventHandler : ITestRunEventsHandler2
         ICollection<AttachmentSet>? runContextAttachments,
         ICollection<string>? executorUris)
     {
-        ProcessNewTestResults(lastChunkArgs);
+        ProcessNewTestResults(lastChunkArgs).GetAwaiter().GetResult();
 
         _logger.Debug("Test Run completed");
 
@@ -47,7 +47,7 @@ public class RunEventHandler : ITestRunEventsHandler2
 
     public void HandleTestRunStatsChange(TestRunChangedEventArgs? testRunChangedArgs)
     {
-        ProcessNewTestResults(testRunChangedArgs);
+        ProcessNewTestResults(testRunChangedArgs).GetAwaiter().GetResult();
     }
 
     public void HandleRawMessage(string rawMessage)
@@ -67,28 +67,7 @@ public class RunEventHandler : ITestRunEventsHandler2
         return false;
     }
 
-    public void UploadFailedTestResultsAfterRetry()
-    {
-        UploadTestResults(FailedTestResults).GetAwaiter().GetResult();
-    }
-
-    private void ProcessNewTestResults(TestRunChangedEventArgs? args)
-    {
-        if (args?.NewTestResults == null)
-        {
-            return;
-        }
-
-        foreach (var failedResult in args.NewTestResults.Where(r => r.Outcome == TestOutcome.Failed))
-        {
-            FailedTestResults.Add(failedResult);
-        }
-
-        var notFailedResults = args.NewTestResults.Where(r => r.Outcome != TestOutcome.Failed).ToArray();
-        UploadTestResults(notFailedResults).GetAwaiter().GetResult();
-    }
-
-    private async Task UploadTestResults(IReadOnlyCollection<TestResult> testResults)
+    public async Task UploadTestResults(IReadOnlyCollection<TestResult> testResults)
     {
         if (!testResults.Any())
         {
@@ -114,5 +93,21 @@ public class RunEventHandler : ITestRunEventsHandler2
                 _logger.Error(e, "Uploaded test {Name} is failed", testResult.DisplayName);
             }
         });
+    }
+
+    private async Task ProcessNewTestResults(TestRunChangedEventArgs? args)
+    {
+        if (args?.NewTestResults == null)
+        {
+            return;
+        }
+
+        foreach (var failedResult in args.NewTestResults.Where(r => r.Outcome == TestOutcome.Failed))
+        {
+            FailedTestResults.Add(failedResult);
+        }
+
+        var notFailedResults = args.NewTestResults.Where(r => r.Outcome != TestOutcome.Failed).ToArray();
+        await UploadTestResults(notFailedResults);
     }
 }

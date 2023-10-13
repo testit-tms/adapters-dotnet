@@ -73,7 +73,7 @@ internal class Program
         }
 
         log.Information("Running tests: {Count}", testCases.Count);
-        var hasUploadErrors = runner.RunSelectedTests(testCases);
+        var hasUploadErrors = await runner.RunSelectedTests(testCases);
 
         if (settings.AdapterMode == 2)
         {
