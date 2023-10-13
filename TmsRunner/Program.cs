@@ -84,7 +84,7 @@ internal class Program
             {
                 try
                 {
-                    log.Information("Uploading test {Name}", testResult.DisplayName);
+                    log.Information("Uploading test {Name} in-parallel", testResult.DisplayName);
 
                     await processorService.ProcessAutoTest(testResult);
 
