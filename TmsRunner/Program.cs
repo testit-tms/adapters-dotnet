@@ -90,21 +90,24 @@ internal class Program
         var processorService =
             new ProcessorService(apiClient, settings, parser);
 
-        foreach (var testResult in testResults)
+        if (testResults.Count > 0)
         {
-            log.Information("Uploading test {Name}", testResult.DisplayName);
-
-            try
+            await Parallel.ForEachAsync(testResults, async (testResult, _) =>
             {
-                await processorService.ProcessAutoTest(testResult, testRun);
+                log.Information("Uploading test {Name} in-parallel", testResult.DisplayName);
 
-                log.Information("Uploaded test {Name}", testResult.DisplayName);
-            }
-            catch (Exception e)
-            {
-                isError = true;
-                log.Error(e, "Uploaded test {Name} is failed", testResult.DisplayName);
-            }
+                try
+                {
+                    await processorService.ProcessAutoTest(testResult, testRun);
+
+                    log.Information("Uploaded test {Name}", testResult.DisplayName);
+                }
+                catch (Exception e)
+                {
+                    isError = true;
+                    log.Error(e, "Uploaded test {Name} is failed", testResult.DisplayName);
+                }
+            });
         }
 
         if (settings.AdapterMode == 2)
