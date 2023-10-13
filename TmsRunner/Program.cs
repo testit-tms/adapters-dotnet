@@ -94,7 +94,7 @@ internal class Program
         {
             await Parallel.ForEachAsync(testResults, async (testResult, _) =>
             {
-                log.Information("Uploading test {Name} in-parallel", testResult.DisplayName);
+                log.Information("Uploading test {Name}", testResult.DisplayName);
 
                 try
                 {
