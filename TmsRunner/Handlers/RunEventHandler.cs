@@ -15,7 +15,7 @@ public class RunEventHandler : ITestRunEventsHandler2
     private readonly ProcessorService _processorService;
 
     public ConcurrentBag<TestResult> FailedTestResults;
-    public bool HasUploadErrors;
+    public volatile bool HasUploadErrors;
 
     public RunEventHandler(AutoResetEvent waitHandle, ProcessorService processorService)
     {
@@ -109,10 +109,7 @@ public class RunEventHandler : ITestRunEventsHandler2
             }
             catch (Exception e)
             {
-                lock (this)
-                {
-                    HasUploadErrors = true;
-                }
+                HasUploadErrors = true;
 
                 _logger.Error(e, "Uploaded test {Name} is failed", testResult.DisplayName);
             }
