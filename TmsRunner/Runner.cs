@@ -78,25 +78,34 @@ public class Runner
 
     public bool RunSelectedTests(List<TestCase> testCases)
     {
-        var waitHandle = new AutoResetEvent(false);
-        var handler = new RunEventHandler(waitHandle, _processorService);
         var retryCounter = 0;
+        var waitHandle = new AutoResetEvent(false);
+        var runHandler = new RunEventHandler(waitHandle, _processorService);
 
         do
         {
-            var testCasesToRun = handler.FailedTestResults.Any() 
-                ? testCases.Where(c => handler.FailedTestResults.Select(r => r.DisplayName).Contains(c.DisplayName))
-                : testCases;
+            List<TestCase> testCasesToRun;
 
-            handler.FailedTestResults = new ConcurrentBag<TestResult>();
-            _consoleWrapper.RunTests(testCasesToRun, _runSettings, handler);
+            if (runHandler.FailedTestResults.Any())
+            {
+                testCasesToRun = testCases
+                    .Where(c => runHandler.FailedTestResults.Select(r => r.DisplayName).Contains(c.DisplayName))
+                    .ToList();
 
+                runHandler.FailedTestResults = new ConcurrentBag<TestResult>();
+            }
+            else
+            {
+                testCasesToRun = testCases;
+            }
+
+            _consoleWrapper.RunTests(testCasesToRun, _runSettings, runHandler);
             retryCounter++;
-        } while (handler.FailedTestResults.Any() && retryCounter <= int.Parse(Environment.GetEnvironmentVariable("ADAPTER_AUTOTESTS_RERUN_COUNT") ?? "0"));
+        } while (runHandler.FailedTestResults.Any() && retryCounter <= int.Parse(Environment.GetEnvironmentVariable("ADAPTER_AUTOTESTS_RERUN_COUNT") ?? "0"));
 
-        handler.UploadFailedTestResultsAfterRetry();
         waitHandle.WaitOne();
+        runHandler.UploadFailedTestResultsAfterRetry();
 
-        return handler.HasUploadErrors;
+        return runHandler.HasUploadErrors;
     }
 }
