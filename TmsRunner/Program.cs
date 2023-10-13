@@ -116,7 +116,7 @@ internal class Program
 
     private static async Task<TestRunV2GetModel> GetTestRun(TmsClient apiClient, TmsSettings settings)
     {
-        var testRun = new TestRunV2GetModel();
+        TestRunV2GetModel? testRun = null;
 
         switch (settings.AdapterMode)
         {

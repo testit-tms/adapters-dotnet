@@ -79,21 +79,19 @@ public class Runner
     {
         var waitHandle = new AutoResetEvent(false);
         var handler = new RunEventHandler(waitHandle, _processorService);
-
-        _consoleWrapper.RunTests(testCases, _runSettings, handler);
-
         var retryCounter = 0;
 
-        while (handler.FailedTestResults.Any() && retryCounter < int.Parse(Environment.GetEnvironmentVariable("ADAPTER_AUTOTESTS_RERUN_COUNT") ?? "0"))
+        do
         {
-            var failedTestCases = testCases
-                .Where(c => handler.FailedTestResults.Select(r => r.DisplayName).Contains(c.DisplayName));
+            var testCasesToRun = handler.FailedTestResults.Any() 
+                ? testCases.Where(c => handler.FailedTestResults.Select(r => r.DisplayName).Contains(c.DisplayName))
+                : testCases;
 
             handler.FailedTestResults = new();
-            _consoleWrapper.RunTests(failedTestCases, _runSettings, handler);
+            _consoleWrapper.RunTests(testCasesToRun, _runSettings, handler);
 
             retryCounter++;
-        }
+        } while (handler.FailedTestResults.Any() && retryCounter <= int.Parse(Environment.GetEnvironmentVariable("ADAPTER_AUTOTESTS_RERUN_COUNT") ?? "0"));
 
         waitHandle.WaitOne();
 
