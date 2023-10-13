@@ -114,24 +114,13 @@ internal class Program
         return config;
     }
 
-    private static async Task<TestRunV2GetModel> GetTestRun(TmsClient apiClient, TmsSettings settings)
+    private static async Task<TestRunV2GetModel?> GetTestRun(ITmsClient apiClient, TmsSettings settings)
     {
-        TestRunV2GetModel? testRun = null;
-
-        switch (settings.AdapterMode)
+        return settings.AdapterMode switch
         {
-            case 0:
-                {
-                    testRun = await apiClient.GetTestRun(settings.TestRunId);
-                    break;
-                }
-            case 2:
-                {
-                    testRun = await apiClient.CreateTestRun();
-                    break;
-                }
-        }
-
-        return testRun;
+            0 => await apiClient.GetTestRun(settings.TestRunId),
+            2 => await apiClient.CreateTestRun(),
+            _ => null
+        };
     }
 }

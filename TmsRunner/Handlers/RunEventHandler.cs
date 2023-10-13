@@ -10,7 +10,7 @@ namespace TmsRunner.Handlers;
 
 public class RunEventHandler : ITestRunEventsHandler2
 {
-    private AutoResetEvent waitHandle;
+    private readonly AutoResetEvent _waitHandle;
     private readonly ILogger _logger;
     private readonly ProcessorService _processorService;
 
@@ -19,10 +19,10 @@ public class RunEventHandler : ITestRunEventsHandler2
 
     public RunEventHandler(AutoResetEvent waitHandle, ProcessorService processorService)
     {
-        this.waitHandle = waitHandle;
         FailedTestResults = new ConcurrentBag<TestResult>();
         HasUploadErrors = false;
 
+        _waitHandle = waitHandle;
         _logger = LoggerFactory.GetLogger().ForContext<RunEventHandler>();
         _processorService = processorService;
     }
@@ -34,18 +34,18 @@ public class RunEventHandler : ITestRunEventsHandler2
 
     public void HandleTestRunComplete(
         TestRunCompleteEventArgs testRunCompleteArgs,
-        TestRunChangedEventArgs lastChunkArgs,
-        ICollection<AttachmentSet> runContextAttachments,
-        ICollection<string> executorUris)
+        TestRunChangedEventArgs? lastChunkArgs,
+        ICollection<AttachmentSet>? runContextAttachments,
+        ICollection<string>? executorUris)
     {
         ProcessNewTestResults(lastChunkArgs);
 
         _logger.Debug("Test Run completed");
 
-        waitHandle.Set();
+        _waitHandle.Set();
     }
 
-    public void HandleTestRunStatsChange(TestRunChangedEventArgs testRunChangedArgs)
+    public void HandleTestRunStatsChange(TestRunChangedEventArgs? testRunChangedArgs)
     {
         ProcessNewTestResults(testRunChangedArgs);
     }
@@ -72,9 +72,9 @@ public class RunEventHandler : ITestRunEventsHandler2
         UploadTestResults(FailedTestResults).GetAwaiter().GetResult();
     }
 
-    private void ProcessNewTestResults(TestRunChangedEventArgs args)
+    private void ProcessNewTestResults(TestRunChangedEventArgs? args)
     {
-        if (args == null || args.NewTestResults == null)
+        if (args?.NewTestResults == null)
         {
             return;
         }
@@ -88,7 +88,7 @@ public class RunEventHandler : ITestRunEventsHandler2
         UploadTestResults(notFailedResults).GetAwaiter().GetResult();
     }
 
-    private async Task UploadTestResults(IEnumerable<TestResult> testResults)
+    private async Task UploadTestResults(IReadOnlyCollection<TestResult> testResults)
     {
         if (!testResults.Any())
         {
@@ -109,7 +109,7 @@ public class RunEventHandler : ITestRunEventsHandler2
             }
             catch (Exception e)
             {
-                lock (waitHandle)
+                lock (this)
                 {
                     HasUploadErrors = true;
                 }

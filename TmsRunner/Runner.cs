@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using Microsoft.TestPlatform.VsTestConsole.TranslationLayer;
 using Microsoft.TestPlatform.VsTestConsole.TranslationLayer.Interfaces;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
@@ -75,7 +76,7 @@ public class Runner
         return handler.DiscoveredTestCases;
     }
 
-    public bool RunSelectedTests(IEnumerable<TestCase> testCases)
+    public bool RunSelectedTests(List<TestCase> testCases)
     {
         var waitHandle = new AutoResetEvent(false);
         var handler = new RunEventHandler(waitHandle, _processorService);
@@ -87,7 +88,7 @@ public class Runner
                 ? testCases.Where(c => handler.FailedTestResults.Select(r => r.DisplayName).Contains(c.DisplayName))
                 : testCases;
 
-            handler.FailedTestResults = new();
+            handler.FailedTestResults = new ConcurrentBag<TestResult>();
             _consoleWrapper.RunTests(testCasesToRun, _runSettings, handler);
 
             retryCounter++;
