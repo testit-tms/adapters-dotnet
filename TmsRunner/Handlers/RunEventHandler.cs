@@ -14,8 +14,9 @@ public class RunEventHandler : ITestRunEventsHandler2
     private readonly ILogger _logger;
     private readonly ProcessorService _processorService;
 
-    public ConcurrentBag<TestResult> FailedTestResults;
-    public List<Task> UploadTasks;
+    public readonly ConcurrentBag<TestResult> FailedTestResults;
+    public readonly List<Task> UploadTasks;
+
     public volatile bool HasUploadErrors;
 
     public RunEventHandler(AutoResetEvent waitHandle, ProcessorService processorService)
@@ -65,6 +66,11 @@ public class RunEventHandler : ITestRunEventsHandler2
     {
         // No op
         return false;
+    }
+
+    public async Task UploadFailedTestResults()
+    {
+        await UploadTestResults(FailedTestResults);
     }
 
     public async Task UploadTestResults(IReadOnlyCollection<TestResult> testResults)

@@ -1,4 +1,3 @@
-using System.Collections.Concurrent;
 using Microsoft.TestPlatform.VsTestConsole.TranslationLayer;
 using Microsoft.TestPlatform.VsTestConsole.TranslationLayer.Interfaces;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
@@ -79,32 +78,26 @@ public class Runner
     public async Task<bool> RunSelectedTests(List<TestCase> testCases)
     {
         var retryCounter = 0;
-        var waitHandle = new AutoResetEvent(false);
-        var runHandler = new RunEventHandler(waitHandle, _processorService);
+        var uploadTasks = new List<Task>();
+        RunEventHandler? runHandler = null;
 
         do
         {
-            List<TestCase> testCasesToRun;
+            var testCasesToRun = runHandler == null 
+                ? testCases 
+                : testCases.Where(c => runHandler.FailedTestResults.Select(r => r.DisplayName).Contains(c.DisplayName));
 
-            if (runHandler.FailedTestResults.Any())
-            {
-                testCasesToRun = testCases
-                    .Where(c => runHandler.FailedTestResults.Select(r => r.DisplayName).Contains(c.DisplayName))
-                    .ToList();
-
-                runHandler.FailedTestResults = new ConcurrentBag<TestResult>();
-            }
-            else
-            {
-                testCasesToRun = testCases;
-            }
-
+            using var waitHandle = new AutoResetEvent(false);
+            runHandler = new RunEventHandler(waitHandle, _processorService);
             _consoleWrapper.RunTests(testCasesToRun, _runSettings, runHandler);
+            waitHandle.WaitOne();
+
+            uploadTasks.AddRange(runHandler.UploadTasks);
             retryCounter++;
         } while (runHandler.FailedTestResults.Any() && retryCounter <= int.Parse(Environment.GetEnvironmentVariable("ADAPTER_AUTOTESTS_RERUN_COUNT") ?? "0"));
 
-        waitHandle.WaitOne();
-        runHandler.UploadTasks.Add(runHandler.UploadTestResults(runHandler.FailedTestResults));
+
+        uploadTasks.Add(runHandler.UploadFailedTestResults());
         await Task.WhenAll(runHandler.UploadTasks);
 
         return runHandler.HasUploadErrors;
