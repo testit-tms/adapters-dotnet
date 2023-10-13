@@ -5,6 +5,7 @@ using TmsRunner.Client;
 using TmsRunner.Configuration;
 using TmsRunner.Extensions;
 using TmsRunner.Logger;
+using TmsRunner.Models;
 using TmsRunner.Options;
 using TmsRunner.Services;
 using TmsRunner.Utils;
@@ -15,8 +16,6 @@ internal class Program
 {
     public static async Task<int> Main(string[] args)
     {
-        TestRunV2GetModel? testRun = null;
-        var isError = false;
         var config = GetAdapterConfiguration(args);
         var settings = ConfigurationManager.Configure(config.ToInternalConfig(),
             Path.GetDirectoryName(config.TestAssemblyPath)!);
@@ -30,11 +29,17 @@ internal class Program
         log.Debug("Test Adapter Path: {Path}", config.TestAdapterPath);
         log.Debug("Test Logger Path: {Path}", config.LoggerPath);
 
-        var runner = new Runner(config);
+        var replacer = new Replacer();
+        var reflector = new Reflector();
+        var parser = new LogParser(replacer, reflector);
+        var apiClient = new TmsClient(settings);
+        var testRun = await GetTestRun(apiClient, settings);
+
+        var processorService = new ProcessorService(apiClient, testRun, parser);
+        var runner = new Runner(config, processorService);
         runner.InitialiseRunner();
 
         var testCases = runner.DiscoverTests();
-
         log.Information("Discovered Tests Count: {Count}", testCases.Count);
 
         if (testCases.Count == 0)
@@ -43,11 +48,7 @@ internal class Program
             return 1;
         }
 
-        ITmsClient apiClient = new TmsClient(settings);
-
-        var replacer = new Replacer();
         var filterService = new FilterService(replacer);
-
         filterService.CheckDuplicatesOfExternalId(config, testCases);
 
         switch (settings.AdapterMode)
@@ -55,13 +56,11 @@ internal class Program
             case 0:
                 {
                     var testCaseForRun = await apiClient.GetAutoTestsForRun(settings.TestRunId);
-                    testRun = await apiClient.GetTestRun(settings.TestRunId);
                     testCases = filterService.FilterTestCases(config.TestAssemblyPath, testCaseForRun, testCases);
                     break;
                 }
             case 2:
                 {
-                    testRun = await apiClient.CreateTestRun();
                     settings.TestRunId = testRun.Id.ToString();
 
                     if (!string.IsNullOrEmpty(config.TmsLabelsOfTestsToRun))
@@ -74,41 +73,7 @@ internal class Program
         }
 
         log.Information("Running tests: {Count}", testCases.Count);
-
-        var testResults = runner.RunSelectedTests(testCases);
-
-        for (int i = 0; i < int.Parse(Environment.GetEnvironmentVariable("ADAPTER_AUTOTESTS_RERUN_COUNT") ?? "0"); i++)
-        {
-            runner.ReRunTests(testCases, ref testResults);
-        }
-
-        log.Debug("Run Selected Test Result: {@Results}",
-            testResults.Select(t => t.DisplayName));
-
-        var reflector = new Reflector();
-        var parser = new LogParser(replacer, reflector);
-        var processorService =
-            new ProcessorService(apiClient, settings, parser);
-
-        if (testResults.Count > 0)
-        {
-            await Parallel.ForEachAsync(testResults, async (testResult, _) =>
-            {
-                try
-                {
-                    log.Information("Uploading test {Name}", testResult.DisplayName);
-
-                    await processorService.ProcessAutoTest(testResult, testRun);
-
-                    log.Information("Uploaded test {Name}", testResult.DisplayName);
-                }
-                catch (Exception e)
-                {
-                    isError = true;
-                    log.Error(e, "Uploaded test {Name} is failed", testResult.DisplayName);
-                }
-            });
-        }
+        var hasUploadErrors = runner.RunSelectedTests(testCases);
 
         if (settings.AdapterMode == 2)
         {
@@ -117,7 +82,7 @@ internal class Program
             log.Information($"Test run {testRunUrl} finished.");
         }
 
-        return isError ? 1 : 0;
+        return hasUploadErrors ? 1 : 0;
     }
 
     private static AdapterConfig GetAdapterConfiguration(IEnumerable<string> args)
@@ -147,5 +112,26 @@ internal class Program
             });
 
         return config;
+    }
+
+    private static async Task<TestRunV2GetModel> GetTestRun(TmsClient apiClient, TmsSettings settings)
+    {
+        var testRun = new TestRunV2GetModel();
+
+        switch (settings.AdapterMode)
+        {
+            case 0:
+                {
+                    testRun = await apiClient.GetTestRun(settings.TestRunId);
+                    break;
+                }
+            case 2:
+                {
+                    testRun = await apiClient.CreateTestRun();
+                    break;
+                }
+        }
+
+        return testRun;
     }
 }
