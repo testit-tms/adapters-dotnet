@@ -104,7 +104,8 @@ public class Runner
         } while (runHandler.FailedTestResults.Any() && retryCounter <= int.Parse(Environment.GetEnvironmentVariable("ADAPTER_AUTOTESTS_RERUN_COUNT") ?? "0"));
 
         waitHandle.WaitOne();
-        await runHandler.UploadTestResults(runHandler.FailedTestResults);
+        runHandler.UploadTasks.Add(runHandler.UploadTestResults(runHandler.FailedTestResults));
+        await Task.WhenAll(runHandler.UploadTasks);
 
         return runHandler.HasUploadErrors;
     }

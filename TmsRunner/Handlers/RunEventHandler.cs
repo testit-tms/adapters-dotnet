@@ -15,11 +15,13 @@ public class RunEventHandler : ITestRunEventsHandler2
     private readonly ProcessorService _processorService;
 
     public ConcurrentBag<TestResult> FailedTestResults;
+    public List<Task> UploadTasks;
     public volatile bool HasUploadErrors;
 
     public RunEventHandler(AutoResetEvent waitHandle, ProcessorService processorService)
     {
         FailedTestResults = new ConcurrentBag<TestResult>();
+        UploadTasks = new List<Task>();
         HasUploadErrors = false;
 
         _waitHandle = waitHandle;
@@ -38,16 +40,14 @@ public class RunEventHandler : ITestRunEventsHandler2
         ICollection<AttachmentSet>? runContextAttachments,
         ICollection<string>? executorUris)
     {
-        ProcessNewTestResults(lastChunkArgs).GetAwaiter().GetResult();
-
+        UploadTasks.Add(ProcessNewTestResults(lastChunkArgs));
         _logger.Debug("Test Run completed");
-
         _waitHandle.Set();
     }
 
     public void HandleTestRunStatsChange(TestRunChangedEventArgs? testRunChangedArgs)
     {
-        ProcessNewTestResults(testRunChangedArgs).GetAwaiter().GetResult();
+        UploadTasks.Add(ProcessNewTestResults(testRunChangedArgs));
     }
 
     public void HandleRawMessage(string rawMessage)
