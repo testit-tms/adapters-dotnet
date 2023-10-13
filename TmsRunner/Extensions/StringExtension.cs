@@ -20,7 +20,7 @@ namespace TmsRunner.Extensions
 
         public static string RemoveQuotes(this string str)
         {
-            return str.Replace("'", "").Replace("\"", "");
+            return string.IsNullOrWhiteSpace(str) ? str : str.Replace("'", "").Replace("\"", "");
         }
     }
 }
