@@ -93,6 +93,7 @@ public class Runner
             retryCounter++;
         } while (handler.FailedTestResults.Any() && retryCounter <= int.Parse(Environment.GetEnvironmentVariable("ADAPTER_AUTOTESTS_RERUN_COUNT") ?? "0"));
 
+        handler.UploadFailedTestResultsAfterRetry();
         waitHandle.WaitOne();
 
         return handler.HasUploadErrors;
