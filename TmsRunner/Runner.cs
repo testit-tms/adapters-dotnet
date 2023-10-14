@@ -5,6 +5,7 @@ using Serilog;
 using TmsRunner.Handlers;
 using TmsRunner.Logger;
 using TmsRunner.Options;
+using TmsRunner.Services;
 
 namespace TmsRunner;
 
@@ -21,14 +22,16 @@ public class Runner
     private readonly AdapterConfig _config;
     private readonly ILogger _logger;
     private readonly IVsTestConsoleWrapper _consoleWrapper;
+    private readonly ProcessorService _processorService;
     private readonly string _runSettings;
 
-    public Runner(AdapterConfig config)
+    public Runner(AdapterConfig config, ProcessorService processorService)
     {
         _config = config;
         _logger = LoggerFactory.GetLogger().ForContext<Runner>();
         _consoleWrapper = new VsTestConsoleWrapper(config.RunnerPath,
             new ConsoleParameters { LogFilePath = Path.Combine(Directory.GetCurrentDirectory(), @"log.txt") });
+        _processorService = processorService;
         _runSettings = string.IsNullOrWhiteSpace(_config.TmsRunSettings) ? DefaultRunSettings : _config.TmsRunSettings;
     }
 
@@ -72,27 +75,32 @@ public class Runner
         return handler.DiscoveredTestCases;
     }
 
-    public List<TestResult> RunSelectedTests(IEnumerable<TestCase> testCases)
+    public async Task<bool> RunSelectedTests(List<TestCase> testCases)
     {
-        var waitHandle = new AutoResetEvent(false);
-        var handler = new RunEventHandler(waitHandle);
+        var retryCounter = 0;
+        var failedTestResults = new List<TestResult>();
 
-        _consoleWrapper.RunTests(testCases, _runSettings, handler);
+        RunEventHandler? runHandler = null;
 
-        waitHandle.WaitOne();
+        do
+        {
+            var testCasesToRun = failedTestResults.Any()
+                ? testCases.Where(c => failedTestResults.Select(r => r.DisplayName).Contains(c.DisplayName))
+                : testCases;
 
-        return handler.TestResults;
-    }
+            using var waitHandle = new AutoResetEvent(false);
+            runHandler = new RunEventHandler(waitHandle, _processorService);
+            failedTestResults.Clear();
 
-    public void ReRunTests(IEnumerable<TestCase> testCases, ref List<TestResult> testResults)
-    {
-        var failedTestResults = testResults.Where(x => x.Outcome == TestOutcome.Failed).ToList();
+            _consoleWrapper.RunTests(testCasesToRun, _runSettings, runHandler);
+            waitHandle.WaitOne();
 
-        foreach (var failedTestResult in failedTestResults)
-            testResults.Remove(failedTestResult);
+            failedTestResults.AddRange(runHandler.FailedTestResults);
+            retryCounter++;
+        } while (failedTestResults.Any() && retryCounter <= int.Parse(Environment.GetEnvironmentVariable("ADAPTER_AUTOTESTS_RERUN_COUNT") ?? "0"));
 
-        var testCasesToReRun = testCases.Where(x => failedTestResults.Select(z => z.DisplayName).ToList().Contains(x.DisplayName)).ToList();
-        var testResultsAfterReRun = RunSelectedTests(testCasesToReRun);
-        testResults.AddRange(testResultsAfterReRun);
+        await runHandler.UploadTestResults(failedTestResults);
+
+        return runHandler.HasUploadErrors;
     }
 }

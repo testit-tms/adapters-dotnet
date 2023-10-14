@@ -2,52 +2,52 @@ using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Client;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
 using Serilog;
+using System.Runtime.CompilerServices;
 using TmsRunner.Logger;
+using TmsRunner.Services;
 
 namespace TmsRunner.Handlers;
 
 public class RunEventHandler : ITestRunEventsHandler2
 {
-    private AutoResetEvent waitHandle;
+    private readonly AutoResetEvent _waitHandle;
     private readonly ILogger _logger;
+    private readonly ProcessorService _processorService;
 
-    public List<TestResult> TestResults { get;}
+    public readonly List<TestResult> FailedTestResults;
+    public bool HasUploadErrors;
 
-    public RunEventHandler(AutoResetEvent waitHandle)
+    public RunEventHandler(AutoResetEvent waitHandle, ProcessorService processorService)
     {
-        this.waitHandle = waitHandle;
-        TestResults = new List<TestResult>();
+        FailedTestResults = new List<TestResult>();
+        HasUploadErrors = false;
 
+        _waitHandle = waitHandle;
         _logger = LoggerFactory.GetLogger().ForContext<RunEventHandler>();
+        _processorService = processorService;
     }
 
-    public void HandleLogMessage(TestMessageLevel level, string message)
+    public void HandleLogMessage(TestMessageLevel level, string? message)
     {
         _logger.Debug("Run Message: {Message}", message);
     }
 
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void HandleTestRunComplete(
         TestRunCompleteEventArgs testRunCompleteArgs,
-        TestRunChangedEventArgs lastChunkArgs,
-        ICollection<AttachmentSet> runContextAttachments,
-        ICollection<string> executorUris)
+        TestRunChangedEventArgs? lastChunkArgs,
+        ICollection<AttachmentSet>? runContextAttachments,
+        ICollection<string>? executorUris)
     {
-        if (lastChunkArgs != null && lastChunkArgs.NewTestResults != null)
-        {
-            TestResults.AddRange(lastChunkArgs.NewTestResults);
-        }
-
+        ProcessNewTestResults(lastChunkArgs).GetAwaiter().GetResult();
         _logger.Debug("Test Run completed");
-
-        waitHandle.Set();
+        _waitHandle.Set();
     }
 
-    public void HandleTestRunStatsChange(TestRunChangedEventArgs testRunChangedArgs)
+    [MethodImpl(MethodImplOptions.Synchronized)]
+    public void HandleTestRunStatsChange(TestRunChangedEventArgs? testRunChangedArgs)
     {
-        if (testRunChangedArgs != null && testRunChangedArgs.NewTestResults != null)
-        {
-            TestResults.AddRange(testRunChangedArgs.NewTestResults);
-        }
+        ProcessNewTestResults(testRunChangedArgs).GetAwaiter().GetResult();
     }
 
     public void HandleRawMessage(string rawMessage)
@@ -65,5 +65,52 @@ public class RunEventHandler : ITestRunEventsHandler2
     {
         // No op
         return false;
+    }
+
+    public async Task UploadFailedTestResults()
+    {
+        await UploadTestResults(FailedTestResults);
+    }
+
+    public async Task UploadTestResults(IReadOnlyCollection<TestResult> testResults)
+    {
+        if (!testResults.Any())
+        {
+            return;
+        }
+
+        _logger.Debug("Run Selected Test Result: {@Results}", testResults.Select(t => t.DisplayName));
+
+        await Parallel.ForEachAsync(testResults, async (testResult, cancellationToken) =>
+        {
+            try
+            {
+                _logger.Information("Uploading test {Name}", testResult.DisplayName);
+
+                await _processorService.ProcessAutoTest(testResult);
+
+                _logger.Information("Uploaded test {Name}", testResult.DisplayName);
+            }
+            catch (Exception e)
+            {
+                HasUploadErrors = true;
+
+                _logger.Error(e, "Uploaded test {Name} is failed", testResult.DisplayName);
+            }
+        });
+    }
+
+    private async Task ProcessNewTestResults(TestRunChangedEventArgs? args)
+    {
+        if (args?.NewTestResults == null)
+        {
+            return;
+        }
+
+        var failedTestResults = args.NewTestResults.Where(r => r.Outcome == TestOutcome.Failed).ToArray();
+        FailedTestResults.AddRange(failedTestResults);
+
+        var notFailedResults = args.NewTestResults.Where(r => r.Outcome != TestOutcome.Failed).ToArray();
+        await UploadTestResults(notFailedResults);
     }
 }
