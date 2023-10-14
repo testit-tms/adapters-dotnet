@@ -78,6 +78,8 @@ public class Runner
     public async Task<bool> RunSelectedTests(List<TestCase> testCases)
     {
         var retryCounter = 0;
+        var failedTestResults = new List<TestResult>();
+
         RunEventHandler? runHandler = null;
 
         do
@@ -86,15 +88,18 @@ public class Runner
                 ? testCases 
                 : testCases.Where(c => runHandler.FailedTestResults.Select(r => r.DisplayName).Contains(c.DisplayName));
 
+            failedTestResults.Clear();
             using var waitHandle = new AutoResetEvent(false);
             runHandler = new RunEventHandler(waitHandle, _processorService);
+
             _consoleWrapper.RunTests(testCasesToRun, _runSettings, runHandler);
             waitHandle.WaitOne();
 
+            failedTestResults.AddRange(runHandler.FailedTestResults);
             retryCounter++;
-        } while (runHandler.FailedTestResults.Any() && retryCounter <= int.Parse(Environment.GetEnvironmentVariable("ADAPTER_AUTOTESTS_RERUN_COUNT") ?? "0"));
+        } while (failedTestResults.Any() && retryCounter <= int.Parse(Environment.GetEnvironmentVariable("ADAPTER_AUTOTESTS_RERUN_COUNT") ?? "0"));
 
-        runHandler.UploadFailedTestResults();
+        await runHandler.UploadTestResults(failedTestResults);
 
         return runHandler.HasUploadErrors;
     }

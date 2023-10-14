@@ -2,6 +2,7 @@
 using TestIt.Client.Api;
 using TestIt.Client.Client;
 using TestIt.Client.Model;
+using TmsRunner.Handlers;
 using TmsRunner.Logger;
 using TmsRunner.Models;
 
@@ -28,10 +29,10 @@ namespace TmsRunner.Client
             var httpClientHandler = new HttpClientHandler();
             httpClientHandler.ServerCertificateCustomValidationCallback = (_, _, _, _) => _settings.CertValidation;
 
-            _testRuns = new TestRunsApi(new HttpClient(), cfg, httpClientHandler);
-            _attachments = new AttachmentsApi(new HttpClient(), cfg, httpClientHandler);
-            _autoTests = new AutoTestsApi(new HttpClient(), cfg, httpClientHandler);
-            _projectsApi = new ProjectsApi(new HttpClient(), cfg, httpClientHandler);
+            _testRuns = new TestRunsApi(new HttpClient(new RetryHandler(new HttpClientHandler())), cfg, httpClientHandler);
+            _attachments = new AttachmentsApi(new HttpClient(new RetryHandler(new HttpClientHandler())), cfg, httpClientHandler);
+            _autoTests = new AutoTestsApi(new HttpClient(new RetryHandler(new HttpClientHandler())), cfg, httpClientHandler);
+            _projectsApi = new ProjectsApi(new HttpClient(new RetryHandler(new HttpClientHandler())), cfg, httpClientHandler);
         }
 
         public async Task<TestRunV2GetModel> CreateTestRun()

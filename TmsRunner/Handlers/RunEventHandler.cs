@@ -2,6 +2,7 @@ using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Client;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
 using Serilog;
+using System.Runtime.CompilerServices;
 using TmsRunner.Logger;
 using TmsRunner.Services;
 
@@ -31,20 +32,22 @@ public class RunEventHandler : ITestRunEventsHandler2
         _logger.Debug("Run Message: {Message}", message);
     }
 
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void HandleTestRunComplete(
         TestRunCompleteEventArgs testRunCompleteArgs,
         TestRunChangedEventArgs? lastChunkArgs,
         ICollection<AttachmentSet>? runContextAttachments,
         ICollection<string>? executorUris)
     {
-        ProcessNewTestResults(lastChunkArgs);
+        ProcessNewTestResults(lastChunkArgs).GetAwaiter().GetResult();
         _logger.Debug("Test Run completed");
         _waitHandle.Set();
     }
 
+    [MethodImpl(MethodImplOptions.Synchronized)]
     public void HandleTestRunStatsChange(TestRunChangedEventArgs? testRunChangedArgs)
     {
-        ProcessNewTestResults(testRunChangedArgs);
+        ProcessNewTestResults(testRunChangedArgs).GetAwaiter().GetResult();
     }
 
     public void HandleRawMessage(string rawMessage)
@@ -64,12 +67,12 @@ public class RunEventHandler : ITestRunEventsHandler2
         return false;
     }
 
-    public void UploadFailedTestResults()
+    public async Task UploadFailedTestResults()
     {
-        UploadTestResults(FailedTestResults);
+        await UploadTestResults(FailedTestResults);
     }
 
-    public void UploadTestResults(IReadOnlyCollection<TestResult> testResults)
+    public async Task UploadTestResults(IReadOnlyCollection<TestResult> testResults)
     {
         if (!testResults.Any())
         {
@@ -78,13 +81,13 @@ public class RunEventHandler : ITestRunEventsHandler2
 
         _logger.Debug("Run Selected Test Result: {@Results}", testResults.Select(t => t.DisplayName));
 
-        foreach(var testResult in testResults)
+        await Parallel.ForEachAsync(testResults, async (testResult, cancellationToken) =>
         {
             try
             {
                 _logger.Information("Uploading test {Name}", testResult.DisplayName);
 
-                _processorService.ProcessAutoTest(testResult).ConfigureAwait(false).GetAwaiter().GetResult();
+                await _processorService.ProcessAutoTest(testResult);
 
                 _logger.Information("Uploaded test {Name}", testResult.DisplayName);
             }
@@ -94,10 +97,10 @@ public class RunEventHandler : ITestRunEventsHandler2
 
                 _logger.Error(e, "Uploaded test {Name} is failed", testResult.DisplayName);
             }
-        }
+        });
     }
 
-    private void ProcessNewTestResults(TestRunChangedEventArgs? args)
+    private async Task ProcessNewTestResults(TestRunChangedEventArgs? args)
     {
         if (args?.NewTestResults == null)
         {
@@ -108,6 +111,6 @@ public class RunEventHandler : ITestRunEventsHandler2
         FailedTestResults.AddRange(failedTestResults);
 
         var notFailedResults = args.NewTestResults.Where(r => r.Outcome != TestOutcome.Failed).ToArray();
-        UploadTestResults(notFailedResults);
+        await UploadTestResults(notFailedResults);
     }
 }
