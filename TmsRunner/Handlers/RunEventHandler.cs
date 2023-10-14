@@ -2,24 +2,23 @@ using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Client;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
 using Serilog;
-using System.Collections.Concurrent;
 using TmsRunner.Logger;
 using TmsRunner.Services;
 
 namespace TmsRunner.Handlers;
 
-public class RunEventHandler : ITestRunEventsHandler2, IDisposable
+public class RunEventHandler : ITestRunEventsHandler2
 {
     private readonly AutoResetEvent _waitHandle;
     private readonly ILogger _logger;
     private readonly ProcessorService _processorService;
 
-    public readonly ConcurrentBag<TestResult> FailedTestResults;
-    public volatile bool HasUploadErrors;
+    public readonly List<TestResult> FailedTestResults;
+    public bool HasUploadErrors;
 
     public RunEventHandler(AutoResetEvent waitHandle, ProcessorService processorService)
     {
-        FailedTestResults = new ConcurrentBag<TestResult>();
+        FailedTestResults = new List<TestResult>();
         HasUploadErrors = false;
 
         _waitHandle = waitHandle;
@@ -38,14 +37,14 @@ public class RunEventHandler : ITestRunEventsHandler2, IDisposable
         ICollection<AttachmentSet>? runContextAttachments,
         ICollection<string>? executorUris)
     {
-        ProcessNewTestResults(lastChunkArgs).GetAwaiter().GetResult();
+        ProcessNewTestResults(lastChunkArgs);
         _logger.Debug("Test Run completed");
         _waitHandle.Set();
     }
 
     public void HandleTestRunStatsChange(TestRunChangedEventArgs? testRunChangedArgs)
     {
-        ProcessNewTestResults(testRunChangedArgs).GetAwaiter().GetResult();
+        ProcessNewTestResults(testRunChangedArgs);
     }
 
     public void HandleRawMessage(string rawMessage)
@@ -65,12 +64,12 @@ public class RunEventHandler : ITestRunEventsHandler2, IDisposable
         return false;
     }
 
-    public async Task UploadFailedTestResults()
+    public void UploadFailedTestResults()
     {
-        await UploadTestResults(FailedTestResults);
+        UploadTestResults(FailedTestResults);
     }
 
-    public async Task UploadTestResults(IReadOnlyCollection<TestResult> testResults)
+    public void UploadTestResults(IReadOnlyCollection<TestResult> testResults)
     {
         if (!testResults.Any())
         {
@@ -79,13 +78,13 @@ public class RunEventHandler : ITestRunEventsHandler2, IDisposable
 
         _logger.Debug("Run Selected Test Result: {@Results}", testResults.Select(t => t.DisplayName));
 
-        await Parallel.ForEachAsync(testResults, async (testResult, _) =>
+        foreach(var testResult in testResults)
         {
             try
             {
                 _logger.Information("Uploading test {Name}", testResult.DisplayName);
 
-                await _processorService.ProcessAutoTest(testResult);
+                _processorService.ProcessAutoTest(testResult).ConfigureAwait(false).GetAwaiter().GetResult();
 
                 _logger.Information("Uploaded test {Name}", testResult.DisplayName);
             }
@@ -95,29 +94,20 @@ public class RunEventHandler : ITestRunEventsHandler2, IDisposable
 
                 _logger.Error(e, "Uploaded test {Name} is failed", testResult.DisplayName);
             }
-        });
+        }
     }
 
-    private async Task ProcessNewTestResults(TestRunChangedEventArgs? args)
+    private void ProcessNewTestResults(TestRunChangedEventArgs? args)
     {
         if (args?.NewTestResults == null)
         {
             return;
         }
 
-        foreach (var failedResult in args.NewTestResults.Where(r => r.Outcome == TestOutcome.Failed))
-        {
-            FailedTestResults.Add(failedResult);
-        }
+        var failedTestResults = args.NewTestResults.Where(r => r.Outcome == TestOutcome.Failed).ToArray();
+        FailedTestResults.AddRange(failedTestResults);
 
         var notFailedResults = args.NewTestResults.Where(r => r.Outcome != TestOutcome.Failed).ToArray();
-        await UploadTestResults(notFailedResults);
-    }
-
-    public void Dispose()
-    {
-        FailedTestResults.Clear();
-        _waitHandle?.Dispose();
-        GC.SuppressFinalize(this);
+        UploadTestResults(notFailedResults);
     }
 }

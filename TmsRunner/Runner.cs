@@ -86,7 +86,6 @@ public class Runner
                 ? testCases 
                 : testCases.Where(c => runHandler.FailedTestResults.Select(r => r.DisplayName).Contains(c.DisplayName));
 
-            runHandler?.Dispose();
             using var waitHandle = new AutoResetEvent(false);
             runHandler = new RunEventHandler(waitHandle, _processorService);
             _consoleWrapper.RunTests(testCasesToRun, _runSettings, runHandler);
@@ -95,7 +94,7 @@ public class Runner
             retryCounter++;
         } while (runHandler.FailedTestResults.Any() && retryCounter <= int.Parse(Environment.GetEnvironmentVariable("ADAPTER_AUTOTESTS_RERUN_COUNT") ?? "0"));
 
-        await runHandler.UploadFailedTestResults();
+        runHandler.UploadFailedTestResults();
 
         return runHandler.HasUploadErrors;
     }
