@@ -84,13 +84,13 @@ public class Runner
 
         do
         {
-            var testCasesToRun = runHandler == null 
-                ? testCases 
-                : testCases.Where(c => runHandler.FailedTestResults.Select(r => r.DisplayName).Contains(c.DisplayName));
+            var testCasesToRun = failedTestResults.Any()
+                ? testCases.Where(c => failedTestResults.Select(r => r.DisplayName).Contains(c.DisplayName))
+                : testCases;
 
-            failedTestResults.Clear();
             using var waitHandle = new AutoResetEvent(false);
             runHandler = new RunEventHandler(waitHandle, _processorService);
+            failedTestResults.Clear();
 
             _consoleWrapper.RunTests(testCasesToRun, _runSettings, runHandler);
             waitHandle.WaitOne();
