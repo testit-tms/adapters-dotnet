@@ -8,21 +8,18 @@ using TmsRunner.Services;
 
 namespace TmsRunner.Handlers;
 
-public class RunEventHandler : ITestRunEventsHandler2
+public class RunEventHandler : ITestRunEventsHandler2, IDisposable
 {
     private readonly AutoResetEvent _waitHandle;
     private readonly ILogger _logger;
     private readonly ProcessorService _processorService;
 
     public readonly ConcurrentBag<TestResult> FailedTestResults;
-    public readonly List<Task> UploadTasks;
-
     public volatile bool HasUploadErrors;
 
     public RunEventHandler(AutoResetEvent waitHandle, ProcessorService processorService)
     {
         FailedTestResults = new ConcurrentBag<TestResult>();
-        UploadTasks = new List<Task>();
         HasUploadErrors = false;
 
         _waitHandle = waitHandle;
@@ -41,14 +38,14 @@ public class RunEventHandler : ITestRunEventsHandler2
         ICollection<AttachmentSet>? runContextAttachments,
         ICollection<string>? executorUris)
     {
-        UploadTasks.Add(ProcessNewTestResults(lastChunkArgs));
+        ProcessNewTestResults(lastChunkArgs).GetAwaiter().GetResult();
         _logger.Debug("Test Run completed");
         _waitHandle.Set();
     }
 
     public void HandleTestRunStatsChange(TestRunChangedEventArgs? testRunChangedArgs)
     {
-        UploadTasks.Add(ProcessNewTestResults(testRunChangedArgs));
+        ProcessNewTestResults(testRunChangedArgs).GetAwaiter().GetResult();
     }
 
     public void HandleRawMessage(string rawMessage)
@@ -115,5 +112,12 @@ public class RunEventHandler : ITestRunEventsHandler2
 
         var notFailedResults = args.NewTestResults.Where(r => r.Outcome != TestOutcome.Failed).ToArray();
         await UploadTestResults(notFailedResults);
+    }
+
+    public void Dispose()
+    {
+        FailedTestResults.Clear();
+        _waitHandle?.Dispose();
+        GC.SuppressFinalize(this);
     }
 }
