@@ -15,6 +15,7 @@ namespace TmsRunner.Services
 {
     public class ProcessorService
     {
+        public bool UploadError;
         private readonly ITmsClient _apiClient;
         private readonly TestRunV2GetModel _testRun;
         private readonly LogParser _parser;
@@ -25,6 +26,8 @@ namespace TmsRunner.Services
             TestRunV2GetModel testRun,
             LogParser parser)
         {
+            UploadError = false;
+            
             _apiClient = apiClient;
             _testRun = testRun;
             _parser = parser;
@@ -174,7 +177,26 @@ namespace TmsRunner.Services
             return match.Groups[1].Value;
         }
 
-        public async Task ProcessAutoTest(TestResult testResult)
+        public void TryUploadTestResults(List<TestResult> testResults)
+        {
+            foreach (var testResult in testResults)
+            {
+                _logger.Information("Uploading test {Name}", testResult.DisplayName);
+
+                try
+                {
+                    ProcessAutoTest(testResult).GetAwaiter().GetResult();
+                    _logger.Information("Uploaded test {Name}", testResult.DisplayName);
+                }
+                catch (Exception e)
+                {
+                    UploadError = true;
+                    _logger.Error(e, "Uploaded test {Name} is failed", testResult.DisplayName);
+                }
+            }
+        }
+        
+        private async Task ProcessAutoTest(TestResult testResult)
         {
             var traceJson = GetTraceJson(testResult);
             var parameters = _parser.GetParameters(traceJson);

@@ -75,7 +75,7 @@ public class Runner
         return handler.DiscoveredTestCases;
     }
 
-    public (List<TestResult> failedTestResults, bool IsUploadError) RunSelectedTests(IEnumerable<TestCase> testCases)
+    public List<TestResult> RunSelectedTests(IEnumerable<TestCase> testCases)
     {
         var waitHandle = new AutoResetEvent(false);
         var handler = new RunEventHandler(waitHandle, _processorService);
@@ -84,10 +84,10 @@ public class Runner
 
         waitHandle.WaitOne();
 
-        return (handler.FailedTestResults, handler.IsUploadError);
+        return handler.FailedTestResults;
     }
 
-    public (List<TestResult> failedTestResults, bool IsUploadError) ReRunTests(IEnumerable<TestCase> testCases, List<TestResult> failedTestResults)
+    public List<TestResult> ReRunTests(IEnumerable<TestCase> testCases, List<TestResult> failedTestResults)
     {
         var testCasesToReRun = testCases.Where(x => failedTestResults.Select(z => z.DisplayName).ToList().Contains(x.DisplayName)).ToList();
         return RunSelectedTests(testCasesToReRun);

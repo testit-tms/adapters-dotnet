@@ -9,7 +9,6 @@ namespace TmsRunner.Handlers;
 
 public class RunEventHandler : ITestRunEventsHandler2
 {
-    public bool IsUploadError;
     public readonly List<TestResult> FailedTestResults;
     
     private readonly AutoResetEvent _waitHandle;
@@ -18,7 +17,6 @@ public class RunEventHandler : ITestRunEventsHandler2
 
     public RunEventHandler(AutoResetEvent waitHandle, ProcessorService processorService)
     {
-        IsUploadError = false;
         FailedTestResults = new List<TestResult>();
 
         _waitHandle = waitHandle;
@@ -77,21 +75,6 @@ public class RunEventHandler : ITestRunEventsHandler2
         FailedTestResults.AddRange(failedTestResults);
 
         var testResultsToUpload = args.NewTestResults.Where(x => !FailedTestResults.Contains(x)).ToList();
-
-        foreach (var testResult in testResultsToUpload)
-        {
-            _logger.Information("Uploading test {Name}", testResult.DisplayName);
-
-            try
-            {
-                _processorService.ProcessAutoTest(testResult).GetAwaiter().GetResult();
-                _logger.Information("Uploaded test {Name}", testResult.DisplayName);
-            }
-            catch (Exception e)
-            {
-                IsUploadError = true;
-                _logger.Error(e, "Uploaded test {Name} is failed", testResult.DisplayName);
-            }
-        }
+        _processorService.TryUploadTestResults(testResultsToUpload);
     }
 }

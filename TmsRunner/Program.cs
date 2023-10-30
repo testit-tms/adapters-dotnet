@@ -73,20 +73,17 @@ internal class Program
         }
 
         log.Information("Running tests: {Count}", testCases.Count);
-        var (failedTestResults, isUploadError) = runner.RunSelectedTests(testCases);
-        var rerunCounter = 0;
+        var failedTestResults = runner.RunSelectedTests(testCases);
+        var rerunCounter = 1;
         
-        while (rerunCounter < int.Parse(Environment.GetEnvironmentVariable("ADAPTER_AUTOTESTS_RERUN_COUNT") ?? "0") && failedTestResults.Any())
+        while (rerunCounter <= Convert.ToInt16(Environment.GetEnvironmentVariable("ADAPTER_AUTOTESTS_RERUN_COUNT")) && failedTestResults.Any())
         {
-            (failedTestResults, var rerunUploadError) = runner.ReRunTests(testCases, failedTestResults);
-
-            if (rerunUploadError)
-            {
-                isUploadError = rerunUploadError;
-            }
-            
+            log.Information($"Rerun failed tests. Attempt {rerunCounter}");
+            failedTestResults = runner.ReRunTests(testCases, failedTestResults);
             rerunCounter++;
         }
+        
+        processorService.TryUploadTestResults(failedTestResults);
 
         if (settings.AdapterMode == 2)
         {
@@ -95,7 +92,7 @@ internal class Program
             log.Information($"Test run {testRunUrl} finished.");
         }
 
-        return isUploadError ? 1 : 0;
+        return processorService.UploadError ? 1 : 0;
     }
 
     private static AdapterConfig GetAdapterConfiguration(IEnumerable<string> args)
