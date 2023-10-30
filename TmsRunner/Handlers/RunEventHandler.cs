@@ -35,7 +35,7 @@ public class RunEventHandler : ITestRunEventsHandler2
         ICollection<AttachmentSet> runContextAttachments,
         ICollection<string> executorUris)
     {
-        ProcessNewTestResults(lastChunkArgs);
+        ProcessNewTestResults(lastChunkArgs).GetAwaiter().GetResult();
 
         _logger.Debug("Test Run completed");
 
@@ -44,7 +44,7 @@ public class RunEventHandler : ITestRunEventsHandler2
 
     public void HandleTestRunStatsChange(TestRunChangedEventArgs testRunChangedArgs)
     {
-        ProcessNewTestResults(testRunChangedArgs);
+        ProcessNewTestResults(testRunChangedArgs).GetAwaiter().GetResult();
     }
 
     public void HandleRawMessage(string rawMessage)
@@ -64,7 +64,7 @@ public class RunEventHandler : ITestRunEventsHandler2
         return false;
     }
 
-    private void ProcessNewTestResults(TestRunChangedEventArgs? args)
+    private async Task ProcessNewTestResults(TestRunChangedEventArgs? args)
     {
         if (args?.NewTestResults == null)
         {
@@ -75,6 +75,6 @@ public class RunEventHandler : ITestRunEventsHandler2
         FailedTestResults.AddRange(failedTestResults);
 
         var testResultsToUpload = args.NewTestResults.Where(x => !FailedTestResults.Contains(x)).ToList();
-        _processorService.TryUploadTestResults(testResultsToUpload);
+        await _processorService.TryUploadTestResults(testResultsToUpload);
     }
 }

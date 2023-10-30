@@ -177,15 +177,13 @@ namespace TmsRunner.Services
             return match.Groups[1].Value;
         }
 
-        public void TryUploadTestResults(ICollection<TestResult> testResults)
+        public async Task TryUploadTestResults(IEnumerable<TestResult> testResults)
         {
             foreach (var testResult in testResults)
             {
-                _logger.Information("Uploading test {Name}", testResult.DisplayName);
-
                 try
                 {
-                    ProcessAutoTest(testResult).GetAwaiter().GetResult();
+                    await ProcessAutoTest(testResult);
                     _logger.Information("Uploaded test {Name}", testResult.DisplayName);
                 }
                 catch (Exception e)

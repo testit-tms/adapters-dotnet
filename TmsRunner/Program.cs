@@ -73,11 +73,11 @@ internal class Program
                 }
         }
         
-        log.Information("Running tests: {Count}", testCases.Count);
-        var failedTestResults = new HashSet<TestResult>();
+        var failedTestResults = new List<TestResult>();
         var rerunCounter = 1;
         
-        runner.RunSelectedTests(testCases).ForEach(r => failedTestResults.Add(r));
+        log.Information("Running tests: {Count}", testCases.Count);
+        failedTestResults.AddRange(runner.RunSelectedTests(testCases));
         
         while (rerunCounter <= Convert.ToInt16(Environment.GetEnvironmentVariable("ADAPTER_AUTOTESTS_RERUN_COUNT")) && failedTestResults.Any())
         {
@@ -85,24 +85,22 @@ internal class Program
 
             foreach (var testCase in testCases)
             {
-                var matchedTestResult = failedTestResults.FirstOrDefault(r => r?.DisplayName == testCase.DisplayName, null);
+                var matchedTestResults = failedTestResults.Where(r => r.DisplayName == testCase.DisplayName).ToList();
 
-                if (matchedTestResult == null)
+                if (matchedTestResults.Any())
                 {
-                    continue;
+                    testCasesToReRun.Add(testCase);
+                    matchedTestResults.ForEach(r => failedTestResults.Remove(r));
                 }
-
-                testCasesToReRun.Add(testCase);
-                failedTestResults.Remove(matchedTestResult);
             }
             
-            log.Information($"Attempt: {rerunCounter}. Rerun tests count {testCasesToReRun.Count}");
-            runner.RunSelectedTests(testCasesToReRun).ForEach(r => failedTestResults.Add(r));
+            log.Information($"Attempt: {rerunCounter}. Rerun tests count: {testCasesToReRun.Count}");
+            failedTestResults.AddRange(runner.RunSelectedTests(testCasesToReRun));
             
             rerunCounter++;
         }
         
-        processorService.TryUploadTestResults(failedTestResults);
+        await processorService.TryUploadTestResults(failedTestResults);
 
         if (settings.AdapterMode == 2)
         {
