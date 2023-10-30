@@ -78,7 +78,7 @@ internal class Program
         
         while (rerunCounter <= Convert.ToInt16(Environment.GetEnvironmentVariable("ADAPTER_AUTOTESTS_RERUN_COUNT")) && failedTestResults.Any())
         {
-            log.Information($"Rerun failed tests. Attempt {rerunCounter}");
+            log.Information($"Rerun {rerunCounter}. Failed tests count {failedTestResults.Count}");
             failedTestResults = runner.ReRunTests(testCases, failedTestResults);
             rerunCounter++;
         }
