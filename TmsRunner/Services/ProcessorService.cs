@@ -16,17 +16,17 @@ namespace TmsRunner.Services
     public class ProcessorService
     {
         private readonly ITmsClient _apiClient;
-        private readonly TmsSettings _tmsSettings;
+        private readonly TestRunV2GetModel _testRun;
         private readonly LogParser _parser;
         private readonly ILogger _logger = LoggerFactory.GetLogger().ForContext<ProcessorService>();
 
         public ProcessorService(
             ITmsClient apiClient,
-            TmsSettings tmsSettings,
+            TestRunV2GetModel testRun,
             LogParser parser)
         {
             _apiClient = apiClient;
-            _tmsSettings = tmsSettings;
+            _testRun = testRun;
             _parser = parser;
         }
 
@@ -174,7 +174,7 @@ namespace TmsRunner.Services
             return match.Groups[1].Value;
         }
 
-        public async Task ProcessAutoTest(TestResult testResult, TestRunV2GetModel testRun)
+        public async Task ProcessAutoTest(TestResult testResult)
         {
             var traceJson = GetTraceJson(testResult);
             var parameters = _parser.GetParameters(traceJson);
@@ -227,7 +227,7 @@ namespace TmsRunner.Services
             var autoTestResultRequestBody = GetAutoTestResultsForTestRunModel(testResult, testCaseSteps, autoTest,
                 traceJson, parameters, attachmentIds);
 
-            await _apiClient.SubmitResultToTestRun(testRun, autoTestResultRequestBody);
+            await _apiClient.SubmitResultToTestRun(_testRun, autoTestResultRequestBody);
         }
 
         private AutoTestResult GetAutoTestResultsForTestRunModel(TestResult testResult,

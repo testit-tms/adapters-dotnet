@@ -5,6 +5,7 @@ using Serilog;
 using TmsRunner.Handlers;
 using TmsRunner.Logger;
 using TmsRunner.Options;
+using TmsRunner.Services;
 
 namespace TmsRunner;
 
@@ -22,14 +23,16 @@ public class Runner
     private readonly ILogger _logger;
     private readonly IVsTestConsoleWrapper _consoleWrapper;
     private readonly string _runSettings;
+    private readonly ProcessorService _processorService;
 
-    public Runner(AdapterConfig config)
+    public Runner(AdapterConfig config, ProcessorService processorService)
     {
         _config = config;
         _logger = LoggerFactory.GetLogger().ForContext<Runner>();
         _consoleWrapper = new VsTestConsoleWrapper(config.RunnerPath,
             new ConsoleParameters { LogFilePath = Path.Combine(Directory.GetCurrentDirectory(), @"log.txt") });
         _runSettings = string.IsNullOrWhiteSpace(_config.TmsRunSettings) ? DefaultRunSettings : _config.TmsRunSettings;
+        _processorService = processorService;
     }
 
     public void InitialiseRunner()
@@ -72,27 +75,21 @@ public class Runner
         return handler.DiscoveredTestCases;
     }
 
-    public List<TestResult> RunSelectedTests(IEnumerable<TestCase> testCases)
+    public (List<TestResult> failedTestResults, bool IsUploadError) RunSelectedTests(IEnumerable<TestCase> testCases)
     {
         var waitHandle = new AutoResetEvent(false);
-        var handler = new RunEventHandler(waitHandle);
+        var handler = new RunEventHandler(waitHandle, _processorService);
 
         _consoleWrapper.RunTests(testCases, _runSettings, handler);
 
         waitHandle.WaitOne();
 
-        return handler.TestResults;
+        return (handler.FailedTestResults, handler.IsUploadError);
     }
 
-    public void ReRunTests(IEnumerable<TestCase> testCases, ref List<TestResult> testResults)
+    public (List<TestResult> failedTestResults, bool IsUploadError) ReRunTests(IEnumerable<TestCase> testCases, List<TestResult> failedTestResults)
     {
-        var failedTestResults = testResults.Where(x => x.Outcome == TestOutcome.Failed).ToList();
-
-        foreach (var failedTestResult in failedTestResults)
-            testResults.Remove(failedTestResult);
-
         var testCasesToReRun = testCases.Where(x => failedTestResults.Select(z => z.DisplayName).ToList().Contains(x.DisplayName)).ToList();
-        var testResultsAfterReRun = RunSelectedTests(testCasesToReRun);
-        testResults.AddRange(testResultsAfterReRun);
+        return RunSelectedTests(testCasesToReRun);
     }
 }
