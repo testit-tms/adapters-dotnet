@@ -1,4 +1,5 @@
 ﻿using CommandLine;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Tms.Adapter.Utils;
 using TmsRunner.Client;
 using TmsRunner.Configuration;
@@ -71,15 +72,33 @@ internal class Program
                     break;
                 }
         }
-
+        
         log.Information("Running tests: {Count}", testCases.Count);
-        var failedTestResults = runner.RunSelectedTests(testCases);
+        var failedTestResults = new HashSet<TestResult>();
         var rerunCounter = 1;
+        
+        runner.RunSelectedTests(testCases).ForEach(r => failedTestResults.Add(r));
         
         while (rerunCounter <= Convert.ToInt16(Environment.GetEnvironmentVariable("ADAPTER_AUTOTESTS_RERUN_COUNT")) && failedTestResults.Any())
         {
-            log.Information($"Rerun {rerunCounter}. Failed tests count {failedTestResults.Count}");
-            failedTestResults = runner.ReRunTests(testCases, failedTestResults);
+            var testCasesToReRun = new List<TestCase>();
+
+            foreach (var testCase in testCases)
+            {
+                var matchedTestResult = failedTestResults.FirstOrDefault(r => r?.DisplayName == testCase.DisplayName, null);
+
+                if (matchedTestResult == null)
+                {
+                    continue;
+                }
+
+                testCasesToReRun.Add(testCase);
+                failedTestResults.Remove(matchedTestResult);
+            }
+            
+            log.Information($"Attempt: {rerunCounter}. Rerun tests count {testCasesToReRun.Count}");
+            runner.RunSelectedTests(testCasesToReRun).ForEach(r => failedTestResults.Add(r));
+            
             rerunCounter++;
         }
         

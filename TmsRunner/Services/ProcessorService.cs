@@ -177,7 +177,7 @@ namespace TmsRunner.Services
             return match.Groups[1].Value;
         }
 
-        public void TryUploadTestResults(List<TestResult> testResults)
+        public void TryUploadTestResults(ICollection<TestResult> testResults)
         {
             foreach (var testResult in testResults)
             {

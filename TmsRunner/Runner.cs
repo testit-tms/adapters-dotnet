@@ -86,10 +86,4 @@ public class Runner
 
         return handler.FailedTestResults;
     }
-
-    public List<TestResult> ReRunTests(IEnumerable<TestCase> testCases, List<TestResult> failedTestResults)
-    {
-        var testCasesToReRun = testCases.Where(x => failedTestResults.Select(z => z.DisplayName).ToList().Contains(x.DisplayName)).ToList();
-        return RunSelectedTests(testCasesToReRun);
-    }
 }
