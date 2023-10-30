@@ -15,7 +15,7 @@ namespace TmsRunner.Services
 {
     public class ProcessorService
     {
-        public bool UploadError;
+        public volatile bool UploadError;
         private readonly ITmsClient _apiClient;
         private readonly TestRunV2GetModel _testRun;
         private readonly LogParser _parser;
@@ -177,21 +177,28 @@ namespace TmsRunner.Services
             return match.Groups[1].Value;
         }
 
-        public async Task TryUploadTestResults(IEnumerable<TestResult> testResults)
+        public async Task TryUploadTestResults(List<TestResult> testResults)
         {
-            foreach (var testResult in testResults)
+            if (!testResults.Any())
             {
-                try
-                {
-                    await ProcessAutoTest(testResult);
-                    _logger.Information("Uploaded test {Name}", testResult.DisplayName);
-                }
-                catch (Exception e)
-                {
-                    UploadError = true;
-                    _logger.Error(e, "Uploaded test {Name} is failed", testResult.DisplayName);
-                }
+                return;
             }
+
+            await Parallel.ForEachAsync(testResults, async (testResult, _) =>
+            {
+                {
+                    try
+                    {
+                        await ProcessAutoTest(testResult);
+                        _logger.Information("Uploaded test {Name}", testResult.DisplayName);
+                    }
+                    catch (Exception e)
+                    {
+                        UploadError = true;
+                        _logger.Error(e, "Uploaded test {Name} is failed", testResult.DisplayName);
+                    }
+                }
+            });
         }
         
         private async Task ProcessAutoTest(TestResult testResult)
