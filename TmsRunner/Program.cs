@@ -31,11 +31,12 @@ internal class Program
         var parser = new LogParser(replacer, reflector);
         var filterService = new FilterService(replacer);
 
-        var testRun = settings.AdapterMode == 0 
-            ? await apiClient.GetTestRun(settings.TestRunId) 
-            : await apiClient.CreateTestRun();
+        if (settings.AdapterMode == 2)
+        {
+            settings.TestRunId = (await apiClient.CreateTestRun()).Id.ToString();
+        }
         
-        var processorService = new ProcessorService(apiClient, testRun, parser);
+        var processorService = new ProcessorService(apiClient, settings.TestRunId, parser);
         var runner = new Runner(config, processorService);
         runner.InitialiseRunner();
 
@@ -61,8 +62,6 @@ internal class Program
                 }
             case 2:
                 {
-                    settings.TestRunId = testRun.Id.ToString();
-
                     if (!string.IsNullOrEmpty(config.TmsLabelsOfTestsToRun))
                     {
                         testCases = filterService.FilterTestCasesByLabels(config, testCases);

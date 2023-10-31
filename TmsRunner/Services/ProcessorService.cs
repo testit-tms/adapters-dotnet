@@ -3,7 +3,6 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Serilog;
-using TestIt.Client.Model;
 using Tms.Adapter.Models;
 using TmsRunner.Client;
 using TmsRunner.Logger;
@@ -17,19 +16,19 @@ namespace TmsRunner.Services
     {
         public volatile bool UploadError;
         private readonly ITmsClient _apiClient;
-        private readonly TestRunV2GetModel _testRun;
+        private readonly string _testRunId;
         private readonly LogParser _parser;
         private readonly ILogger _logger = LoggerFactory.GetLogger().ForContext<ProcessorService>();
 
         public ProcessorService(
             ITmsClient apiClient,
-            TestRunV2GetModel testRun,
+            string testRunId,
             LogParser parser)
         {
             UploadError = false;
             
             _apiClient = apiClient;
-            _testRun = testRun;
+            _testRunId = testRunId;
             _parser = parser;
         }
 
@@ -250,7 +249,9 @@ namespace TmsRunner.Services
             var autoTestResultRequestBody = GetAutoTestResultsForTestRunModel(testResult, testCaseSteps, autoTest,
                 traceJson, parameters, attachmentIds);
 
-            await _apiClient.SubmitResultToTestRun(_testRun, autoTestResultRequestBody);
+            var testRun = await _apiClient.GetTestRun(_testRunId);
+
+            await _apiClient.SubmitResultToTestRun(testRun, autoTestResultRequestBody);
         }
 
         private AutoTestResult GetAutoTestResultsForTestRunModel(TestResult testResult,
