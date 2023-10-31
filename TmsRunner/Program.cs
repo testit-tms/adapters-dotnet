@@ -82,8 +82,8 @@ internal class Program
             log.Information("Rerun failed tests. Attempt: {Count}", attemptCounter);
 
             var failedTestsNames = failedTestResults.Select(r => r.DisplayName).ToList();
-            var failedTestCases = testCases.Where(c => failedTestsNames.Contains(c.DisplayName)).ToList();
-            failedTestResults = runner.RunSelectedTests(failedTestCases);
+            var testCasesToRerun = testCases.Where(c => failedTestsNames.Contains(c.DisplayName)).ToList();
+            failedTestResults = runner.RunSelectedTests(testCasesToRerun);
             
             attemptCounter++;
         }
