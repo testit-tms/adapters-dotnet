@@ -16,6 +16,8 @@ public class Config
 
     public string TmsAdapterMode { get; set; }
 
+    public string TmsAdapterAutoTestRerunCount { get; set; }
+
     public string TmsConfigFile { get; set; }
 
     public string TmsRunSettings { get; set; }

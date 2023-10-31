@@ -76,7 +76,7 @@ internal class Program
         var failedTestResults = runner.RunSelectedTests(testCases);
         var attemptCounter = 1;
 
-        while (attemptCounter <= Convert.ToInt16(Environment.GetEnvironmentVariable("ADAPTER_AUTOTESTS_RERUN_COUNT")) && failedTestResults.Any())
+        while (attemptCounter <= settings.AdapterAutoTestRerunCount && failedTestResults.Any())
         {
             log.Information("Failed tests count: {Count}", failedTestResults.Count);
             log.Information("Rerun failed tests. Attempt: {Count}", attemptCounter);
@@ -121,6 +121,7 @@ internal class Program
                     TmsTestRunId = ac.TmsTestRunId,
                     TmsTestRunName = ac.TmsTestRunName,
                     TmsAdapterMode = ac.TmsAdapterMode,
+                    TmsAdapterAutoTestRerunCount = ac.TmsAdapterAutoTestRerunCount,
                     TmsConfigFile = ac.TmsConfigFile,
                     TmsLabelsOfTestsToRun = ac.TmsLabelsOfTestsToRun
                 };
