@@ -78,8 +78,9 @@ internal class Program
 
         while (attemptCounter <= settings.AdapterAutoTestRerunCount && failedTestResults.Any())
         {
-            log.Information("Failed tests count: {Count}", failedTestResults.Count);
-            log.Information("Rerun failed tests. Attempt: {Count}", attemptCounter);
+            log.Information("Rerun attempt: {attemptCounter}. Failed tests count: {Count}",
+                attemptCounter,
+                failedTestResults.Count);
 
             var failedTestsNames = failedTestResults.Select(r => r.DisplayName).ToList();
             var testCasesToRerun = testCases.Where(c => failedTestsNames.Contains(c.DisplayName)).ToList();
