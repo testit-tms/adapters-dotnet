@@ -1,5 +1,4 @@
 ﻿using CommandLine;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Tms.Adapter.Utils;
 using TmsRunner.Client;
 using TmsRunner.Configuration;
@@ -72,32 +71,21 @@ internal class Program
                     break;
                 }
         }
-        
-        var failedTestResults = new List<TestResult>();
-        var rerunCounter = 1;
-        
+          
         log.Information("Running tests: {Count}", testCases.Count);
-        failedTestResults.AddRange(runner.RunSelectedTests(testCases));
-        
-        while (rerunCounter <= Convert.ToInt16(Environment.GetEnvironmentVariable("ADAPTER_AUTOTESTS_RERUN_COUNT")) && failedTestResults.Any())
+        var failedTestResults = runner.RunSelectedTests(testCases);
+        var attemptCounter = 1;
+
+        while (attemptCounter <= Convert.ToInt16(Environment.GetEnvironmentVariable("ADAPTER_AUTOTESTS_RERUN_COUNT")) && failedTestResults.Any())
         {
-            var testCasesToReRun = new List<TestCase>();
+            log.Information("Failed tests count: {Count}", failedTestResults.Count);
+            log.Information("Rerun failed tests. Attempt: {Count}", attemptCounter);
 
-            foreach (var testCase in testCases)
-            {
-                var matchedTestResults = failedTestResults.Where(r => r.DisplayName == testCase.DisplayName).ToList();
-
-                if (matchedTestResults.Any())
-                {
-                    testCasesToReRun.Add(testCase);
-                    matchedTestResults.ForEach(r => failedTestResults.Remove(r));
-                }
-            }
+            var failedTestsNames = failedTestResults.Select(r => r.DisplayName).ToList();
+            var failedTestCases = testCases.Where(c => failedTestsNames.Contains(c.DisplayName)).ToList();
+            failedTestResults = runner.RunSelectedTests(failedTestCases);
             
-            log.Information($"Attempt: {rerunCounter}. Rerun tests count: {testCasesToReRun.Count}");
-            failedTestResults.AddRange(runner.RunSelectedTests(testCasesToReRun));
-            
-            rerunCounter++;
+            attemptCounter++;
         }
         
         await processorService.TryUploadTestResults(failedTestResults);

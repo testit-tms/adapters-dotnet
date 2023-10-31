@@ -179,13 +179,9 @@ namespace TmsRunner.Services
 
         public async Task TryUploadTestResults(List<TestResult> testResults)
         {
-            if (!testResults.Any())
+            if (testResults.Any())
             {
-                return;
-            }
-
-            await Parallel.ForEachAsync(testResults, async (testResult, _) =>
-            {
+                await Parallel.ForEachAsync(testResults, async (testResult, _) =>
                 {
                     try
                     {
@@ -197,10 +193,10 @@ namespace TmsRunner.Services
                         UploadError = true;
                         _logger.Error(e, "Uploaded test {Name} is failed", testResult.DisplayName);
                     }
-                }
-            });
+                });
+            }
         }
-        
+
         private async Task ProcessAutoTest(TestResult testResult)
         {
             var traceJson = GetTraceJson(testResult);

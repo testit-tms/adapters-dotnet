@@ -75,9 +75,9 @@ public class Runner
         return handler.DiscoveredTestCases;
     }
 
-    public IEnumerable<TestResult> RunSelectedTests(IEnumerable<TestCase> testCases)
+    public List<TestResult> RunSelectedTests(IEnumerable<TestCase> testCases)
     {
-        var waitHandle = new AutoResetEvent(false);
+        using var waitHandle = new AutoResetEvent(false);
         var handler = new RunEventHandler(waitHandle, _processorService);
 
         _consoleWrapper.RunTests(testCases, _runSettings, handler);
