@@ -3,7 +3,6 @@ using System.Text.Json;
 using System.Text.RegularExpressions;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Serilog;
-using TestIt.Client.Model;
 using Tms.Adapter.Models;
 using TmsRunner.Client;
 using TmsRunner.Logger;
@@ -15,18 +14,21 @@ namespace TmsRunner.Services
 {
     public class ProcessorService
     {
+        public volatile bool UploadError;
         private readonly ITmsClient _apiClient;
-        private readonly TmsSettings _tmsSettings;
+        private readonly string _testRunId;
         private readonly LogParser _parser;
         private readonly ILogger _logger = LoggerFactory.GetLogger().ForContext<ProcessorService>();
 
         public ProcessorService(
             ITmsClient apiClient,
-            TmsSettings tmsSettings,
+            string testRunId,
             LogParser parser)
         {
+            UploadError = false;
+            
             _apiClient = apiClient;
-            _tmsSettings = tmsSettings;
+            _testRunId = testRunId;
             _parser = parser;
         }
 
@@ -174,7 +176,27 @@ namespace TmsRunner.Services
             return match.Groups[1].Value;
         }
 
-        public async Task ProcessAutoTest(TestResult testResult, TestRunV2GetModel testRun)
+        public async Task TryUploadTestResults(List<TestResult> testResults)
+        {
+            if (testResults.Any())
+            {
+                await Parallel.ForEachAsync(testResults, async (testResult, _) =>
+                {
+                    try
+                    {
+                        await ProcessAutoTest(testResult);
+                        _logger.Information("Uploaded test {Name}", testResult.DisplayName);
+                    }
+                    catch (Exception e)
+                    {
+                        UploadError = true;
+                        _logger.Error(e, "Uploaded test {Name} is failed", testResult.DisplayName);
+                    }
+                });
+            }
+        }
+
+        private async Task ProcessAutoTest(TestResult testResult)
         {
             var traceJson = GetTraceJson(testResult);
             var parameters = _parser.GetParameters(traceJson);
@@ -226,6 +248,8 @@ namespace TmsRunner.Services
 
             var autoTestResultRequestBody = GetAutoTestResultsForTestRunModel(testResult, testCaseSteps, autoTest,
                 traceJson, parameters, attachmentIds);
+
+            var testRun = await _apiClient.GetTestRun(_testRunId);
 
             await _apiClient.SubmitResultToTestRun(testRun, autoTestResultRequestBody);
         }
