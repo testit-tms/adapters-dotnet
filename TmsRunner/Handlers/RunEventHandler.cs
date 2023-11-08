@@ -24,16 +24,16 @@ public class RunEventHandler : ITestRunEventsHandler2
         _processorService = processorService;
     }
 
-    public void HandleLogMessage(TestMessageLevel level, string message)
+    public void HandleLogMessage(TestMessageLevel level, string? message)
     {
         _logger.Debug("Run Message: {Message}", message);
     }
 
     public void HandleTestRunComplete(
-        TestRunCompleteEventArgs testRunCompleteArgs,
-        TestRunChangedEventArgs lastChunkArgs,
-        ICollection<AttachmentSet> runContextAttachments,
-        ICollection<string> executorUris)
+        TestRunCompleteEventArgs? testRunCompleteArgs,
+        TestRunChangedEventArgs? lastChunkArgs,
+        ICollection<AttachmentSet>? runContextAttachments,
+        ICollection<string>? executorUris)
     {
         ProcessNewTestResults(lastChunkArgs).GetAwaiter().GetResult();
 
@@ -42,7 +42,7 @@ public class RunEventHandler : ITestRunEventsHandler2
         _waitHandle.Set();
     }
 
-    public void HandleTestRunStatsChange(TestRunChangedEventArgs testRunChangedArgs)
+    public void HandleTestRunStatsChange(TestRunChangedEventArgs? testRunChangedArgs)
     {
         ProcessNewTestResults(testRunChangedArgs).GetAwaiter().GetResult();
     }
