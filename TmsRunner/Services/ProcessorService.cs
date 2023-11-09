@@ -178,21 +178,18 @@ namespace TmsRunner.Services
 
         public async Task TryUploadTestResults(List<TestResult> testResults)
         {
-            if (testResults.Any())
+            foreach (var testResult in testResults)
             {
-                await Parallel.ForEachAsync(testResults, async (testResult, _) =>
+                try
                 {
-                    try
-                    {
-                        await ProcessAutoTest(testResult);
-                        _logger.Information("Uploaded test {Name}", testResult.DisplayName);
-                    }
-                    catch (Exception e)
-                    {
-                        UploadError = true;
-                        _logger.Error(e, "Uploaded test {Name} is failed", testResult.DisplayName);
-                    }
-                });
+                    await ProcessAutoTest(testResult);
+                    _logger.Information("Uploaded test {Name}", testResult.DisplayName);
+                }
+                catch (Exception e)
+                {
+                    UploadError = true;
+                    _logger.Error(e, "Uploaded test {Name} is failed", testResult.DisplayName);
+                }
             }
         }
 
