@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Client;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
@@ -9,19 +10,23 @@ namespace TmsRunner.Handlers;
 
 public class RunEventHandler : ITestRunEventsHandler2
 {
-    public readonly List<TestResult> FailedTestResults;
-    
+    public readonly ConcurrentBag<TestResult> FailedTestResults;
+
+    private readonly ConcurrentBag<Task> _uploadTasks;
     private readonly AutoResetEvent _waitHandle;
+    private readonly bool _isLastRun;
     private readonly ILogger _logger;
     private readonly ProcessorService _processorService;
 
-    public RunEventHandler(AutoResetEvent waitHandle, ProcessorService processorService)
+    public RunEventHandler(AutoResetEvent waitHandle, bool isLastRun, ProcessorService processorService)
     {
-        FailedTestResults = new List<TestResult>();
-
         _waitHandle = waitHandle;
-        _logger = LoggerFactory.GetLogger().ForContext<RunEventHandler>();
+        _isLastRun = isLastRun;
         _processorService = processorService;
+        
+        _logger = LoggerFactory.GetLogger().ForContext<RunEventHandler>();
+        FailedTestResults = new ConcurrentBag<TestResult>();
+        _uploadTasks = new ConcurrentBag<Task>();
     }
 
     public void HandleLogMessage(TestMessageLevel level, string? message)
@@ -35,8 +40,9 @@ public class RunEventHandler : ITestRunEventsHandler2
         ICollection<AttachmentSet>? runContextAttachments,
         ICollection<string>? executorUris)
     {
-        ProcessNewTestResults(lastChunkArgs).GetAwaiter().GetResult();
 
+        StartUploadTask(lastChunkArgs);
+        Task.WaitAll(_uploadTasks.ToArray());
         _logger.Debug("Test Run completed");
 
         _waitHandle.Set();
@@ -44,7 +50,7 @@ public class RunEventHandler : ITestRunEventsHandler2
 
     public void HandleTestRunStatsChange(TestRunChangedEventArgs? testRunChangedArgs)
     {
-        ProcessNewTestResults(testRunChangedArgs).GetAwaiter().GetResult();
+        StartUploadTask(testRunChangedArgs);
     }
 
     public void HandleRawMessage(string rawMessage)
@@ -64,6 +70,13 @@ public class RunEventHandler : ITestRunEventsHandler2
         return false;
     }
 
+    private void StartUploadTask(TestRunChangedEventArgs? args)
+    {
+        var uploadTask = ProcessNewTestResults(args);
+        uploadTask.Start();
+        _uploadTasks.Add(uploadTask);
+    }
+
     private async Task ProcessNewTestResults(TestRunChangedEventArgs? args)
     {
         if (args?.NewTestResults == null)
@@ -71,10 +84,22 @@ public class RunEventHandler : ITestRunEventsHandler2
             return;
         }
 
-        var failedTestResults = args.NewTestResults.Where(x => x.Outcome == TestOutcome.Failed).ToList();
-        FailedTestResults.AddRange(failedTestResults);
-
-        var testResultsToUpload = args.NewTestResults.Where(x => !FailedTestResults.Contains(x)).ToList();
+        var testResultsToUpload = new List<TestResult>();
+        
+        if (_isLastRun)
+        {
+            testResultsToUpload.AddRange(args.NewTestResults);
+        }
+        else
+        {
+            args.NewTestResults
+                .Where(x => x.Outcome == TestOutcome.Failed)
+                .ToList()
+                .ForEach(r => FailedTestResults.Add(r));
+            
+            testResultsToUpload.AddRange(args.NewTestResults.Where(x => !FailedTestResults.Contains(x)));
+        }
+        
         await _processorService.TryUploadTestResults(testResultsToUpload);
     }
 }

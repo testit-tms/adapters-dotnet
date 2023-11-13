@@ -1,4 +1,5 @@
 ﻿using CommandLine;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Tms.Adapter.Utils;
 using TmsRunner.Client;
 using TmsRunner.Configuration;
@@ -70,25 +71,34 @@ internal class Program
                     break;
                 }
         }
-          
-        log.Information("Running tests: {Count}", testCases.Count);
-        var failedTestResults = runner.RunSelectedTests(testCases);
-        var attemptCounter = 1;
 
-        while (attemptCounter <= settings.AdapterAutoTestRerunCount && failedTestResults.Any())
+        var failedTestResults = new List<TestResult>();
+        var attemptCounter = 0;
+
+        do
         {
-            log.Information("Rerun attempt: {attemptCounter}. Failed tests count: {Count}",
-                attemptCounter,
-                failedTestResults.Count);
-
-            var failedTestsNames = failedTestResults.Select(r => r.DisplayName).ToList();
-            var testCasesToRerun = testCases.Where(c => failedTestsNames.Contains(c.DisplayName)).ToList();
-            failedTestResults = runner.RunSelectedTests(testCasesToRerun);
+            var testCasesToRun = new List<TestCase>();
+            var isLastRun = attemptCounter + 1 > settings.AdapterAutoTestRerunCount;
             
+            if (attemptCounter == 0)
+            {
+                testCasesToRun.AddRange(testCases);
+                log.Information("Running tests: {Count}", testCasesToRun.Count);
+            }
+            else
+            {
+                var failedTestsNames = failedTestResults.Select(r => r.DisplayName).ToList();
+                testCasesToRun.AddRange(testCases.Where(c => failedTestsNames.Contains(c.DisplayName)));
+                log.Information("Attempt: {attemptCounter}. Rerun tests count: {Count}",
+                    attemptCounter,
+                    testCasesToRun.Count);
+                
+                failedTestResults.Clear();
+            }
+
+            failedTestResults.AddRange(runner.RunSelectedTests(testCasesToRun, isLastRun));
             attemptCounter++;
-        }
-        
-        await processorService.TryUploadTestResults(failedTestResults);
+        } while (attemptCounter <= settings.AdapterAutoTestRerunCount && failedTestResults.Any());
 
         if (settings.AdapterMode == 2)
         {
