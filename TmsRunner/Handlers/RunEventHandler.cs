@@ -41,7 +41,7 @@ public class RunEventHandler : ITestRunEventsHandler2
         ICollection<string>? executorUris)
     {
 
-        StartUploadTask(lastChunkArgs);
+        _uploadTasks.Add(ProcessNewTestResults(lastChunkArgs));
         Task.WaitAll(_uploadTasks.ToArray());
         _logger.Debug("Test Run completed");
 
@@ -50,7 +50,7 @@ public class RunEventHandler : ITestRunEventsHandler2
 
     public void HandleTestRunStatsChange(TestRunChangedEventArgs? testRunChangedArgs)
     {
-        StartUploadTask(testRunChangedArgs);
+        _uploadTasks.Add(ProcessNewTestResults(testRunChangedArgs));
     }
 
     public void HandleRawMessage(string rawMessage)
@@ -68,13 +68,6 @@ public class RunEventHandler : ITestRunEventsHandler2
     {
         // No op
         return false;
-    }
-
-    private void StartUploadTask(TestRunChangedEventArgs? args)
-    {
-        var uploadTask = ProcessNewTestResults(args);
-        uploadTask.Start();
-        _uploadTasks.Add(uploadTask);
     }
 
     private async Task ProcessNewTestResults(TestRunChangedEventArgs? args)
@@ -95,7 +88,7 @@ public class RunEventHandler : ITestRunEventsHandler2
             args.NewTestResults
                 .Where(x => x.Outcome == TestOutcome.Failed)
                 .ToList()
-                .ForEach(r => FailedTestResults.Add(r));
+                .ForEach(FailedTestResults.Add);
             
             testResultsToUpload.AddRange(args.NewTestResults.Where(x => !FailedTestResults.Contains(x)));
         }
