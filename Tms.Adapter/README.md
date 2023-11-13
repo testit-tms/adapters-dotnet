@@ -64,7 +64,7 @@ Create **Tms.config.json** file in the project directory:
 
 ```
 TmsRunner --runner "/usr/local/share/dotnet/sdk/6.0.302/vstest.console.dll" --testassembly "/tests/MsTest.dll" --tmsUrl=http://localhost:8080 --tmsPrivateToken=Token --tmsProjectId=f5da5bab-380a-4382-b36f-600083fdd795 --tmsConfigurationId=3a14fa45-b54e-4859-9998-cc502d4cc8c6
--tmsAdapterMode=0 --DtmsTestRunId=a17269da-bc65-4671-90dd-d3e3da92af80 --tmsTestRunName=Regress --tmsAutomaticCreationTestCases=true --tmsCertValidation=true --tmsLabelsOfTestsToRun smoke,regress --debug
+-tmsAdapterMode=0 --tmsTestRunId=a17269da-bc65-4671-90dd-d3e3da92af80 --tmsTestRunName=Regress --tmsAutomaticCreationTestCases=true --tmsCertValidation=true --tmsLabelsOfTestsToRun smoke,regress --debug
 ```
 
 * `runner` - path to vstest.console.dll or vstest.console.exe
