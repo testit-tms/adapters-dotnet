@@ -11,12 +11,11 @@ namespace TmsRunner.Handlers;
 public class RunEventHandler : ITestRunEventsHandler2
 {
     public readonly ConcurrentBag<TestResult> FailedTestResults;
-
-    private readonly ConcurrentBag<Task> _uploadTasks;
     private readonly AutoResetEvent _waitHandle;
     private readonly bool _isLastRun;
     private readonly ILogger _logger;
     private readonly ProcessorService _processorService;
+    private ConcurrentBag<Task> _uploadTasks;
 
     public RunEventHandler(AutoResetEvent waitHandle, bool isLastRun, ProcessorService processorService)
     {
@@ -25,8 +24,8 @@ public class RunEventHandler : ITestRunEventsHandler2
         _processorService = processorService;
         
         _logger = LoggerFactory.GetLogger().ForContext<RunEventHandler>();
-        FailedTestResults = new ConcurrentBag<TestResult>();
         _uploadTasks = new ConcurrentBag<Task>();
+        FailedTestResults = new ConcurrentBag<TestResult>();
     }
 
     public void HandleLogMessage(TestMessageLevel level, string? message)
@@ -41,7 +40,11 @@ public class RunEventHandler : ITestRunEventsHandler2
         ICollection<string>? executorUris)
     {
 
-        _uploadTasks.Add(ProcessNewTestResults(lastChunkArgs));
+        _uploadTasks = new ConcurrentBag<Task>(_uploadTasks.Where(t => !t.IsCompleted))
+        {
+            ProcessNewTestResults(lastChunkArgs)
+        };
+
         Task.WaitAll(_uploadTasks.ToArray());
         _logger.Debug("Test Run completed");
 
@@ -50,7 +53,10 @@ public class RunEventHandler : ITestRunEventsHandler2
 
     public void HandleTestRunStatsChange(TestRunChangedEventArgs? testRunChangedArgs)
     {
-        _uploadTasks.Add(ProcessNewTestResults(testRunChangedArgs));
+        _uploadTasks = new ConcurrentBag<Task>(_uploadTasks.Where(t => !t.IsCompleted))
+        {
+            ProcessNewTestResults(testRunChangedArgs)
+        };
     }
 
     public void HandleRawMessage(string rawMessage)

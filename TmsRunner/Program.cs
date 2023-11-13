@@ -78,7 +78,6 @@ internal class Program
         do
         {
             var testCasesToRun = new List<TestCase>();
-            var isLastRun = attemptCounter + 1 > settings.AdapterAutoTestRerunCount;
             
             if (attemptCounter == 0)
             {
@@ -96,6 +95,7 @@ internal class Program
                 failedTestResults.Clear();
             }
 
+            var isLastRun = attemptCounter + 1 > settings.AdapterAutoTestRerunCount;
             failedTestResults.AddRange(runner.RunSelectedTests(testCasesToRun, isLastRun));
             attemptCounter++;
         } while (attemptCounter <= settings.AdapterAutoTestRerunCount && failedTestResults.Any());
