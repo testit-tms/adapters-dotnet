@@ -87,8 +87,8 @@ internal class Program
             }
             else
             {
-                var failedTestsNames = failedTestResults.Select(r => r.DisplayName).ToHashSet();
-                var testCasesToRun = testCases.Where(c => failedTestsNames.Contains(c.DisplayName)).ToHashSet();
+                var failedTestsNames = failedTestResults.Select(r => r.DisplayName).ToList();
+                var testCasesToRun = testCases.Where(c => failedTestsNames.Contains(c.DisplayName)).ToList();
                 log.Information("Attempt: {attemptCounter}. Rerun tests count: {Count}",
                     attemptCounter,
                     testCasesToRun.Count);

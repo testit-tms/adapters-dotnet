@@ -9,7 +9,7 @@ namespace TmsRunner.Handlers;
 
 public class RunEventHandler : ITestRunEventsHandler2
 {
-    public readonly HashSet<TestResult> FailedTestResults;
+    public readonly List<TestResult> FailedTestResults;
     private readonly AutoResetEvent _waitHandle;
     private readonly bool _isLastRun;
     private readonly ILogger _logger;
@@ -21,7 +21,7 @@ public class RunEventHandler : ITestRunEventsHandler2
         _isLastRun = isLastRun;
         _processorService = processorService;
         _logger = LoggerFactory.GetLogger().ForContext<RunEventHandler>();
-        FailedTestResults = new HashSet<TestResult>();
+        FailedTestResults = [];
     }
 
     public void HandleLogMessage(TestMessageLevel level, string? message)
