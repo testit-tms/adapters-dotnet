@@ -1,4 +1,5 @@
-﻿using CommandLine;
+﻿using System.Collections.Immutable;
+using CommandLine;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Tms.Adapter.Utils;
 using TmsRunner.Client;
@@ -77,28 +78,27 @@ internal class Program
 
         do
         {
-            var testCasesToRun = new List<TestCase>();
-            
+            var isLastRun = attemptCounter + 1 > settings.AdapterAutoTestRerunCount;
+
             if (attemptCounter == 0)
             {
-                testCasesToRun.AddRange(testCases);
-                log.Information("Running tests: {Count}", testCasesToRun.Count);
+                log.Information("Running tests: {Count}", testCases.Count);
+                failedTestResults.AddRange(runner.RunSelectedTests(testCases, isLastRun));
             }
             else
             {
-                var failedTestsNames = failedTestResults.Select(r => r.DisplayName).ToList();
-                testCasesToRun.AddRange(testCases.Where(c => failedTestsNames.Contains(c.DisplayName)));
+                var failedTestsNames = failedTestResults.Select(r => r.DisplayName);
+                var testCasesToRun = testCases.Where(c => failedTestsNames.Contains(c.DisplayName)).ToImmutableHashSet();
                 log.Information("Attempt: {attemptCounter}. Rerun tests count: {Count}",
                     attemptCounter,
                     testCasesToRun.Count);
                 
                 failedTestResults.Clear();
+                failedTestResults.AddRange(runner.RunSelectedTests(testCasesToRun, isLastRun));
             }
 
-            var isLastRun = attemptCounter + 1 > settings.AdapterAutoTestRerunCount;
-            failedTestResults.AddRange(runner.RunSelectedTests(testCasesToRun, isLastRun));
             attemptCounter++;
-        } while (attemptCounter <= settings.AdapterAutoTestRerunCount && failedTestResults.Any());
+        } while (attemptCounter <= settings.AdapterAutoTestRerunCount && failedTestResults.Count > 0);
 
         if (settings.AdapterMode == 2)
         {

@@ -14,16 +14,13 @@ public class RunEventHandler : ITestRunEventsHandler2
     private readonly bool _isLastRun;
     private readonly ILogger _logger;
     private readonly ProcessorService _processorService;
-    private HashSet<Task> _uploadTasks;
 
     public RunEventHandler(AutoResetEvent waitHandle, bool isLastRun, ProcessorService processorService)
     {
         _waitHandle = waitHandle;
         _isLastRun = isLastRun;
         _processorService = processorService;
-        
         _logger = LoggerFactory.GetLogger().ForContext<RunEventHandler>();
-        _uploadTasks = new HashSet<Task>();
         FailedTestResults = new HashSet<TestResult>();
     }
 
@@ -39,12 +36,7 @@ public class RunEventHandler : ITestRunEventsHandler2
         ICollection<string>? executorUris)
     {
 
-        _uploadTasks = new HashSet<Task>(_uploadTasks.Where(t => !t.IsCompleted))
-        {
-            ProcessNewTestResults(lastChunkArgs)
-        };
-
-        Task.WaitAll(_uploadTasks.ToArray());
+        ProcessNewTestResults(lastChunkArgs).Wait();
         _logger.Debug("Test Run completed");
 
         _waitHandle.Set();
@@ -52,13 +44,7 @@ public class RunEventHandler : ITestRunEventsHandler2
 
     public void HandleTestRunStatsChange(TestRunChangedEventArgs? testRunChangedArgs)
     {
-        lock (_uploadTasks)
-        {
-            _uploadTasks = new HashSet<Task>(_uploadTasks.Where(t => !t.IsCompleted))
-        {
-            ProcessNewTestResults(testRunChangedArgs)
-        };
-        }
+        ProcessNewTestResults(testRunChangedArgs).Wait();
     }
 
     public void HandleRawMessage(string rawMessage)
@@ -84,29 +70,19 @@ public class RunEventHandler : ITestRunEventsHandler2
         {
             return;
         }
-
-        var testResultsToUpload = new List<TestResult>();
         
         if (_isLastRun)
         {
-            testResultsToUpload.AddRange(args.NewTestResults);
+            await _processorService.TryUploadTestResults(args.NewTestResults);
         }
         else
         {
             args.NewTestResults
                 .Where(x => x.Outcome == TestOutcome.Failed)
                 .ToList()
-                .ForEach(r =>
-                {
-                    lock (FailedTestResults)
-                    {
-                        FailedTestResults.Add(r);
-                    }
-                });
+                .ForEach(r => FailedTestResults.Add(r));
             
-            testResultsToUpload.AddRange(args.NewTestResults.Where(x => !FailedTestResults.Contains(x)));
+            await _processorService.TryUploadTestResults(args.NewTestResults.Where(x => !FailedTestResults.Contains(x)));
         }
-        
-        await _processorService.TryUploadTestResults(testResultsToUpload);
     }
 }
