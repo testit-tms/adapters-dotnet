@@ -11,11 +11,11 @@
     <Copyright>Copyright (c) 2019 - 2023 Test IT</Copyright>
     <RepositoryUrl>https://github.com/testit-tms/adapters-dotnet</RepositoryUrl>
     <PackageProjectUrl>https://testit.software</PackageProjectUrl>
-    <TargetFramework>net8.0</TargetFramework>
     <PublishSingleFile>true</PublishSingleFile>
     <SelfContained>true</SelfContained>
     <RuntimeIdentifiers>win-x64;linux-x64;osx-x64</RuntimeIdentifiers>
     <LangVersion>default</LangVersion>
+    <TargetFrameworks>net8.0;net6.0;net7.0</TargetFrameworks>
   </PropertyGroup>
 
   <ItemGroup>
