@@ -98,7 +98,7 @@ internal class Program
             }
 
             attemptCounter++;
-        } while (attemptCounter <= settings.AdapterAutoTestRerunCount && failedTestResults.Count > 0);
+        } while (attemptCounter <= settings.AdapterAutoTestRerunCount && failedTestResults.Any());
 
         if (settings.AdapterMode == 2)
         {
