@@ -21,7 +21,7 @@ public class RunEventHandler : ITestRunEventsHandler2
         _isLastRun = isLastRun;
         _processorService = processorService;
         _logger = LoggerFactory.GetLogger().ForContext<RunEventHandler>();
-        FailedTestResults = [];
+        FailedTestResults = new List<TestResult>();
     }
 
     public void HandleLogMessage(TestMessageLevel level, string? message)
