@@ -1,5 +1,4 @@
-﻿using System.Collections.Immutable;
-using CommandLine;
+﻿using CommandLine;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Tms.Adapter.Utils;
 using TmsRunner.Client;
