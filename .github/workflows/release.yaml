@@ -29,7 +29,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 7.0.x
+          dotnet-version: 6.0.x
 
       - name: Restore dependencies
         run: dotnet restore ${{ matrix.project }}
@@ -99,7 +99,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: 7.0.x
+          dotnet-version: 6.0.x
 
       - name: Restore dependencies
         run: dotnet restore ${{ env.RUNNER_DIR }}
