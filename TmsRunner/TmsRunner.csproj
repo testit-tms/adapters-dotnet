@@ -15,7 +15,7 @@
     <SelfContained>true</SelfContained>
     <RuntimeIdentifiers>win-x64;linux-x64;osx-x64</RuntimeIdentifiers>
     <LangVersion>default</LangVersion>
-    <TargetFrameworks>net8.0;net6.0;net7.0</TargetFrameworks>
+    <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
   </PropertyGroup>
 
   <ItemGroup>
