@@ -5,8 +5,8 @@
       "environmentVariables": {
         "TMS_TEST_RUN_NAME": "NUnit"
       },
-      "commandLineArgs": "--runner \"/usr/local/share/dotnet/sdk/6.0.302/vstest.console.dll\" --testassembly \"/Users/dmitry.gridnev/github/testit/dotnet-examples/NUnitTests/NUnitTests/bin/Debug/net6.0/NUnitTests.dll\" --debug"
-      //      "commandLineArgs": "--runner \"/usr/local/share/dotnet/sdk/6.0.302/vstest.console.dll\" --testassembly \"/Users/dmitry.gridnev/github/testit/dotnet-examples/MsTest/MsTest/bin/Debug/net6.0/MsTest.dll\" --debug"
+       "commandLineArgs": "--runner \"/usr/local/share/dotnet/sdk/6.0.302/vstest.console.dll\" --testassembly \"/Users/dmitry.gridnev/github/testit/dotnet-examples/NUnitTests/NUnitTests/bin/Debug/net6.0/NUnitTests.dll\" --debug"
+//      "commandLineArgs": "--runner \"/usr/local/share/dotnet/sdk/6.0.302/vstest.console.dll\" --testassembly \"/Users/dmitry.gridnev/github/testit/dotnet-examples/MsTest/MsTest/bin/Debug/net6.0/MsTest.dll\" --debug"
     }
   }
 }
