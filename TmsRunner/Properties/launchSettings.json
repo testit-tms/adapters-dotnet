@@ -5,7 +5,8 @@
       "environmentVariables": {
         "TMS_TEST_RUN_NAME": "NUnit"
       },
-      "commandLineArgs": "--runner \"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\Common7\\IDE\\CommonExtensions\\Microsoft\\TestWindow\\VsTest\\vstest.console.dll\" --testassembly \"C:\\Users\\petr.komissarov\\source\\repos\\e2e_tests\\testit\\TestIT.Tests\\bin\\Debug\\net8.0\\TestIT.Tests.dll\" --debug --tmsPrivateToken NEhZOXluOXhlZ2ZtakVjOFNn"
+      "commandLineArgs": "--runner \"/usr/local/share/dotnet/sdk/6.0.302/vstest.console.dll\" --testassembly \"/Users/dmitry.gridnev/github/testit/dotnet-examples/NUnitTests/NUnitTests/bin/Debug/net6.0/NUnitTests.dll\" --debug"
+      //      "commandLineArgs": "--runner \"/usr/local/share/dotnet/sdk/6.0.302/vstest.console.dll\" --testassembly \"/Users/dmitry.gridnev/github/testit/dotnet-examples/MsTest/MsTest/bin/Debug/net6.0/MsTest.dll\" --debug"
     }
   }
 }
