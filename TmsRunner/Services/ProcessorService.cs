@@ -176,7 +176,7 @@ namespace TmsRunner.Services
             return match.Groups[1].Value;
         }
 
-        public async Task TryUploadTestResults(List<TestResult> testResults)
+        public async Task TryUploadTestResults(IEnumerable<TestResult> testResults)
         {
             foreach (var testResult in testResults)
             {
