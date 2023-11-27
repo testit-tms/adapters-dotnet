@@ -1,11 +1,11 @@
-using TestIt.Client.Model;
+using TestIT.ApiClient.Model;
 using TmsRunner.Models;
 
 namespace TmsRunner.Client;
 
 public class Converter
 {
-    public static AutoTestPostModel ConvertAutoTestDtoToPostModel(AutoTest dto, string projectId)
+    public static CreateAutoTestRequest ConvertAutoTestDtoToPostModel(AutoTest dto, string projectId)
     {
         var links = dto.Links?.Select(l =>
             new LinkPostModel(
@@ -15,7 +15,7 @@ public class Converter
                 Enum.Parse<LinkType>(l.Type.ToString()!))
         ).ToList();
 
-        return new AutoTestPostModel(externalId: dto.ExternalId, name: dto.Name)
+        return new CreateAutoTestRequest(externalId: dto.ExternalId, name: dto.Name)
         {
             ExternalId = dto.ExternalId,
             Links = links!,
@@ -31,7 +31,7 @@ public class Converter
         };
     }
 
-    public static AutoTestPutModel ConvertAutoTestDtoToPutModel(AutoTest dto, string projectId)
+    public static UpdateAutoTestRequest ConvertAutoTestDtoToPutModel(AutoTest dto, string projectId)
     {
         var links = dto.Links.Select(l =>
             new LinkPutModel(
@@ -42,7 +42,7 @@ public class Converter
         ).ToList();
 
 
-        return new AutoTestPutModel(externalId: dto.ExternalId, name: dto.Name)
+        return new UpdateAutoTestRequest(externalId: dto.ExternalId, name: dto.Name)
         {
             Links = links,
             ProjectId = new Guid(projectId), Name = dto.Name,

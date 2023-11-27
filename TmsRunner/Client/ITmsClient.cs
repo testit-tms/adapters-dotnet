@@ -1,4 +1,4 @@
-using TestIt.Client.Model;
+using TestIT.ApiClient.Model;
 using TmsRunner.Models;
 
 namespace TmsRunner.Client;

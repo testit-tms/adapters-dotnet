@@ -1,6 +1,5 @@
 ﻿using System.Text;
 using Tms.Adapter.Models;
-using TestIt.Client.Model;
 
 namespace TmsRunner.Models
 {
