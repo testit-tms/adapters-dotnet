@@ -1,7 +1,7 @@
 ﻿using Serilog;
-using TestIt.Client.Api;
-using TestIt.Client.Client;
-using TestIt.Client.Model;
+using TestIT.ApiClient.Api;
+using TestIT.ApiClient.Client;
+using TestIT.ApiClient.Model;
 using TmsRunner.Logger;
 using TmsRunner.Models;
 
@@ -20,7 +20,7 @@ namespace TmsRunner.Client
             _logger = LoggerFactory.GetLogger().ForContext<TmsClient>();
             _settings = settings;
 
-            var cfg = new TestIt.Client.Client.Configuration { BasePath = settings.Url };
+            var cfg = new TestIT.ApiClient.Client.Configuration { BasePath = settings.Url };
             cfg.AddApiKeyPrefix("Authorization", "PrivateToken");
             cfg.AddApiKey("Authorization", settings.PrivateToken);
 
@@ -34,7 +34,7 @@ namespace TmsRunner.Client
 
         public async Task<string> CreateTestRun()
         {
-            var createTestRunRequestBody = new TestRunV2PostShortModel
+            var createTestRunRequestBody = new CreateEmptyRequest
             {
                 ProjectId = new Guid(_settings.ProjectId),
                 Name = (string.IsNullOrEmpty(_settings.TestRunName) ? null : _settings.TestRunName)!
@@ -101,16 +101,16 @@ namespace TmsRunner.Client
         {
             _logger.Debug("Getting autotest by external id {Id}", externalId);
 
-            var filter = new AutotestsSelectModel
-            {
-                Filter = new AutotestFilterModel
+            var filter = new ApiV2AutoTestsSearchPostRequest(
+                filter: new AutotestsSelectModelFilter
                 {
                     ExternalIds = new List<string> { externalId },
                     ProjectIds = new List<Guid> { new Guid(_settings.ProjectId) }
-                }
-            };
+                },
+                includes: new AutotestsSelectModelIncludes()
+            );
 
-            var autotests = await _autoTests.ApiV2AutoTestsSearchPostAsync(autotestsSelectModel: filter);
+            var autotests = await _autoTests.ApiV2AutoTestsSearchPostAsync(apiV2AutoTestsSearchPostRequest: filter);
             var autotest = autotests.FirstOrDefault();
 
             _logger.Debug(
@@ -153,7 +153,7 @@ namespace TmsRunner.Client
 
             try
             {
-                await _autoTests.LinkAutoTestToWorkItemAsync(autotestId, new WorkItemIdModel(workItemId));
+                await _autoTests.LinkAutoTestToWorkItemAsync(autotestId, new LinkAutoTestToWorkItemRequest(workItemId));
             }
             catch (ApiException e) when (e.Message.Contains("was not found"))
             {

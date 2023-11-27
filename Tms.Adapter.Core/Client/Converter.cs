@@ -1,15 +1,15 @@
-using TestIt.Client.Model;
+using TestIT.ApiClient.Model;
 using Tms.Adapter.Core.Models;
-using LinkType = TestIt.Client.Model.LinkType;
+using LinkType = TestIT.ApiClient.Model.LinkType;
 
 namespace Tms.Adapter.Core.Client;
 
 public static class Converter
 {
-    public static AutoTestPostModel ConvertAutoTestDtoToPostModel(TestContainer result, ClassContainer container,
+    public static CreateAutoTestRequest ConvertAutoTestDtoToPostModel(TestContainer result, ClassContainer container,
         string projectId)
     {
-        return new AutoTestPostModel(externalId: result.ExternalId, name: result.DisplayName)
+        return new CreateAutoTestRequest(externalId: result.ExternalId, name: result.DisplayName)
         {
             ExternalId = result.ExternalId,
             Links = ConvertLinksToPostModel(result.Links),
@@ -25,10 +25,10 @@ public static class Converter
         };
     }
 
-    public static AutoTestPutModel ConvertAutoTestDtoToPutModel(TestContainer result, ClassContainer container,
+    public static UpdateAutoTestRequest ConvertAutoTestDtoToPutModel(TestContainer result, ClassContainer container,
         string projectId)
     {
-        return new AutoTestPutModel(externalId: result.ExternalId, name: result.DisplayName)
+        return new UpdateAutoTestRequest(externalId: result.ExternalId, name: result.DisplayName)
         {
             ExternalId = result.ExternalId,
             Links = ConvertLinksToPutModel(result.Links),
