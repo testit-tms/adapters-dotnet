@@ -7,6 +7,7 @@ The repository contains new versions of adaptors for dotnet test frameworks.
 | Test IT | MSTest | NUnit | XUnit |
 |---------|--------|-------|-------|
 | 4.0     | 1.0    | 1.0   | 1.0   |
+| 4.5     | 1.1    | 1.1   | 1.1   |
 
 Supported test frameworks :
 
