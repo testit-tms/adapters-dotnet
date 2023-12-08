@@ -21,13 +21,11 @@ namespace Tms.Adapter.SpecFlowPlugin
         [BeforeTestRun]
         public static void BeforeTestRun()
         {
-            Adapter.CreateTestRun().Wait();
         }
 
         [AfterTestRun]
         public static void AfterTestRun()
         {
-            Adapter.CompleteTestRun().Wait();
         }
 
         [BeforeFeature(Order = int.MinValue)]
