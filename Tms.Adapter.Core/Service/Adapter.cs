@@ -23,7 +23,7 @@ public static class Adapter
 
     public static void AddAttachments(string pathToFile)
     {
-        using var fs = new FileStream(pathToFile, FileMode.Open, FileAccess.Read);
+        using var fs = new FileStream(pathToFile, FileMode.OpenOrCreate, FileAccess.Read);
         AdapterManager.Instance.AddAttachments(Path.GetFileName(pathToFile), fs);
     }
 
