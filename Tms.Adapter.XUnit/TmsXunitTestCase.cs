@@ -17,6 +17,8 @@ public class TmsXunitTestCase : XunitTestCase, ITmsAccessor
     {
     }
 
+    public TmsXunitTestCase() { }
+
     public override async Task<RunSummary> RunAsync(IMessageSink diagnosticMessageSink,
         IMessageBus messageBus,
         object[] constructorArguments,
