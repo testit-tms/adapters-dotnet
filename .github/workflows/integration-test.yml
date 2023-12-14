@@ -1,0 +1,172 @@
+name: Integration test
+
+run-name: "#${{ github.run_number }} test by ${{ github.triggering_actor }}"
+
+on:
+  pull_request:
+    paths:
+      - "Tms.Adapter.Core/**"
+      - "Tms.Adapter.SpecFlowPlugin/**"
+      - "Tms.Adapter.XUnit/**"
+      - "Tms.Adapter/**"
+      - "TmsRunner/**"
+  workflow_dispatch:
+
+env:
+  DOTNET_VERSION: 8
+  GITHUB_PAT: ${{ secrets.SERVICE_ACCOUNT_TOKEN }}
+  PYTHON_VERSION: 3.12
+  TEMP_FILE: tmp/output.txt
+  TMS_ADAPTER_MODE: 1
+  TMS_CERT_VALIDATION: false
+  TMS_PRIVATE_TOKEN: ${{ secrets.TESTIT_PRIVATE_TOKEN }}
+  TMS_URL: ${{ secrets.TESTIT_URL }}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        include:
+          - configuration_id: SPECFLOW_CONFIGURATION_ID
+            package_name: SpecFlowPlugin
+            project_id: SPECFLOW_PROJECT_ID
+            project_name: SpecFlowTests
+
+          - configuration_id: XUNIT_CONFIGURATION_ID
+            package_name: XUnit
+            project_id: XUNIT_PROJECT_ID
+            project_name: XUnitTests
+
+    env:
+      ADAPTER_PACKAGE: Tms.Adapter.${{ matrix.package_name }}/Tms.Adapter.${{ matrix.package_name }}.csproj
+      TMS_CONFIGURATION_ID: ${{ secrets[matrix.configuration_id] }}
+      TMS_PROJECT_ID: ${{ secrets[matrix.project_id] }}
+      TMS_TEST_RUN_NAME: ${{ matrix.project_name }} TestRun
+      TEST_ROOT: dotnet-examples/${{ matrix.project_name }}/${{ matrix.project_name }}
+
+    steps:
+      - name: Checkout adapters-dotnet
+        uses: actions/checkout@v4
+
+      - name: Checkout api-validator-dotnet
+        uses: actions/checkout@v4
+        with:
+          repository: testit-tms/api-validator-dotnet
+          token: ${{ env.GITHUB_PAT }}
+          path: api-validator-dotnet
+
+      - name: Checkout dotnet-examples
+        uses: actions/checkout@v4
+        with:
+          repository: testit-tms/dotnet-examples
+          path: dotnet-examples
+
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Setup python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Setup environment
+        run: |
+          dotnet remove ${{ env.TEST_ROOT }}/${{ matrix.project_name }}.csproj package TestIT.Adapter.${{ matrix.package_name }}
+          dotnet add ${{ env.TEST_ROOT }}/${{ matrix.project_name }}.csproj reference Tms.Adapter.Core/Tms.Adapter.Core.csproj
+          dotnet add ${{ env.TEST_ROOT }}/${{ matrix.project_name }}.csproj reference ${{ env.ADAPTER_PACKAGE }}
+          dotnet build dotnet-examples/${{ matrix.project_name }}
+          dotnet build api-validator-dotnet
+          pip install testit-cli
+
+      - name: Create TestRun
+        run: |
+          testit testrun create --token ${{ env.TMS_PRIVATE_TOKEN }} --output ${{ env.TEMP_FILE }}
+          echo "TMS_TEST_RUN_ID=$(<${{ env.TEMP_FILE }})" >> $GITHUB_ENV
+
+      - name: Test
+        run: |
+          dotnet test dotnet-examples/${{ matrix.project_name }} || exit 0
+
+      - name: Validate
+        run: |
+          dotnet test api-validator-dotnet
+
+  test-tms-runner:
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        include:
+          - configuration_id: MSTEST_CONFIGURATION_ID
+            project_id: MSTEST_PROJECT_ID
+            project_name: MsTest
+
+          - configuration_id: NUNIT_CONFIGURATION_ID
+            project_id: NUNIT_PROJECT_ID
+            project_name: NUnitTests
+
+    env:
+      TMS_CONFIGURATION_ID: ${{ secrets[matrix.configuration_id] }}
+      TMS_PROJECT_ID: ${{ secrets[matrix.project_id] }}
+      TMS_RUNNER: TmsRunner/bin/Debug/net7.0/linux-x64/TmsRunner
+      TMS_TEST_RUN_NAME: ${{ matrix.project_name }} TestRun
+      TEST_ROOT: dotnet-examples/${{ matrix.project_name }}/${{ matrix.project_name }}
+      TEST_DLL: ${GITHUB_WORKSPACE}/$TEST_ROOT/bin/Debug/net6.0/${{ matrix.project_name }}.dll
+
+    steps:
+      - name: Checkout adapters-dotnet
+        uses: actions/checkout@v4
+
+      - name: Checkout api-validator-dotnet
+        uses: actions/checkout@v4
+        with:
+          repository: testit-tms/api-validator-dotnet
+          token: ${{ env.GITHUB_PAT }}
+          path: api-validator-dotnet
+
+      - name: Checkout dotnet-examples
+        uses: actions/checkout@v4
+        with:
+          repository: testit-tms/dotnet-examples
+          path: dotnet-examples
+
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Setup python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Setup environment
+        run: |
+          dotnet remove ${{ env.TEST_ROOT }}/${{ matrix.project_name }}.csproj package TestIT.Adapter
+          dotnet add ${{ env.TEST_ROOT }}/${{ matrix.project_name }}.csproj reference Tms.Adapter/Tms.Adapter.csproj
+          dotnet build dotnet-examples/${{ matrix.project_name }}
+          dotnet build TmsRunner
+          dotnet build api-validator-dotnet
+          pip install testit-cli
+          echo "VSTEST_CONSOLE=$(find /usr/share/dotnet/sdk -type f -name "vstest.console.dll" 2>/dev/null | head -n 1)" >> $GITHUB_ENV
+        
+      - name: Create TestRun
+        run: |
+          testit testrun create --token ${{ env.TMS_PRIVATE_TOKEN }} --output ${{ env.TEMP_FILE }}
+          echo "TMS_TEST_RUN_ID=$(<${{ env.TEMP_FILE }})" >> $GITHUB_ENV
+
+      - name: Test
+        run: |
+          ${{ env.TMS_RUNNER }} --runner "${{ env.VSTEST_CONSOLE }}" --testassembly "${{ env.TEST_DLL }}"
+
+      - name: Validate
+        run: |
+          dotnet test api-validator-dotnet
