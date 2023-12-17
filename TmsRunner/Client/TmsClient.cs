@@ -1,4 +1,5 @@
 ﻿using Serilog;
+using System.Net;
 using TestIT.ApiClient.Api;
 using TestIT.ApiClient.Client;
 using TestIT.ApiClient.Model;
@@ -7,29 +8,42 @@ using TmsRunner.Models;
 
 namespace TmsRunner.Client
 {
-    public class TmsClient : ITmsClient
+    public class TmsClient : ITmsClient, IDisposable
     {
         private readonly TmsSettings _settings;
         private readonly ILogger _logger;
         private readonly TestRunsApi _testRuns;
         private readonly AttachmentsApi _attachments;
         private readonly AutoTestsApi _autoTests;
+        private readonly HttpClient _httpClient;
+        private readonly HttpClientHandler _httpClientHandler;
 
         public TmsClient(TmsSettings settings)
         {
             _logger = LoggerFactory.GetLogger().ForContext<TmsClient>();
             _settings = settings;
 
-            var cfg = new TestIT.ApiClient.Client.Configuration { BasePath = settings.Url };
-            cfg.AddApiKeyPrefix("Authorization", "PrivateToken");
-            cfg.AddApiKey("Authorization", settings.PrivateToken);
+            var cfg = new TestIT.ApiClient.Client.Configuration
+            {
+                BasePath = settings.Url,
+                ApiKeyPrefix = new Dictionary<string, string>() { {"Authorization", "PrivateToken" } },
+                ApiKey = new Dictionary<string, string>() { { "Authorization", settings.PrivateToken } }
+            };
 
-            var httpClientHandler = new HttpClientHandler();
-            httpClientHandler.ServerCertificateCustomValidationCallback = (_, _, _, _) => _settings.CertValidation;
+            _httpClientHandler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = (_, _, _, _) => _settings.CertValidation
+            };
 
-            _testRuns = new TestRunsApi(new HttpClient(), cfg, httpClientHandler);
-            _attachments = new AttachmentsApi(new HttpClient(), cfg, httpClientHandler);
-            _autoTests = new AutoTestsApi(new HttpClient(), cfg, httpClientHandler);
+            _httpClient = new()
+            {
+                DefaultRequestVersion = HttpVersion.Version20,
+                DefaultVersionPolicy = HttpVersionPolicy.RequestVersionOrLower
+            };
+
+            _testRuns = new TestRunsApi(_httpClient, cfg, _httpClientHandler);
+            _attachments = new AttachmentsApi(_httpClient, cfg, _httpClientHandler);
+            _autoTests = new AutoTestsApi(_httpClient, cfg, _httpClientHandler);
         }
 
         public async Task<string> CreateTestRun()
@@ -168,6 +182,15 @@ namespace TmsRunner.Client
                 "Link autotest {AutotestId} to workitem {WorkitemId} is successfully",
                 autotestId,
                 workItemId);
+        }
+
+        public void Dispose()
+        {
+            _testRuns?.Dispose();
+            _attachments?.Dispose();
+            _autoTests?.Dispose();
+            _httpClient?.Dispose();
+            _httpClientHandler?.Dispose();
         }
     }
 }

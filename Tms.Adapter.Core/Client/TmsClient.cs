@@ -4,33 +4,41 @@ using TestIT.ApiClient.Client;
 using TestIT.ApiClient.Model;
 using Tms.Adapter.Core.Configurator;
 using Tms.Adapter.Core.Models;
-using LinkType = TestIT.ApiClient.Model.LinkType;
 
 namespace Tms.Adapter.Core.Client;
 
-public class TmsClient : ITmsClient
+public class TmsClient : ITmsClient, IDisposable
 {
     private readonly ILogger<TmsClient> _logger;
     private readonly TmsSettings _settings;
     private readonly TestRunsApi _testRuns;
     private readonly AttachmentsApi _attachments;
     private readonly AutoTestsApi _autoTests;
+    private readonly HttpClient _httpClient;
+    private readonly HttpClientHandler _httpClientHandler;
 
     public TmsClient(ILogger<TmsClient> logger, TmsSettings settings)
     {
         _logger = logger;
         _settings = settings;
 
-        var cfg = new Configuration { BasePath = settings.Url };
-        cfg.AddApiKeyPrefix("Authorization", "PrivateToken");
-        cfg.AddApiKey("Authorization", settings.PrivateToken);
+        var cfg = new Configuration
+        {
+            BasePath = settings.Url,
+            ApiKeyPrefix = new Dictionary<string, string>() { { "Authorization", "PrivateToken" } },
+            ApiKey = new Dictionary<string, string>() { { "Authorization", settings.PrivateToken } }
+        };
 
-        var httpClientHandler = new HttpClientHandler();
-        httpClientHandler.ServerCertificateCustomValidationCallback = (_, _, _, _) => _settings.CertValidation;
+        _httpClientHandler = new HttpClientHandler
+        {
+            ServerCertificateCustomValidationCallback = (_, _, _, _) => _settings.CertValidation
+        };
 
-        _testRuns = new TestRunsApi(new HttpClient(), cfg, httpClientHandler);
-        _attachments = new AttachmentsApi(new HttpClient(), cfg, httpClientHandler);
-        _autoTests = new AutoTestsApi(new HttpClient(), cfg, httpClientHandler);
+        _httpClient = new(new HttpVersionsHandler(new HttpClientHandler()));
+
+        _testRuns = new TestRunsApi(_httpClient, cfg, _httpClientHandler);
+        _attachments = new AttachmentsApi(_httpClient, cfg, _httpClientHandler);
+        _autoTests = new AutoTestsApi(_httpClient, cfg, _httpClientHandler);
     }
 
     public async Task<bool> IsAutotestExist(string externalId)
@@ -82,7 +90,7 @@ public class TmsClient : ITmsClient
                 Title = l.Title,
                 Description = l.Description,
                 Type = l.Type != null
-                    ? (LinkType?)Enum.Parse(typeof(LinkType), l.Type.ToString())
+                    ? (TestIT.ApiClient.Model.LinkType?)Enum.Parse(typeof(TestIT.ApiClient.Model.LinkType), l.Type.ToString())
                     : null
             }
         ).ToList();
@@ -230,5 +238,14 @@ public class TmsClient : ITmsClient
             externalId);
 
         return autotest;
+    }
+
+    public void Dispose()
+    {
+        _testRuns?.Dispose();
+        _attachments?.Dispose();
+        _autoTests?.Dispose();
+        _httpClient?.Dispose();
+        _httpClientHandler?.Dispose();
     }
 }
