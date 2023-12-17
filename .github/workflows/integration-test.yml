@@ -6,6 +6,7 @@ on:
   pull_request:
     paths:
       - "Tms.Adapter.Core/**"
+      - "TmsRunner/**"
   workflow_dispatch:
 
 env:
