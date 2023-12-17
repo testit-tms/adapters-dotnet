@@ -24,6 +24,8 @@ env:
 
 jobs:
   test:
+    name: test ${{ matrix.project_name }}
+
     runs-on: ubuntu-latest
 
     strategy:
@@ -98,6 +100,8 @@ jobs:
           dotnet test api-validator-dotnet
 
   test-tms-runner:
+    name: test ${{ matrix.project_name }}
+    
     runs-on: ubuntu-latest
 
     strategy:
