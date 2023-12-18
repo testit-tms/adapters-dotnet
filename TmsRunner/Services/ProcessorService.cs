@@ -135,7 +135,7 @@ namespace TmsRunner.Services
 
                         if (System.IO.File.Exists(file!.PathToFile))
                         {
-                            await using var fs = new FileStream(file.PathToFile, FileMode.Open, FileAccess.Read);
+                            using var fs = new FileStream(file.PathToFile, FileMode.Open, FileAccess.Read);
                             var attachment = await _apiClient.UploadAttachment(Path.GetFileName(file.PathToFile), fs);
 
                             if (parentStep is not null)
