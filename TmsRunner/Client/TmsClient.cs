@@ -1,4 +1,5 @@
 ﻿using Serilog;
+using System.Net;
 using TestIT.ApiClient.Api;
 using TestIT.ApiClient.Client;
 using TestIT.ApiClient.Model;
@@ -27,9 +28,23 @@ namespace TmsRunner.Client
             var httpClientHandler = new HttpClientHandler();
             httpClientHandler.ServerCertificateCustomValidationCallback = (_, _, _, _) => _settings.CertValidation;
 
-            _testRuns = new TestRunsApi(new HttpClient(), cfg, httpClientHandler);
-            _attachments = new AttachmentsApi(new HttpClient(), cfg, httpClientHandler);
-            _autoTests = new AutoTestsApi(new HttpClient(), cfg, httpClientHandler);
+            _testRuns = new TestRunsApi(new HttpClient()
+            {
+                DefaultRequestVersion = HttpVersion.Version20,
+                DefaultVersionPolicy = HttpVersionPolicy.RequestVersionOrHigher
+            }, cfg,httpClientHandler);
+
+            _attachments = new AttachmentsApi(new HttpClient()
+            {
+                DefaultRequestVersion = HttpVersion.Version20,
+                DefaultVersionPolicy = HttpVersionPolicy.RequestVersionOrHigher
+            }, cfg, httpClientHandler);
+
+            _autoTests = new AutoTestsApi(new HttpClient()
+            {
+                DefaultRequestVersion = HttpVersion.Version20,
+                DefaultVersionPolicy = HttpVersionPolicy.RequestVersionOrHigher
+            }, cfg, httpClientHandler);
         }
 
         public async Task<string> CreateTestRun()

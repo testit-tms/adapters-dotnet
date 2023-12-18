@@ -17,6 +17,12 @@ public class TmsXunitTestCase : XunitTestCase, ITmsAccessor
     {
     }
 
+    public TmsXunitTestCase(IMessageSink diagnosticMessageSink, TestMethodDisplay defaultMethodDisplay,
+        ITestMethod testMethod, object[] testMethodArguments = null)
+        : base(diagnosticMessageSink, defaultMethodDisplay, testMethod, testMethodArguments)
+    { 
+    }
+
     public TmsXunitTestCase() { }
 
     public override async Task<RunSummary> RunAsync(IMessageSink diagnosticMessageSink,
