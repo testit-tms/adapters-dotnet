@@ -38,7 +38,7 @@ namespace TmsRunner.Client
             _httpClient = new()
             {
                 DefaultRequestVersion = HttpVersion.Version20,
-                DefaultVersionPolicy = HttpVersionPolicy.RequestVersionOrLower
+                DefaultVersionPolicy = HttpVersionPolicy.RequestVersionOrHigher
             };
 
             _testRuns = new TestRunsApi(_httpClient, cfg, _httpClientHandler);
