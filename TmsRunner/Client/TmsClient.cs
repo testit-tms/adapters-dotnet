@@ -25,10 +25,8 @@ namespace TmsRunner.Client
             cfg.AddApiKeyPrefix("Authorization", "PrivateToken");
             cfg.AddApiKey("Authorization", settings.PrivateToken);
 
-            var httpClientHandler = new HttpClientHandler
-            {
-                ServerCertificateCustomValidationCallback = (_, _, _, _) => _settings.CertValidation
-            };
+            var httpClientHandler = new HttpClientHandler();
+            httpClientHandler.ServerCertificateCustomValidationCallback = (_, _, _, _) => _settings.CertValidation;
 
             _testRuns = new TestRunsApi(new HttpClient()
             {
