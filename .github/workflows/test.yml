@@ -66,8 +66,9 @@ jobs:
           dotnet remove ${{ env.TEST_ROOT }}/${{ matrix.project_name }}.csproj package TestIT.Adapter.${{ matrix.package_name }}
           dotnet add ${{ env.TEST_ROOT }}/${{ matrix.project_name }}.csproj reference Tms.Adapter.Core/Tms.Adapter.Core.csproj
           dotnet add ${{ env.TEST_ROOT }}/${{ matrix.project_name }}.csproj reference ${{ env.ADAPTER_PACKAGE }}
-          dotnet build --configuration Release dotnet-examples/${{ matrix.project_name }}
-          dotnet build --configuration Release api-validator-dotnet
+          dotnet build --configuration Release --property WarningLevel=0 ${{ env.ADAPTER_PACKAGE }}
+          dotnet build --configuration Release --property WarningLevel=0 dotnet-examples/${{ matrix.project_name }}
+          dotnet build --configuration Release --property WarningLevel=0 api-validator-dotnet
           pip install testit-cli
       - name: Create TestRun
         run: |
