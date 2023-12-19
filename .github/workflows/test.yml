@@ -6,8 +6,7 @@ on:
       - "Tms.Adapter.Core/**"
       - "Tms.Adapter.SpecFlowPlugin/**"
       - "Tms.Adapter.XUnit/**"
-    paths-ignore:
-      - "**.csproj"
+      - "!**.csproj"
   workflow_dispatch:
 env:
   DOTNET_VERSION: 8

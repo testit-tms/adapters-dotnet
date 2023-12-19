@@ -5,8 +5,7 @@ on:
     paths:
       - "Tms.Adapter/**"
       - "TmsRunner/**"
-    paths-ignore:
-      - "**.csproj"
+      - "!**.csproj"
   workflow_dispatch:
 env:
   DOTNET_VERSION: 8
