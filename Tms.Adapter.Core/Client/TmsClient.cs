@@ -28,9 +28,9 @@ public class TmsClient : ITmsClient
         var httpClientHandler = new HttpClientHandler();
         httpClientHandler.ServerCertificateCustomValidationCallback = (_, _, _, _) => _settings.CertValidation;
 
-        _testRuns = new TestRunsApi(new HttpClient(new HttpVersionsHandler(new HttpClientHandler())), cfg, httpClientHandler);
-        _attachments = new AttachmentsApi(new HttpClient(new HttpVersionsHandler(new HttpClientHandler())), cfg, httpClientHandler);
-        _autoTests = new AutoTestsApi(new HttpClient(new HttpVersionsHandler(new HttpClientHandler())), cfg, httpClientHandler);
+        _testRuns = new TestRunsApi(new HttpClient(), cfg, httpClientHandler);
+        _attachments = new AttachmentsApi(new HttpClient(), cfg, httpClientHandler);
+        _autoTests = new AutoTestsApi(new HttpClient(), cfg, httpClientHandler);
     }
 
     public async Task<bool> IsAutotestExist(string externalId)
@@ -111,7 +111,7 @@ public class TmsClient : ITmsClient
             _logger.LogError("Autotest with {ID} not found", externalId);
             return;
         }
-        
+
         foreach (var workItemId in workItemIds)
         {
             _logger.LogDebug(
@@ -119,18 +119,7 @@ public class TmsClient : ITmsClient
                 autotest.Id,
                 workItemId);
 
-            try
-            {
-                await _autoTests.LinkAutoTestToWorkItemAsync(autotest.Id.ToString(), new LinkAutoTestToWorkItemRequest(workItemId));
-            }
-            catch (ApiException e) when (e.Message.Contains("does not exist"))
-            {
-                _logger.LogError(
-                    "Cannot link autotest {AutotestId} to work item {WorkItemId}: work item was not found",
-                    autotest.Id,
-                    workItemId);
-                return;
-            }
+            await _autoTests.LinkAutoTestToWorkItemAsync(autotest.Id.ToString(), new LinkAutoTestToWorkItemRequest(workItemId));
 
             _logger.LogDebug(
                 "Link autotest {AutotestId} to work item {WorkItemId} is successfully",
@@ -216,7 +205,8 @@ public class TmsClient : ITmsClient
             filter: new AutotestsSelectModelFilter
             {
                 ExternalIds = new List<string> { externalId },
-                ProjectIds = new List<Guid> { new Guid(_settings.ProjectId) }
+                ProjectIds = new List<Guid> { new Guid(_settings.ProjectId) },
+                IsDeleted = false
             },
             includes: new AutotestsSelectModelIncludes()
         );
