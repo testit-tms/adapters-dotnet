@@ -6,8 +6,7 @@ on:
       - "Tms.Adapter.Core/**"
       - "Tms.Adapter.SpecFlowPlugin/**"
       - "Tms.Adapter.XUnit/**"
-    paths-ignore:
-      - "**.csproj"
+      - "!**.csproj"
   workflow_dispatch:
 env:
   DOTNET_VERSION: 8
@@ -20,7 +19,7 @@ env:
   TMS_URL: ${{ secrets.TESTIT_URL }}
 jobs:
   test:
-    name: test ${{ matrix.project_name }}
+    name: ${{ matrix.project_name }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
