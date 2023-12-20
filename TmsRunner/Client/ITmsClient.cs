@@ -12,5 +12,5 @@ public interface ITmsClient
     Task<AutoTestModel?> GetAutotestByExternalId(string externalId);
     Task<AutoTestModel> CreateAutotest(AutoTest model);
     Task UpdateAutotest(AutoTest model);
-    Task LinkAutoTestToWorkItem(string autotestId, string workItemId);
+    Task<bool> TryLinkAutoTestToWorkItem(string autotestId, IEnumerable<string> workItemIds);
 }

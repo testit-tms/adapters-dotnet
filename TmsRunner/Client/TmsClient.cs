@@ -145,30 +145,36 @@ namespace TmsRunner.Client
             _logger.Debug("Update autotest {@Autotest} is successfully", model);
         }
 
-        public async Task LinkAutoTestToWorkItem(string autotestId, string workItemId)
+        public async Task<bool> TryLinkAutoTestToWorkItem(string autotestId, IEnumerable<string> workItemIds)
         {
-            _logger.Debug(
-                "Linking autotest {AutotestId} to workitem {WorkitemId}",
-                autotestId,
-                workItemId);
-
-            try
+            foreach (var workItemId in workItemIds)
             {
-                await _autoTests.LinkAutoTestToWorkItemAsync(autotestId, new LinkAutoTestToWorkItemRequest(workItemId));
-            }
-            catch (ApiException e) when (e.Message.Contains("was not found"))
-            {
-                _logger.Error(
-                    "Cannot link autotest {AutotestId} to workitem {WorkitemId}: workitem was not found",
+                _logger.Debug(
+                    "Linking autotest {AutotestId} to workitem {WorkitemId}",
                     autotestId,
                     workItemId);
-                return;
+
+                try
+                {
+                    await _autoTests.LinkAutoTestToWorkItemAsync(autotestId, new LinkAutoTestToWorkItemRequest(workItemId));
+                }
+                catch (ApiException e) when (e.Message.Contains("was not found"))
+                {
+                    _logger.Error(
+                         "Cannot link autotest {AutotestId} to work item {WorkItemId}: work item was not found",
+                         autotestId,
+                         workItemId);
+
+                    return false;
+                }
+
+                _logger.Debug(
+                    "Link autotest {AutotestId} to workitem {WorkitemId} is successfully",
+                    autotestId,
+                    workItemId);
             }
 
-            _logger.Debug(
-                "Link autotest {AutotestId} to workitem {WorkitemId} is successfully",
-                autotestId,
-                workItemId);
+            return true;
         }
     }
 }

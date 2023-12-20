@@ -44,7 +44,10 @@ public class Writer : IWriter
 
             if (result.WorkItemIds.Count > 0)
             {
-                await _client.LinkAutoTestToWorkItems(result.ExternalId, result.WorkItemIds);
+                if (!await _client.TryLinkAutoTestToWorkItems(result.ExternalId, result.WorkItemIds))
+                {
+                    return;
+                }
             }
 
             await _client.SubmitTestCaseResult(result, container);

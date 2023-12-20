@@ -102,14 +102,15 @@ public class TmsClient : ITmsClient
         _logger.LogDebug("Update autotest {ExternalId} is successfully", externalId);
     }
 
-    public async Task LinkAutoTestToWorkItems(string externalId, IEnumerable<string> workItemIds)
+    public async Task<bool> TryLinkAutoTestToWorkItems(string externalId, IEnumerable<string> workItemIds)
     {
         var autotest = await GetAutotestByExternalId(externalId);
 
         if (autotest == null)
         {
             _logger.LogError("Autotest with {ID} not found", externalId);
-            return;
+
+            return false;
         }
 
         foreach (var workItemId in workItemIds)
@@ -119,13 +120,27 @@ public class TmsClient : ITmsClient
                 autotest.Id,
                 workItemId);
 
-            await _autoTests.LinkAutoTestToWorkItemAsync(autotest.Id.ToString(), new LinkAutoTestToWorkItemRequest(workItemId));
+            try
+            {
+                await _autoTests.LinkAutoTestToWorkItemAsync(autotest.Id.ToString(), new LinkAutoTestToWorkItemRequest(workItemId));
+            }
+            catch (ApiException e) when (e.Message.Contains("does not exist"))
+            {
+                _logger.LogError(
+                    "Cannot link autotest {AutotestId} to work item {WorkItemId}: work item was not found",
+                    autotest.Id,
+                    workItemId);
+
+                return false;
+            }
 
             _logger.LogDebug(
                 "Link autotest {AutotestId} to work item {WorkItemId} is successfully",
                 autotest.Id,
                 workItemId);
         }
+
+        return true;
     }
 
     public async Task SubmitTestCaseResult(TestContainer result, ClassContainer container)

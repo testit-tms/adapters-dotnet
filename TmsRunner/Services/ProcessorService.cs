@@ -215,7 +215,10 @@ namespace TmsRunner.Services
 
             if (autoTest.WorkItemIds.Count > 0)
             {
-                await LinkAutotestToWorkItem(existAutotest.Id.ToString(), autoTest.WorkItemIds);
+                if (!await _apiClient.TryLinkAutoTestToWorkItem(existAutotest.Id.ToString(), autoTest.WorkItemIds))
+                {
+                    return;
+                }
             }
 
             if (!string.IsNullOrEmpty(testResult.ErrorMessage))
@@ -271,14 +274,6 @@ namespace TmsRunner.Services
             }
 
             return autoTestResultRequestBody;
-        }
-
-        private async Task LinkAutotestToWorkItem(string autotestId, IEnumerable<string> workItemIds)
-        {
-            foreach (var workItemId in workItemIds)
-            {
-                await _apiClient.LinkAutoTestToWorkItem(autotestId, workItemId);
-            }
         }
 
         private static string GetTraceJson(TestResult testResult)
