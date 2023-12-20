@@ -158,10 +158,10 @@ namespace TmsRunner.Client
                 {
                     await _autoTests.LinkAutoTestToWorkItemAsync(autotestId, new LinkAutoTestToWorkItemRequest(workItemId));
                 }
-                catch (ApiException e) when (e.Message.Contains("was not found"))
+                catch (ApiException e) when (e.Message.Contains("does not exist"))
                 {
                     _logger.Error(
-                         "Cannot link autotest {AutotestId} to work item {WorkItemId}: work item was not found",
+                         "Cannot link autotest {AutotestId} to work item {WorkItemId}: work item does not exist",
                          autotestId,
                          workItemId);
 

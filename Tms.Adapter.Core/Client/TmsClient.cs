@@ -127,7 +127,7 @@ public class TmsClient : ITmsClient
             catch (ApiException e) when (e.Message.Contains("does not exist"))
             {
                 _logger.LogError(
-                    "Cannot link autotest {AutotestId} to work item {WorkItemId}: work item was not found",
+                    "Cannot link autotest {AutotestId} to work item {WorkItemId}: work item does not exist",
                     autotest.Id,
                     workItemId);
 
