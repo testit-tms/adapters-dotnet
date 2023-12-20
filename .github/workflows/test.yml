@@ -75,7 +75,7 @@ jobs:
           echo "TMS_TEST_RUN_ID=$(<${{ env.TEMP_FILE }})" >> $GITHUB_ENV
       - name: Test
         run: |
-          dotnet test --configuration Release dotnet-examples/${{ matrix.project_name }} || exit 0
+          dotnet test --configuration Release --no-build dotnet-examples/${{ matrix.project_name }} || exit 0
       - name: Validate
         run: |
-          dotnet test --configuration Release api-validator-dotnet
+          dotnet test --configuration Release --no-build api-validator-dotnet
