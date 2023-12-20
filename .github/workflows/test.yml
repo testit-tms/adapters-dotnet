@@ -78,4 +78,4 @@ jobs:
           dotnet test --configuration Release --no-build dotnet-examples/${{ matrix.project_name }} || exit 0
       - name: Validate
         run: |
-          dotnet test --configuration Release --no-build api-validator-dotnet
+          dotnet test --configuration Release --no-build --logger:"console;verbosity=detailed" api-validator-dotnet
