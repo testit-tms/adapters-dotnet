@@ -1,5 +1,4 @@
 ﻿using Serilog;
-using System.Net;
 using TestIT.ApiClient.Api;
 using TestIT.ApiClient.Client;
 using TestIT.ApiClient.Model;
@@ -28,23 +27,9 @@ namespace TmsRunner.Client
             var httpClientHandler = new HttpClientHandler();
             httpClientHandler.ServerCertificateCustomValidationCallback = (_, _, _, _) => _settings.CertValidation;
 
-            _testRuns = new TestRunsApi(new HttpClient()
-            {
-                DefaultRequestVersion = HttpVersion.Version20,
-                DefaultVersionPolicy = HttpVersionPolicy.RequestVersionOrHigher
-            }, cfg,httpClientHandler);
-
-            _attachments = new AttachmentsApi(new HttpClient()
-            {
-                DefaultRequestVersion = HttpVersion.Version20,
-                DefaultVersionPolicy = HttpVersionPolicy.RequestVersionOrHigher
-            }, cfg, httpClientHandler);
-
-            _autoTests = new AutoTestsApi(new HttpClient()
-            {
-                DefaultRequestVersion = HttpVersion.Version20,
-                DefaultVersionPolicy = HttpVersionPolicy.RequestVersionOrHigher
-            }, cfg, httpClientHandler);
+            _testRuns = new TestRunsApi(new HttpClient(), cfg, httpClientHandler);
+            _attachments = new AttachmentsApi(new HttpClient(), cfg, httpClientHandler);
+            _autoTests = new AutoTestsApi(new HttpClient(), cfg, httpClientHandler);
         }
 
         public async Task<string> CreateTestRun()
@@ -75,7 +60,7 @@ namespace TmsRunner.Client
 
             var testRun = await _testRuns.GetTestRunByIdAsync(new Guid(testRunId));
 
-            var autotests = testRun.TestResults.Select(x => x.AutoTest.ExternalId).ToList();
+            var autotests = testRun.TestResults.Where(x => !x.AutoTest.IsDeleted).Select(x => x.AutoTest.ExternalId).ToList();
 
             _logger.Debug(
                 "Autotests for run from test run {Id}: {@Autotests}",
@@ -120,7 +105,8 @@ namespace TmsRunner.Client
                 filter: new AutotestsSelectModelFilter
                 {
                     ExternalIds = new List<string> { externalId },
-                    ProjectIds = new List<Guid> { new Guid(_settings.ProjectId) }
+                    ProjectIds = new List<Guid> { new Guid(_settings.ProjectId) },
+                    IsDeleted = false
                 },
                 includes: new AutotestsSelectModelIncludes()
             );
@@ -159,30 +145,36 @@ namespace TmsRunner.Client
             _logger.Debug("Update autotest {@Autotest} is successfully", model);
         }
 
-        public async Task LinkAutoTestToWorkItem(string autotestId, string workItemId)
+        public async Task<bool> TryLinkAutoTestToWorkItem(string autotestId, IEnumerable<string> workItemIds)
         {
-            _logger.Debug(
-                "Linking autotest {AutotestId} to workitem {WorkitemId}",
-                autotestId,
-                workItemId);
-
-            try
+            foreach (var workItemId in workItemIds)
             {
-                await _autoTests.LinkAutoTestToWorkItemAsync(autotestId, new LinkAutoTestToWorkItemRequest(workItemId));
-            }
-            catch (ApiException e) when (e.Message.Contains("was not found"))
-            {
-                _logger.Error(
-                    "Cannot link autotest {AutotestId} to workitem {WorkitemId}: workitem was not found",
+                _logger.Debug(
+                    "Linking autotest {AutotestId} to workitem {WorkitemId}",
                     autotestId,
                     workItemId);
-                return;
+
+                try
+                {
+                    await _autoTests.LinkAutoTestToWorkItemAsync(autotestId, new LinkAutoTestToWorkItemRequest(workItemId));
+                }
+                catch (ApiException e) when (e.Message.Contains("does not exist"))
+                {
+                    _logger.Error(
+                         "Cannot link autotest {AutotestId} to work item {WorkItemId}: work item does not exist",
+                         autotestId,
+                         workItemId);
+
+                    return false;
+                }
+
+                _logger.Debug(
+                    "Link autotest {AutotestId} to workitem {WorkitemId} is successfully",
+                    autotestId,
+                    workItemId);
             }
 
-            _logger.Debug(
-                "Link autotest {AutotestId} to workitem {WorkitemId} is successfully",
-                autotestId,
-                workItemId);
+            return true;
         }
     }
 }

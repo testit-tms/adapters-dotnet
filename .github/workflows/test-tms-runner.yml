@@ -1,5 +1,5 @@
 name: Test TMSRunner
-run-name: "#${{ github.run_number }} test by ${{ github.triggering_actor }}"
+run-name: "#${{ github.run_number }} test tms-runner by ${{ github.triggering_actor }}"
 on:
   pull_request:
     paths:
@@ -63,9 +63,9 @@ jobs:
         run: |
           dotnet remove ${{ env.TEST_ROOT }}/${{ matrix.project_name }}.csproj package TestIT.Adapter
           dotnet add ${{ env.TEST_ROOT }}/${{ matrix.project_name }}.csproj reference Tms.Adapter/Tms.Adapter.csproj
-          dotnet build --configuration Release dotnet-examples/${{ matrix.project_name }}
-          dotnet build --configuration Release TmsRunner
-          dotnet build --configuration Release api-validator-dotnet
+          dotnet build --configuration Release --property WarningLevel=0 dotnet-examples/${{ matrix.project_name }}
+          dotnet build --configuration Release --property WarningLevel=0 TmsRunner
+          dotnet build --configuration Release --property WarningLevel=0 api-validator-dotnet
           pip install testit-cli
           echo "VSTEST_CONSOLE=$(find /usr/share/dotnet/sdk -type f -name "vstest.console.dll" 2>/dev/null | head -n 1)" >> $GITHUB_ENV
       - name: Create TestRun
@@ -77,4 +77,4 @@ jobs:
           ${{ env.TMS_RUNNER }} --runner "${{ env.VSTEST_CONSOLE }}" --testassembly "${{ env.TEST_DLL }}"
       - name: Validate
         run: |
-          dotnet test --configuration Release api-validator-dotnet
+          dotnet test --configuration Release --no-build api-validator-dotnet
