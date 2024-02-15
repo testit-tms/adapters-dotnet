@@ -15,7 +15,7 @@ public class FilterService
 {
     private readonly Replacer _replacer;
     private readonly ILogger _log;
-    private readonly Regex _parametersRegex = new Regex("\\((.*)\\)");
+    private static readonly Regex _parametersRegex = new Regex("\\((.*)\\)");
 
     public FilterService(Replacer replacer)
     {
