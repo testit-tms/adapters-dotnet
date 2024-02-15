@@ -1,9 +1,12 @@
+using System.Data;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Tms.Adapter.Attributes;
 using Tms.Adapter.Utils;
 using TmsRunner.Extensions;
+using TmsRunner.Logger;
 using TmsRunner.Options;
 
 namespace TmsRunner.Services;
@@ -23,52 +26,54 @@ public class FilterService
         IEnumerable<string> externalIds,
         IEnumerable<TestCase> testCases)
     {
-        var testCasesName = testCases.Select(t => t.FullyQualifiedName);
+        var log = LoggerFactory.GetLogger(false).ForContext<FilterService>();
         var testCasesToRun = new List<TestCase>();
         var assembly = Assembly.LoadFrom(assemblyPath);
-        var testMethods = new List<MethodInfo>(
-            assembly.GetExportedTypes()
-                .SelectMany(type => type.GetMethods())
-                .Where(m => testCasesName.Contains(m.DeclaringType!.FullName + "." + m.Name))
-        );
+        var allTestMethods = new List<MethodInfo>(assembly.GetExportedTypes().SelectMany(type => type.GetMethods()));
+        var parametersRegex = new Regex("\\((.*)\\)");
 
-        foreach (var testMethod in testMethods)
+        foreach (var testCase in testCases)
         {
-            string? id = null;
-            var fullName = testMethod.DeclaringType!.FullName + "." + testMethod.Name;
-            var attributes = testMethod.GetCustomAttributes(false);
+            var testMethod = allTestMethods.FirstOrDefault(
+                m => (m.DeclaringType!.FullName + "." + m.Name).Contains(parametersRegex.Replace(testCase.FullyQualifiedName, string.Empty))
+            );
 
-            foreach (var attribute in attributes)
+            if (testMethod == null)
             {
-                if (attribute is ExternalIdAttribute externalId)
-                {
-                    id = externalId.Value;
-                }
+                log.Error("TestMethod {@FullyQualifiedName} not found", testCase.FullyQualifiedName);
+                continue;
             }
 
-            if (string.IsNullOrEmpty(id))
-            {
-                id = fullName.ComputeHash();
-            }
-            else
-            {
-                var parameterNames = testMethod.GetParameters().Select(x => x.Name?.ToString());
-                var testCase = testCases.FirstOrDefault(x => x.FullyQualifiedName == fullName);
-                var parametersRegex = new Regex("\\((.*)\\)");
-                var parameterValues = parametersRegex.Match(testCase!.DisplayName).Groups[1].Value.Split(',');
-                var parameterDictionary = parameterNames
-                    .Zip(parameterValues, (k, v) => new { k, v })
-                    .ToDictionary(x => x.k, x => x.v);
-                id = _replacer.ReplaceParameters(id, parameterDictionary!);
-            }
+            var externalId = GetExternalId(testCase, testMethod, parametersRegex);
 
-            if (externalIds.Contains(id))
+            if (externalIds.Contains(externalId))
             {
-                testCasesToRun.AddRange(testCases.Where(x => x.FullyQualifiedName == fullName).ToList());
+                testCasesToRun.Add(testCase);
             }
         }
 
         return testCasesToRun;
+    }
+
+    private string GetExternalId(TestCase testCase, MethodInfo testMethod, Regex parametersRegex)
+    {
+        var fullName = testMethod.DeclaringType!.FullName + "." + testMethod.Name;
+        var attributes = testMethod.GetCustomAttributes(false);
+
+        foreach (var attribute in attributes)
+        {
+            if (attribute is ExternalIdAttribute externalId)
+            {
+                var parameterNames = testMethod.GetParameters().Select(x => x.Name?.ToString());
+                var parameterValues = parametersRegex.Match(testCase.DisplayName).Groups[1].Value.Split(',').Select(x => x.Replace("\"", string.Empty));
+                var parameterDictionary = parameterNames
+                    .Zip(parameterValues, (k, v) => new { k, v })
+                    .ToDictionary(x => x.k, x => x.v);
+                return _replacer.ReplaceParameters(externalId.Value, parameterDictionary!);
+            }
+        }
+
+        return (testMethod.DeclaringType!.FullName + "." + testMethod.Name).ComputeHash();
     }
 
     public List<TestCase> FilterTestCasesByLabels(
