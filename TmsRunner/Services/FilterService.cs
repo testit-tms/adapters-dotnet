@@ -2,7 +2,7 @@ using System.Data;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Serilog;
 using Tms.Adapter.Attributes;
 using Tms.Adapter.Utils;
 using TmsRunner.Extensions;
@@ -14,10 +14,14 @@ namespace TmsRunner.Services;
 public class FilterService
 {
     private readonly Replacer _replacer;
+    private readonly ILogger _log;
+    private readonly Regex _parametersRegex;
 
     public FilterService(Replacer replacer)
     {
         _replacer = replacer;
+        _log = LoggerFactory.GetLogger(false).ForContext<FilterService>();
+        _parametersRegex = new Regex("\\((.*)\\)");
     }
 
     // TODO: write unit tests
@@ -26,25 +30,23 @@ public class FilterService
         IEnumerable<string> externalIds,
         IEnumerable<TestCase> testCases)
     {
-        var log = LoggerFactory.GetLogger(false).ForContext<FilterService>();
         var testCasesToRun = new List<TestCase>();
         var assembly = Assembly.LoadFrom(assemblyPath);
         var allTestMethods = new List<MethodInfo>(assembly.GetExportedTypes().SelectMany(type => type.GetMethods()));
-        var parametersRegex = new Regex("\\((.*)\\)");
 
         foreach (var testCase in testCases)
         {
             var testMethod = allTestMethods.FirstOrDefault(
-                m => (m.DeclaringType!.FullName + "." + m.Name).Contains(parametersRegex.Replace(testCase.FullyQualifiedName, string.Empty))
+                m => (m.DeclaringType!.FullName + "." + m.Name).Contains(_parametersRegex.Replace(testCase.FullyQualifiedName, string.Empty))
             );
 
             if (testMethod == null)
             {
-                log.Error("TestMethod {@FullyQualifiedName} not found", testCase.FullyQualifiedName);
+                _log.Error("TestMethod {@FullyQualifiedName} not found", testCase.FullyQualifiedName);
                 continue;
             }
 
-            var externalId = GetExternalId(testCase, testMethod, parametersRegex);
+            var externalId = GetExternalId(testCase, testMethod);
 
             if (externalIds.Contains(externalId))
             {
@@ -55,9 +57,8 @@ public class FilterService
         return testCasesToRun;
     }
 
-    private string GetExternalId(TestCase testCase, MethodInfo testMethod, Regex parametersRegex)
+    private string GetExternalId(TestCase testCase, MethodInfo testMethod)
     {
-        var fullName = testMethod.DeclaringType!.FullName + "." + testMethod.Name;
         var attributes = testMethod.GetCustomAttributes(false);
 
         foreach (var attribute in attributes)
@@ -65,7 +66,7 @@ public class FilterService
             if (attribute is ExternalIdAttribute externalId)
             {
                 var parameterNames = testMethod.GetParameters().Select(x => x.Name?.ToString());
-                var parameterValues = parametersRegex.Match(testCase.DisplayName).Groups[1].Value.Split(',').Select(x => x.Replace("\"", string.Empty));
+                var parameterValues = _parametersRegex.Match(testCase.DisplayName).Groups[1].Value.Split(',').Select(x => x.Replace("\"", string.Empty));
                 var parameterDictionary = parameterNames
                     .Zip(parameterValues, (k, v) => new { k, v })
                     .ToDictionary(x => x.k, x => x.v);
