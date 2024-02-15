@@ -15,13 +15,12 @@ public class FilterService
 {
     private readonly Replacer _replacer;
     private readonly ILogger _log;
-    private readonly Regex _parametersRegex;
+    private readonly Regex _parametersRegex = new Regex("\\((.*)\\)");
 
     public FilterService(Replacer replacer)
     {
         _replacer = replacer;
         _log = LoggerFactory.GetLogger(false).ForContext<FilterService>();
-        _parametersRegex = new Regex("\\((.*)\\)");
     }
 
     // TODO: write unit tests
