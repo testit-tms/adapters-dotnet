@@ -43,49 +43,49 @@ public static class Configurator
     private static TmsSettings ApplyEnv(TmsSettings settings)
     {
         var url = Environment.GetEnvironmentVariable(TmsUrl);
-        if (url != null)
+        if (!string.IsNullOrWhiteSpace(url))
         {
             settings.Url = url;
         }
 
         var token = Environment.GetEnvironmentVariable(TmsPrivateToken);
-        if (token != null)
+        if (!string.IsNullOrWhiteSpace(token))
         {
             settings.PrivateToken = token;
         }
 
         var projectId = Environment.GetEnvironmentVariable(TmsProjectId);
-        if (projectId != null)
+        if (!string.IsNullOrWhiteSpace(projectId))
         {
             settings.ProjectId = projectId;
         }
 
         var configId = Environment.GetEnvironmentVariable(TmsConfigurationId);
-        if (configId != null)
+        if (!string.IsNullOrWhiteSpace(configId))
         {
             settings.ConfigurationId = configId;
         }
 
         var testRunId = Environment.GetEnvironmentVariable(TmsTestRunId);
-        if (testRunId != null)
+        if (!string.IsNullOrWhiteSpace(testRunId))
         {
             settings.TestRunId = testRunId;
         }
 
         var testRunName = Environment.GetEnvironmentVariable(TmsTestRunName);
-        if (testRunName != null)
+        if (!string.IsNullOrWhiteSpace(testRunName))
         {
             settings.TestRunName = testRunName;
         }
         
         var createTestCase = Environment.GetEnvironmentVariable(TmsAutomaticCreationTestCases);
-        if (createTestCase != null)
+        if (!string.IsNullOrWhiteSpace(createTestCase))
         {
             settings.AutomaticCreationTestCases = bool.Parse(createTestCase);
         }
 
         var validCert = Environment.GetEnvironmentVariable(TmsCertValidation);
-        if (validCert != null)
+        if (!string.IsNullOrWhiteSpace(validCert))
         {
             settings.CertValidation = bool.Parse(validCert);
         }
