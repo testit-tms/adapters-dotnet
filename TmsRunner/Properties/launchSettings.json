@@ -3,10 +3,16 @@
     "TmsRunner": {
       "commandName": "Project",
       "environmentVariables": {
-        "TMS_TEST_RUN_NAME": "NUnit"
+        "TMS_URL": "https://team-okp8.testit.software",
+        "TMS_PRIVATE_TOKEN": "ZW9GSkRIQkdHbzhkdXE1SkE0",
+        "TMS_PROJECT_ID": "31b8e72a-25d8-4f49-a3a1-629517c4f340",
+        "TMS_CONFIGURATION_ID": "ccbb7839-00ba-4904-9147-cf7682d274ce",
+        "TMS_ADAPTER_MODE": "2",
+        "TMS_CERT_VALIDATION": "false",
+        "TMS_TEST_RUN_NAME": "Komissarov adapter test",
+        "TMS_ADAPTER_AUTOTESTS_RERUN_COUNT": "1"
       },
-       "commandLineArgs": "--runner \"/usr/local/share/dotnet/sdk/6.0.302/vstest.console.dll\" --testassembly \"/Users/dmitry.gridnev/github/testit/dotnet-examples/NUnitTests/NUnitTests/bin/Debug/net6.0/NUnitTests.dll\" --debug"
-//      "commandLineArgs": "--runner \"/usr/local/share/dotnet/sdk/6.0.302/vstest.console.dll\" --testassembly \"/Users/dmitry.gridnev/github/testit/dotnet-examples/MsTest/MsTest/bin/Debug/net6.0/MsTest.dll\" --debug"
+      "commandLineArgs": "--runner \"C:\\Users\\petr.komissarov\\source\\repos\\adapters-dotnet\\TmsRunnerTests\\bin\\Debug\\net7.0\\TmsRunnerTests.dll\" --debug --tmsPrivateToken cXdzUExLcU9ZclZXQmdIQnZm --tmsProjectId 31b8e72a-25d8-4f49-a3a1-629517c4f340 --tmsConfigurationId ccbb7839-00ba-4904-9147-cf7682d274ce --tmsTestRunName Komissarov --tmsAdapterMode 2 --tmsCertValidation false --tmsUrl https://team-okp8.testit.software/"
     }
   }
 }
