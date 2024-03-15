@@ -102,6 +102,7 @@ using Tms.Adapter.Attributes;
 using Tms.Adapter.Models;
 using Atr = Tms.Adapter.Attributes;
 
+[TestClass]
 public class SampleTests {
 
     [Step]
@@ -122,7 +123,7 @@ public class SampleTests {
     public void CreateSection() 
     {
         Assert.IsTrue(true);
-        Adapter.AddAttachment("/Users/user/screen.json");
+        Adapter.AddAttachments("/Users/user/screen.json");
     }
 
     [TestMethod]
