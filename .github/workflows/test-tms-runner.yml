@@ -33,10 +33,10 @@ jobs:
     env:
       TMS_CONFIGURATION_ID: ${{ secrets[matrix.configuration_id] }}
       TMS_PROJECT_ID: ${{ secrets[matrix.project_id] }}
-      TMS_RUNNER: TmsRunner/bin/Release/net7.0/linux-x64/TmsRunner
+      TMS_RUNNER: TmsRunner/bin/Release/net8.0/linux-x64/TmsRunner
       TMS_TEST_RUN_NAME: ${{ matrix.project_name }} TestRun
       TEST_ROOT: dotnet-examples/${{ matrix.project_name }}/${{ matrix.project_name }}
-      TEST_DLL: ${GITHUB_WORKSPACE}/$TEST_ROOT/bin/Release/net6.0/${{ matrix.project_name }}.dll
+      TEST_DLL: ${GITHUB_WORKSPACE}/$TEST_ROOT/bin/Release/net8.0/${{ matrix.project_name }}.dll
     steps:
       - name: Checkout adapters-dotnet
         uses: actions/checkout@v4
