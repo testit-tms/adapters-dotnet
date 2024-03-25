@@ -1,52 +1,40 @@
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Client;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
-using Serilog;
-using TmsRunner.Logger;
+using TmsRunner.Services;
 
 namespace TmsRunner.Handlers;
 
-public class RunEventHandler : ITestRunEventsHandler2
+public sealed class RunEventHandler(ILogger<RunEventHandler> logger, AutoResetEvent waitHandle,
+                                    ProcessorService processorService) : ITestRunEventsHandler, IDisposable
 {
-    private AutoResetEvent waitHandle;
-    private readonly ILogger _logger;
+    private readonly List<Task> _processTestResultsTasks = [];
 
-    public List<TestResult> TestResults { get;}
-
-    public RunEventHandler(AutoResetEvent waitHandle)
+    public void HandleLogMessage(TestMessageLevel level, string? message)
     {
-        this.waitHandle = waitHandle;
-        TestResults = new List<TestResult>();
-
-        _logger = LoggerFactory.GetLogger().ForContext<RunEventHandler>();
+        logger.LogDebug("Run Message: {Message}", message);
     }
 
-    public void HandleLogMessage(TestMessageLevel level, string message)
-    {
-        _logger.Debug("Run Message: {Message}", message);
-    }
-
-    public void HandleTestRunComplete(
-        TestRunCompleteEventArgs testRunCompleteArgs,
-        TestRunChangedEventArgs lastChunkArgs,
-        ICollection<AttachmentSet> runContextAttachments,
-        ICollection<string> executorUris)
+    public void HandleTestRunComplete(TestRunCompleteEventArgs testRunCompleteArgs,
+                                      TestRunChangedEventArgs? lastChunkArgs,
+                                      ICollection<AttachmentSet>? runContextAttachments,
+                                      ICollection<string>? executorUris)
     {
         if (lastChunkArgs != null && lastChunkArgs.NewTestResults != null)
         {
-            TestResults.AddRange(lastChunkArgs.NewTestResults);
+            _processTestResultsTasks.Add(ProcessTestResultsAsync(lastChunkArgs.NewTestResults));
         }
 
-        _logger.Debug("Test Run completed");
-
-        waitHandle.Set();
+        logger.LogDebug("Test Run completed");
+        _ = waitHandle.Set();
     }
 
-    public void HandleTestRunStatsChange(TestRunChangedEventArgs testRunChangedArgs)
+    public void HandleTestRunStatsChange(TestRunChangedEventArgs? testRunChangedArgs)
     {
         if (testRunChangedArgs != null && testRunChangedArgs.NewTestResults != null)
         {
-            TestResults.AddRange(testRunChangedArgs.NewTestResults);
+            _processTestResultsTasks.Add(ProcessTestResultsAsync(testRunChangedArgs.NewTestResults));
         }
     }
 
@@ -65,5 +53,50 @@ public class RunEventHandler : ITestRunEventsHandler2
     {
         // No op
         return false;
+    }
+
+    public void WaitForEnd()
+    {
+        _ = waitHandle.WaitOne();
+    }
+
+    public List<Task> GetProcessTestResultsTasks()
+    {
+        return _processTestResultsTasks;
+    }
+
+    private async Task ProcessTestResultsAsync(IEnumerable<TestResult?>? testResults)
+    {
+        if (testResults == null || !testResults.Any())
+        {
+            return;
+        }
+
+        foreach (var testResult in testResults)
+        {
+            if (testResult == null)
+            {
+                continue;
+            }
+
+            logger.LogDebug("Start test '{Name}' upload", testResult.DisplayName);
+
+            try
+            {
+                await processorService.ProcessAutoTestAsync(testResult).ConfigureAwait(false);
+
+                logger.LogInformation("Success test '{Name}' upload", testResult.DisplayName);
+            }
+            catch (Exception e)
+            {
+                logger.LogError(e, "Failed test '{Name}' upload", testResult.DisplayName);
+            }
+        }
+    }
+
+    public void Dispose()
+    {
+        _processTestResultsTasks?.Clear();
+        waitHandle?.Dispose();
     }
 }

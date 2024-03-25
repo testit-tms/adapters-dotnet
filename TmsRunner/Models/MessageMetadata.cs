@@ -2,8 +2,8 @@ using Tms.Adapter.Models;
 
 namespace TmsRunner.Models;
 
-public class MessageMetadata
+public sealed record MessageMetadata
 {
     public MessageType Type { get; set; }
-    public string Value { get; set; }
+    public string? Value { get; set; }
 }

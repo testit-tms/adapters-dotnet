@@ -7,7 +7,7 @@ public class ReplacerTests
 {
     private const string valueWithTags = "some string {a} {b} {c}";
 
-    private Dictionary<string, string> parametersWithValue = new()
+    private static readonly Dictionary<string, string> parametersWithValue = new()
     {
         { "a", "first" },
         { "b", "second" },
@@ -20,20 +20,20 @@ public class ReplacerTests
         var replacer = new Replacer();
 
         var value = replacer.ReplaceParameters(null, parametersWithValue);
-        
+
         Assert.IsNull(value);
     }
-    
+
     [TestMethod]
     public void ReplaceParameters_ValueIsEmptyString()
     {
         var replacer = new Replacer();
 
         var value = replacer.ReplaceParameters(string.Empty, parametersWithValue);
-        
+
         Assert.AreEqual(string.Empty, value);
     }
-    
+
     [TestMethod]
     public void ReplaceParameters_ParametersIsEmpty()
     {
@@ -41,10 +41,10 @@ public class ReplacerTests
         var parameters = new Dictionary<string, string>();
 
         var value = replacer.ReplaceParameters(valueWithTags, parameters);
-        
+
         Assert.AreEqual(valueWithTags, value);
     }
-    
+
     [TestMethod]
     public void ReplaceParameters_ReplaceTags()
     {
@@ -52,10 +52,10 @@ public class ReplacerTests
         const string exceptedValue = "some string first second third";
 
         var value = replacer.ReplaceParameters(valueWithTags, parametersWithValue);
-        
+
         Assert.AreEqual(exceptedValue, value);
     }
-    
+
     [TestMethod]
     public void ReplaceParameters_ValueWithOutTags()
     {
@@ -63,7 +63,7 @@ public class ReplacerTests
         const string exceptedValue = "some string first second third";
 
         var value = replacer.ReplaceParameters(exceptedValue, parametersWithValue);
-        
+
         Assert.AreEqual(exceptedValue, value);
     }
 }

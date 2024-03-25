@@ -1,53 +1,40 @@
-﻿using System.Text;
+﻿using Microsoft.Extensions.Logging;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel;
+using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel;
-using Serilog;
 using Tms.Adapter.Models;
-using TmsRunner.Client;
-using TmsRunner.Logger;
+using TmsRunner.Managers;
 using TmsRunner.Models;
+using TmsRunner.Models.AutoTest;
 using TmsRunner.Utils;
 using File = Tms.Adapter.Models.File;
 
-namespace TmsRunner.Services
+namespace TmsRunner.Services;
+
+public sealed class ProcessorService(ILogger<ProcessorService> logger,
+                                     TmsManager apiClient,
+                                     TmsSettings tmsSettings,
+                                     LogParser parser)
 {
-    public class ProcessorService
+    private async Task<List<Step>> GetStepsWithAttachmentsAsync(string? traceJson, List<Guid> attachmentIds)
     {
-        private readonly ITmsClient _apiClient;
-        private readonly TmsSettings _tmsSettings;
-        private readonly LogParser _parser;
-        private readonly ILogger _logger = LoggerFactory.GetLogger().ForContext<ProcessorService>();
+        var messages = LogParser.GetMessages(traceJson ?? string.Empty);
 
-        public ProcessorService(
-            ITmsClient apiClient,
-            TmsSettings tmsSettings,
-            LogParser parser)
+        var testCaseStepsHierarchical = new List<Step>();
+        Step? parentStep = null;
+        var nestingLevel = 1;
+
+        foreach (var message in messages)
         {
-            _apiClient = apiClient;
-            _tmsSettings = tmsSettings;
-            _parser = parser;
-        }
-
-        private async Task<List<Step>> GetStepsWithAttachments(
-            string? traceJson, ICollection<Guid> attachmentIds)
-        {
-            var messages = _parser.GetMessages(traceJson);
-
-            var testCaseStepsHierarchical = new List<Step>();
-            Step? parentStep = null;
-            var nestingLevel = 1;
-
-            foreach (var message in messages)
+            switch (message.Type)
             {
-                switch (message.Type)
-                {
-                    case MessageType.TmsStep:
+                case MessageType.TmsStep:
                     {
-                        var step = JsonSerializer.Deserialize<Step>(message.Value);
+                        var step = JsonSerializer.Deserialize<Step>(message?.Value ?? string.Empty);
                         if (step == null)
                         {
-                            _logger.Warning("Can not deserialize step: {Step}", message.Value);
+                            logger.LogWarning("Can not deserialize step: {Step}", message?.Value);
                             break;
                         }
 
@@ -89,13 +76,13 @@ namespace TmsRunner.Services
 
                         break;
                     }
-                    case MessageType.TmsStepResult:
+                case MessageType.TmsStepResult:
                     {
-                        var stepResult = JsonSerializer.Deserialize<StepResult>(message.Value);
+                        var stepResult = JsonSerializer.Deserialize<StepResult>(message?.Value ?? string.Empty);
 
                         if (stepResult == null)
                         {
-                            _logger.Warning("Can not deserialize step result: {StepResult}", message.Value);
+                            logger.LogWarning("Can not deserialize step result: {StepResult}", message?.Value ?? string.Empty);
                             break;
                         }
 
@@ -108,12 +95,12 @@ namespace TmsRunner.Services
 
                         break;
                     }
-                    case MessageType.TmsStepAttachmentAsText:
+                case MessageType.TmsStepAttachmentAsText:
                     {
-                        var attachment = JsonSerializer.Deserialize<File>(message.Value);
+                        var attachment = JsonSerializer.Deserialize<File>(message?.Value ?? string.Empty);
                         using var ms = new MemoryStream(Encoding.UTF8.GetBytes(attachment!.Content));
                         var createdAttachment =
-                            await _apiClient.UploadAttachment(Path.GetFileName(attachment.Name), ms);
+                            await apiClient.UploadAttachmentAsync(Path.GetFileName(attachment.Name), ms).ConfigureAwait(false);
 
                         if (parentStep is not null)
                         {
@@ -129,14 +116,14 @@ namespace TmsRunner.Services
 
                         break;
                     }
-                    case MessageType.TmsStepAttachment:
+                case MessageType.TmsStepAttachment:
                     {
-                        var file = JsonSerializer.Deserialize<File>(message.Value);
+                        var file = JsonSerializer.Deserialize<File>(message?.Value ?? string.Empty);
 
                         if (System.IO.File.Exists(file!.PathToFile))
                         {
                             using var fs = new FileStream(file.PathToFile, FileMode.Open, FileAccess.Read);
-                            var attachment = await _apiClient.UploadAttachment(Path.GetFileName(file.PathToFile), fs);
+                            var attachment = await apiClient.UploadAttachmentAsync(Path.GetFileName(file.PathToFile), fs).ConfigureAwait(false);
 
                             if (parentStep is not null)
                             {
@@ -153,150 +140,153 @@ namespace TmsRunner.Services
 
                         break;
                     }
-                    default:
-                        _logger.Debug("Un support message type: {MessageType}", message.Type);
-                        break;
-                }
+                default:
+                    logger.LogDebug("Un support message type: {MessageType}", message.Type);
+                    break;
             }
-
-            return testCaseStepsHierarchical;
         }
 
-        private static string? GetCalledMethod(string? calledMethod)
+        return testCaseStepsHierarchical;
+    }
+
+    private static string? GetCalledMethod(string? calledMethod)
+    {
+        if (calledMethod == null || !calledMethod.Contains('<'))
         {
-            if (calledMethod == null || !calledMethod.Contains("<")) return calledMethod;
-
-            const string pattern = "(?<=\\<)(.*)(?=\\>)";
-            var regex = new Regex(pattern);
-            var match = regex.Match(calledMethod);
-
-            return match.Groups[1].Value;
+            return calledMethod;
         }
 
-        public async Task ProcessAutoTest(TestResult testResult)
+        const string pattern = "(?<=\\<)(.*)(?=\\>)";
+        var regex = new Regex(pattern);
+        var match = regex.Match(calledMethod);
+
+        return match.Groups[1].Value;
+    }
+
+    public async Task ProcessAutoTestAsync(TestResult testResult)
+    {
+        var traceJson = GetTraceJson(testResult);
+        var parameters = LogParser.GetParameters(traceJson);
+        var autoTest = parser.GetAutoTest(testResult, parameters);
+        autoTest.Message = LogParser.GetMessage(traceJson);
+
+        var attachmentIds = new List<Guid>();
+        var testCaseSteps = await GetStepsWithAttachmentsAsync(traceJson, attachmentIds).ConfigureAwait(false);
+
+        autoTest.Setup = testCaseSteps
+            .Where(x => x.CallerMethodType == CallerMethodType.Setup)
+            .Select(AutoTestStep.ConvertFromStep)
+            .ToList();
+
+        autoTest.Steps = testCaseSteps
+            .Where(x => x.CallerMethodType == CallerMethodType.TestMethod)
+            .Select(AutoTestStep.ConvertFromStep)
+            .ToList();
+
+        autoTest.Teardown = testCaseSteps
+            .Where(x => x.CallerMethodType == CallerMethodType.Teardown)
+            .Select(AutoTestStep.ConvertFromStep)
+            .ToList();
+
+
+        var existAutotest = await apiClient.GetAutotestByExternalIdAsync(autoTest.ExternalId).ConfigureAwait(false);
+
+        if (existAutotest == null)
         {
-            var traceJson = GetTraceJson(testResult);
-            var parameters = _parser.GetParameters(traceJson);
-            var autoTest = _parser.GetAutoTest(testResult, parameters);
-            autoTest.Message = _parser.GetMessage(traceJson);
+            existAutotest = await apiClient.CreateAutotestAsync(autoTest).ConfigureAwait(false);
+        }
+        else
+        {
+            autoTest.IsFlaky = existAutotest.IsFlaky;
 
-            var attachmentIds = new List<Guid>();
-            var testCaseSteps =
-                await GetStepsWithAttachments(traceJson, attachmentIds);
+            await apiClient.UpdateAutotestAsync(autoTest).ConfigureAwait(false);
+        }
 
-            autoTest.Setup = testCaseSteps
-                .Where(x => x.CallerMethodType == CallerMethodType.Setup)
-                .Select(AutoTestStep.ConvertFromStep)
-                .ToList();
+        if (autoTest.WorkItemIds.Count > 0)
+        {
+            if (!await apiClient.TryLinkAutoTestToWorkItemAsync(existAutotest.Id.ToString(), autoTest.WorkItemIds).ConfigureAwait(false))
+            {
+                return;
+            }
+        }
 
-            autoTest.Steps = testCaseSteps
+        if (!string.IsNullOrEmpty(testResult.ErrorMessage))
+        {
+            autoTest.Message += Environment.NewLine + testResult.ErrorMessage;
+        }
+
+        var autoTestResultRequestBody = GetAutoTestResultsForTestRunModel(autoTest, testResult, traceJson,
+            testCaseSteps, attachmentIds, parameters);
+
+        await apiClient.SubmitResultToTestRunAsync(tmsSettings.TestRunId, autoTestResultRequestBody).ConfigureAwait(false);
+    }
+
+    private static AutoTestResult GetAutoTestResultsForTestRunModel(AutoTest autoTest,
+                                                                    TestResult testResult,
+                                                                    string traceJson,
+                                                                    IReadOnlyCollection<Step> testCaseSteps,
+                                                                    List<Guid> attachmentIds,
+                                                                    Dictionary<string, string>? parameters)
+    {
+        var stepResults =
+            testCaseSteps
                 .Where(x => x.CallerMethodType == CallerMethodType.TestMethod)
-                .Select(AutoTestStep.ConvertFromStep)
-                .ToList();
+                .Select(AutoTestStepResult.ConvertFromStep).ToList();
 
-            autoTest.Teardown = testCaseSteps
+        var setupResults =
+            testCaseSteps
+                .Where(x => x.CallerMethodType == CallerMethodType.Setup)
+                .Select(AutoTestStepResult.ConvertFromStep).ToList();
+
+        var teardownResults =
+            testCaseSteps
                 .Where(x => x.CallerMethodType == CallerMethodType.Teardown)
-                .Select(AutoTestStep.ConvertFromStep)
-                .ToList();
+                .Select(AutoTestStepResult.ConvertFromStep).ToList();
 
 
-            var existAutotest = await _apiClient.GetAutotestByExternalId(autoTest.ExternalId);
-
-            if (existAutotest == null)
-            {
-                existAutotest = await _apiClient.CreateAutotest(autoTest);
-            }
-            else
-            {
-                autoTest.IsFlaky = existAutotest.IsFlaky;
-
-                await _apiClient.UpdateAutotest(autoTest);
-            }
-
-            if (autoTest.WorkItemIds.Count > 0)
-            {
-                if (!await _apiClient.TryLinkAutoTestToWorkItem(existAutotest.Id.ToString(), autoTest.WorkItemIds))
-                {
-                    return;
-                }
-            }
-
-            if (!string.IsNullOrEmpty(testResult.ErrorMessage))
-            {
-                autoTest.Message += Environment.NewLine + testResult.ErrorMessage;
-            }
-
-            var autoTestResultRequestBody = GetAutoTestResultsForTestRunModel(testResult, testCaseSteps, autoTest,
-                traceJson, parameters, attachmentIds);
-
-            await _apiClient.SubmitResultToTestRun(_tmsSettings.TestRunId, autoTestResultRequestBody);
-        }
-
-        private AutoTestResult GetAutoTestResultsForTestRunModel(TestResult testResult,
-            IReadOnlyCollection<Step> testCaseSteps,
-            AutoTest autoTest, string traceJson, Dictionary<string, string>? parameters,
-            List<Guid> attachmentIds)
+        var autoTestResultRequestBody = new AutoTestResult
         {
-            var stepResults =
-                testCaseSteps
-                    .Where(x => x.CallerMethodType == CallerMethodType.TestMethod)
-                    .Select(AutoTestStepResult.ConvertFromStep).ToList();
-
-            var setupResults =
-                testCaseSteps
-                    .Where(x => x.CallerMethodType == CallerMethodType.Setup)
-                    .Select(AutoTestStepResult.ConvertFromStep).ToList();
-
-            var teardownResults =
-                testCaseSteps
-                    .Where(x => x.CallerMethodType == CallerMethodType.Teardown)
-                    .Select(AutoTestStepResult.ConvertFromStep).ToList();
-
-
-            var autoTestResultRequestBody = new AutoTestResult
-            {
-                ExternalId = autoTest.ExternalId,
-                Outcome = testResult.Outcome,
-                StartedOn = testResult.StartTime.UtcDateTime,
-                CompletedOn = testResult.EndTime.UtcDateTime,
-                Duration = (long)testResult.Duration.TotalMilliseconds,
-                StepResults = stepResults,
-                SetupResults = setupResults,
-                TeardownResults = teardownResults,
-                Links = _parser.GetLinks(traceJson),
-                Message = autoTest.Message!.TrimStart(Environment.NewLine.ToCharArray()),
-                Parameters = parameters!,
-                Attachments = attachmentIds,
-            };
-            if (!string.IsNullOrEmpty(testResult.ErrorStackTrace))
-            {
-                autoTestResultRequestBody.Traces = testResult.ErrorStackTrace.TrimStart();
-            }
-
-            return autoTestResultRequestBody;
-        }
-
-        private static string GetTraceJson(TestResult testResult)
+            ExternalId = autoTest.ExternalId,
+            Outcome = testResult.Outcome,
+            StartedOn = testResult.StartTime.UtcDateTime,
+            CompletedOn = testResult.EndTime.UtcDateTime,
+            Duration = (long)testResult.Duration.TotalMilliseconds,
+            StepResults = stepResults,
+            SetupResults = setupResults,
+            TeardownResults = teardownResults,
+            Links = LogParser.GetLinks(traceJson),
+            Message = autoTest.Message!.TrimStart(Environment.NewLine.ToCharArray()),
+            Parameters = parameters!,
+            Attachments = attachmentIds,
+        };
+        if (!string.IsNullOrEmpty(testResult.ErrorStackTrace))
         {
-            var debugTraceMessages = testResult.Messages.Select(x => x.Text);
-            var traceJson = string.Join("\n", debugTraceMessages);
-
-            return traceJson;
+            autoTestResultRequestBody.Traces = testResult.ErrorStackTrace.TrimStart();
         }
 
-        private static Step? MapStep(Step? step, StepResult stepResult)
+        return autoTestResultRequestBody;
+    }
+
+    private static string GetTraceJson(TestResult testResult)
+    {
+        var debugTraceMessages = testResult.Messages.Select(x => x.Text);
+        var traceJson = string.Join("\n", debugTraceMessages);
+
+        return traceJson;
+    }
+
+    private static Step? MapStep(Step? step, StepResult stepResult)
+    {
+        if (step == null)
         {
-            if (step == null)
-            {
-                return null;
-            }
-
-            step.CompletedOn = stepResult.CompletedOn;
-            step.Duration = stepResult.Duration;
-            step.Result = stepResult.Result;
-            step.Outcome = stepResult.Outcome;
-
-            return step;
+            return null;
         }
+
+        step.CompletedOn = stepResult.CompletedOn;
+        step.Duration = stepResult.Duration;
+        step.Result = stepResult.Result;
+        step.Outcome = stepResult.Outcome;
+
+        return step;
     }
 }

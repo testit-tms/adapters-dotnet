@@ -1,6 +1,4 @@
-using NSubstitute;
 using Tms.Adapter.Models;
-using Tms.Adapter.Utils;
 using TmsRunner.Utils;
 
 namespace TmsRunnerTests.Utils;
@@ -8,7 +6,7 @@ namespace TmsRunnerTests.Utils;
 [TestClass]
 public class LogParserTests
 {
-    private readonly string message =
+    private static readonly string message =
         MessageType.TmsParameters + ": {\"testType\":\"Simple\", \"secondParam\":\"123\"}\n" +
         MessageType.TmsStep +
         ": {\"Guid\":\"5ebaef93-cc90-440e-adf9-d23a95a3b328\",\"StartedOn\":\"2023-03-28T10:26:53.269419Z\",\"CompletedOn\":null,\"Duration\":0,\"Title\":\"TestCleanup\",\"Description\":null,\"Instance\":\"SumTests\",\"CurrentMethod\":\"TestCleanup\",\"CallerMethod\":null,\"Args\":{},\"Result\":null,\"Steps\":[],\"ParentStep\":null,\"NestingLevel\":0,\"CallerMethodType\":2,\"CurrentMethodType\":2,\"Links\":[],\"Attachments\":[],\"Outcome\":null}\n" +
@@ -23,15 +21,10 @@ public class LogParserTests
     private const int ValueCount = 2;
     private const string MessageValue = "Some message";
 
-    private readonly Replacer _replacer = Substitute.For<Replacer>();
-    private readonly Reflector _reflector = Substitute.For<Reflector>();
-
     [TestMethod]
     public void GetParameters_TraceIsEmpty()
     {
-        var parser = new LogParser(_replacer, _reflector);
-
-        var parameters = parser.GetParameters(string.Empty);
+        var parameters = LogParser.GetParameters(string.Empty);
 
         Assert.IsNull(parameters);
     }
@@ -44,9 +37,7 @@ public class LogParserTests
         const string key02 = "secondParam";
         const string value02 = "123";
 
-        var parser = new LogParser(_replacer, _reflector);
-
-        var parameters = parser.GetParameters(message);
+        var parameters = LogParser.GetParameters(message);
 
         Assert.IsNotNull(parameters);
         Assert.AreEqual(ValueCount, parameters.Count);
@@ -57,10 +48,9 @@ public class LogParserTests
     [TestMethod]
     public void GetParameters_TraceWithoutParameters()
     {
-        var parser = new LogParser(_replacer, _reflector);
         const string trace = "some trace";
 
-        var parameters = parser.GetParameters(trace);
+        var parameters = LogParser.GetParameters(trace);
 
         Assert.IsNull(parameters);
     }
@@ -68,9 +58,7 @@ public class LogParserTests
     [TestMethod]
     public void GetMessage_TraceIsEmpty()
     {
-        var parser = new LogParser(_replacer, _reflector);
-
-        var result = parser.GetMessage(string.Empty);
+        var result = LogParser.GetMessage(string.Empty);
 
         Assert.AreEqual(string.Empty, result);
     }
@@ -78,9 +66,7 @@ public class LogParserTests
     [TestMethod]
     public void GetMessage_TraceWithMessage()
     {
-        var parser = new LogParser(_replacer, _reflector);
-
-        var result = parser.GetMessage(message);
+        var result = LogParser.GetMessage(message);
 
         Assert.AreEqual(MessageValue, result);
     }
@@ -88,10 +74,9 @@ public class LogParserTests
     [TestMethod]
     public void GetMessage_TraceWithoutMessage()
     {
-        var parser = new LogParser(_replacer, _reflector);
         const string trace = "some trace";
 
-        var result = parser.GetMessage(trace);
+        var result = LogParser.GetMessage(trace);
 
         Assert.AreEqual(string.Empty, result);
     }
@@ -99,9 +84,7 @@ public class LogParserTests
     [TestMethod]
     public void GetLinks_TraceIsEmpty()
     {
-        var parser = new LogParser(_replacer, _reflector);
-
-        var result = parser.GetLinks(string.Empty);
+        var result = LogParser.GetLinks(string.Empty);
 
         Assert.IsNull(result);
     }
@@ -109,7 +92,6 @@ public class LogParserTests
     [TestMethod]
     public void GetLinks_TraceWithLinks()
     {
-        var parser = new LogParser(_replacer, _reflector);
         var expectLink1 = new Link
         {
             Title = "Test 1",
@@ -126,7 +108,7 @@ public class LogParserTests
             Type = LinkType.Defect
         };
 
-        var result = parser.GetLinks(message);
+        var result = LogParser.GetLinks(message);
 
         Assert.IsNotNull(result);
         Assert.AreEqual(ValueCount, result.Count);
@@ -137,10 +119,9 @@ public class LogParserTests
     [TestMethod]
     public void GetLinks_TraceWithoutLinks()
     {
-        var parser = new LogParser(_replacer, _reflector);
         const string trace = "some trace";
 
-        var result = parser.GetLinks(trace);
+        var result = LogParser.GetLinks(trace);
 
         Assert.IsNull(result);
     }

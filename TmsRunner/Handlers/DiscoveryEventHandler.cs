@@ -1,56 +1,64 @@
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Client;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
-using Serilog;
-using TmsRunner.Logger;
 
 namespace TmsRunner.Handlers;
 
-public class DiscoveryEventHandler : ITestDiscoveryEventsHandler
+public sealed class DiscoveryEventHandler(ILogger<DiscoveryEventHandler> logger,
+                                          AutoResetEvent waitHandle) : ITestDiscoveryEventsHandler, IDisposable
 {
-    private AutoResetEvent waitHandle;
-    private readonly ILogger _logger;
-    public List<TestCase> DiscoveredTestCases { get; }
+    private readonly List<TestCase> _discoveredTestCases = [];
 
-    public DiscoveryEventHandler(AutoResetEvent waitHandle)
+    public void HandleDiscoveredTests(IEnumerable<TestCase>? discoveredTestCases)
     {
-        this.waitHandle = waitHandle;
-        DiscoveredTestCases = new List<TestCase>();
-        _logger = LoggerFactory.GetLogger().ForContext<DiscoveryEventHandler>();
-    }
+        logger.LogDebug("Discovery tests");
 
-    public void HandleDiscoveredTests(IEnumerable<TestCase> discoveredTestCases)
-    {
-        _logger.Debug("Discovery tests");
+        if (discoveredTestCases == null)
+        {
+            return;
+        }
 
-        if (discoveredTestCases == null) return;
+        _discoveredTestCases.AddRange(discoveredTestCases);
 
-        DiscoveredTestCases.AddRange(discoveredTestCases);
-
-        _logger.Debug(
-            "Added test cases: {@TestCases}", 
-            discoveredTestCases.Select(t => t.FullyQualifiedName));
+        logger.LogDebug("Added test cases: {@TestCases}", discoveredTestCases.Select(t => t.FullyQualifiedName));
     }
 
     public void HandleDiscoveryComplete(long totalTests, IEnumerable<TestCase>? lastChunk, bool isAborted)
     {
         if (lastChunk != null)
         {
-            DiscoveredTestCases.AddRange(lastChunk);
+            _discoveredTestCases.AddRange(lastChunk);
         }
 
-        _logger.Debug("Discovery completed");
+        logger.LogDebug("Discovery completed");
 
-        waitHandle.Set();
+        _ = waitHandle.Set();
     }
 
-    public void HandleLogMessage(TestMessageLevel level, string message)
+    public void WaitForEnd()
     {
-        _logger.Debug("Discovery Message: {Message}", message);
+        _ = waitHandle.WaitOne();
+    }
+
+    public void HandleLogMessage(TestMessageLevel level, string? message)
+    {
+        logger.LogDebug("Discovery Message: {Message}", message);
     }
 
     public void HandleRawMessage(string rawMessage)
     {
         // No op
+    }
+
+    public List<TestCase> GetTestCases()
+    {
+        return _discoveredTestCases;
+    }
+
+    public void Dispose()
+    {
+        _discoveredTestCases?.Clear();
+        waitHandle?.Dispose();
     }
 }

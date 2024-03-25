@@ -1,26 +1,18 @@
+using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Tms.Adapter.Attributes;
 using Tms.Adapter.Models;
 using Tms.Adapter.Utils;
 using TmsRunner.Extensions;
 using TmsRunner.Models;
+using TmsRunner.Models.AutoTest;
 
 namespace TmsRunner.Utils;
 
-public class LogParser
+public sealed class LogParser(Replacer replacer)
 {
-    private readonly Replacer _replacer;
-    private readonly Reflector _reflector;
-
-    public LogParser(Replacer replacer, Reflector reflector)
-    {
-        _replacer = replacer;
-        _reflector = reflector;
-    }
-
-    public Dictionary<string, string>? GetParameters(string traceJson)
+    public static Dictionary<string, string>? GetParameters(string traceJson)
     {
         var pattern = $"{MessageType.TmsParameters}:\\s*([^\\n\\r]*)";
         var regex = new Regex(pattern);
@@ -30,7 +22,7 @@ public class LogParser
         return string.IsNullOrEmpty(json) ? null : JsonSerializer.Deserialize<Dictionary<string, string>>(json);
     }
 
-    public string GetMessage(string traceJson)
+    public static string GetMessage(string traceJson)
     {
         var pattern = $"{MessageType.TmsStepMessage}:\\s*([^\\n\\r]*)";
         var messageRegex = new Regex(pattern);
@@ -40,7 +32,7 @@ public class LogParser
         return message;
     }
 
-    public List<Link>? GetLinks(string traceJson)
+    public static List<Link>? GetLinks(string traceJson)
     {
         var pattern = $"{MessageType.TmsStepLinks}:\\s*\\[([^\\n\\r]*)\\]";
         var regex = new Regex(pattern);
@@ -52,7 +44,7 @@ public class LogParser
         }
 
         var linksJsonArray = $"[ {string.Join(", ", matches.Select(m => m.Groups[1].Value))} ]";
-        
+
         return JsonSerializer.Deserialize<List<Link>>(linksJsonArray);
     }
 
@@ -60,7 +52,7 @@ public class LogParser
     public AutoTest GetAutoTest(TestResult testResult, Dictionary<string, string>? parameters)
     {
         var methodFullName = GetFullyQualifiedMethodName(testResult.TestCase.FullyQualifiedName);
-        var method = _reflector.GetMethodMetadata(testResult.TestCase.Source, methodFullName, parameters);
+        var method = Reflector.GetMethodMetadata(testResult.TestCase.Source, methodFullName, parameters);
 
         var autoTest = new AutoTest
         {
@@ -69,50 +61,52 @@ public class LogParser
             MethodName = method.Name
         };
 
-        foreach (var attribute in method.Attributes)
+        var attributes = method.Attributes ?? [];
+
+        foreach (var attribute in attributes)
         {
             switch (attribute)
             {
                 case ExternalIdAttribute externalId:
-                    autoTest.ExternalId = _replacer.ReplaceParameters(externalId.Value, parameters);
+                    autoTest.ExternalId = replacer.ReplaceParameters(externalId.Value, parameters);
                     break;
                 case DisplayNameAttribute displayName:
-                    autoTest.Name = _replacer.ReplaceParameters(displayName.Value, parameters);
+                    autoTest.Name = replacer.ReplaceParameters(displayName.Value, parameters);
                     break;
                 case TitleAttribute title:
-                    autoTest.Title = _replacer.ReplaceParameters(title.Value, parameters);
+                    autoTest.Title = replacer.ReplaceParameters(title.Value, parameters);
                     break;
                 case DescriptionAttribute description:
-                    autoTest.Description = _replacer.ReplaceParameters(description.Value, parameters);
+                    autoTest.Description = replacer.ReplaceParameters(description.Value, parameters);
                     break;
                 case WorkItemIdsAttribute ids:
-                {
-                    var workItemIds = ids.Value
-                        .Select(id => _replacer.ReplaceParameters(id, parameters))
-                        .ToList();
-
-                    autoTest.WorkItemIds = workItemIds;
-                    break;
-                }
-                case LinksAttribute links:
-                {
-                    if (links.Value is not null)
                     {
-                        links.Value.Title = _replacer.ReplaceParameters(links.Value.Title, parameters);
-                        links.Value.Url = _replacer.ReplaceParameters(links.Value.Url, parameters);
-                        links.Value.Description =
-                            _replacer.ReplaceParameters(links.Value.Description, parameters);
+                        var workItemIds = ids.Value?
+                            .Select(id => replacer.ReplaceParameters(id, parameters))
+                            .ToList();
 
-                        autoTest.Links.Add(links.Value);
+                        autoTest.WorkItemIds = workItemIds ?? [];
+                        break;
                     }
+                case LinksAttribute links:
+                    {
+                        if (links.Value is not null)
+                        {
+                            links.Value.Title = replacer.ReplaceParameters(links.Value.Title, parameters);
+                            links.Value.Url = replacer.ReplaceParameters(links.Value.Url, parameters);
+                            links.Value.Description =
+                                replacer.ReplaceParameters(links.Value.Description, parameters);
 
-                    break;
-                }
+                            autoTest.Links?.Add(links.Value);
+                        }
+
+                        break;
+                    }
                 case LabelsAttribute labels:
-                {
-                    autoTest.Labels = labels.Value;
-                    break;
-                }
+                    {
+                        autoTest.Labels = labels.Value;
+                        break;
+                    }
             }
         }
 
@@ -130,7 +124,7 @@ public class LogParser
     }
 
     // TODO: write unit tests
-    public List<MessageMetadata> GetMessages(string traceJson)
+    public static List<MessageMetadata> GetMessages(string traceJson)
     {
         var messages = new List<MessageMetadata>();
 

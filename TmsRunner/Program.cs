@@ -1,116 +1,49 @@
 ﻿using CommandLine;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.TestPlatform.VsTestConsole.TranslationLayer;
+using Microsoft.TestPlatform.VsTestConsole.TranslationLayer.Interfaces;
+using Polly;
+using Polly.Extensions.Http;
+using Polly.Retry;
+using Serilog;
+using Serilog.Events;
+using Serilog.Expressions;
+using Serilog.Settings.Configuration;
+using System.Net;
+using TestIT.ApiClient.Api;
 using Tms.Adapter.Utils;
-using TmsRunner.Client;
-using TmsRunner.Configuration;
+using TmsRunner.Enums;
 using TmsRunner.Extensions;
-using TmsRunner.Logger;
-using TmsRunner.Options;
+using TmsRunner.Handlers;
+using TmsRunner.Managers;
+using TmsRunner.Models;
+using TmsRunner.Models.Configuration;
 using TmsRunner.Services;
 using TmsRunner.Utils;
+using ConfigurationManager = TmsRunner.Managers.ConfigurationManager;
 
 namespace TmsRunner;
 
-internal class Program
+public class Program
 {
     public static async Task<int> Main(string[] args)
     {
-        var config = GetAdapterConfiguration(args);
-        var settings = ConfigurationManager.Configure(config.ToInternalConfig(),
-            Path.GetDirectoryName(config.TestAssemblyPath)!);
-
-        var log = LoggerFactory.GetLogger(config.IsDebug).ForContext<Program>();
-
-        log.Information("Adapter works in {Mode} mode", settings.AdapterMode);
-        log.Debug("Parameters:");
-        log.Debug("Runner Path: {Path}", config.RunnerPath);
-        log.Debug("Test Assembly Path: {Path}", config.TestAssemblyPath);
-        log.Debug("Test Adapter Path: {Path}", config.TestAdapterPath);
-        log.Debug("Test Logger Path: {Path}", config.LoggerPath);
-
-        var runner = new Runner(config);
-        runner.InitialiseRunner();
-
-        var testCases = runner.DiscoverTests();
-
-        log.Information("Discovered Tests Count: {Count}", testCases.Count);
-
-        if (testCases.Count == 0)
-        {
-            log.Information("Can not found tests for run");
-            return 1;
-        }
-
-        ITmsClient apiClient = new TmsClient(settings);
-
-        var replacer = new Replacer();
-        var filterService = new FilterService(replacer);
-
-        switch (settings.AdapterMode)
-        {
-            case 0:
-            {
-                var testCaseForRun = await apiClient.GetAutoTestsForRun(settings.TestRunId);
-                testCases = filterService.FilterTestCases(config.TestAssemblyPath, testCaseForRun, testCases);
-                break;
-            }
-            case 2:
-            {
-                settings.TestRunId = await apiClient.CreateTestRun();
-
-                if (!string.IsNullOrEmpty(config.TmsLabelsOfTestsToRun))
-                {
-                    testCases = filterService.FilterTestCasesByLabels(config, testCases);
-                }
-                
-                break;
-            }
-        }
-
-        log.Information("Running tests: {Count}", testCases.Count);
-
-        var testResults = runner.RunSelectedTests(testCases);
-
-        log.Debug("Run Selected Test Result: {@Results}",
-            testResults.Select(t => t.DisplayName));
-
-        var reflector = new Reflector();
-        var parser = new LogParser(replacer, reflector);
-        var processorService =
-            new ProcessorService(apiClient, settings, parser);
-
-        foreach (var testResult in testResults)
-        {
-            log.Information("Uploading test {Name}", testResult.DisplayName);
-
-            try
-            {
-                await processorService.ProcessAutoTest(testResult);
-
-                log.Information("Uploaded test {Name}", testResult.DisplayName);
-            }
-            catch (Exception e)
-            {
-                log.Error(e, "Uploaded test {Name} is failed", testResult.DisplayName);
-            }
-        }
-
-        if (settings.AdapterMode == 2)
-            log.Information("Test run {TestRunId} finished.", settings.TestRunId);
-
-        return 0;
+        using var host = CreateHostBuilder(args).Build();
+        return await host.Services.GetRequiredService<App>().RunAsync().ConfigureAwait(false);
     }
 
     private static AdapterConfig GetAdapterConfiguration(IEnumerable<string> args)
     {
         AdapterConfig config = null!;
 
-        Parser.Default.ParseArguments<AdapterConfig>(args)
+        _ = Parser.Default.ParseArguments<AdapterConfig>(args)
             .WithParsed(ac =>
             {
                 config = new AdapterConfig
                 {
-                    RunnerPath = ac.RunnerPath.RemoveQuotes(),
-                    TestAssemblyPath = ac.TestAssemblyPath.RemoveQuotes(),
+                    RunnerPath = ac.RunnerPath?.RemoveQuotes(),
+                    TestAssemblyPath = ac.TestAssemblyPath?.RemoveQuotes(),
                     TestAdapterPath = ac.TestAdapterPath?.RemoveQuotes() ?? string.Empty,
                     LoggerPath = ac.LoggerPath?.RemoveQuotes() ?? string.Empty,
                     IsDebug = ac.IsDebug,
@@ -125,7 +58,108 @@ internal class Program
                     TmsLabelsOfTestsToRun = ac.TmsLabelsOfTestsToRun
                 };
             });
-        
+
+        if (string.IsNullOrWhiteSpace(config.TmsRunSettings))
+        {
+            config.TmsRunSettings =
+        @"
+<RunSettings>
+  <RunConfiguration>
+  </RunConfiguration> 
+</RunSettings>
+";
+        }
+
         return config;
+    }
+
+    private static IHostBuilder CreateHostBuilder(string[] args)
+    {
+        var options = new ConfigurationReaderOptions(
+            typeof(ConsoleLoggerConfigurationExtensions).Assembly,
+            typeof(SerilogExpression).Assembly
+        );
+
+        return Host.CreateDefaultBuilder()
+            .UseSerilog((context, services, configuration) => configuration
+                .ReadFrom.Configuration(context.Configuration, options)
+                .ReadFrom.Services(services)
+                .Enrich.FromLogContext()
+                .MinimumLevel.Debug()
+                .WriteTo.Console(LogEventLevel.Information))
+            .ConfigureServices((hostContext, services) =>
+            {
+                _ = services.AddHttpClient(nameof(HttpClientNames.Default), client =>
+                {
+                    client.DefaultVersionPolicy = HttpVersionPolicy.RequestVersionOrHigher;
+                    client.DefaultRequestVersion = HttpVersion.Version11;
+                })
+                .SetHandlerLifetime(TimeSpan.FromDays(1))
+                .AddPolicyHandler(GetRetryPolicy());
+
+                _ = services
+                    .AddSingleton(GetAdapterConfiguration(args))
+                    .AddSingleton(provider =>
+                    {
+                        var adapterConfig = provider.GetRequiredService<AdapterConfig>();
+
+                        return ConfigurationManager.Configure(
+                            adapterConfig.ToInternalConfig(),
+                            Path.GetDirectoryName(adapterConfig.TestAssemblyPath) ?? string.Empty
+                        );
+                    })
+                    .AddSingleton(provider =>
+                    {
+                        var tmsSettings = provider.GetRequiredService<TmsSettings>();
+
+                        return new TestIT.ApiClient.Client.Configuration
+                        {
+                            BasePath = tmsSettings.Url ?? string.Empty,
+                            ApiKeyPrefix = new Dictionary<string, string> { { "Authorization", "PrivateToken" } },
+                            ApiKey = new Dictionary<string, string> { { "Authorization", tmsSettings?.PrivateToken ?? string.Empty } }
+                        };
+                    })
+                    .AddTransient(provider => new HttpClientHandler
+                    {
+                        ServerCertificateCustomValidationCallback = (_, _, _, _) => provider.GetRequiredService<TmsSettings>().CertValidation
+                    })
+                    .AddTransient<IAttachmentsApiAsync, AttachmentsApi>(provider => new AttachmentsApi(
+                        provider.GetRequiredService<IHttpClientFactory>().CreateClient(nameof(HttpClientNames.Default)),
+                        provider.GetRequiredService<TestIT.ApiClient.Client.Configuration>(),
+                        provider.GetRequiredService<HttpClientHandler>()
+                    ))
+                    .AddTransient<ITestRunsApiAsync, TestRunsApi>(provider => new TestRunsApi(
+                        provider.GetRequiredService<IHttpClientFactory>().CreateClient(nameof(HttpClientNames.Default)),
+                        provider.GetRequiredService<TestIT.ApiClient.Client.Configuration>(),
+                        provider.GetRequiredService<HttpClientHandler>()
+                    ))
+                    .AddTransient<IAutoTestsApiAsync, AutoTestsApi>(provider => new AutoTestsApi(
+                        provider.GetRequiredService<IHttpClientFactory>().CreateClient(nameof(HttpClientNames.Default)),
+                        provider.GetRequiredService<TestIT.ApiClient.Client.Configuration>(),
+                        provider.GetRequiredService<HttpClientHandler>()
+                    ))
+                    .AddTransient<App>()
+                    .AddTransient<TmsManager>()
+                    .AddTransient<Replacer>()
+                    .AddTransient<Reflector>()
+                    .AddTransient<LogParser>()
+                    .AddTransient<FilterService>()
+                    .AddTransient<ProcessorService>()
+                    .AddTransient(provider => new AutoResetEvent(false))
+                    .AddTransient<DiscoveryEventHandler>()
+                    .AddTransient<RunEventHandler>()
+                    .AddTransient<IVsTestConsoleWrapper, VsTestConsoleWrapper>(provider => new VsTestConsoleWrapper(
+                        provider.GetRequiredService<AdapterConfig>().RunnerPath ?? string.Empty,
+                        new ConsoleParameters { LogFilePath = Path.Combine(Directory.GetCurrentDirectory(), @"log.txt") }
+                    ))
+                    .AddTransient<RunService>();
+            });
+    }
+
+    private static AsyncRetryPolicy<HttpResponseMessage> GetRetryPolicy()
+    {
+        return HttpPolicyExtensions
+            .HandleTransientHttpError()
+            .WaitAndRetryAsync(2, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
     }
 }

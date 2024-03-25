@@ -1,36 +1,26 @@
+using Microsoft.Extensions.Logging;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using System.Data;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel;
-using Serilog;
 using Tms.Adapter.Attributes;
 using Tms.Adapter.Utils;
 using TmsRunner.Extensions;
-using TmsRunner.Logger;
-using TmsRunner.Options;
+using TmsRunner.Models.Configuration;
 
 namespace TmsRunner.Services;
 
-public class FilterService
+public sealed class FilterService(ILogger<FilterService> logger, Replacer replacer)
 {
-    private readonly Replacer _replacer;
-    private readonly ILogger _log;
-    private static readonly Regex _parametersRegex = new Regex("\\((.*)\\)");
-
-    public FilterService(Replacer replacer)
-    {
-        _replacer = replacer;
-        _log = LoggerFactory.GetLogger(false).ForContext<FilterService>();
-    }
+    private static readonly Regex _parametersRegex = new("\\((.*)\\)");
 
     // TODO: write unit tests
-    public List<TestCase> FilterTestCases(
-        string assemblyPath,
-        IEnumerable<string> externalIds,
-        IEnumerable<TestCase> testCases)
+    public List<TestCase> FilterTestCases(string? assemblyPath,
+                                          IEnumerable<string?>? externalIds,
+                                          IEnumerable<TestCase> testCases)
     {
         var testCasesToRun = new List<TestCase>();
-        var assembly = Assembly.LoadFrom(assemblyPath);
+        var assembly = Assembly.LoadFrom(assemblyPath ?? string.Empty);
         var allTestMethods = new List<MethodInfo>(assembly.GetExportedTypes().SelectMany(type => type.GetMethods()));
 
         foreach (var testCase in testCases)
@@ -41,13 +31,13 @@ public class FilterService
 
             if (testMethod == null)
             {
-                _log.Error("TestMethod {@FullyQualifiedName} not found", testCase.FullyQualifiedName);
+                logger.LogError("TestMethod {@FullyQualifiedName} not found", testCase.FullyQualifiedName);
                 continue;
             }
 
-            var externalId = GetExternalId(testCase, testMethod);
+            var externalId = GetExternalId(testMethod, testCase);
 
-            if (externalIds.Contains(externalId))
+            if (externalIds?.Contains(externalId) ?? false)
             {
                 testCasesToRun.Add(testCase);
             }
@@ -56,7 +46,7 @@ public class FilterService
         return testCasesToRun;
     }
 
-    private string GetExternalId(TestCase testCase, MethodInfo testMethod)
+    private string GetExternalId(MethodInfo testMethod, TestCase testCase)
     {
         var attributes = testMethod.GetCustomAttributes(false);
 
@@ -67,23 +57,22 @@ public class FilterService
                 var parameterNames = testMethod.GetParameters().Select(x => x.Name?.ToString());
                 var parameterValues = _parametersRegex.Match(testCase.DisplayName).Groups[1].Value.Split(',').Select(x => x.Replace("\"", string.Empty));
                 var parameterDictionary = parameterNames
+                    .Select(x => x ?? string.Empty)
                     .Zip(parameterValues, (k, v) => new { k, v })
                     .ToDictionary(x => x.k, x => x.v);
-                return _replacer.ReplaceParameters(externalId.Value, parameterDictionary!);
+                return replacer.ReplaceParameters(externalId.Value, parameterDictionary!);
             }
         }
 
         return (testMethod.DeclaringType!.FullName + "." + testMethod.Name).ComputeHash();
     }
 
-    public List<TestCase> FilterTestCasesByLabels(
-        AdapterConfig config,
-        IEnumerable<TestCase> testCases)
+    public static List<TestCase> FilterTestCasesByLabels(AdapterConfig config, IEnumerable<TestCase> testCases)
     {
-        var labelsToRun = config.TmsLabelsOfTestsToRun.Split(',').Select(x => x.Trim()).ToList();
+        var labelsToRun = config.TmsLabelsOfTestsToRun?.Split(',').Select(x => x.Trim()).ToList();
         var testCasesName = testCases.Select(t => t.FullyQualifiedName);
         var testCasesToRun = new List<TestCase>();
-        var assembly = Assembly.LoadFrom(config.TestAssemblyPath);
+        var assembly = Assembly.LoadFrom(config.TestAssemblyPath ?? string.Empty);
         var testMethods = new List<MethodInfo>(
             assembly.GetExportedTypes()
                 .SelectMany(type => type.GetMethods())
@@ -92,18 +81,24 @@ public class FilterService
 
         foreach (var testMethod in testMethods)
         {
-            var fullName = testMethod.DeclaringType!.FullName + "." + testMethod.Name;
+            var fullName = testMethod?.DeclaringType?.FullName + "." + testMethod?.Name;
+            var customAttributes = testMethod?.GetCustomAttributes(false) ?? [];
 
-            foreach (var attribute in testMethod.GetCustomAttributes(false))
+            foreach (var attribute in customAttributes)
             {
                 if (attribute is LabelsAttribute labelsAttr)
                 {
-                    if (labelsAttr.Value.Any(labelsToRun.Contains))
+                    if (labelsAttr.Value?.Any(x => labelsToRun?.Contains(x) ?? false) ?? false)
                     {
-                        testCasesToRun.Add(testCases.FirstOrDefault(x => x.FullyQualifiedName == fullName));
+                        var testCase = testCases.FirstOrDefault(x => x.FullyQualifiedName == fullName);
+
+                        if (testCase != null)
+                        {
+                            testCasesToRun.Add(testCase);
+                        }
                     }
                 }
-            } 
+            }
         }
 
         return testCasesToRun;
