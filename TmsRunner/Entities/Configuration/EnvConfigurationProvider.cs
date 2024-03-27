@@ -1,8 +1,8 @@
 using Microsoft.Extensions.Configuration;
 
-namespace TmsRunner.Configuration;
+namespace TmsRunner.Entities.Configuration;
 
-public class EnvConfigurationProvider : ConfigurationProvider
+public sealed class EnvConfigurationProvider : ConfigurationProvider
 {
     private const string EnvTmsUrl = "TMS_URL";
     private const string EnvTmsPrivateToken = "TMS_PRIVATE_TOKEN";
@@ -17,7 +17,7 @@ public class EnvConfigurationProvider : ConfigurationProvider
 
     public override void Load()
     {
-        var data = new Dictionary<string, string>
+        var data = new Dictionary<string, string?>
         {
             { "Url", Environment.GetEnvironmentVariable(EnvTmsUrl) },
             { "PrivateToken", Environment.GetEnvironmentVariable(EnvTmsPrivateToken) },

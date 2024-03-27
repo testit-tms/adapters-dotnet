@@ -1,0 +1,123 @@
+﻿using Microsoft.Extensions.Configuration;
+using System.Configuration;
+using TmsRunner.Entities;
+using TmsRunner.Entities.Configuration;
+using TmsRunner.Extensions;
+
+namespace TmsRunner.Managers;
+
+public static class ConfigurationManager
+{
+    private const string EnvConfigFile = "TMS_CONFIG_FILE";
+    private const string DefaultConfigFileName = "Tms.config.json";
+
+    public static TmsSettings Configure(Config adapterConfig, string pathToConfFile)
+    {
+        if (string.IsNullOrWhiteSpace(pathToConfFile))
+        {
+            throw new ArgumentException("The path of config directory is empty", nameof(pathToConfFile));
+        }
+
+        var configFileName = GetConfigFileName(adapterConfig.TmsConfigFile);
+        var configurationFileLocation = Path.Combine(pathToConfFile, configFileName);
+
+        var configBuilder = new ConfigurationBuilder();
+
+        if (File.Exists(configurationFileLocation))
+        {
+            _ = configBuilder.AddJsonFile(configurationFileLocation);
+        }
+        else
+        {
+            Console.WriteLine($"Configuration file was not found at {configurationFileLocation}");
+        }
+
+        var config = configBuilder
+            .Add(new EnvConfigurationSource())
+            .Add(new ClassConfigurationSource(adapterConfig))
+            .Build();
+
+        var tmsSettings = new TmsSettings();
+        config.Bind(tmsSettings);
+
+        Validate(tmsSettings);
+
+        return tmsSettings;
+    }
+
+    private static string GetConfigFileName(string? path)
+    {
+        var defaultConfFileName = DefaultConfigFileName;
+        var envConfFileName = Environment.GetEnvironmentVariable(EnvConfigFile);
+        defaultConfFileName = defaultConfFileName.AssignIfNullOrEmpty(envConfFileName);
+
+        return defaultConfFileName.AssignIfNullOrEmpty(path);
+    }
+
+    private static void Validate(TmsSettings settings)
+    {
+        if (string.IsNullOrWhiteSpace(settings.Url))
+        {
+            throw new ConfigurationErrorsException("Url is empty");
+        }
+
+        if (string.IsNullOrWhiteSpace(settings.PrivateToken))
+        {
+            throw new ConfigurationErrorsException("Private token is empty");
+        }
+
+        if (string.IsNullOrWhiteSpace(settings.ConfigurationId))
+        {
+            throw new ConfigurationErrorsException("Configuration id is empty");
+        }
+
+        if (!string.IsNullOrWhiteSpace(settings.RunSettings) && !IsValidXml(settings.RunSettings))
+        {
+            throw new ConfigurationErrorsException("Run settings is invalid");
+        }
+
+        switch (settings.AdapterMode)
+        {
+            case 0:
+            case 1:
+                {
+                    if (string.IsNullOrWhiteSpace(settings.TestRunId))
+                    {
+                        throw new ConfigurationErrorsException(
+                            "Adapter works in mode 0 or 1. Config should contains test run id and configuration id.");
+                    }
+
+                    break;
+                }
+            case 2:
+                if (string.IsNullOrWhiteSpace(settings.ProjectId) || !string.IsNullOrWhiteSpace(settings.TestRunId))
+                {
+                    throw new ConfigurationErrorsException(
+                        "Adapter works in mode 2. Config should contains project id and configuration id. Also doesn't contains test run id.");
+                }
+
+                break;
+            default:
+                throw new Exception($"Incorrect adapter mode: {settings.AdapterMode}");
+        }
+    }
+
+    private static bool IsValidXml(string xmlStr)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(xmlStr))
+            {
+                return false;
+            }
+
+            var xmlDoc = new System.Xml.XmlDocument();
+            xmlDoc.LoadXml(xmlStr);
+            return true;
+        }
+        catch (System.Xml.XmlException)
+        {
+            return false;
+        }
+    }
+}

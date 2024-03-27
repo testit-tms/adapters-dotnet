@@ -5,9 +5,9 @@ namespace TmsRunnerTests.Utils;
 [TestClass]
 public class ReplacerTests
 {
-    private const string valueWithTags = "some string {a} {b} {c}";
+    private const string ValueWithTags = "some string {a} {b} {c}";
 
-    private Dictionary<string, string> parametersWithValue = new()
+    private static readonly Dictionary<string, string> ParametersWithValue = new()
     {
         { "a", "first" },
         { "b", "second" },
@@ -19,51 +19,51 @@ public class ReplacerTests
     {
         var replacer = new Replacer();
 
-        var value = replacer.ReplaceParameters(null, parametersWithValue);
-        
+        var value = replacer.ReplaceParameters(null, ParametersWithValue);
+
         Assert.IsNull(value);
     }
-    
+
     [TestMethod]
     public void ReplaceParameters_ValueIsEmptyString()
     {
         var replacer = new Replacer();
 
-        var value = replacer.ReplaceParameters(string.Empty, parametersWithValue);
-        
+        var value = replacer.ReplaceParameters(string.Empty, ParametersWithValue);
+
         Assert.AreEqual(string.Empty, value);
     }
-    
+
     [TestMethod]
     public void ReplaceParameters_ParametersIsEmpty()
     {
         var replacer = new Replacer();
         var parameters = new Dictionary<string, string>();
 
-        var value = replacer.ReplaceParameters(valueWithTags, parameters);
-        
-        Assert.AreEqual(valueWithTags, value);
+        var value = replacer.ReplaceParameters(ValueWithTags, parameters);
+
+        Assert.AreEqual(ValueWithTags, value);
     }
-    
+
     [TestMethod]
     public void ReplaceParameters_ReplaceTags()
     {
         var replacer = new Replacer();
         const string exceptedValue = "some string first second third";
 
-        var value = replacer.ReplaceParameters(valueWithTags, parametersWithValue);
-        
+        var value = replacer.ReplaceParameters(ValueWithTags, ParametersWithValue);
+
         Assert.AreEqual(exceptedValue, value);
     }
-    
+
     [TestMethod]
     public void ReplaceParameters_ValueWithOutTags()
     {
         var replacer = new Replacer();
         const string exceptedValue = "some string first second third";
 
-        var value = replacer.ReplaceParameters(exceptedValue, parametersWithValue);
-        
+        var value = replacer.ReplaceParameters(exceptedValue, ParametersWithValue);
+
         Assert.AreEqual(exceptedValue, value);
     }
 }
