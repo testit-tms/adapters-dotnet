@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System.Configuration;
+using TmsRunner.Entities;
+using TmsRunner.Entities.Configuration;
 using TmsRunner.Extensions;
-using TmsRunner.Models;
-using TmsRunner.Models.Configuration;
 
 namespace TmsRunner.Managers;
 

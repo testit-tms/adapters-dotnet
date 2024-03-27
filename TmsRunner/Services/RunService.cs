@@ -1,8 +1,8 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.TestPlatform.VsTestConsole.TranslationLayer.Interfaces;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
+using TmsRunner.Entities.Configuration;
 using TmsRunner.Handlers;
-using TmsRunner.Models.Configuration;
 
 namespace TmsRunner.Services;
 

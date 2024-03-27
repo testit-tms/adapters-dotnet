@@ -1,6 +1,6 @@
-namespace TmsRunner.Models;
+namespace TmsRunner.Entities;
 
-public sealed class TmsSettings
+public sealed record TmsSettings
 {
     private string? _url;
 

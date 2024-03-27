@@ -6,7 +6,7 @@ using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
 namespace TmsRunner.Handlers;
 
 public sealed class DiscoveryEventHandler(ILogger<DiscoveryEventHandler> logger,
-                                          AutoResetEvent waitHandle) : ITestDiscoveryEventsHandler, IDisposable
+                                          EventWaitHandle waitHandle) : ITestDiscoveryEventsHandler, IDisposable
 {
     private readonly List<TestCase> _discoveredTestCases = [];
 
@@ -19,9 +19,10 @@ public sealed class DiscoveryEventHandler(ILogger<DiscoveryEventHandler> logger,
             return;
         }
 
-        _discoveredTestCases.AddRange(discoveredTestCases);
+        var testCases = discoveredTestCases.ToArray();
+        _discoveredTestCases.AddRange(testCases);
 
-        logger.LogDebug("Added test cases: {@TestCases}", discoveredTestCases.Select(t => t.FullyQualifiedName));
+        logger.LogDebug("Added test cases: {@TestCases}", testCases.Select(t => t.FullyQualifiedName));
     }
 
     public void HandleDiscoveryComplete(long totalTests, IEnumerable<TestCase>? lastChunk, bool isAborted)
@@ -58,7 +59,7 @@ public sealed class DiscoveryEventHandler(ILogger<DiscoveryEventHandler> logger,
 
     public void Dispose()
     {
-        _discoveredTestCases?.Clear();
-        waitHandle?.Dispose();
+        _discoveredTestCases.Clear();
+        waitHandle.Dispose();
     }
 }

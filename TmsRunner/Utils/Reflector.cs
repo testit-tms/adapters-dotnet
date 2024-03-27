@@ -1,5 +1,5 @@
 using System.Reflection;
-using TmsRunner.Models;
+using TmsRunner.Entities;
 
 namespace TmsRunner.Utils;
 

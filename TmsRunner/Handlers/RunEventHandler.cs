@@ -6,7 +6,7 @@ using TmsRunner.Services;
 
 namespace TmsRunner.Handlers;
 
-public sealed class RunEventHandler(ILogger<RunEventHandler> logger, AutoResetEvent waitHandle,
+public sealed class RunEventHandler(ILogger<RunEventHandler> logger, EventWaitHandle waitHandle,
                                     ProcessorService processorService) : ITestRunEventsHandler, IDisposable
 {
     private readonly List<Task> _processTestResultsTasks = [];
@@ -21,7 +21,7 @@ public sealed class RunEventHandler(ILogger<RunEventHandler> logger, AutoResetEv
                                       ICollection<AttachmentSet>? runContextAttachments,
                                       ICollection<string>? executorUris)
     {
-        if (lastChunkArgs != null && lastChunkArgs.NewTestResults != null)
+        if (lastChunkArgs is { NewTestResults: not null })
         {
             _processTestResultsTasks.Add(ProcessTestResultsAsync(lastChunkArgs.NewTestResults));
         }
@@ -32,7 +32,7 @@ public sealed class RunEventHandler(ILogger<RunEventHandler> logger, AutoResetEv
 
     public void HandleTestRunStatsChange(TestRunChangedEventArgs? testRunChangedArgs)
     {
-        if (testRunChangedArgs != null && testRunChangedArgs.NewTestResults != null)
+        if (testRunChangedArgs is { NewTestResults: not null })
         {
             _processTestResultsTasks.Add(ProcessTestResultsAsync(testRunChangedArgs.NewTestResults));
         }
@@ -67,7 +67,7 @@ public sealed class RunEventHandler(ILogger<RunEventHandler> logger, AutoResetEv
 
     private async Task ProcessTestResultsAsync(IEnumerable<TestResult?>? testResults)
     {
-        if (testResults == null || !testResults.Any())
+        if (testResults == null)
         {
             return;
         }
@@ -96,7 +96,7 @@ public sealed class RunEventHandler(ILogger<RunEventHandler> logger, AutoResetEv
 
     public void Dispose()
     {
-        _processTestResultsTasks?.Clear();
-        waitHandle?.Dispose();
+        _processTestResultsTasks.Clear();
+        waitHandle.Dispose();
     }
 }

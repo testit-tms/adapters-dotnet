@@ -1,23 +1,22 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
-using System.Data;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using Tms.Adapter.Attributes;
 using Tms.Adapter.Utils;
+using TmsRunner.Entities.Configuration;
 using TmsRunner.Extensions;
-using TmsRunner.Models.Configuration;
 
 namespace TmsRunner.Services;
 
 public sealed class FilterService(ILogger<FilterService> logger, Replacer replacer)
 {
-    private static readonly Regex _parametersRegex = new("\\((.*)\\)");
+    private static readonly Regex ParametersRegex = new("\\((.*)\\)");
 
     // TODO: write unit tests
     public List<TestCase> FilterTestCases(string? assemblyPath,
-                                          IEnumerable<string?>? externalIds,
-                                          IEnumerable<TestCase> testCases)
+                                          IReadOnlyCollection<string?>? externalIds,
+                                          IReadOnlyCollection<TestCase> testCases)
     {
         var testCasesToRun = new List<TestCase>();
         var assembly = Assembly.LoadFrom(assemblyPath ?? string.Empty);
@@ -26,7 +25,7 @@ public sealed class FilterService(ILogger<FilterService> logger, Replacer replac
         foreach (var testCase in testCases)
         {
             var testMethod = allTestMethods.FirstOrDefault(
-                m => (m.DeclaringType!.FullName + "." + m.Name).Contains(_parametersRegex.Replace(testCase.FullyQualifiedName, string.Empty))
+                m => (m.DeclaringType!.FullName + "." + m.Name).Contains(ParametersRegex.Replace(testCase.FullyQualifiedName, string.Empty))
             );
 
             if (testMethod == null)
@@ -55,19 +54,19 @@ public sealed class FilterService(ILogger<FilterService> logger, Replacer replac
             if (attribute is ExternalIdAttribute externalId)
             {
                 var parameterNames = testMethod.GetParameters().Select(x => x.Name?.ToString());
-                var parameterValues = _parametersRegex.Match(testCase.DisplayName).Groups[1].Value.Split(',').Select(x => x.Replace("\"", string.Empty));
+                var parameterValues = ParametersRegex.Match(testCase.DisplayName).Groups[1].Value.Split(',').Select(x => x.Replace("\"", string.Empty));
                 var parameterDictionary = parameterNames
                     .Select(x => x ?? string.Empty)
                     .Zip(parameterValues, (k, v) => new { k, v })
                     .ToDictionary(x => x.k, x => x.v);
-                return replacer.ReplaceParameters(externalId.Value, parameterDictionary!);
+                return replacer.ReplaceParameters(externalId.Value, parameterDictionary);
             }
         }
 
         return (testMethod.DeclaringType!.FullName + "." + testMethod.Name).ComputeHash();
     }
 
-    public static List<TestCase> FilterTestCasesByLabels(AdapterConfig config, IEnumerable<TestCase> testCases)
+    public static List<TestCase> FilterTestCasesByLabels(AdapterConfig config, IReadOnlyCollection<TestCase> testCases)
     {
         var labelsToRun = config.TmsLabelsOfTestsToRun?.Split(',').Select(x => x.Trim()).ToList();
         var testCasesName = testCases.Select(t => t.FullyQualifiedName);
@@ -81,8 +80,8 @@ public sealed class FilterService(ILogger<FilterService> logger, Replacer replac
 
         foreach (var testMethod in testMethods)
         {
-            var fullName = testMethod?.DeclaringType?.FullName + "." + testMethod?.Name;
-            var customAttributes = testMethod?.GetCustomAttributes(false) ?? [];
+            var fullName = testMethod.DeclaringType?.FullName + "." + testMethod.Name;
+            var customAttributes = testMethod.GetCustomAttributes(false);
 
             foreach (var attribute in customAttributes)
             {

@@ -4,9 +4,9 @@ using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
 using Tms.Adapter.Models;
+using TmsRunner.Entities;
+using TmsRunner.Entities.AutoTest;
 using TmsRunner.Managers;
-using TmsRunner.Models;
-using TmsRunner.Models.AutoTest;
 using TmsRunner.Utils;
 using File = Tms.Adapter.Models.File;
 
@@ -31,10 +31,10 @@ public sealed class ProcessorService(ILogger<ProcessorService> logger,
             {
                 case MessageType.TmsStep:
                     {
-                        var step = JsonSerializer.Deserialize<Step>(message?.Value ?? string.Empty);
+                        var step = JsonSerializer.Deserialize<Step>(message.Value ?? string.Empty);
                         if (step == null)
                         {
-                            logger.LogWarning("Can not deserialize step: {Step}", message?.Value);
+                            logger.LogWarning("Can not deserialize step: {Step}", message.Value);
                             break;
                         }
 
@@ -50,10 +50,9 @@ public sealed class ProcessorService(ILogger<ProcessorService> logger,
                         {
                             var calledMethod = GetCalledMethod(step.CallerMethod);
 
-                            while (parentStep != null && calledMethod != null &&
-                                   parentStep?.CurrentMethod != calledMethod)
+                            while (parentStep != null && calledMethod != null && parentStep.CurrentMethod != calledMethod)
                             {
-                                parentStep = parentStep?.ParentStep;
+                                parentStep = parentStep.ParentStep;
                                 nestingLevel--;
                             }
 
@@ -78,11 +77,11 @@ public sealed class ProcessorService(ILogger<ProcessorService> logger,
                     }
                 case MessageType.TmsStepResult:
                     {
-                        var stepResult = JsonSerializer.Deserialize<StepResult>(message?.Value ?? string.Empty);
+                        var stepResult = JsonSerializer.Deserialize<StepResult>(message.Value ?? string.Empty);
 
                         if (stepResult == null)
                         {
-                            logger.LogWarning("Can not deserialize step result: {StepResult}", message?.Value ?? string.Empty);
+                            logger.LogWarning("Can not deserialize step result: {StepResult}", message.Value ?? string.Empty);
                             break;
                         }
 
@@ -97,7 +96,7 @@ public sealed class ProcessorService(ILogger<ProcessorService> logger,
                     }
                 case MessageType.TmsStepAttachmentAsText:
                     {
-                        var attachment = JsonSerializer.Deserialize<File>(message?.Value ?? string.Empty);
+                        var attachment = JsonSerializer.Deserialize<File>(message.Value ?? string.Empty);
                         using var ms = new MemoryStream(Encoding.UTF8.GetBytes(attachment!.Content));
                         var createdAttachment =
                             await apiClient.UploadAttachmentAsync(Path.GetFileName(attachment.Name), ms).ConfigureAwait(false);
@@ -118,11 +117,11 @@ public sealed class ProcessorService(ILogger<ProcessorService> logger,
                     }
                 case MessageType.TmsStepAttachment:
                     {
-                        var file = JsonSerializer.Deserialize<File>(message?.Value ?? string.Empty);
+                        var file = JsonSerializer.Deserialize<File>(message.Value ?? string.Empty);
 
                         if (System.IO.File.Exists(file!.PathToFile))
                         {
-                            using var fs = new FileStream(file.PathToFile, FileMode.Open, FileAccess.Read);
+                            await using var fs = new FileStream(file.PathToFile, FileMode.Open, FileAccess.Read);
                             var attachment = await apiClient.UploadAttachmentAsync(Path.GetFileName(file.PathToFile), fs).ConfigureAwait(false);
 
                             if (parentStep is not null)

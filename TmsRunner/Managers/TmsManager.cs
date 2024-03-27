@@ -2,8 +2,8 @@
 using TestIT.ApiClient.Api;
 using TestIT.ApiClient.Client;
 using TestIT.ApiClient.Model;
-using TmsRunner.Models;
-using TmsRunner.Models.AutoTest;
+using TmsRunner.Entities;
+using TmsRunner.Entities.AutoTest;
 using TmsRunner.Utils;
 
 namespace TmsRunner.Managers;

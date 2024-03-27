@@ -4,9 +4,9 @@ using System.Text.RegularExpressions;
 using Tms.Adapter.Attributes;
 using Tms.Adapter.Models;
 using Tms.Adapter.Utils;
+using TmsRunner.Entities;
+using TmsRunner.Entities.AutoTest;
 using TmsRunner.Extensions;
-using TmsRunner.Models;
-using TmsRunner.Models.AutoTest;
 
 namespace TmsRunner.Utils;
 

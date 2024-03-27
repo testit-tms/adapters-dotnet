@@ -1,31 +1,25 @@
 using CommandLine;
 
-namespace TmsRunner.Models.Configuration;
+namespace TmsRunner.Entities.Configuration;
 
 public sealed class AdapterConfig
 {
-    [Option('r', "runner", Required = true,
-        HelpText =
-            "Set path to test runner. Example: --runner '/opt/homebrew/Cellar/dotnet/6.0.110/libexec/sdk/6.0.110/vstest.console.dll'")]
+    [Option('r', "runner", Required = true, HelpText = "Set path to test runner. Example: --runner '/opt/homebrew/Cellar/dotnet/6.0.110/libexec/sdk/6.0.110/vstest.console.dll'")]
     public string? RunnerPath { get; set; }
 
-    [Option('t', "testassembly", Required = true,
-        HelpText = "Set path to test assembly. Example: --testassembly '/Tests/tests.dll'")]
+    [Option('t', "testassembly", Required = true, HelpText = "Set path to test assembly. Example: --testassembly '/Tests/tests.dll'")]
     public string? TestAssemblyPath { get; set; }
 
-    [Option('a', "testadapter", Required = false,
-        HelpText = "Set path to test adapter. Example: --testadapter '/Tests/testsAdapter.dll'")]
+    [Option('a', "testadapter", Required = false, HelpText = "Set path to test adapter. Example: --testadapter '/Tests/testsAdapter.dll'")]
     public string? TestAdapterPath { get; set; }
 
-    [Option('l', "logger", Required = false,
-        HelpText = "Set path to logger. Example: --logger '/Tests/logger.dll'")]
+    [Option('l', "logger", Required = false, HelpText = "Set path to logger. Example: --logger '/Tests/logger.dll'")]
     public string? LoggerPath { get; set; }
 
     [Option("tmsLabelsOfTestsToRun", Required = false, HelpText = "Set labels of autotests to run. Example: --tmsLabelsOfTestsToRun smoke OR --tmsLabelsOfTestsToRun smoke,prod,cloud")]
     public string? TmsLabelsOfTestsToRun { get; set; }
 
-    [Option('d', "debug", Required = false,
-        HelpText = "Set debug level for logging. Example: --debug")]
+    [Option('d', "debug", Required = false, HelpText = "Set debug level for logging. Example: --debug")]
     public bool IsDebug { get; set; }
 
     [Option("tmsUrl", Required = false, HelpText = "Set TMS host address.")]

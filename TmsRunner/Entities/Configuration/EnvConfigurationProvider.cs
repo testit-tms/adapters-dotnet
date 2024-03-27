@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Configuration;
 
-namespace TmsRunner.Models.Configuration;
+namespace TmsRunner.Entities.Configuration;
 
 public sealed class EnvConfigurationProvider : ConfigurationProvider
 {

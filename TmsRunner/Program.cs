@@ -13,19 +13,19 @@ using Serilog.Settings.Configuration;
 using System.Net;
 using TestIT.ApiClient.Api;
 using Tms.Adapter.Utils;
+using TmsRunner.Entities;
+using TmsRunner.Entities.Configuration;
 using TmsRunner.Enums;
 using TmsRunner.Extensions;
 using TmsRunner.Handlers;
 using TmsRunner.Managers;
-using TmsRunner.Models;
-using TmsRunner.Models.Configuration;
 using TmsRunner.Services;
 using TmsRunner.Utils;
 using ConfigurationManager = TmsRunner.Managers.ConfigurationManager;
 
 namespace TmsRunner;
 
-public class Program
+public static class Program
 {
     public static async Task<int> Main(string[] args)
     {
@@ -86,6 +86,7 @@ public class Program
                 .ReadFrom.Services(services)
                 .Enrich.FromLogContext()
                 .MinimumLevel.Debug()
+                .MinimumLevel.Override("System.Net.Http.HttpClient", LogEventLevel.Warning)
                 .WriteTo.Console(LogEventLevel.Information))
             .ConfigureServices((hostContext, services) =>
             {
@@ -116,7 +117,7 @@ public class Program
                         {
                             BasePath = tmsSettings.Url ?? string.Empty,
                             ApiKeyPrefix = new Dictionary<string, string> { { "Authorization", "PrivateToken" } },
-                            ApiKey = new Dictionary<string, string> { { "Authorization", tmsSettings?.PrivateToken ?? string.Empty } }
+                            ApiKey = new Dictionary<string, string> { { "Authorization", tmsSettings.PrivateToken ?? string.Empty } }
                         };
                     })
                     .AddTransient(provider => new HttpClientHandler
@@ -145,12 +146,12 @@ public class Program
                     .AddTransient<LogParser>()
                     .AddTransient<FilterService>()
                     .AddTransient<ProcessorService>()
-                    .AddTransient(provider => new AutoResetEvent(false))
+                    .AddTransient<EventWaitHandle>(_ => new AutoResetEvent(false))
                     .AddTransient<DiscoveryEventHandler>()
                     .AddTransient<RunEventHandler>()
                     .AddTransient<IVsTestConsoleWrapper, VsTestConsoleWrapper>(provider => new VsTestConsoleWrapper(
                         provider.GetRequiredService<AdapterConfig>().RunnerPath ?? string.Empty,
-                        new ConsoleParameters { LogFilePath = Path.Combine(Directory.GetCurrentDirectory(), @"log.txt") }
+                        new ConsoleParameters { LogFilePath = Path.Combine(Directory.GetCurrentDirectory(), "log.txt") }
                     ))
                     .AddTransient<RunService>();
             });

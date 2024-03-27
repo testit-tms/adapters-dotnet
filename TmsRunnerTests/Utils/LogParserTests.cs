@@ -6,7 +6,7 @@ namespace TmsRunnerTests.Utils;
 [TestClass]
 public class LogParserTests
 {
-    private static readonly string message =
+    private static readonly string Message =
         MessageType.TmsParameters + ": {\"testType\":\"Simple\", \"secondParam\":\"123\"}\n" +
         MessageType.TmsStep +
         ": {\"Guid\":\"5ebaef93-cc90-440e-adf9-d23a95a3b328\",\"StartedOn\":\"2023-03-28T10:26:53.269419Z\",\"CompletedOn\":null,\"Duration\":0,\"Title\":\"TestCleanup\",\"Description\":null,\"Instance\":\"SumTests\",\"CurrentMethod\":\"TestCleanup\",\"CallerMethod\":null,\"Args\":{},\"Result\":null,\"Steps\":[],\"ParentStep\":null,\"NestingLevel\":0,\"CallerMethodType\":2,\"CurrentMethodType\":2,\"Links\":[],\"Attachments\":[],\"Outcome\":null}\n" +
@@ -37,7 +37,7 @@ public class LogParserTests
         const string key02 = "secondParam";
         const string value02 = "123";
 
-        var parameters = LogParser.GetParameters(message);
+        var parameters = LogParser.GetParameters(Message);
 
         Assert.IsNotNull(parameters);
         Assert.AreEqual(ValueCount, parameters.Count);
@@ -66,7 +66,7 @@ public class LogParserTests
     [TestMethod]
     public void GetMessage_TraceWithMessage()
     {
-        var result = LogParser.GetMessage(message);
+        var result = LogParser.GetMessage(Message);
 
         Assert.AreEqual(MessageValue, result);
     }
@@ -108,7 +108,7 @@ public class LogParserTests
             Type = LinkType.Defect
         };
 
-        var result = LogParser.GetLinks(message);
+        var result = LogParser.GetLinks(Message);
 
         Assert.IsNotNull(result);
         Assert.AreEqual(ValueCount, result.Count);

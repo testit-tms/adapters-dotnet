@@ -5,9 +5,9 @@ namespace TmsRunnerTests.Utils;
 [TestClass]
 public class ReplacerTests
 {
-    private const string valueWithTags = "some string {a} {b} {c}";
+    private const string ValueWithTags = "some string {a} {b} {c}";
 
-    private static readonly Dictionary<string, string> parametersWithValue = new()
+    private static readonly Dictionary<string, string> ParametersWithValue = new()
     {
         { "a", "first" },
         { "b", "second" },
@@ -19,7 +19,7 @@ public class ReplacerTests
     {
         var replacer = new Replacer();
 
-        var value = replacer.ReplaceParameters(null, parametersWithValue);
+        var value = replacer.ReplaceParameters(null, ParametersWithValue);
 
         Assert.IsNull(value);
     }
@@ -29,7 +29,7 @@ public class ReplacerTests
     {
         var replacer = new Replacer();
 
-        var value = replacer.ReplaceParameters(string.Empty, parametersWithValue);
+        var value = replacer.ReplaceParameters(string.Empty, ParametersWithValue);
 
         Assert.AreEqual(string.Empty, value);
     }
@@ -40,9 +40,9 @@ public class ReplacerTests
         var replacer = new Replacer();
         var parameters = new Dictionary<string, string>();
 
-        var value = replacer.ReplaceParameters(valueWithTags, parameters);
+        var value = replacer.ReplaceParameters(ValueWithTags, parameters);
 
-        Assert.AreEqual(valueWithTags, value);
+        Assert.AreEqual(ValueWithTags, value);
     }
 
     [TestMethod]
@@ -51,7 +51,7 @@ public class ReplacerTests
         var replacer = new Replacer();
         const string exceptedValue = "some string first second third";
 
-        var value = replacer.ReplaceParameters(valueWithTags, parametersWithValue);
+        var value = replacer.ReplaceParameters(ValueWithTags, ParametersWithValue);
 
         Assert.AreEqual(exceptedValue, value);
     }
@@ -62,7 +62,7 @@ public class ReplacerTests
         var replacer = new Replacer();
         const string exceptedValue = "some string first second third";
 
-        var value = replacer.ReplaceParameters(exceptedValue, parametersWithValue);
+        var value = replacer.ReplaceParameters(exceptedValue, ParametersWithValue);
 
         Assert.AreEqual(exceptedValue, value);
     }

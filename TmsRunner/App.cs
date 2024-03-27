@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
+using TmsRunner.Entities;
+using TmsRunner.Entities.Configuration;
 using TmsRunner.Managers;
-using TmsRunner.Models;
-using TmsRunner.Models.Configuration;
 using TmsRunner.Services;
 
 namespace TmsRunner;

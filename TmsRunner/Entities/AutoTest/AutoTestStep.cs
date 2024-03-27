@@ -1,10 +1,10 @@
-namespace TmsRunner.Models.AutoTest;
+namespace TmsRunner.Entities.AutoTest;
 
 public sealed record AutoTestStep
 {
-    public string? Title { get; set; }
-    public string? Description { get; set; }
-    public List<AutoTestStep>? Steps { get; set; }
+    public string? Title;
+    public string? Description;
+    public List<AutoTestStep>? Steps;
 
     public static AutoTestStep ConvertFromStep(Step step)
     {

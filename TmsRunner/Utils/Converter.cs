@@ -1,9 +1,9 @@
 using TestIT.ApiClient.Model;
-using TmsRunner.Models.AutoTest;
+using TmsRunner.Entities.AutoTest;
 
 namespace TmsRunner.Utils;
 
-public sealed class Converter
+public static class Converter
 {
     public static CreateAutoTestRequest ConvertAutoTestDtoToPostModel(AutoTest autotest, string? projectId)
     {
@@ -71,20 +71,20 @@ public sealed class Converter
 
         return new AutoTestResultsForTestRunModel(
             autoTestExternalId: autotest.ExternalId ?? string.Empty,
-            outcome: Enum.Parse<AvailableTestResultOutcome>(autotest?.Outcome?.ToString() ?? string.Empty))
+            outcome: Enum.Parse<AvailableTestResultOutcome>(autotest.Outcome?.ToString() ?? string.Empty))
         {
             ConfigurationId = new Guid(configurationId ?? string.Empty),
             Links = links ?? [],
-            Message = autotest?.Message ?? string.Empty,
-            Traces = autotest?.Traces ?? string.Empty,
-            StartedOn = autotest?.StartedOn,
-            CompletedOn = autotest?.CompletedOn,
-            Duration = autotest?.Duration,
-            Attachments = autotest?.Attachments?.Select(a => new AttachmentPutModel(a)).ToList() ?? [],
-            Parameters = autotest?.Parameters ?? [],
-            StepResults = ConvertResultStepToModel(autotest?.StepResults),
-            SetupResults = ConvertResultStepToModel(autotest?.SetupResults),
-            TeardownResults = ConvertResultStepToModel(autotest?.TeardownResults)
+            Message = autotest.Message ?? string.Empty,
+            Traces = autotest.Traces ?? string.Empty,
+            StartedOn = autotest.StartedOn,
+            CompletedOn = autotest.CompletedOn,
+            Duration = autotest.Duration,
+            Attachments = autotest.Attachments?.Select(a => new AttachmentPutModel(a)).ToList() ?? [],
+            Parameters = autotest.Parameters ?? [],
+            StepResults = ConvertResultStepToModel(autotest.StepResults),
+            SetupResults = ConvertResultStepToModel(autotest.SetupResults),
+            TeardownResults = ConvertResultStepToModel(autotest.TeardownResults)
         };
     }
 
@@ -104,8 +104,8 @@ public sealed class Converter
             Duration = s.Duration,
             Attachments = s.Attachments?.Select(a => new AttachmentPutModel(a)).ToList() ?? [],
             Parameters = s.Parameters ?? [],
-            StepResults = ConvertResultStepToModel(s?.Steps),
-            Outcome = Enum.Parse<AvailableTestResultOutcome>(s?.Outcome ?? string.Empty)
+            StepResults = ConvertResultStepToModel(s.Steps),
+            Outcome = Enum.Parse<AvailableTestResultOutcome>(s.Outcome ?? string.Empty)
         }).ToList() ?? [];
     }
 
