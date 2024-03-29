@@ -56,19 +56,25 @@ public static class ConfigurationManager
 
     private static void Validate(TmsSettings settings)
     {
-        if (string.IsNullOrWhiteSpace(settings.Url))
+        
+        if (!Uri.IsWellFormedUriString(settings.Url, UriKind.Absolute))
         {
-            throw new ConfigurationErrorsException("Url is empty");
+            throw new ConfigurationErrorsException("Url is invalid");
         }
 
         if (string.IsNullOrWhiteSpace(settings.PrivateToken))
         {
-            throw new ConfigurationErrorsException("Private token is empty");
+            throw new ConfigurationErrorsException("Private token is invalid");
         }
 
-        if (string.IsNullOrWhiteSpace(settings.ConfigurationId))
+        if (!Guid.TryParse(settings.ProjectId, out var _))
         {
-            throw new ConfigurationErrorsException("Configuration id is empty");
+            throw new ConfigurationErrorsException("Project id is invalid");
+        }
+
+        if (!Guid.TryParse(settings.ConfigurationId, out var _))
+        {
+            throw new ConfigurationErrorsException("Configuration id is invalid");
         }
 
         if (!string.IsNullOrWhiteSpace(settings.RunSettings) && !IsValidXml(settings.RunSettings))
@@ -79,21 +85,30 @@ public static class ConfigurationManager
         switch (settings.AdapterMode)
         {
             case 0:
-            case 1:
                 {
-                    if (string.IsNullOrWhiteSpace(settings.TestRunId))
+                    if (!Guid.TryParse(settings.TestRunId, out var _))
                     {
                         throw new ConfigurationErrorsException(
-                            "Adapter works in mode 0 or 1. Config should contains test run id and configuration id.");
+                            "Adapter works in mode 0. Config should contains valid test run id.");
+                    }
+
+                    break;
+                }
+            case 1:
+                {
+                    if (!Guid.TryParse(settings.TestRunId, out var _))
+                    {
+                        throw new ConfigurationErrorsException(
+                            "Adapter works in mode 1. Config should contains valid test run id.");
                     }
 
                     break;
                 }
             case 2:
-                if (string.IsNullOrWhiteSpace(settings.ProjectId) || !string.IsNullOrWhiteSpace(settings.TestRunId))
+                if (Guid.TryParse(settings.TestRunId, out var _))
                 {
                     throw new ConfigurationErrorsException(
-                        "Adapter works in mode 2. Config should contains project id and configuration id. Also doesn't contains test run id.");
+                        "Adapter works in mode 2. Config should not contains test run id.");
                 }
 
                 break;

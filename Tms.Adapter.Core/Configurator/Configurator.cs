@@ -17,18 +17,33 @@ public static class Configurator
 
     public static TmsSettings GetConfig()
     {
-        var defaultJsonConfigPath =
-            Path.Combine(AppDomain.CurrentDomain.BaseDirectory, GetConfigFileName());
-
-        if (!File.Exists(defaultJsonConfigPath))
-            throw new Exception("Can not found config path");
-
-        var options = new JsonSerializerOptions
+        var config = new TmsSettings 
         {
-            PropertyNameCaseInsensitive = true
+            AutomaticCreationTestCases  = false,
+            CertValidation = true
         };
 
-        var config = JsonSerializer.Deserialize<TmsSettings>(File.ReadAllText(defaultJsonConfigPath), options);
+        var defaultJsonConfigPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, GetConfigFileName());
+
+        if (File.Exists(defaultJsonConfigPath))
+        {
+            var options = new JsonSerializerOptions
+            {
+                PropertyNameCaseInsensitive = true
+            };
+
+            var fileConfig = JsonSerializer.Deserialize<TmsSettings>(File.ReadAllText(defaultJsonConfigPath), options);
+
+            if (fileConfig != null)
+            {
+                config = fileConfig;
+            }
+        }
+        else 
+        {
+            Console.WriteLine($"Configuration file was not found at {defaultJsonConfigPath}");
+        }
+
 
         return ApplyEnv(config);
     }
@@ -42,8 +57,8 @@ public static class Configurator
 
     private static TmsSettings ApplyEnv(TmsSettings settings)
     {
-        var url = Environment.GetEnvironmentVariable(TmsUrl);
-        if (!string.IsNullOrWhiteSpace(url))
+        var url = Environment.GetEnvironmentVariable(TmsUrl);     
+        if (Uri.IsWellFormedUriString(url, UriKind.Absolute))
         {
             settings.Url = url;
         }
@@ -55,19 +70,19 @@ public static class Configurator
         }
 
         var projectId = Environment.GetEnvironmentVariable(TmsProjectId);
-        if (!string.IsNullOrWhiteSpace(projectId))
+        if (Guid.TryParse(projectId, out var _))
         {
             settings.ProjectId = projectId;
         }
 
-        var configId = Environment.GetEnvironmentVariable(TmsConfigurationId);
-        if (!string.IsNullOrWhiteSpace(configId))
+        var configurationId = Environment.GetEnvironmentVariable(TmsConfigurationId);
+        if (Guid.TryParse(configurationId, out var _))
         {
-            settings.ConfigurationId = configId;
+            settings.ConfigurationId = configurationId;
         }
 
         var testRunId = Environment.GetEnvironmentVariable(TmsTestRunId);
-        if (!string.IsNullOrWhiteSpace(testRunId))
+        if (Guid.TryParse(testRunId, out var _))
         {
             settings.TestRunId = testRunId;
         }
@@ -79,15 +94,14 @@ public static class Configurator
         }
         
         var createTestCase = Environment.GetEnvironmentVariable(TmsAutomaticCreationTestCases);
-        if (!string.IsNullOrWhiteSpace(createTestCase))
+        if (bool.TryParse(createTestCase, out var value) && value)
         {
-            settings.AutomaticCreationTestCases = bool.Parse(createTestCase);
+            settings.AutomaticCreationTestCases = value;
         }
 
-        var validCert = Environment.GetEnvironmentVariable(TmsCertValidation);
-        if (!string.IsNullOrWhiteSpace(validCert))
+        if (bool.TryParse(Environment.GetEnvironmentVariable(TmsCertValidation), out var validCert) && !validCert)
         {
-            settings.CertValidation = bool.Parse(validCert);
+            settings.CertValidation = false;
         }
 
         return settings;
