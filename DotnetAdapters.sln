@@ -12,15 +12,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TmsRunner", "TmsRunner\TmsR
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tms.Adapter", "Tms.Adapter\Tms.Adapter.csproj", "{B5482D1B-736D-4E8D-88D9-5242922B58D8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TmsRunnerTests", "TmsRunnerTests\TmsRunnerTests.csproj", "{5ACF7A63-C444-43D5-87A9-90D43801D28A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TmsRunnerTests", "TmsRunnerTests\TmsRunnerTests.csproj", "{5ACF7A63-C444-43D5-87A9-90D43801D28A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tms.Adapter.Core", "Tms.Adapter.Core\Tms.Adapter.Core.csproj", "{671EC822-3ED1-4797-850E-CA9952B8E5B3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tms.Adapter.Core", "Tms.Adapter.Core\Tms.Adapter.Core.csproj", "{671EC822-3ED1-4797-850E-CA9952B8E5B3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tms.Adapter.CoreTests", "Tms.Adapter.CoreTests\Tms.Adapter.CoreTests.csproj", "{11F581C6-4B0F-424C-8160-6F0C4055C4F2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tms.Adapter.CoreTests", "Tms.Adapter.CoreTests\Tms.Adapter.CoreTests.csproj", "{11F581C6-4B0F-424C-8160-6F0C4055C4F2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tms.Adapter.XUnit", "Tms.Adapter.XUnit\Tms.Adapter.XUnit.csproj", "{B5612734-4F6B-4801-9D17-5A1195C8D2A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tms.Adapter.XUnit", "Tms.Adapter.XUnit\Tms.Adapter.XUnit.csproj", "{B5612734-4F6B-4801-9D17-5A1195C8D2A0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tms.Adapter.SpecFlowPlugin", "Tms.Adapter.SpecFlowPlugin\Tms.Adapter.SpecFlowPlugin.csproj", "{47C8A533-91F4-43E9-B75B-5DA46A9A05AD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tms.Adapter.SpecFlowPlugin", "Tms.Adapter.SpecFlowPlugin\Tms.Adapter.SpecFlowPlugin.csproj", "{47C8A533-91F4-43E9-B75B-5DA46A9A05AD}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tms.Adapter.MSTest", "Tms.Adapter.MSTest\Tms.Adapter.MSTest.csproj", "{3124F948-FB31-4B60-9FB5-4CB267AF43F2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -56,6 +58,10 @@ Global
 		{47C8A533-91F4-43E9-B75B-5DA46A9A05AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{47C8A533-91F4-43E9-B75B-5DA46A9A05AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{47C8A533-91F4-43E9-B75B-5DA46A9A05AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3124F948-FB31-4B60-9FB5-4CB267AF43F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3124F948-FB31-4B60-9FB5-4CB267AF43F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3124F948-FB31-4B60-9FB5-4CB267AF43F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3124F948-FB31-4B60-9FB5-4CB267AF43F2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
