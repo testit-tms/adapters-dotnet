@@ -67,12 +67,12 @@ public static class ConfigurationManager
             throw new ConfigurationErrorsException("Private token is invalid");
         }
 
-        if (!Guid.TryParse(settings.ProjectId, out var _))
+        if (!Guid.TryParse(settings.ProjectId, out _))
         {
             throw new ConfigurationErrorsException("Project id is invalid");
         }
-
-        if (!Guid.TryParse(settings.ConfigurationId, out var _))
+        
+        if (!Guid.TryParse(settings.ConfigurationId, out _))
         {
             throw new ConfigurationErrorsException("Configuration id is invalid");
         }
@@ -86,7 +86,7 @@ public static class ConfigurationManager
         {
             case 0:
                 {
-                    if (!Guid.TryParse(settings.TestRunId, out var _))
+                    if (!Guid.TryParse(settings.TestRunId, out _))
                     {
                         throw new ConfigurationErrorsException(
                             "Adapter works in mode 0. Config should contains valid test run id.");
@@ -96,7 +96,7 @@ public static class ConfigurationManager
                 }
             case 1:
                 {
-                    if (!Guid.TryParse(settings.TestRunId, out var _))
+                    if (!Guid.TryParse(settings.TestRunId, out _))
                     {
                         throw new ConfigurationErrorsException(
                             "Adapter works in mode 1. Config should contains valid test run id.");
@@ -105,12 +105,6 @@ public static class ConfigurationManager
                     break;
                 }
             case 2:
-                if (Guid.TryParse(settings.TestRunId, out var _))
-                {
-                    throw new ConfigurationErrorsException(
-                        "Adapter works in mode 2. Config should not contains test run id.");
-                }
-
                 break;
             default:
                 throw new Exception($"Incorrect adapter mode: {settings.AdapterMode}");
@@ -121,7 +115,7 @@ public static class ConfigurationManager
     {
         try
         {
-            if (string.IsNullOrEmpty(xmlStr))
+            if (string.IsNullOrWhiteSpace(xmlStr))
             {
                 return false;
             }
