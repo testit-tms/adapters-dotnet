@@ -5,6 +5,7 @@ on:
     paths:
       - "Tms.Adapter/**"
       - "TmsRunner/**"
+      - ".github/**/test-tms-runner.yml"
       - "!**.csproj"
   workflow_dispatch:
 env:
@@ -65,7 +66,7 @@ jobs:
           dotnet add ${{ env.TEST_ROOT }}/${{ matrix.project_name }}.csproj reference Tms.Adapter/Tms.Adapter.csproj
           dotnet build --configuration Release --property WarningLevel=0 dotnet-examples/${{ matrix.project_name }}
           dotnet build --configuration Release --property WarningLevel=0 TmsRunner
-          dotnet build --configuration Release --property WarningLevel=0 api-validator-dotnet
+          dotnet build --configuration Debug --property WarningLevel=0 api-validator-dotnet
           pip install testit-cli
           echo "VSTEST_CONSOLE=$(find /usr/share/dotnet/sdk -type f -name "vstest.console.dll" 2>/dev/null | head -n 1)" >> $GITHUB_ENV
       - name: Create TestRun
@@ -77,4 +78,4 @@ jobs:
           ${{ env.TMS_RUNNER }} --runner "${{ env.VSTEST_CONSOLE }}" --testassembly "${{ env.TEST_DLL }}"
       - name: Validate
         run: |
-          dotnet test --configuration Release --no-build --logger:"console;verbosity=detailed" api-validator-dotnet
+          dotnet test --configuration Debug --no-build --logger:"console;verbosity=detailed" api-validator-dotnet
