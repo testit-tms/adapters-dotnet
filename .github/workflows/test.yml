@@ -6,6 +6,7 @@ on:
       - "Tms.Adapter.Core/**"
       - "Tms.Adapter.SpecFlowPlugin/**"
       - "Tms.Adapter.XUnit/**"
+      - ".github/**/test.yml"
       - "!**.csproj"
   workflow_dispatch:
 env:
@@ -67,7 +68,7 @@ jobs:
           dotnet add ${{ env.TEST_ROOT }}/${{ matrix.project_name }}.csproj reference Tms.Adapter.Core/Tms.Adapter.Core.csproj
           dotnet add ${{ env.TEST_ROOT }}/${{ matrix.project_name }}.csproj reference ${{ env.ADAPTER_PACKAGE }}
           dotnet build --configuration Release --property WarningLevel=0 dotnet-examples/${{ matrix.project_name }}
-          dotnet build --configuration Release --property WarningLevel=0 api-validator-dotnet
+          dotnet build --configuration Debug --property WarningLevel=0 api-validator-dotnet
           pip install testit-cli
       - name: Create TestRun
         run: |
@@ -78,4 +79,4 @@ jobs:
           dotnet test --configuration Release --no-build dotnet-examples/${{ matrix.project_name }} || exit 0
       - name: Validate
         run: |
-          dotnet test --configuration Release --no-build --logger:"console;verbosity=detailed" api-validator-dotnet
+          dotnet test --configuration Debug --no-build --logger:"console;verbosity=detailed" api-validator-dotnet
