@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using System.Text.Json;
 using System.Text.RegularExpressions;
+using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Serilog;
 using Tms.Adapter.Models;
@@ -287,10 +288,8 @@ namespace TmsRunner.Services
                 Parameters = new Dictionary<string, string>(),
                 Attachments = attachmentIds,
             };
-            if (!string.IsNullOrEmpty(testResult.ErrorStackTrace))
-            {
-                autoTestResultRequestBody.Traces = testResult.ErrorStackTrace.TrimStart();
-            }
+            
+            autoTestResultRequestBody.Traces = autoTestResultRequestBody.Message + "\n" + testResult.ErrorStackTrace?.TrimStart();
 
             return autoTestResultRequestBody;
         }
