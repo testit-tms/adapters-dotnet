@@ -15,7 +15,8 @@ public static class Configurator
     private const string TmsAutomaticCreationTestCases = "TMS_AUTOMATIC_CREATION_TEST_CASES";
     private const string TmsCertValidation = "TMS_CERT_VALIDATION";
     private const string ConfigFile = "TMS_CONFIG_FILE";
-
+    private static readonly JsonSerializerOptions SerializerOptions = new() { PropertyNameCaseInsensitive = true };
+    
     public static TmsSettings GetConfig()
     {
         var config = new TmsSettings 
@@ -28,12 +29,7 @@ public static class Configurator
 
         if (File.Exists(defaultJsonConfigPath))
         {
-            var options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            };
-
-            var fileConfig = JsonSerializer.Deserialize<TmsSettings>(File.ReadAllText(defaultJsonConfigPath), options);
+            var fileConfig = JsonSerializer.Deserialize<TmsSettings>(File.ReadAllText(defaultJsonConfigPath), SerializerOptions);
 
             if (fileConfig != null)
             {
@@ -58,10 +54,10 @@ public static class Configurator
         return envConfigFileName ?? DefaultFileName;
     }
 
-    private static TmsSettings ApplyEnv(TmsSettings settings)
+    private static void ApplyEnv(TmsSettings settings)
     {
         var url = Environment.GetEnvironmentVariable(TmsUrl);     
-        if (Uri.IsWellFormedUriString(url, UriKind.Absolute))
+        if (!string.IsNullOrWhiteSpace(url) && Uri.IsWellFormedUriString(url, UriKind.Absolute))
         {
             settings.Url = url;
         }
@@ -73,19 +69,19 @@ public static class Configurator
         }
 
         var projectId = Environment.GetEnvironmentVariable(TmsProjectId);
-        if (Guid.TryParse(projectId, out var _))
+        if (!string.IsNullOrWhiteSpace(projectId) && Guid.TryParse(projectId, out _))
         {
             settings.ProjectId = projectId;
         }
 
         var configurationId = Environment.GetEnvironmentVariable(TmsConfigurationId);
-        if (Guid.TryParse(configurationId, out var _))
+        if (!string.IsNullOrWhiteSpace(configurationId) && Guid.TryParse(configurationId, out _))
         {
             settings.ConfigurationId = configurationId;
         }
 
         var testRunId = Environment.GetEnvironmentVariable(TmsTestRunId);
-        if (Guid.TryParse(testRunId, out var _))
+        if (!string.IsNullOrWhiteSpace(testRunId) && Guid.TryParse(testRunId, out _))
         {
             settings.TestRunId = testRunId;
         }
@@ -106,8 +102,6 @@ public static class Configurator
         {
             settings.CertValidation = false;
         }
-
-        return settings;
     }
 
     private static void Validate(TmsSettings settings)
@@ -123,23 +117,25 @@ public static class Configurator
             throw new ConfigurationErrorsException("Private token is invalid");
         }
 
-        if (!Guid.TryParse(settings.ProjectId, out var _))
+        if (!Guid.TryParse(settings.ProjectId, out _))
         {
             throw new ConfigurationErrorsException("Project id is invalid");
         }
 
-        if (!Guid.TryParse(settings.ConfigurationId, out var _))
+        if (!Guid.TryParse(settings.ConfigurationId, out _))
         {
             throw new ConfigurationErrorsException("Configuration id is invalid");
         }
 
-        if (!string.IsNullOrWhiteSpace(settings.TestRunId))
+        if (string.IsNullOrWhiteSpace(settings.TestRunId))
         {
-            if (!Guid.TryParse(settings.TestRunId, out var _))
-            {
-                throw new ConfigurationErrorsException(
-                    "Config contains not valid test run id.");
-            }
+            return;
+        }
+
+        if (!Guid.TryParse(settings.TestRunId, out _))
+        {
+            throw new ConfigurationErrorsException(
+                "Config contains not valid test run id.");
         }
     }
 }
