@@ -1,13 +1,10 @@
-﻿using System;
+﻿namespace Tms.Adapter.Models;
 
-namespace Tms.Adapter.Models
+public class StepResult
 {
-    public class StepResult
-    {
-        public Guid Guid { get; set; }
-        public DateTime? CompletedOn { get; set; }
-        public long Duration { get; set; }
-        public string? Result { get; set; }
-        public string Outcome { get; set; }
-    }
+    public Guid Guid { get; set; }
+    public DateTime? CompletedOn { get; set; }
+    public long Duration { get; set; }
+    public string? Result { get; set; }
+    public string Outcome { get; set; }
 }

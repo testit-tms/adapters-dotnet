@@ -1,10 +1,9 @@
-﻿namespace Tms.Adapter.Attributes
+﻿namespace Tms.Adapter.Attributes;
+
+public class ExternalIdAttribute : BaseAttribute<string>
 {
-    public class ExternalIdAttribute : BaseAttribute<string>
+    public ExternalIdAttribute(string externalId)
     {
-        public ExternalIdAttribute(string externalId)
-        {
-            Value = externalId;
-        }
+        Value = externalId;
     }
 }

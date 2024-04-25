@@ -1,13 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿namespace Tms.Adapter.Attributes;
 
-namespace Tms.Adapter.Attributes
+public class LabelsAttribute : BaseAttribute<List<string>>
 {
-    public class LabelsAttribute : BaseAttribute<List<string>>
+    public LabelsAttribute(params string[] labels)
     {
-        public LabelsAttribute(params string[] labels)
-        {
-            Value = labels.ToList();
-        }
+        Value = labels.ToList();
     }
 }

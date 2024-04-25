@@ -1,10 +1,9 @@
-﻿namespace Tms.Adapter.Attributes
+﻿namespace Tms.Adapter.Attributes;
+
+public class TitleAttribute : BaseAttribute<string>
 {
-    public class TitleAttribute : BaseAttribute<string>
+    public TitleAttribute(string title)
     {
-        public TitleAttribute(string title)
-        {
-            Value = title;
-        }
+        Value = title;
     }
 }

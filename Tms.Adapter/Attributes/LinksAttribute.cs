@@ -1,20 +1,18 @@
-﻿using System;
-using Tms.Adapter.Models;
+﻿using Tms.Adapter.Models;
 
-namespace Tms.Adapter.Attributes
+namespace Tms.Adapter.Attributes;
+
+[AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
+public class LinksAttribute : BaseAttribute<Link>
 {
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
-    public class LinksAttribute : BaseAttribute<Link>
+    public LinksAttribute(string url, LinkType type = 0, string? title = null, string? description = null)
     {
-        public LinksAttribute(string url, LinkType type = 0, string? title = null, string? description = null)
+        Value = new Link
         {
-            Value = new Link
-            {
-                Url = url,
-                Type = type,
-                Title = title,
-                Description = description
-            };
-        }
+            Url = url,
+            Type = type,
+            Title = title,
+            Description = description
+        };
     }
 }

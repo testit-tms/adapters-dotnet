@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace Tms.Adapter.Models;
 
 public class StepDto
