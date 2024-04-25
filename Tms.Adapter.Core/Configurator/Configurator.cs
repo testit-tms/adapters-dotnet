@@ -1,3 +1,4 @@
+using System.Configuration;
 using System.Text.Json;
 
 namespace Tms.Adapter.Core.Configurator;
@@ -44,8 +45,10 @@ public static class Configurator
             Console.WriteLine($"Configuration file was not found at {defaultJsonConfigPath}");
         }
 
+        ApplyEnv(config);
+        Validate(config);
 
-        return ApplyEnv(config);
+        return config;
     }
 
     private static string GetConfigFileName()
@@ -105,5 +108,38 @@ public static class Configurator
         }
 
         return settings;
+    }
+
+    private static void Validate(TmsSettings settings)
+    {
+
+        if (!Uri.IsWellFormedUriString(settings.Url, UriKind.Absolute))
+        {
+            throw new ConfigurationErrorsException("Url is invalid");
+        }
+
+        if (string.IsNullOrWhiteSpace(settings.PrivateToken))
+        {
+            throw new ConfigurationErrorsException("Private token is invalid");
+        }
+
+        if (!Guid.TryParse(settings.ProjectId, out var _))
+        {
+            throw new ConfigurationErrorsException("Project id is invalid");
+        }
+
+        if (!Guid.TryParse(settings.ConfigurationId, out var _))
+        {
+            throw new ConfigurationErrorsException("Configuration id is invalid");
+        }
+
+        if (!string.IsNullOrWhiteSpace(settings.TestRunId))
+        {
+            if (!Guid.TryParse(settings.TestRunId, out var _))
+            {
+                throw new ConfigurationErrorsException(
+                    "Config contains not valid test run id.");
+            }
+        }
     }
 }
