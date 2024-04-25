@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-		<Version>1.5.1</Version>
+		<Version>1.5.2</Version>
         <TargetFramework>netstandard2.1</TargetFramework>
         <Nullable>enable</Nullable>
         <IsPackable>true</IsPackable>
@@ -9,13 +9,26 @@
         <PackageId>TestIT.Adapter.XUnit</PackageId>
         <Authors>Integration team</Authors>
         <Description>Test IT XUnit adapter</Description>
-        <Copyright>Copyright (c) 2019 - 2023 Test IT</Copyright>
+        <Copyright>Copyright (c) 2019 - 2024 Test IT</Copyright>
         <RepositoryUrl>https://github.com/testit-tms/adapters-dotnet</RepositoryUrl>
         <PackageProjectUrl>https://testit.software</PackageProjectUrl>
         <ImplicitUsings>enable</ImplicitUsings>
-        <LangVersion>latest</LangVersion>
+		<LangVersion>default</LangVersion>
         <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
         <PackageReadmeFile>README.md</PackageReadmeFile>
+        <AnalysisLevel>latest-recommended</AnalysisLevel>
+        <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+        <ErrorReport>none</ErrorReport>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+      <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+      <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+      <WarningLevel>4</WarningLevel>
     </PropertyGroup>
 
     <ItemGroup>

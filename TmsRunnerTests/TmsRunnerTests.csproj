@@ -3,10 +3,22 @@
     <PropertyGroup>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-
         <IsPackable>false</IsPackable>
-
         <TargetFramework>net8.0</TargetFramework>
+        <LangVersion>default</LangVersion>
+        <AnalysisLevel>latest-recommended</AnalysisLevel>
+        <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+        <ErrorReport>none</ErrorReport>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+      <WarningLevel>4</WarningLevel>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+      <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+      <WarningLevel>4</WarningLevel>
     </PropertyGroup>
 
     <ItemGroup>
