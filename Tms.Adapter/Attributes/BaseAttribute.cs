@@ -1,10 +1,7 @@
-﻿using System;
+﻿namespace Tms.Adapter.Attributes;
 
-namespace Tms.Adapter.Attributes
+[AttributeUsage(AttributeTargets.Method)]
+public class BaseAttribute<T> : Attribute
 {
-    [AttributeUsage(AttributeTargets.Method)]
-    public class BaseAttribute<T> : Attribute
-    {
-        public T? Value { get; set; }
-    }
+    public T? Value { get; set; }
 }

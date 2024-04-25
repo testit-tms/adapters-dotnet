@@ -36,4 +36,8 @@
       <ProjectReference Include="..\Tms.Adapter.Core\Tms.Adapter.Core.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
+    </ItemGroup>
+
 </Project>
