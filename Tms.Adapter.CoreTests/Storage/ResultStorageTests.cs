@@ -1,25 +1,24 @@
 using Tms.Adapter.Core.Storage;
 
-namespace Tms.Adapter.CoreTests;
+namespace Tms.Adapter.CoreTests.Storage;
 
 [TestClass]
 public class ResultStorageTests
 {
-    private ResultStorage _storage;
+    private readonly ResultStorage _storage;
 
     private const string ObjectId = "123";
     private const string ObjectValue = "321";
     private const string NotExistObjectId = "456";
-
-    [TestInitialize]
-    public void TestSetup()
+    
+    public ResultStorageTests()
     {
         _storage = new ResultStorage();
         _storage.Put(ObjectId, ObjectValue);
     }
 
     [TestMethod]
-    public void Get_ObjectExist()
+    public void GetObjectExist()
     {
         var value = _storage.Get<string>(ObjectId);
 
@@ -28,13 +27,13 @@ public class ResultStorageTests
 
     [TestMethod]
     [ExpectedException(typeof(KeyNotFoundException))]
-    public void Get_ObjectNotExist()
+    public void GetObjectNotExist()
     {
         _storage.Get<string>(NotExistObjectId);
     }
 
     [TestMethod]
-    public void Put_ObjectNotExist()
+    public void PutObjectNotExist()
     {
         const string newValue = "qwerty";
 
@@ -44,7 +43,7 @@ public class ResultStorageTests
     }
 
     [TestMethod]
-    public void Put_ObjectExist()
+    public void PutObjectExist()
     {
         const string newValue = "qwerty";
 
@@ -55,7 +54,7 @@ public class ResultStorageTests
     }
 
     [TestMethod]
-    public void Remove_ObjectNotExist()
+    public void RemoveObjectNotExist()
     {
         var value = _storage.Remove<string>(NotExistObjectId);
 
@@ -63,7 +62,7 @@ public class ResultStorageTests
     }
 
     [TestMethod]
-    public void Remove_ObjectExist()
+    public void RemoveObjectExist()
     {
         var value = _storage.Remove<string>(ObjectId);
 
