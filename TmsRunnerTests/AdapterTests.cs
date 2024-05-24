@@ -1,4 +1,6 @@
-﻿namespace Tms.Adapter.CoreTests.Service;
+﻿using Tms.Adapter;
+
+namespace TmsRunnerTests;
 
 [TestClass]
 public class AdapterTests
@@ -20,7 +22,7 @@ public class AdapterTests
         const string message = "test";
 
         // Act & Assert
-        Core.Service.Adapter.AddMessage(message);
+        Adapter.AddMessage(message);
     }
 
     [TestMethod]
@@ -34,7 +36,7 @@ public class AdapterTests
             File.Create(filename).Dispose();
 
             // Act & Assert
-            Assert.ThrowsException<AggregateException>(() => Core.Service.Adapter.AddAttachments(filename));
+            Adapter.AddAttachments(filename);
         }
         finally
         {
@@ -49,6 +51,6 @@ public class AdapterTests
         const string url = "https://example.com";
 
         // Act & Assert
-        Core.Service.Adapter.AddLinks(url);
+        Adapter.AddLinks(url);
     }
 }

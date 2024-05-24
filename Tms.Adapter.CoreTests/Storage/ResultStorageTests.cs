@@ -5,12 +5,11 @@ namespace Tms.Adapter.CoreTests.Storage;
 [TestClass]
 public class ResultStorageTests
 {
-    private readonly ResultStorage _storage;
-
     private const string ObjectId = "123";
     private const string ObjectValue = "321";
     private const string NotExistObjectId = "456";
-    
+    private readonly ResultStorage _storage;
+
     public ResultStorageTests()
     {
         _storage = new ResultStorage();
@@ -20,52 +19,65 @@ public class ResultStorageTests
     [TestMethod]
     public void GetObjectExist()
     {
-        var value = _storage.Get<string>(ObjectId);
+        // Act
+        var actual = _storage.Get<string>(ObjectId);
 
-        Assert.AreEqual(ObjectValue, value);
+        // Assert
+        Assert.AreEqual(ObjectValue, actual);
     }
 
     [TestMethod]
     [ExpectedException(typeof(KeyNotFoundException))]
     public void GetObjectNotExist()
     {
+        // Act & Assert
         _storage.Get<string>(NotExistObjectId);
     }
 
     [TestMethod]
     public void PutObjectNotExist()
     {
-        const string newValue = "qwerty";
+        // Arrange
+        const string expected = "qwerty";
 
-        var value = _storage.Put(NotExistObjectId, newValue);
+        // Act
+        var actual = _storage.Put(NotExistObjectId, expected);
 
-        Assert.AreEqual(newValue, value);
+        // Assert
+        Assert.AreEqual(expected, actual);
     }
 
     [TestMethod]
     public void PutObjectExist()
     {
-        const string newValue = "qwerty";
+        // Arrange
+        const string expected = "qwerty";
 
-        var value = _storage.Put(ObjectId, newValue);
+        // Act
+        var actual = _storage.Put(ObjectId, expected);
 
-        Assert.AreNotEqual(newValue, value);
-        Assert.AreEqual(ObjectValue, value);
+        // Assert
+        Assert.AreNotEqual(expected, actual);
+        Assert.AreEqual(ObjectValue, actual);
     }
 
     [TestMethod]
     public void RemoveObjectNotExist()
     {
-        var value = _storage.Remove<string>(NotExistObjectId);
+        // Act
+        var actual = _storage.Remove<string>(NotExistObjectId);
 
-        Assert.IsNull(value);
+        // Assert
+        Assert.IsNull(actual);
     }
 
     [TestMethod]
     public void RemoveObjectExist()
     {
-        var value = _storage.Remove<string>(ObjectId);
+        // Act
+        var actual = _storage.Remove<string>(ObjectId);
 
-        Assert.AreEqual(ObjectValue, value);
+        // Assert
+        Assert.AreEqual(ObjectValue, actual);
     }
 }

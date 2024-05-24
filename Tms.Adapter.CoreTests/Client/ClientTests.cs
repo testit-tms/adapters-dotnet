@@ -12,6 +12,7 @@ namespace Tms.Adapter.CoreTests.Client;
 public class ClientTests
 {
     private readonly ILogger<TmsClient> _logger = Substitute.For<ILogger<TmsClient>>();
+
     private readonly TmsSettings _settings = new()
     {
         Url = "https://example.com",
@@ -20,7 +21,7 @@ public class ClientTests
         ConfigurationId = Guid.NewGuid().ToString(),
         TestRunId = Guid.NewGuid().ToString()
     };
-    
+
     [TestMethod]
     public async Task IsAutotestExist()
     {
@@ -33,7 +34,7 @@ public class ClientTests
             .ThrowsExceptionAsync<ApiException>(async () => await client.IsAutotestExist(id).ConfigureAwait(false))
             .ConfigureAwait(false);
     }
-    
+
     [TestMethod]
     public async Task UpdateAutotest()
     {
@@ -50,7 +51,7 @@ public class ClientTests
         await Assert.ThrowsExceptionAsync<ApiException>(async () =>
             await client.UpdateAutotest(testContainer, classContainer).ConfigureAwait(false)).ConfigureAwait(false);
     }
-    
+
     [TestMethod]
     public async Task CreateAutotest()
     {
@@ -67,7 +68,7 @@ public class ClientTests
         await Assert.ThrowsExceptionAsync<ApiException>(async () =>
             await client.CreateAutotest(testContainer, classContainer).ConfigureAwait(false)).ConfigureAwait(false);
     }
-    
+
     [TestMethod]
     public async Task UpdateAutotestLinks()
     {
@@ -81,7 +82,7 @@ public class ClientTests
             .ThrowsExceptionAsync<ApiException>(
                 async () => await client.UpdateAutotest(id, links).ConfigureAwait(false)).ConfigureAwait(false);
     }
-    
+
     [TestMethod]
     public async Task TryLinkAutoTestToWorkItems()
     {
@@ -94,7 +95,7 @@ public class ClientTests
         await Assert.ThrowsExceptionAsync<ApiException>(async () =>
             await client.TryLinkAutoTestToWorkItems(id, workItemIds).ConfigureAwait(false)).ConfigureAwait(false);
     }
-    
+
     [TestMethod]
     public async Task SubmitTestCaseResult()
     {
@@ -112,7 +113,7 @@ public class ClientTests
                 await client.SubmitTestCaseResult(testContainer, classContainer).ConfigureAwait(false))
             .ConfigureAwait(false);
     }
-    
+
     [TestMethod]
     public async Task UploadAttachment()
     {
@@ -126,7 +127,7 @@ public class ClientTests
             .ThrowsExceptionAsync<ApiException>(async () =>
                 await client.UploadAttachment(filename, stream).ConfigureAwait(false)).ConfigureAwait(false);
     }
-    
+
     [TestMethod]
     public async Task CreateTestRun()
     {
@@ -136,7 +137,7 @@ public class ClientTests
         // Act & Assert
         await client.CreateTestRun().ConfigureAwait(false);
     }
-    
+
     [TestMethod]
     public async Task CompleteTestRun()
     {

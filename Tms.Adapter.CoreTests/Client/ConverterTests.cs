@@ -27,7 +27,7 @@ public class ConverterTests
         Assert.IsInstanceOfType<CreateAutoTestRequest>(actual);
         Assert.IsNotNull(actual);
     }
-    
+
     [TestMethod]
     public void ConvertResultToModel()
     {
@@ -47,7 +47,7 @@ public class ConverterTests
         Assert.IsInstanceOfType<AutoTestResultsForTestRunModel>(actual);
         Assert.IsNotNull(actual);
     }
-    
+
     [TestMethod]
     public void ConvertAutoTestDtoToPutModel()
     {
