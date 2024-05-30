@@ -15,55 +15,70 @@ public class ReplacerTests
     };
 
     [TestMethod]
-    public void ReplaceParameters_ValueIsNull()
+    public void ReplaceParametersValueIsNull()
     {
+        // Arrange
         var replacer = new Replacer();
 
-        var value = replacer.ReplaceParameters(null, ParametersWithValue);
+        // Act
+        var actual = replacer.ReplaceParameters(null, ParametersWithValue);
 
-        Assert.IsNull(value);
+        // Assert
+        Assert.IsNull(actual);
     }
 
     [TestMethod]
-    public void ReplaceParameters_ValueIsEmptyString()
+    public void ReplaceParametersValueIsEmptyString()
     {
+        // Arrange
         var replacer = new Replacer();
 
-        var value = replacer.ReplaceParameters(string.Empty, ParametersWithValue);
+        // Act
+        var actual = replacer.ReplaceParameters(string.Empty, ParametersWithValue);
 
-        Assert.AreEqual(string.Empty, value);
+        // Assert
+        Assert.AreEqual(string.Empty, actual);
     }
 
     [TestMethod]
-    public void ReplaceParameters_ParametersIsEmpty()
+    public void ReplaceParametersParametersIsEmpty()
     {
+        // Arrange
         var replacer = new Replacer();
         var parameters = new Dictionary<string, string>();
 
-        var value = replacer.ReplaceParameters(ValueWithTags, parameters);
+        // Act
+        var actual = replacer.ReplaceParameters(ValueWithTags, parameters);
 
-        Assert.AreEqual(ValueWithTags, value);
+        // Assert
+        Assert.AreEqual(ValueWithTags, actual);
     }
 
     [TestMethod]
-    public void ReplaceParameters_ReplaceTags()
+    public void ReplaceParametersReplaceTags()
     {
+        // Arrange
         var replacer = new Replacer();
-        const string exceptedValue = "some string first second third";
+        const string excepted = "some string first second third";
 
-        var value = replacer.ReplaceParameters(ValueWithTags, ParametersWithValue);
+        // Act
+        var actual = replacer.ReplaceParameters(ValueWithTags, ParametersWithValue);
 
-        Assert.AreEqual(exceptedValue, value);
+        // Assert
+        Assert.AreEqual(excepted, actual);
     }
 
     [TestMethod]
-    public void ReplaceParameters_ValueWithOutTags()
+    public void ReplaceParametersValueWithOutTags()
     {
+        // Arrange
         var replacer = new Replacer();
-        const string exceptedValue = "some string first second third";
+        const string excepted = "some string first second third";
 
-        var value = replacer.ReplaceParameters(exceptedValue, ParametersWithValue);
+        // Act
+        var actual = replacer.ReplaceParameters(excepted, ParametersWithValue);
 
-        Assert.AreEqual(exceptedValue, value);
+        // Assert
+        Assert.AreEqual(excepted, actual);
     }
 }

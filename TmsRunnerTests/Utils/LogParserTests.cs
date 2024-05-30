@@ -6,6 +6,9 @@ namespace TmsRunnerTests.Utils;
 [TestClass]
 public class LogParserTests
 {
+    private const int ValueCount = 2;
+    private const string MessageValue = "Some message";
+
     private static readonly string Message =
         MessageType.TmsParameters + ": {\"testType\":\"Simple\", \"secondParam\":\"123\"}\n" +
         MessageType.TmsStep +
@@ -18,27 +21,29 @@ public class LogParserTests
         MessageType.TmsStepLinks +
         ": [{\"Type\":3,\"Title\":\"Test 2\",\"Url\":\"https://test2.example/\",\"Description\":\"Desc 2\",\"HasInfo\":false}]\n";
 
-    private const int ValueCount = 2;
-    private const string MessageValue = "Some message";
-
     [TestMethod]
-    public void GetParameters_TraceIsEmpty()
+    public void GetParametersTraceIsEmpty()
     {
+        // Act
         var parameters = LogParser.GetParameters(string.Empty);
 
+        // Assert
         Assert.IsNull(parameters);
     }
 
     [TestMethod]
-    public void GetParameters_TraceWithParameters()
+    public void GetParametersTraceWithParameters()
     {
+        // Arrange
         const string key01 = "testType";
         const string value01 = "Simple";
         const string key02 = "secondParam";
         const string value02 = "123";
 
+        // Act
         var parameters = LogParser.GetParameters(Message);
 
+        // Assert
         Assert.IsNotNull(parameters);
         Assert.AreEqual(ValueCount, parameters.Count);
         Assert.AreEqual(value01, parameters[key01]);
@@ -46,61 +51,73 @@ public class LogParserTests
     }
 
     [TestMethod]
-    public void GetParameters_TraceWithoutParameters()
+    public void GetParametersTraceWithoutParameters()
     {
+        // Arrange
         const string trace = "some trace";
 
-        var parameters = LogParser.GetParameters(trace);
+        // Act
+        var actual = LogParser.GetParameters(trace);
 
-        Assert.IsNull(parameters);
+        // Assert
+        Assert.IsNull(actual);
     }
 
     [TestMethod]
-    public void GetMessage_TraceIsEmpty()
+    public void GetMessageTraceIsEmpty()
     {
-        var result = LogParser.GetMessage(string.Empty);
+        // Act
+        var actual = LogParser.GetMessage(string.Empty);
 
-        Assert.AreEqual(string.Empty, result);
+        // Assert
+        Assert.AreEqual(string.Empty, actual);
     }
 
     [TestMethod]
-    public void GetMessage_TraceWithMessage()
+    public void GetMessageTraceWithMessage()
     {
-        var result = LogParser.GetMessage(Message);
+        // Act
+        var actual = LogParser.GetMessage(Message);
 
-        Assert.AreEqual(MessageValue, result);
+        // Assert
+        Assert.AreEqual(MessageValue, actual);
     }
 
     [TestMethod]
-    public void GetMessage_TraceWithoutMessage()
+    public void GetMessageTraceWithoutMessage()
     {
+        // Arrange
         const string trace = "some trace";
 
-        var result = LogParser.GetMessage(trace);
+        // Act
+        var actual = LogParser.GetMessage(trace);
 
-        Assert.AreEqual(string.Empty, result);
+        // Assert
+        Assert.AreEqual(string.Empty, actual);
     }
 
     [TestMethod]
-    public void GetLinks_TraceIsEmpty()
+    public void GetLinksTraceIsEmpty()
     {
-        var result = LogParser.GetLinks(string.Empty);
+        // Act
+        var actual = LogParser.GetLinks(string.Empty);
 
-        Assert.IsNull(result);
+        // Assert
+        Assert.IsNull(actual);
     }
 
     [TestMethod]
-    public void GetLinks_TraceWithLinks()
+    public void GetLinksTraceWithLinks()
     {
-        var expectLink1 = new Link
+        // Arrange
+        var expect1 = new Link
         {
             Title = "Test 1",
             Url = "https://test.example/",
             Description = "Desc 1",
             Type = LinkType.Issue
         };
-
-        var expectLink2 = new Link
+        var expect2 = new Link
         {
             Title = "Test 2",
             Url = "https://test2.example/",
@@ -108,21 +125,26 @@ public class LogParserTests
             Type = LinkType.Defect
         };
 
-        var result = LogParser.GetLinks(Message);
+        // Act
+        var actual = LogParser.GetLinks(Message);
 
-        Assert.IsNotNull(result);
-        Assert.AreEqual(ValueCount, result.Count);
-        Assert.AreEqual(expectLink1, result[0]);
-        Assert.AreEqual(expectLink2, result[1]);
+        // Assert
+        Assert.IsNotNull(actual);
+        Assert.AreEqual(ValueCount, actual.Count);
+        Assert.AreEqual(expect1, actual[0]);
+        Assert.AreEqual(expect2, actual[1]);
     }
 
     [TestMethod]
-    public void GetLinks_TraceWithoutLinks()
+    public void GetLinksTraceWithoutLinks()
     {
+        // Arrange
         const string trace = "some trace";
 
-        var result = LogParser.GetLinks(trace);
+        // Act
+        var actual = LogParser.GetLinks(trace);
 
-        Assert.IsNull(result);
+        // Assert
+        Assert.IsNull(actual);
     }
 }
