@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Version>1.5.0</Version>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <Nullable>enable</Nullable>
+    <IsPackable>true</IsPackable>
+    <Title>Test IT MSTest adapter</Title>
+    <PackageId>Tms.Adapter.MSTest</PackageId>
+    <Authors>Integration team</Authors>
+    <Description>Test IT MSTest adapter</Description>
+    <Copyright>Copyright (c) 2019 - 2023 Test IT</Copyright>
+    <RepositoryUrl>https://github.com/testit-tms/adapters-dotnet</RepositoryUrl>
+    <PackageProjectUrl>https://testit.software</PackageProjectUrl>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="../LICENSE.md" Pack="true" PackagePath="$(PackageLicenseFile)" />
+    <None Include="./README.md" Pack="true" PackagePath="$(PackageReadmeFile)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
+    <PackageReference Include="MSTest.TestAdapter" Version="3.0.2" />
+    <PackageReference Include="MSTest.TestFramework" Version="3.0.2" />
+    <PackageReference Include="TestIT.Adapter" Version="1.3.0" />
+    <PackageReference Include="Serilog" Version="2.12.0" />
+    <PackageReference Include="Serilog.Enrichers.Thread" Version="3.1.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="4.1.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="AspectInjector" Version="2.8.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Tms.Adapter.Core\Tms.Adapter.Core.csproj" />
+  </ItemGroup>
+
+</Project>
