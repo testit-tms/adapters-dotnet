@@ -18,6 +18,7 @@ public sealed class ClassConfigurationProvider(Config config) : ConfigurationPro
             { "ConfigFile", config.TmsConfigFile },
             { "RunSettings", config.TmsRunSettings },
             { "AutomaticCreationTestCases", config.TmsAutomaticCreationTestCases },
+            { "AutomaticUpdationLinksToTestCases", config.TmsAutomaticUpdationLinksToTestCases },
             { "CertValidation", config.TmsCertValidation }
         };
 

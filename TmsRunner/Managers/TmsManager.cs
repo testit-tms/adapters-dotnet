@@ -14,6 +14,9 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
                               ITestRunsApiAsync testRunsApi,
                               TmsSettings settings)
 {
+    private readonly int MAX_TRIES = 10;
+    private readonly int WAITING_TIME = 200;
+
     public async Task<string?> CreateTestRunAsync()
     {
         var createTestRunRequestBody = new CreateEmptyRequest
@@ -120,7 +123,7 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
         logger.LogDebug("Update autotest {@Autotest} is successfully", model);
     }
 
-    public async Task<bool> TryLinkAutoTestToWorkItemAsync(string autotestId, IEnumerable<string?> workItemIds)
+    public async Task LinkAutoTestToWorkItemAsync(string autotestId, IEnumerable<string?> workItemIds)
     {
         foreach (var workItemId in workItemIds)
         {
@@ -129,26 +132,65 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
                 autotestId,
                 workItemId);
 
-            try
+            for (var attempts = 0; attempts < MAX_TRIES; attempts++)
             {
-                await autoTestsApi.LinkAutoTestToWorkItemAsync(autotestId, new LinkAutoTestToWorkItemRequest(workItemId ?? string.Empty)).ConfigureAwait(false);
-            }
-            catch (ApiException e) when (e.Message.Contains("does not exist"))
-            {
-                logger.LogError(
-                     "Cannot link autotest {AutotestId} to work item {WorkItemId}: work item does not exist",
-                     autotestId,
-                     workItemId);
+                try
+                {
+                    await autoTestsApi.LinkAutoTestToWorkItemAsync(autotestId, new LinkAutoTestToWorkItemRequest(workItemId ?? string.Empty)).ConfigureAwait(false);
+                    logger.LogDebug(
+                        "Link autotest {AutotestId} to workitem {WorkitemId} is successfully",
+                    autotestId,
+                    workItemId);
 
-                return false;
-            }
+                    return;
+                }
+                catch (ApiException e)
+                {
+                    logger.LogError(
+                         "Cannot link autotest {AutotestId} to work item {WorkItemId}",
+                    autotestId,
+                    workItemId);
 
-            logger.LogDebug(
-                "Link autotest {AutotestId} to workitem {WorkitemId} is successfully",
-                autotestId,
-                workItemId);
+                    Thread.Sleep(WAITING_TIME);
+                }
+            }
         }
 
-        return true;
+    }
+
+    public async Task DeleteAutoTestLinkFromWorkItemAsync(string autotestId, string workItemId)
+    {
+        logger.LogDebug(
+            "Unlink autotest {AutotestId} from workitem {WorkitemId}",
+            autotestId,
+            workItemId);
+
+        for (var attempts = 0; attempts < MAX_TRIES; attempts++)
+        {
+            try
+            {
+                await autoTestsApi.DeleteAutoTestLinkFromWorkItemAsync(autotestId, workItemId);
+                logger.LogDebug(
+                    "Unlink autotest {AutotestId} from workitem {WorkitemId} is successfully",
+                    autotestId,
+                    workItemId);
+
+                return;
+            }
+            catch (ApiException e)
+            {
+                logger.LogError(
+                    "Cannot link autotest {AutotestId} to work item {WorkitemId}",
+                    autotestId,
+                    workItemId);
+
+                Thread.Sleep(WAITING_TIME);
+            }
+        }
+    }
+
+    public async Task<List<WorkItemIdentifierModel>> GetWorkItemsLinkedToAutoTestAsync(string autotestId)
+    {
+        return await autoTestsApi.GetWorkItemsLinkedToAutoTestAsync(autotestId);
     }
 }

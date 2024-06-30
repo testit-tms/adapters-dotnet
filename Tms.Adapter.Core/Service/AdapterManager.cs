@@ -48,7 +48,7 @@ public class AdapterManager
         _logger = logger.CreateLogger<AdapterManager>();
         _client = new TmsClient(logger.CreateLogger<TmsClient>(), config);
         _storage = new ResultStorage();
-        _writer = new Writer.Writer(logger.CreateLogger<Writer.Writer>(), _client);
+        _writer = new Writer.Writer(logger.CreateLogger<Writer.Writer>(), _client, config);
     }
 
     public virtual AdapterManager StartTestContainer(ClassContainer container)

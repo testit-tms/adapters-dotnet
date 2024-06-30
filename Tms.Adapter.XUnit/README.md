@@ -22,16 +22,17 @@ dotnet package add TestIT.Adapter.Core
 
 ### Configuration
 
-| Description                                                                                                                                                                                                                                                                                                         | File property              | Environment variable              |
-|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------|-----------------------------------|
-| Location of the TMS instance                                                                                                                                                                                                                                                                                        | url                        | TMS_URL                           |
-| API secret key [How to getting API secret key?](https://github.com/testit-tms/.github/tree/main/configuration#privatetoken)                                                                                                                                                                                         | privateToken               | TMS_PRIVATE_TOKEN                 | 
-| ID of project in TMS instance [How to getting project ID?](https://github.com/testit-tms/.github/tree/main/configuration#projectid)                                                                                                                                                                                 | projectId                  | TMS_PROJECT_ID                    | 
-| ID of configuration in TMS instance [How to getting configuration ID?](https://github.com/testit-tms/.github/tree/main/configuration#configurationid)                                                                                                                                                               | configurationId            | TMS_CONFIGURATION_ID              | 
-| ID of the created test run in TMS instance.                                                                                                                                                                                                                                                                         | testRunId                  | TMS_TEST_RUN_ID                   | 
-| It enables/disables certificate validation (**It's optional**). Default value - true                                                                                                                                                                                                                                | certValidation             | TMS_CERT_VALIDATION               | 
-| Mode of automatic creation test cases (**It's optional**). Default value - false. The adapter supports following modes:<br/>true - in this mode, the adapter will create a test case linked to the created autotest (not to the updated autotest)<br/>false - in this mode, the adapter will not create a test case | automaticCreationTestCases | TMS_AUTOMATIC_CREATION_TEST_CASES |
-| Enable debug logs (**It's optional**). Default value - false                                                                                                                                                                                                                                                        | isDebug                    | -                                 |
+| Description                                                                                                                                                                                                                                                                                                         | File property                     | Environment variable                       |
+|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------|--------------------------------------------|
+| Location of the TMS instance                                                                                                                                                                                                                                                                                        | url                               | TMS_URL                                    |
+| API secret key [How to getting API secret key?](https://github.com/testit-tms/.github/tree/main/configuration#privatetoken)                                                                                                                                                                                         | privateToken                      | TMS_PRIVATE_TOKEN                          | 
+| ID of project in TMS instance [How to getting project ID?](https://github.com/testit-tms/.github/tree/main/configuration#projectid)                                                                                                                                                                                 | projectId                         | TMS_PROJECT_ID                             | 
+| ID of configuration in TMS instance [How to getting configuration ID?](https://github.com/testit-tms/.github/tree/main/configuration#configurationid)                                                                                                                                                               | configurationId                   | TMS_CONFIGURATION_ID                       | 
+| ID of the created test run in TMS instance. If you don't provide a test run ID, the adapter will automatically create one.                                                                                                                                                                                          | testRunId                         | TMS_TEST_RUN_ID                            | 
+| It enables/disables certificate validation (**It's optional**). Default value - true                                                                                                                                                                                                                                | certValidation                    | TMS_CERT_VALIDATION                        | 
+| Mode of automatic creation test cases (**It's optional**). Default value - false. The adapter supports following modes:<br/>true - in this mode, the adapter will create a test case linked to the created autotest (not to the updated autotest)<br/>false - in this mode, the adapter will not create a test case | automaticCreationTestCases        | TMS_AUTOMATIC_CREATION_TEST_CASES          |
+| Mode of automatic updation links to test cases (**It's optional**). Default value - false. The adapter supports following modes:<br/>true - in this mode, the adapter will update links to test cases<br/>false - in this mode, the adapter will not update link to test cases                                      | automaticUpdationLinksToTestCases | TMS_AUTOMATIC_UPDATION_LINKS_TO_TEST_CASES |
+| Enable debug logs (**It's optional**). Default value - false                                                                                                                                                                                                                                                        | isDebug                           | -                                          |
 
 #### File
 
@@ -39,14 +40,15 @@ Create **Tms.config.json** file in the project directory:
 
 ```json
 {
-    "url": "URL",
-    "privateToken": "USER_PRIVATE_TOKEN",
-    "projectId": "PROJECT_ID",
-    "configurationId": "CONFIGURATION_ID",
-    "testRunId": "TEST_RUN_ID",
-    "automaticCreationTestCases": false,
-    "certValidation": true,
-    "isDebug": true
+  "url": "URL",
+  "privateToken": "USER_PRIVATE_TOKEN",
+  "projectId": "PROJECT_ID",
+  "configurationId": "CONFIGURATION_ID",
+  "testRunId": "TEST_RUN_ID",
+  "automaticCreationTestCases": false,
+  "automaticUpdationLinksToTestCases": false,
+  "certValidation": true,
+  "isDebug": true
 }
 ```
 

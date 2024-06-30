@@ -15,6 +15,8 @@ public class TmsClient : ITmsClient
     private readonly TestRunsApi _testRuns;
     private readonly AttachmentsApi _attachments;
     private readonly AutoTestsApi _autoTests;
+    private readonly int MAX_TRIES = 10;
+    private readonly int WAITING_TIME = 200;
 
     public TmsClient(ILogger<TmsClient> logger, TmsSettings settings)
     {
@@ -102,45 +104,75 @@ public class TmsClient : ITmsClient
         _logger.LogDebug("Update autotest {ExternalId} is successfully", externalId);
     }
 
-    public async Task<bool> TryLinkAutoTestToWorkItems(string externalId, IEnumerable<string> workItemIds)
+    public async Task LinkAutoTestToWorkItems(string autotestId, IEnumerable<string> workItemIds)
     {
-        var autotest = await GetAutotestByExternalId(externalId);
-
-        if (autotest == null)
-        {
-            _logger.LogError("Autotest with {ID} not found", externalId);
-
-            return false;
-        }
-
         foreach (var workItemId in workItemIds)
         {
             _logger.LogDebug(
-                "Linking autotest {AutotestId} to work item {WorkItemId}",
-                autotest.Id,
+                "Linking autotest {AutotestId} to workitem {WorkitemId}",
+                autotestId,
                 workItemId);
 
-            try
+            for (var attempts = 0; attempts < MAX_TRIES; attempts++)
             {
-                await _autoTests.LinkAutoTestToWorkItemAsync(autotest.Id.ToString(), new LinkAutoTestToWorkItemRequest(workItemId));
-            }
-            catch (ApiException e) when (e.Message.Contains("does not exist"))
-            {
-                _logger.LogError(
-                    "Cannot link autotest {AutotestId} to work item {WorkItemId}: work item does not exist",
-                    autotest.Id,
-                    workItemId);
+                try
+                {
+                    await _autoTests.LinkAutoTestToWorkItemAsync(autotestId, new LinkAutoTestToWorkItemRequest(workItemId ?? string.Empty)).ConfigureAwait(false);
+                    _logger.LogDebug(
+                        "Link autotest {AutotestId} to workitem {WorkitemId} is successfully",
+                        autotestId,
+                        workItemId);
 
-                return false;
-            }
+                    return;
+                }
+                catch (ApiException e)
+                {
+                    _logger.LogError(
+                         "Cannot link autotest {AutotestId} to work item {WorkItemId}: work item does not exist",
+                         autotestId,
+                         workItemId);
 
-            _logger.LogDebug(
-                "Link autotest {AutotestId} to work item {WorkItemId} is successfully",
-                autotest.Id,
-                workItemId);
+                    Thread.Sleep(WAITING_TIME);
+                }
+            }
         }
 
-        return true;
+    }
+
+    public async Task DeleteAutoTestLinkFromWorkItem(string autotestId, string workItemId)
+    {
+        _logger.LogDebug(
+            "Unlink autotest {AutotestId} from workitem {WorkitemId}",
+            autotestId,
+            workItemId);
+
+        for (var attempts = 0; attempts < MAX_TRIES; attempts++)
+        {
+            try
+            {
+                await _autoTests.DeleteAutoTestLinkFromWorkItemAsync(autotestId, workItemId);
+                _logger.LogDebug(
+                    "Unlink autotest {AutotestId} from workitem {WorkitemId} is successfully",
+                    autotestId,
+                    workItemId);
+
+                return;
+            }
+            catch (ApiException e)
+            {
+                _logger.LogError(
+                    "Cannot link autotest {AutotestId} to work item {WorkitemId}",
+                    autotestId,
+                    workItemId);
+
+                Thread.Sleep(WAITING_TIME);
+            }
+        }
+    }
+
+    public async Task<List<WorkItemIdentifierModel>> GetWorkItemsLinkedToAutoTest(string autotestId)
+    {
+        return await _autoTests.GetWorkItemsLinkedToAutoTestAsync(autotestId);
     }
 
     public async Task SubmitTestCaseResult(TestContainer result, ClassContainer container)
@@ -212,7 +244,7 @@ public class TmsClient : ITmsClient
         _logger.LogDebug("Complete test run is successfully");
     }
 
-    private async Task<AutoTestModel?> GetAutotestByExternalId(string externalId)
+    public async Task<AutoTestModel?> GetAutotestByExternalId(string externalId)
     {
         _logger.LogDebug("Getting autotest by external id {Id}", externalId);
 

@@ -12,6 +12,7 @@ public sealed record Config
     public string? TmsConfigFile;
     public string? TmsRunSettings;
     public string? TmsAutomaticCreationTestCases;
+    public string? TmsAutomaticUpdationLinksToTestCases;
     public string? TmsCertValidation;
     public string? TmsLabelsOfTestsToRun;
 }

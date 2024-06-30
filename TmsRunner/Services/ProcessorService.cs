@@ -203,10 +203,7 @@ public sealed class ProcessorService(ILogger<ProcessorService> logger,
 
         if (autoTest.WorkItemIds.Count > 0)
         {
-            if (!await apiClient.TryLinkAutoTestToWorkItemAsync(existAutotest.Id.ToString(), autoTest.WorkItemIds).ConfigureAwait(false))
-            {
-                return;
-            }
+            await UpdateTestLinkToWorkItems(existAutotest.Id.ToString(), autoTest.WorkItemIds);
         }
 
         if (!string.IsNullOrEmpty(testResult.ErrorMessage))
@@ -218,6 +215,27 @@ public sealed class ProcessorService(ILogger<ProcessorService> logger,
             testCaseSteps, attachmentIds, parameters);
 
         await apiClient.SubmitResultToTestRunAsync(tmsSettings.TestRunId, autoTestResultRequestBody).ConfigureAwait(false);
+    }
+
+    private async Task UpdateTestLinkToWorkItems(string autoTestId, List<string> workItemIds)
+    {
+        var linkedWorkItems = await apiClient.GetWorkItemsLinkedToAutoTestAsync(autoTestId);
+
+        foreach (var linkedWorkItem in linkedWorkItems) {
+            var linkedWorkItemId = linkedWorkItem.GlobalId.ToString();
+
+            if (workItemIds.Contains(linkedWorkItemId)) {
+                workItemIds.Remove(linkedWorkItemId);
+
+                continue;
+            }
+
+            if (tmsSettings.AutomaticUpdationLinksToTestCases) {
+                await apiClient.DeleteAutoTestLinkFromWorkItemAsync(autoTestId, linkedWorkItemId);
+            }
+        }
+
+        await apiClient.LinkAutoTestToWorkItemAsync(autoTestId, workItemIds);
     }
 
     private static AutoTestResult GetAutoTestResultsForTestRunModel(AutoTest autoTest,
