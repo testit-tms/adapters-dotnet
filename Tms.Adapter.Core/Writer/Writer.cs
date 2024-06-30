@@ -60,9 +60,19 @@ public class Writer : IWriter
         }
     }
 
-    private async Task UpdateTestLinkToWorkItems(string autoTestId, List<string> workItemIds)
+    private async Task UpdateTestLinkToWorkItems(string externalId, List<string> workItemIds)
     {
-        var linkedWorkItems = await _client.GetWorkItemsLinkedToAutoTest(autoTestId);
+        var autotest = await _client.GetAutotestByExternalId(externalId);
+
+        if (autotest == null)
+        {
+            _logger.LogError("Autotest with {ID} not found", externalId);
+            return;
+        }
+
+        var autotestId = autotest.Id.ToString();
+
+        var linkedWorkItems = await _client.GetWorkItemsLinkedToAutoTest(autotestId);
 
         foreach (var linkedWorkItem in linkedWorkItems)
         {
@@ -77,10 +87,10 @@ public class Writer : IWriter
 
             if (_tmsSettings.AutomaticUpdationLinksToTestCases)
             {
-                await _client.DeleteAutoTestLinkFromWorkItem(autoTestId, linkedWorkItemId);
+                await _client.DeleteAutoTestLinkFromWorkItem(autotestId, linkedWorkItemId);
             }
         }
 
-        await _client.LinkAutoTestToWorkItems(autoTestId, workItemIds);
+        await _client.LinkAutoTestToWorkItems(autotestId, workItemIds);
     }
 }

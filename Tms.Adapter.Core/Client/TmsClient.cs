@@ -244,7 +244,7 @@ public class TmsClient : ITmsClient
         _logger.LogDebug("Complete test run is successfully");
     }
 
-    private async Task<AutoTestModel?> GetAutotestByExternalId(string externalId)
+    public async Task<AutoTestModel?> GetAutotestByExternalId(string externalId)
     {
         _logger.LogDebug("Getting autotest by external id {Id}", externalId);
 
