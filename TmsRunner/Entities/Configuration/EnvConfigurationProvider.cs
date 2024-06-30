@@ -13,6 +13,7 @@ public sealed class EnvConfigurationProvider : ConfigurationProvider
     private const string EnvTmsAdapterMode = "TMS_ADAPTER_MODE";
     private const string EnvTmsRunSettings = "TMS_RUN_SETTINGS";
     private const string EnvTmsAutomaticCreationTestCases = "TMS_AUTOMATIC_CREATION_TEST_CASES";
+    private const string EnvTmsAutomaticUpdationLinksToTestCases = "TMS_AUTOMATIC_UPDATION_LINKS_TO_TEST_CASES";
     private const string EnvTmsCertValidation = "TMS_CERT_VALIDATION";
 
     public override void Load()
@@ -28,6 +29,7 @@ public sealed class EnvConfigurationProvider : ConfigurationProvider
             { "AdapterMode", Environment.GetEnvironmentVariable(EnvTmsAdapterMode) },
             { "RunSettings", Environment.GetEnvironmentVariable(EnvTmsRunSettings) },
             { "AutomaticCreationTestCases", Environment.GetEnvironmentVariable(EnvTmsAutomaticCreationTestCases) },
+            { "AutomaticUpdationLinksToTestCases", Environment.GetEnvironmentVariable(EnvTmsAutomaticUpdationLinksToTestCases) },
             { "CertValidation", Environment.GetEnvironmentVariable(EnvTmsCertValidation) },
         };
 

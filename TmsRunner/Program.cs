@@ -55,7 +55,10 @@ public static class Program
                     TmsTestRunName = ac.TmsTestRunName,
                     TmsAdapterMode = ac.TmsAdapterMode,
                     TmsConfigFile = ac.TmsConfigFile,
-                    TmsLabelsOfTestsToRun = ac.TmsLabelsOfTestsToRun
+                    TmsLabelsOfTestsToRun = ac.TmsLabelsOfTestsToRun,
+                    TmsAutomaticCreationTestCases = ac.TmsAutomaticCreationTestCases,
+                    TmsAutomaticUpdationLinksToTestCases = ac.TmsAutomaticUpdationLinksToTestCases,
+                    TmsCertValidation = ac.TmsCertValidation
                 };
             });
 

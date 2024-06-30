@@ -13,6 +13,7 @@ public static class Configurator
     private const string TmsTestRunId = "TMS_TEST_RUN_ID";
     private const string TmsTestRunName = "TMS_TEST_RUN_NAME";
     private const string TmsAutomaticCreationTestCases = "TMS_AUTOMATIC_CREATION_TEST_CASES";
+    private const string TmsAutomaticUpdationLinksToTestCases = "TMS_AUTOMATIC_UPDATION_LINKS_TO_TEST_CASES";
     private const string TmsCertValidation = "TMS_CERT_VALIDATION";
     private const string ConfigFile = "TMS_CONFIG_FILE";
     private static readonly JsonSerializerOptions SerializerOptions = new() { PropertyNameCaseInsensitive = true };
@@ -22,6 +23,7 @@ public static class Configurator
         var config = new TmsSettings 
         {
             AutomaticCreationTestCases  = false,
+            AutomaticUpdationLinksToTestCases = false,
             CertValidation = true
         };
 
@@ -96,6 +98,12 @@ public static class Configurator
         if (bool.TryParse(createTestCase, out var value) && value)
         {
             settings.AutomaticCreationTestCases = value;
+        }
+
+        var updateLinksToTestCase = Environment.GetEnvironmentVariable(TmsAutomaticUpdationLinksToTestCases);
+        if (bool.TryParse(updateLinksToTestCase, out var updateLinks) && updateLinks)
+        {
+            settings.AutomaticUpdationLinksToTestCases = updateLinks;
         }
 
         if (bool.TryParse(Environment.GetEnvironmentVariable(TmsCertValidation), out var validCert) && !validCert)

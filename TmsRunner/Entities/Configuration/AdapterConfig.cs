@@ -72,6 +72,9 @@ public sealed class AdapterConfig
     [Option("tmsAutomaticCreationTestCases", Required = false, HelpText = "Set automatic creation test cases.")]
     public string? TmsAutomaticCreationTestCases { get; init; }
 
+    [Option("TmsAutomaticUpdationLinksToTestCases", Required = false, HelpText = "Set automatic updation links to test cases.")]
+    public string? TmsAutomaticUpdationLinksToTestCases { get; init; }
+
     [Option("tmsCertValidation", Default = "true", Required = false, HelpText = "Set certificate validation.")]
     public string? TmsCertValidation { get; init; }
 
@@ -89,8 +92,10 @@ public sealed class AdapterConfig
             TmsConfigFile = TmsConfigFile,
             TmsRunSettings = TmsRunSettings,
             TmsAutomaticCreationTestCases = TmsAutomaticCreationTestCases,
+            TmsAutomaticUpdationLinksToTestCases = TmsAutomaticUpdationLinksToTestCases,
             TmsCertValidation = TmsCertValidation,
             TmsLabelsOfTestsToRun = TmsLabelsOfTestsToRun
+
         };
     }
 
