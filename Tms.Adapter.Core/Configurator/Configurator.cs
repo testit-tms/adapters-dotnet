@@ -1,5 +1,6 @@
 using System.Configuration;
-using System.Text.Json;
+
+using Newtonsoft.Json;
 
 namespace Tms.Adapter.Core.Configurator;
 
@@ -16,7 +17,6 @@ public static class Configurator
     private const string TmsAutomaticUpdationLinksToTestCases = "TMS_AUTOMATIC_UPDATION_LINKS_TO_TEST_CASES";
     private const string TmsCertValidation = "TMS_CERT_VALIDATION";
     private const string ConfigFile = "TMS_CONFIG_FILE";
-    private static readonly JsonSerializerOptions SerializerOptions = new() { PropertyNameCaseInsensitive = true };
     
     public static TmsSettings GetConfig()
     {
@@ -31,7 +31,7 @@ public static class Configurator
 
         if (File.Exists(defaultJsonConfigPath))
         {
-            var fileConfig = JsonSerializer.Deserialize<TmsSettings>(File.ReadAllText(defaultJsonConfigPath), SerializerOptions);
+            var fileConfig = JsonConvert.DeserializeObject<TmsSettings>(File.ReadAllText(defaultJsonConfigPath));
 
             if (fileConfig != null)
             {

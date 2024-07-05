@@ -1,8 +1,13 @@
 using System.Text.Json;
 using System.Text.Json.Nodes;
+
+using Newtonsoft.Json;
+
 using TechTalk.SpecFlow;
 using Tms.Adapter.Core.Models;
 using Tms.Adapter.Core.Utils;
+
+using JsonException = System.Text.Json.JsonException;
 
 namespace Tms.Adapter.SpecFlowPlugin;
 
@@ -17,10 +22,6 @@ public static class TmsTagParser
     private const string Labels = "LABELS";
     private const string Links = "LINKS";
     private const string WorkItemIds = "WORKITEMIDS";
-
-    private static readonly JsonSerializerOptions Options = new JsonSerializerOptions
-        { PropertyNameCaseInsensitive = true };
-
 
     public static TestContainer AddTags(TestContainer testContainer, FeatureInfo featureInfo,
         ScenarioInfo scenarioInfo, Dictionary<string, string> parameters)
@@ -145,11 +146,11 @@ public static class TmsTagParser
 
     private static LinkItem? GetLink(string source)
     {
-        return JsonSerializer.Deserialize<LinkItem>(source, Options);
+        return JsonConvert.DeserializeObject<LinkItem>(source);
     }
 
     private static List<LinkItem?>? GetLinks(string source)
     {
-        return JsonSerializer.Deserialize<List<LinkItem?>>(source, Options);
+        return JsonConvert.DeserializeObject<List<LinkItem?>>(source);
     }
 }

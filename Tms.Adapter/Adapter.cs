@@ -1,5 +1,7 @@
 ﻿using System.Diagnostics;
-using System.Text.Json;
+
+using Newtonsoft.Json;
+
 using Tms.Adapter.Models;
 
 namespace Tms.Adapter;
@@ -8,13 +10,13 @@ public static class Adapter
 {
     public static void AddLinks(params Link[] links)
     {
-        Console.WriteLine($"{MessageType.TmsStepLinks}: " + JsonSerializer.Serialize(links));
+        Console.WriteLine($"{MessageType.TmsStepLinks}: " + JsonConvert.SerializeObject(links));
     }
 
     public static void AddLinks(string url, string? title = null, string? description = null,
         LinkType? type = null)
     {
-        Console.WriteLine($"{MessageType.TmsStepLinks}: " + JsonSerializer.Serialize(new List<Link>
+        Console.WriteLine($"{MessageType.TmsStepLinks}: " + JsonConvert.SerializeObject(new List<Link>
         {
             new Link
             {
@@ -36,7 +38,7 @@ public static class Adapter
         var fullPath = Path.GetFullPath(pathToFile);
 
         Console.WriteLine($"{MessageType.TmsStepAttachment}: " +
-                          JsonSerializer.Serialize(new Models.File
+                          JsonConvert.SerializeObject(new Models.File
                               { PathToFile = fullPath, CallerMemberName = memberName }));
     }
 
@@ -56,7 +58,7 @@ public static class Adapter
             .Replace("$_executor_", string.Empty);
 
         Console.WriteLine($"{MessageType.TmsStepAttachmentAsText}: " +
-                          JsonSerializer.Serialize(new Models.File
+                          JsonConvert.SerializeObject(new Models.File
                               { Name = name, Content = content, CallerMemberName = memberName }));
     }
 

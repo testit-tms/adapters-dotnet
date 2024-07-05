@@ -66,7 +66,7 @@ public static class Converter
                 l.Title,
                 l.Url,
                 l.Description,
-                Enum.Parse<LinkType>(l.Type.ToString()!))
+                Enum.TryParse<LinkType>(l.Type?.ToString(), true, out var result) ? result : null)
         ).ToList();
 
         return new AutoTestResultsForTestRunModel(

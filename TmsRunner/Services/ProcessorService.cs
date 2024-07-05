@@ -1,7 +1,9 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
+
+using Newtonsoft.Json;
+
 using System.Text;
-using System.Text.Json;
 using System.Text.RegularExpressions;
 using Tms.Adapter.Models;
 using TmsRunner.Entities;
@@ -31,7 +33,7 @@ public sealed class ProcessorService(ILogger<ProcessorService> logger,
             {
                 case MessageType.TmsStep:
                     {
-                        var step = JsonSerializer.Deserialize<Step>(message.Value ?? string.Empty);
+                        var step = JsonConvert.DeserializeObject<Step>(message.Value ?? string.Empty);
                         if (step == null)
                         {
                             logger.LogWarning("Can not deserialize step: {Step}", message.Value);
@@ -77,7 +79,7 @@ public sealed class ProcessorService(ILogger<ProcessorService> logger,
                     }
                 case MessageType.TmsStepResult:
                     {
-                        var stepResult = JsonSerializer.Deserialize<StepResult>(message.Value ?? string.Empty);
+                        var stepResult = JsonConvert.DeserializeObject<StepResult>(message.Value ?? string.Empty);
 
                         if (stepResult == null)
                         {
@@ -96,7 +98,7 @@ public sealed class ProcessorService(ILogger<ProcessorService> logger,
                     }
                 case MessageType.TmsStepAttachmentAsText:
                     {
-                        var attachment = JsonSerializer.Deserialize<File>(message.Value ?? string.Empty);
+                        var attachment = JsonConvert.DeserializeObject<File>(message.Value ?? string.Empty);
                         using var ms = new MemoryStream(Encoding.UTF8.GetBytes(attachment!.Content));
                         var createdAttachment =
                             await apiClient.UploadAttachmentAsync(Path.GetFileName(attachment.Name), ms).ConfigureAwait(false);
@@ -117,7 +119,7 @@ public sealed class ProcessorService(ILogger<ProcessorService> logger,
                     }
                 case MessageType.TmsStepAttachment:
                     {
-                        var file = JsonSerializer.Deserialize<File>(message.Value ?? string.Empty);
+                        var file = JsonConvert.DeserializeObject<File>(message.Value ?? string.Empty);
 
                         if (System.IO.File.Exists(file!.PathToFile))
                         {

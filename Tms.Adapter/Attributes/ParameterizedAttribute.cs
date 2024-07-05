@@ -1,5 +1,7 @@
-﻿using System.Text.Json;
-using MethodBoundaryAspect.Fody.Attributes;
+﻿using MethodBoundaryAspect.Fody.Attributes;
+
+using Newtonsoft.Json;
+
 using Tms.Adapter.Models;
 
 namespace Tms.Adapter.Attributes;
@@ -14,7 +16,7 @@ public class ParameterizedAttribute : OnMethodBoundaryAspect
             .Zip(arguments, (k, v) => new { k, v })
             .ToDictionary(x => x.k, x => x.v);
             
-        Console.WriteLine($"{MessageType.TmsParameters}: " + JsonSerializer.Serialize(args));
+        Console.WriteLine($"{MessageType.TmsParameters}: " + JsonConvert.SerializeObject(args));
     }
 }
 
