@@ -1,5 +1,7 @@
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
-using System.Text.Json;
+
+using Newtonsoft.Json;
+
 using System.Text.RegularExpressions;
 using Tms.Adapter.Attributes;
 using Tms.Adapter.Models;
@@ -19,7 +21,7 @@ public sealed class LogParser(Replacer replacer)
         var match = regex.Match(traceJson);
         var json = match.Groups[1].Value;
 
-        return string.IsNullOrEmpty(json) ? null : JsonSerializer.Deserialize<Dictionary<string, string>>(json);
+        return string.IsNullOrEmpty(json) ? null : JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
     }
 
     public static string GetMessage(string traceJson)
@@ -45,7 +47,7 @@ public sealed class LogParser(Replacer replacer)
 
         var linksJsonArray = $"[ {string.Join(", ", matches.Select(m => m.Groups[1].Value))} ]";
 
-        return JsonSerializer.Deserialize<List<Link>>(linksJsonArray);
+        return JsonConvert.DeserializeObject<List<Link>>(linksJsonArray);
     }
 
     // TODO: write unit tests

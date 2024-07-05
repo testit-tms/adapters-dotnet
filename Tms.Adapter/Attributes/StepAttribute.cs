@@ -1,8 +1,10 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
-using System.Text.Json;
 using System.Text.RegularExpressions;
 using MethodBoundaryAspect.Fody.Attributes;
+
+using Newtonsoft.Json;
+
 using Tms.Adapter.Models;
 using Tms.Adapter.Utils;
 
@@ -128,7 +130,7 @@ public class StepAttribute : OnMethodBoundaryAspect
             CurrentMethodType = _currentMethodType
         };
 
-        Console.WriteLine($"{MessageType.TmsStep}: " + JsonSerializer.Serialize(step));
+        Console.WriteLine($"{MessageType.TmsStep}: " + JsonConvert.SerializeObject(step));
     }
 
     public override void OnExit(MethodExecutionArgs arg)
@@ -154,6 +156,6 @@ public class StepAttribute : OnMethodBoundaryAspect
             Outcome = outcome
         };
 
-        Console.WriteLine($"{MessageType.TmsStepResult}: " + JsonSerializer.Serialize(stepResult));
+        Console.WriteLine($"{MessageType.TmsStepResult}: " + JsonConvert.SerializeObject(stepResult));
     }
 }
