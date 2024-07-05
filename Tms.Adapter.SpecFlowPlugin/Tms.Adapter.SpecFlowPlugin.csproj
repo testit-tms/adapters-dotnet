@@ -37,8 +37,8 @@
     </ItemGroup>
     
     <ItemGroup>
-      <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
       <PackageReference Include="SpecFlow" Version="3.9.74" />
+      <PackageReference Include="System.Text.Json" Version="8.0.0" />
     </ItemGroup>
 
     <ItemGroup>

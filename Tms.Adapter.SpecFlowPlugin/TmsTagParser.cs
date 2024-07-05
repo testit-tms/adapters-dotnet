@@ -1,9 +1,13 @@
+using System.Text.Json;
+using System.Text.Json.Nodes;
+
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 using TechTalk.SpecFlow;
 using Tms.Adapter.Core.Models;
 using Tms.Adapter.Core.Utils;
+
+using JsonException = System.Text.Json.JsonException;
 
 namespace Tms.Adapter.SpecFlowPlugin;
 
@@ -115,10 +119,10 @@ public static class TmsTagParser
 
         try
         {
-            JObject.Parse(source);
+            JsonDocument.Parse(source);
             return true;
         }
-        catch (JsonReaderException)
+        catch (JsonException)
         {
             return false;
         }
@@ -131,10 +135,10 @@ public static class TmsTagParser
 
         try
         {
-            JObject.Parse(source);
+            JsonNode.Parse(source);
             return true;
         }
-        catch (JsonReaderException)
+        catch (JsonException)
         {
             return false;
         }
