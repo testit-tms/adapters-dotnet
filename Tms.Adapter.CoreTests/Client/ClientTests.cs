@@ -84,7 +84,31 @@ public class ClientTests
     }
 
     [TestMethod]
-    public async Task TryLinkAutoTestToWorkItems()
+    public async Task GetWorkItemsLinkedToAutoTest()
+    {
+        // Arrange
+        var client = new TmsClient(_logger, _settings);
+        var id = Guid.NewGuid().ToString();
+
+        // Act & Assert
+        await Assert.ThrowsExceptionAsync<ApiException>(async () =>
+            await client.GetWorkItemsLinkedToAutoTest(id).ConfigureAwait(false)).ConfigureAwait(false);
+    }
+    
+    [TestMethod]
+    public async Task DeleteAutoTestLinkFromWorkItem()
+    {
+        // Arrange
+        var client = new TmsClient(_logger, _settings);
+        var id = Guid.NewGuid().ToString();
+        const string workItemId = "";
+
+        // Act & Assert
+        await client.DeleteAutoTestLinkFromWorkItem(id, workItemId).ConfigureAwait(false);
+    }
+    
+    [TestMethod]
+    public async Task LinkAutoTestToWorkItems()
     {
         // Arrange
         var client = new TmsClient(_logger, _settings);
@@ -92,8 +116,7 @@ public class ClientTests
         var workItemIds = Array.Empty<string>();
 
         // Act & Assert
-        await Assert.ThrowsExceptionAsync<ApiException>(async () =>
-            await client.TryLinkAutoTestToWorkItems(id, workItemIds).ConfigureAwait(false)).ConfigureAwait(false);
+        await client.LinkAutoTestToWorkItems(id, workItemIds).ConfigureAwait(false);
     }
 
     [TestMethod]
