@@ -52,6 +52,9 @@ public class AdapterConfig
 
     [Option("tmsAdapterAutoTestRerunCount", Required = false, HelpText = "Set rerun failed tests count.")]
     public string TmsAdapterAutoTestRerunCount { get; set; }
+    
+    [Option("tmsAdapterParallelRunCount", Required = false, HelpText = "Set parallel tests run count.")]
+    public string TmsAdapterParallelRunCount { get; set; }
 
     [Option("tmsConfigFile", Required = false, HelpText = "Set configuration file name.")]
     public string TmsConfigFile { get; set; }
@@ -77,6 +80,7 @@ public class AdapterConfig
             TmsTestRunName = TmsTestRunName,
             TmsAdapterMode = TmsAdapterMode,
             TmsAdapterAutoTestRerunCount = TmsAdapterAutoTestRerunCount,
+            TmsAdapterParallelRunCount = TmsAdapterParallelRunCount,
             TmsConfigFile = TmsConfigFile,
             TmsRunSettings = TmsRunSettings,
             TmsAutomaticCreationTestCases = TmsAutomaticCreationTestCases,

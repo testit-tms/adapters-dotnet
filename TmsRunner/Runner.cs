@@ -11,18 +11,6 @@ namespace TmsRunner;
 
 public class Runner
 {
-    private const string DefaultRunSettings =
-        @"
-<RunSettings>
-    <MSTest>
-        <Parallelize>
-            <Workers>4</Workers>
-            <Scope>MethodLevel</Scope>
-        </Parallelize>
-    </MSTest>
-</RunSettings>
-";
-
     private readonly AdapterConfig _config;
     private readonly ILogger _logger;
     private readonly IVsTestConsoleWrapper _consoleWrapper;
@@ -35,7 +23,16 @@ public class Runner
         _logger = LoggerFactory.GetLogger().ForContext<Runner>();
         _consoleWrapper = new VsTestConsoleWrapper(config.RunnerPath,
             new ConsoleParameters { LogFilePath = Path.Combine(Directory.GetCurrentDirectory(), @"log.txt") });
-        _runSettings = DefaultRunSettings;
+        _runSettings = @$"
+<RunSettings>
+    <MSTest>
+        <Parallelize>
+            <Workers>{config.TmsAdapterParallelRunCount}</Workers>
+            <Scope>MethodLevel</Scope>
+        </Parallelize>
+    </MSTest>
+</RunSettings>
+";
         _processorService = processorService;
     }
 

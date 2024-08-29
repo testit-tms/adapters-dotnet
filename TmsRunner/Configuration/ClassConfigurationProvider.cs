@@ -24,6 +24,7 @@ public class ClassConfigurationProvider : ConfigurationProvider
             { "TestRunName", _config.TmsTestRunName },
             { "AdapterMode", _config.TmsAdapterMode },
             { "AdapterAutoTestRerunCount", _config.TmsAdapterAutoTestRerunCount },
+            { "AdapterParallelRunCount", _config.TmsAdapterParallelRunCount },
             { "ConfigFile", _config.TmsConfigFile },
             { "RunSettings", _config.TmsRunSettings },
             { "AutomaticCreationTestCases", _config.TmsAutomaticCreationTestCases },

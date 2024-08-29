@@ -131,6 +131,7 @@ internal class Program
                     TmsTestRunName = ac.TmsTestRunName,
                     TmsAdapterMode = ac.TmsAdapterMode,
                     TmsAdapterAutoTestRerunCount = ac.TmsAdapterAutoTestRerunCount,
+                    TmsAdapterParallelRunCount = ac.TmsAdapterParallelRunCount,
                     TmsConfigFile = ac.TmsConfigFile,
                     TmsLabelsOfTestsToRun = ac.TmsLabelsOfTestsToRun
                 };

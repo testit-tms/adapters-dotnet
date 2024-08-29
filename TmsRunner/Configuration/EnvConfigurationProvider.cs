@@ -12,6 +12,7 @@ public class EnvConfigurationProvider : ConfigurationProvider
     private const string EnvTmsTestRunName = "TMS_TEST_RUN_NAME";
     private const string EnvTmsAdapterMode = "TMS_ADAPTER_MODE";
     private const string EnvTmsAdapterAutoTestRerunCount = "TMS_ADAPTER_AUTOTESTS_RERUN_COUNT";
+    private const string EnvTmsAdapterParallelRunCount = "TMS_ADAPTER_PARALLEL_RUN_COUNT";
     private const string EnvTmsRunSettings = "TMS_RUN_SETTINGS";
     private const string EnvTmsAutomaticCreationTestCases = "TMS_AUTOMATIC_CREATION_TEST_CASES";
     private const string EnvTmsCertValidation = "TMS_CERT_VALIDATION";
@@ -28,6 +29,7 @@ public class EnvConfigurationProvider : ConfigurationProvider
             { "TestRunName", Environment.GetEnvironmentVariable(EnvTmsTestRunName) },
             { "AdapterMode", Environment.GetEnvironmentVariable(EnvTmsAdapterMode) },
             { "AdapterAutoTestRerunCount", Environment.GetEnvironmentVariable(EnvTmsAdapterAutoTestRerunCount) },
+            { "AdapterParallelRunCount", Environment.GetEnvironmentVariable(EnvTmsAdapterParallelRunCount) },
             { "RunSettings", Environment.GetEnvironmentVariable(EnvTmsRunSettings) },
             { "AutomaticCreationTestCases", Environment.GetEnvironmentVariable(EnvTmsAutomaticCreationTestCases) },
             { "CertValidation", Environment.GetEnvironmentVariable(EnvTmsCertValidation) },

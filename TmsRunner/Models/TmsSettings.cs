@@ -17,6 +17,7 @@ public class TmsSettings
     public string TestRunName { get; set; }
     public int AdapterMode { get; set; }
     public int AdapterAutoTestRerunCount { get; set; }
+    public int AdapterParallelRunCount { get; set; }
     public string RunSettings { get; set; }
     public bool AutomaticCreationTestCases { get; set; }
     public bool CertValidation { get; set; }
