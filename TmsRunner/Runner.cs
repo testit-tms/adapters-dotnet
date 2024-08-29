@@ -14,8 +14,12 @@ public class Runner
     private const string DefaultRunSettings =
         @"
 <RunSettings>
-  <RunConfiguration>
-  </RunConfiguration> 
+    <MSTest>
+        <Parallelize>
+            <Workers>4</Workers>
+            <Scope>MethodLevel</Scope>
+        </Parallelize>
+    </MSTest>
 </RunSettings>
 ";
 
@@ -80,8 +84,15 @@ public class Runner
         using var waitHandle = new AutoResetEvent(false);
         var handler = new RunEventHandler(waitHandle, isLastRun, _processorService);
 
-        _consoleWrapper.RunTests(testCases, _runSettings, handler);
-
+        try
+        {
+            _consoleWrapper.RunTests(testCases, _runSettings, handler);
+        }
+        catch (Exception e)
+        {
+            _logger.Information(e.Message);
+        }
+        
         waitHandle.WaitOne();
 
         return handler.FailedTestResults;
