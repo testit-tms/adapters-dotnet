@@ -35,7 +35,7 @@ public class Runner
         _logger = LoggerFactory.GetLogger().ForContext<Runner>();
         _consoleWrapper = new VsTestConsoleWrapper(config.RunnerPath,
             new ConsoleParameters { LogFilePath = Path.Combine(Directory.GetCurrentDirectory(), @"log.txt") });
-        _runSettings = string.IsNullOrWhiteSpace(_config.TmsRunSettings) ? DefaultRunSettings : _config.TmsRunSettings;
+        _runSettings = DefaultRunSettings;
         _processorService = processorService;
     }
 
