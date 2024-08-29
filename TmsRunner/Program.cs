@@ -20,6 +20,7 @@ internal class Program
         var log = LoggerFactory.GetLogger(config.IsDebug).ForContext<Program>();
 
         log.Information("Adapter works in {Mode} mode", settings.AdapterMode);
+        log.Information("Count tests in parallel is {Count}", settings.AdapterParallelRunCount);
         log.Debug("Parameters:");
         log.Debug("Runner Path: {Path}", config.RunnerPath);
         log.Debug("Test Assembly Path: {Path}", config.TestAssemblyPath);
@@ -38,6 +39,8 @@ internal class Program
         }
         
         var processorService = new ProcessorService(apiClient, settings.TestRunId, parser);
+
+        config.TmsAdapterParallelRunCount = settings.AdapterParallelRunCount.ToString();
         var runner = new Runner(config, processorService);
         runner.InitialiseRunner();
 
