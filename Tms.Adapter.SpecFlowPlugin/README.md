@@ -14,8 +14,8 @@ Install-Package TestIT.Adapter.Core
 #### .NET CLI
 
 ```bash
-dotnet package add TestIT.Adapter.SpecFlowPlugin
-dotnet package add TestIT.Adapter.Core
+dotnet add package TestIT.Adapter.SpecFlowPlugin
+dotnet add package TestIT.Adapter.Core
 ```
 
 #### Add runtime plugin
