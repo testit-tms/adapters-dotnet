@@ -28,11 +28,15 @@ public class TmsClient : ITmsClient
         cfg.AddApiKey("Authorization", settings.PrivateToken);
 
         var httpClientHandler = new HttpClientHandler();
-        httpClientHandler.ServerCertificateCustomValidationCallback = (_, _, _, _) => _settings.CertValidation;
 
-        _testRuns = new TestRunsApi(new HttpClient(), cfg, httpClientHandler);
-        _attachments = new AttachmentsApi(new HttpClient(), cfg, httpClientHandler);
-        _autoTests = new AutoTestsApi(new HttpClient(), cfg, httpClientHandler);
+        if (!_settings.CertValidation)
+        {
+            httpClientHandler.ServerCertificateCustomValidationCallback = (_, _, _, _) => true;
+        }
+
+        _testRuns = new TestRunsApi(new HttpClient(httpClientHandler), cfg);
+        _attachments = new AttachmentsApi(new HttpClient(httpClientHandler), cfg);
+        _autoTests = new AutoTestsApi(new HttpClient(httpClientHandler), cfg);
     }
 
     public async Task<bool> IsAutotestExist(string externalId)
