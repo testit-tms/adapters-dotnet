@@ -16,6 +16,7 @@ namespace TmsRunner.Services
     public class ProcessorService
     {
         public volatile bool UploadError;
+        public int TotalCountOfFailedTests;
         private readonly ITmsClient _apiClient;
         private readonly string _testRunId;
         private readonly LogParser _parser;
@@ -27,7 +28,6 @@ namespace TmsRunner.Services
             LogParser parser)
         {
             UploadError = false;
-            
             _apiClient = apiClient;
             _testRunId = testRunId;
             _parser = parser;
@@ -183,6 +183,10 @@ namespace TmsRunner.Services
             {
                 try
                 {
+                    if (testResult.Outcome == TestOutcome.Failed)
+                    {
+                        TotalCountOfFailedTests++;
+                    }
                     await ProcessAutoTest(testResult);
                     _logger.Information("Uploaded test {Name}", testResult.DisplayName);
                 }

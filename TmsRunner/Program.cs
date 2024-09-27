@@ -107,6 +107,7 @@ internal class Program
             var projectGlobalId = (await apiClient.GetProject()).GlobalId;
             var testRunUrl = new Uri(new Uri(settings.Url), $"projects/{projectGlobalId}/test-runs/{settings.TestRunId}/test-results");
             log.Information($"Test run {testRunUrl} finished.");
+            log.Information($"Count of failed tests: {processorService.TotalCountOfFailedTests}");
         }
 
         return processorService.UploadError ? 1 : 0;
