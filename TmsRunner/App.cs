@@ -48,7 +48,7 @@ public class App(ILogger<App> logger,
 
                     if (!string.IsNullOrEmpty(adapterConfig.TmsLabelsOfTestsToRun))
                     {
-                        testCases = FilterService.FilterTestCasesByLabels(adapterConfig, testCases);
+                        testCases = filterService.FilterTestCasesByLabels(adapterConfig, testCases);
                     }
 
                     break;

@@ -33,14 +33,15 @@ public class FilterServiceTests
     public void FilterTestCasesByLabels()
     {
         // Arrange
+        var filterService = new FilterService(_logger, _replacer);
         var config = new AdapterConfig
         {
             TestAssemblyPath = typeof(FilterServiceTests).Assembly.Location
         };
-        var testcases = new[] { new TestCase() };
+        var testcases = new[] { new TestCase { FullyQualifiedName = "test" } };
 
         // Act
-        var actual = FilterService.FilterTestCasesByLabels(config, testcases);
+        var actual = filterService.FilterTestCasesByLabels(config, testcases);
 
         // Assert
         Assert.AreEqual(0, actual.Count);

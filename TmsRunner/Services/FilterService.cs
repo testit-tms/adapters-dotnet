@@ -66,21 +66,25 @@ public sealed class FilterService(ILogger<FilterService> logger, Replacer replac
         return (testMethod.DeclaringType!.FullName + "." + testMethod.Name).ComputeHash();
     }
 
-    public static List<TestCase> FilterTestCasesByLabels(AdapterConfig config, IReadOnlyCollection<TestCase> testCases)
+    public List<TestCase> FilterTestCasesByLabels(AdapterConfig config, IReadOnlyCollection<TestCase> testCases)
     {
         var labelsToRun = config.TmsLabelsOfTestsToRun?.Split(',').Select(x => x.Trim()).ToList();
-        var testCasesName = testCases.Select(t => t.FullyQualifiedName);
         var testCasesToRun = new List<TestCase>();
         var assembly = Assembly.LoadFrom(config.TestAssemblyPath ?? string.Empty);
-        var testMethods = new List<MethodInfo>(
-            assembly.GetExportedTypes()
-                .SelectMany(type => type.GetMethods())
-                .Where(m => testCasesName.Contains(m.DeclaringType!.FullName + "." + m.Name))
-        );
+        var allTestMethods = new List<MethodInfo>(assembly.GetExportedTypes().SelectMany(type => type.GetMethods()));
 
-        foreach (var testMethod in testMethods)
+        foreach (var testCase in testCases)
         {
-            var fullName = testMethod.DeclaringType?.FullName + "." + testMethod.Name;
+            var testMethod = allTestMethods.FirstOrDefault(
+                m => (m.DeclaringType!.FullName + "." + m.Name).Contains(ParametersRegex.Replace(testCase.FullyQualifiedName, string.Empty))
+            );
+
+            if (testMethod == null)
+            {
+                logger.LogError("TestMethod {@FullyQualifiedName} not found", testCase.FullyQualifiedName);
+                continue;
+            }
+
             var customAttributes = testMethod.GetCustomAttributes(false);
 
             foreach (var attribute in customAttributes)
@@ -89,8 +93,6 @@ public sealed class FilterService(ILogger<FilterService> logger, Replacer replac
                 {
                     if (labelsAttr.Value?.Any(x => labelsToRun?.Contains(x) ?? false) ?? false)
                     {
-                        var testCase = testCases.FirstOrDefault(x => x.FullyQualifiedName == fullName);
-
                         if (testCase != null)
                         {
                             testCasesToRun.Add(testCase);
