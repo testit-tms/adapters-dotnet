@@ -69,7 +69,6 @@ public sealed class FilterService(ILogger<FilterService> logger, Replacer replac
     public List<TestCase> FilterTestCasesByLabels(AdapterConfig config, IReadOnlyCollection<TestCase> testCases)
     {
         var labelsToRun = config.TmsLabelsOfTestsToRun?.Split(',').Select(x => x.Trim()).ToList();
-        var testCasesName = testCases.Select(t => t.FullyQualifiedName);
         var testCasesToRun = new List<TestCase>();
         var assembly = Assembly.LoadFrom(config.TestAssemblyPath ?? string.Empty);
         var allTestMethods = new List<MethodInfo>(assembly.GetExportedTypes().SelectMany(type => type.GetMethods()));

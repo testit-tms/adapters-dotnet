@@ -34,12 +34,11 @@ public class FilterServiceTests
     {
         // Arrange
         var filterService = new FilterService(_logger, _replacer);
-        var assemblyPath = typeof(FilterServiceTests).Assembly.Location;
         var config = new AdapterConfig
         {
             TestAssemblyPath = typeof(FilterServiceTests).Assembly.Location
         };
-        var testcases = new[] { new TestCase() };
+        var testcases = new[] { new TestCase { FullyQualifiedName = "test" } };
 
         // Act
         var actual = filterService.FilterTestCasesByLabels(config, testcases);
