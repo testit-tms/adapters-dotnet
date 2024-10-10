@@ -108,7 +108,7 @@ public class Converter
                 Attachments = s.Attachments.Select(a => new AttachmentPutModel(a)).ToList(),
                 Parameters = s.Parameters,
                 StepResults = ConvertResultStepToModel(s.Steps),
-                Outcome = Enum.Parse<AvailableTestResultOutcome>(s.Outcome)
+                Outcome = Enum.Parse<AvailableTestResultOutcome>(s.Outcome ?? AvailableTestResultOutcome.Passed.ToString())
             }).ToList();
     }
 
