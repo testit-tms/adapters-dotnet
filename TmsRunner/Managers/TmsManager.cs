@@ -5,6 +5,7 @@ using TestIT.ApiClient.Model;
 using TmsRunner.Entities;
 using TmsRunner.Entities.AutoTest;
 using TmsRunner.Utils;
+using AutoTest = TmsRunner.Entities.AutoTest.AutoTest;
 
 namespace TmsRunner.Managers;
 
@@ -19,15 +20,15 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
 
     public async Task<string?> CreateTestRunAsync()
     {
-        var createTestRunRequestBody = new CreateEmptyRequest
+        var testRunV2PostShortModel = new TestRunV2PostShortModel
         {
             ProjectId = new Guid(settings.ProjectId ?? string.Empty),
             Name = (string.IsNullOrEmpty(settings.TestRunName) ? null : settings.TestRunName)!
         };
 
-        logger.LogDebug("Creating test run {@TestRun}", createTestRunRequestBody);
+        logger.LogDebug("Creating test run {@TestRun}", testRunV2PostShortModel);
 
-        var testRun = await testRunsApi.CreateEmptyAsync(createTestRunRequestBody).ConfigureAwait(false) ?? throw new Exception($"Could not find project with id: {settings.ProjectId}");
+        var testRun = await testRunsApi.CreateEmptyAsync(testRunV2PostShortModel).ConfigureAwait(false) ?? throw new Exception($"Could not find project with id: {settings.ProjectId}");
         logger.LogDebug("Created test run {@TestRun}", testRun);
 
         return testRun.Id.ToString();
@@ -136,7 +137,7 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
             {
                 try
                 {
-                    await autoTestsApi.LinkAutoTestToWorkItemAsync(autotestId, new LinkAutoTestToWorkItemRequest(workItemId ?? string.Empty)).ConfigureAwait(false);
+                    await autoTestsApi.LinkAutoTestToWorkItemAsync(autotestId, new WorkItemIdModel(workItemId ?? string.Empty)).ConfigureAwait(false);
                     logger.LogDebug(
                         "Link autotest {AutotestId} to workitem {WorkitemId} is successfully",
                     autotestId,
