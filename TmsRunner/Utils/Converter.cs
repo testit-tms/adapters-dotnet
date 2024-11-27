@@ -1,11 +1,14 @@
 using TestIT.ApiClient.Model;
 using TmsRunner.Entities.AutoTest;
+using AutoTest = TmsRunner.Entities.AutoTest.AutoTest;
+using AutoTestStep = TmsRunner.Entities.AutoTest.AutoTestStep;
+using AutoTestStepResult = TmsRunner.Entities.AutoTest.AutoTestStepResult;
 
 namespace TmsRunner.Utils;
 
 public static class Converter
 {
-    public static CreateAutoTestRequest ConvertAutoTestDtoToPostModel(AutoTest autotest, string? projectId)
+    public static AutoTestPostModel ConvertAutoTestDtoToPostModel(AutoTest autotest, string? projectId)
     {
         var links = autotest.Links?.Select(l =>
             new LinkPostModel(
@@ -15,7 +18,7 @@ public static class Converter
                 Enum.Parse<LinkType>(l.Type.ToString()!))
         ).ToList();
 
-        return new CreateAutoTestRequest(externalId: autotest.ExternalId ?? string.Empty, name: autotest.Name ?? string.Empty)
+        return new AutoTestPostModel(externalId: autotest.ExternalId ?? string.Empty, name: autotest.Name ?? string.Empty)
         {
             ExternalId = autotest.ExternalId ?? string.Empty,
             Links = links!,
@@ -31,7 +34,7 @@ public static class Converter
         };
     }
 
-    public static UpdateAutoTestRequest ConvertAutoTestDtoToPutModel(AutoTest autotest, string? projectId)
+    public static AutoTestPutModel ConvertAutoTestDtoToPutModel(AutoTest autotest, string? projectId)
     {
         var links = autotest.Links?.Select(l =>
             new LinkPutModel(
@@ -42,7 +45,7 @@ public static class Converter
         ).ToList();
 
 
-        return new UpdateAutoTestRequest(externalId: autotest.ExternalId ?? string.Empty, name: autotest.Name ?? string.Empty)
+        return new AutoTestPutModel(externalId: autotest.ExternalId ?? string.Empty, name: autotest.Name ?? string.Empty)
         {
             Links = links ?? [],
             ProjectId = new Guid(projectId ?? string.Empty),
