@@ -72,7 +72,7 @@ public class TmsClient : ITmsClient
         _logger.LogDebug("Update autotest {ExternalId} is successfully", result.ExternalId);
     }
 
-    public async Task UpdateAutotest(string externalId, List<Link> links)
+    public async Task UpdateAutotest(string externalId, List<Link> links, string externalKey)
     {
         _logger.LogDebug("Updating links property for autotest {ExternalId}: {@Links}", externalId, links);
 
@@ -101,6 +101,12 @@ public class TmsClient : ITmsClient
                 Path = nameof(AutoTestPutModel.Links),
                 Value = putLinks,
                 Op = "Add"
+            },
+            new()
+            {
+                Path = nameof(AutoTestPutModel.ExternalKey),
+                Value = externalKey,
+                Op = "Replace"
             }
         };
 

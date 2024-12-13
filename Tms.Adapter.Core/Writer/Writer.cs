@@ -34,10 +34,7 @@ public class Writer : IWriter
                 }
                 else
                 {
-                    if (result.Links.Count != 0)
-                    {
-                        await _client.UpdateAutotest(result.ExternalId, result.Links);
-                    }
+                    await _client.UpdateAutotest(result.ExternalId, result.Links, result.ExternalKey);
                 }
             }
             else
