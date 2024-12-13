@@ -23,7 +23,8 @@ public static class Converter
             Teardown = ConvertFixturesToModel(container.Afters),
             Title = result.Title,
             Description = result.Description,
-            Labels = ConvertLabelsToPostModel(result.Labels)
+            Labels = ConvertLabelsToPostModel(result.Labels),
+            ExternalKey = result.ExternalKey,
         };
     }
 
@@ -42,7 +43,8 @@ public static class Converter
             Teardown = ConvertFixturesToModel(container.Afters),
             Title = result.Title,
             Description = result.Description,
-            Labels = ConvertLabelsToPostModel(result.Labels)
+            Labels = ConvertLabelsToPostModel(result.Labels),
+            ExternalKey = result.ExternalKey,
         };
     }
 

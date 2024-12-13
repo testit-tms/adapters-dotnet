@@ -9,7 +9,7 @@ public interface ITmsClient
     Task<bool> IsAutotestExist(string externalId);
     Task CreateAutotest(TestContainer result, ClassContainer container);
     Task UpdateAutotest(TestContainer result, ClassContainer container);
-    Task UpdateAutotest(string externalId, List<Link> links);
+    Task UpdateAutotest(string externalId, List<Link> links, string externalKey);
     Task LinkAutoTestToWorkItems(string autotestId, IEnumerable<string> workItemIds);
     Task DeleteAutoTestLinkFromWorkItem(string autotestId, string workItemId);
     Task<List<WorkItemIdentifierModel>> GetWorkItemsLinkedToAutoTest(string autotestId);
