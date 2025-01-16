@@ -57,6 +57,7 @@ public static class Program
                     TmsConfigFile = ac.TmsConfigFile,
                     TmsLabelsOfTestsToRun = ac.TmsLabelsOfTestsToRun,
                     TmsAutomaticCreationTestCases = ac.TmsAutomaticCreationTestCases,
+                    TmsRunSettings = ac.TmsRunSettings,
                     TmsAutomaticUpdationLinksToTestCases = ac.TmsAutomaticUpdationLinksToTestCases,
                     TmsCertValidation = ac.TmsCertValidation
                 };
