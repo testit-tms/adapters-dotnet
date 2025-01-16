@@ -9,7 +9,7 @@ public static class Hash
         var hash = sha.ComputeHash(textData);
         return BitConverter.ToString(hash).Replace("-", String.Empty);
     }
-    
+
     public static string NewId()
     {
         return Guid.NewGuid().ToString("N");
