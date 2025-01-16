@@ -24,6 +24,7 @@ public sealed class ProcessorService(ILogger<ProcessorService> logger,
         var messages = LogParser.GetMessages(traceJson ?? string.Empty);
 
         var testCaseStepsHierarchical = new List<Step>();
+        var stepsTable = new Dictionary<Guid, Step>();
         Step? parentStep = null;
         var nestingLevel = 1;
 
@@ -40,6 +41,8 @@ public sealed class ProcessorService(ILogger<ProcessorService> logger,
                             break;
                         }
 
+                        stepsTable.Add(step.Guid, step);
+                        
                         if ((step.CallerMethodType != null && parentStep == null) ||
                             (step.CurrentMethodType != null && parentStep == null))
                         {
@@ -87,12 +90,7 @@ public sealed class ProcessorService(ILogger<ProcessorService> logger,
                             break;
                         }
 
-                        parentStep = MapStep(parentStep, stepResult);
-
-                        if (parentStep != null)
-                        {
-                            parentStep = parentStep.ParentStep ?? null;
-                        }
+                        parentStep = MapStep(stepsTable, stepResult);
 
                         break;
                     }
@@ -294,18 +292,18 @@ public sealed class ProcessorService(ILogger<ProcessorService> logger,
         return traceJson;
     }
 
-    private static Step? MapStep(Step? step, StepResult stepResult)
+    private static Step? MapStep(Dictionary<Guid, Step> stepsDictionary, StepResult stepResult)
     {
-        if (step == null)
+        if (!stepsDictionary.TryGetValue(stepResult.Guid, out var stepToUpdate))
         {
             return null;
         }
 
-        step.CompletedOn = stepResult.CompletedOn;
-        step.Duration = stepResult.Duration;
-        step.Result = stepResult.Result;
-        step.Outcome = stepResult.Outcome;
+        stepToUpdate.CompletedOn = stepResult.CompletedOn;
+        stepToUpdate.Duration = stepResult.Duration;
+        stepToUpdate.Result = stepResult.Result;
+        stepToUpdate.Outcome = stepResult.Outcome;
 
-        return step;
+        return stepToUpdate.ParentStep;
     }
 }
