@@ -4,6 +4,7 @@ using TestIT.ApiClient.Client;
 using TestIT.ApiClient.Model;
 using Tms.Adapter.Core.Configurator;
 using Tms.Adapter.Core.Models;
+using Link = Tms.Adapter.Core.Models.Link;
 using LinkType = TestIT.ApiClient.Model.LinkType;
 
 namespace Tms.Adapter.Core.Client;
@@ -71,7 +72,7 @@ public class TmsClient : ITmsClient
         _logger.LogDebug("Update autotest {ExternalId} is successfully", result.ExternalId);
     }
 
-    public async Task UpdateAutotest(string externalId, List<Link> links)
+    public async Task UpdateAutotest(string externalId, List<Link> links, string externalKey)
     {
         _logger.LogDebug("Updating links property for autotest {ExternalId}: {@Links}", externalId, links);
 
@@ -100,6 +101,12 @@ public class TmsClient : ITmsClient
                 Path = nameof(AutoTestPutModel.Links),
                 Value = putLinks,
                 Op = "Add"
+            },
+            new()
+            {
+                Path = nameof(AutoTestPutModel.ExternalKey),
+                Value = externalKey,
+                Op = "Replace"
             }
         };
 
@@ -121,7 +128,7 @@ public class TmsClient : ITmsClient
             {
                 try
                 {
-                    await _autoTests.LinkAutoTestToWorkItemAsync(autotestId, new LinkAutoTestToWorkItemRequest(workItemId ?? string.Empty)).ConfigureAwait(false);
+                    await _autoTests.LinkAutoTestToWorkItemAsync(autotestId, new WorkItemIdModel(workItemId ?? string.Empty)).ConfigureAwait(false);
                     _logger.LogDebug(
                         "Link autotest {AutotestId} to workitem {WorkitemId} is successfully",
                         autotestId,
@@ -217,12 +224,12 @@ public class TmsClient : ITmsClient
             return;
         }
 
-        var createTestRunRequestBody = new CreateEmptyRequest
+        var testRunV2PostShortModel = new TestRunV2PostShortModel
         {
             ProjectId = new Guid(_settings.ProjectId),
             Name = (string.IsNullOrEmpty(_settings.TestRunName) ? null : _settings.TestRunName)!
         };
-        var testRun = await _testRuns.CreateEmptyAsync(createTestRunRequestBody);
+        var testRun = await _testRuns.CreateEmptyAsync(testRunV2PostShortModel);
 
         _settings.TestRunId = testRun.Id.ToString();
 

@@ -1,7 +1,8 @@
 ﻿using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using TestIT.ApiClient.Model;
-using TmsRunner.Entities.AutoTest;
 using TmsRunner.Utils;
+using AutoTest = TmsRunner.Entities.AutoTest.AutoTest;
+using AutoTestResult = TmsRunner.Entities.AutoTest.AutoTestResult;
 
 namespace TmsRunnerTests.Utils;
 
@@ -37,7 +38,7 @@ public class ConverterTests
         var actual = Converter.ConvertAutoTestDtoToPutModel(autotest, id);
 
         // Assert
-        Assert.IsInstanceOfType<UpdateAutoTestRequest>(actual);
+        Assert.IsInstanceOfType<AutoTestPutModel>(actual);
         Assert.IsNotNull(actual);
     }
 
@@ -52,7 +53,7 @@ public class ConverterTests
         var actual = Converter.ConvertAutoTestDtoToPostModel(autotest, id);
 
         // Assert
-        Assert.IsInstanceOfType<CreateAutoTestRequest>(actual);
+        Assert.IsInstanceOfType<AutoTestPostModel>(actual);
         Assert.IsNotNull(actual);
     }
 }

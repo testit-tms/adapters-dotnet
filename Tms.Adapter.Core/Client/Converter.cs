@@ -1,15 +1,17 @@
 using TestIT.ApiClient.Model;
 using Tms.Adapter.Core.Models;
+using Link = Tms.Adapter.Core.Models.Link;
 using LinkType = TestIT.ApiClient.Model.LinkType;
+using StepResult = Tms.Adapter.Core.Models.StepResult;
 
 namespace Tms.Adapter.Core.Client;
 
 public static class Converter
 {
-    public static CreateAutoTestRequest ConvertAutoTestDtoToPostModel(TestContainer result, ClassContainer container,
+    public static AutoTestPostModel ConvertAutoTestDtoToPostModel(TestContainer result, ClassContainer container,
         string projectId)
     {
-        return new CreateAutoTestRequest(externalId: result.ExternalId, name: result.DisplayName)
+        return new AutoTestPostModel(externalId: result.ExternalId, name: result.DisplayName)
         {
             ExternalId = result.ExternalId,
             Links = ConvertLinksToPostModel(result.Links),
@@ -21,14 +23,15 @@ public static class Converter
             Teardown = ConvertFixturesToModel(container.Afters),
             Title = result.Title,
             Description = result.Description,
-            Labels = ConvertLabelsToPostModel(result.Labels)
+            Labels = ConvertLabelsToPostModel(result.Labels),
+            ExternalKey = result.ExternalKey,
         };
     }
 
-    public static UpdateAutoTestRequest ConvertAutoTestDtoToPutModel(TestContainer result, ClassContainer container,
+    public static AutoTestPutModel ConvertAutoTestDtoToPutModel(TestContainer result, ClassContainer container,
         string projectId)
     {
-        return new UpdateAutoTestRequest(externalId: result.ExternalId, name: result.DisplayName)
+        return new AutoTestPutModel(externalId: result.ExternalId, name: result.DisplayName)
         {
             ExternalId = result.ExternalId,
             Links = ConvertLinksToPutModel(result.Links),
@@ -40,7 +43,8 @@ public static class Converter
             Teardown = ConvertFixturesToModel(container.Afters),
             Title = result.Title,
             Description = result.Description,
-            Labels = ConvertLabelsToPostModel(result.Labels)
+            Labels = ConvertLabelsToPostModel(result.Labels),
+            ExternalKey = result.ExternalKey,
         };
     }
 

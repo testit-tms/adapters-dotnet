@@ -80,7 +80,7 @@ public class ClientTests
         // Act & Assert
         await Assert
             .ThrowsExceptionAsync<ApiException>(
-                async () => await client.UpdateAutotest(id, links).ConfigureAwait(false)).ConfigureAwait(false);
+                async () => await client.UpdateAutotest(id, links, "").ConfigureAwait(false)).ConfigureAwait(false);
     }
 
     [TestMethod]

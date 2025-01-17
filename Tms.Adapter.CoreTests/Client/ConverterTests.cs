@@ -24,7 +24,7 @@ public class ConverterTests
         var actual = Converter.ConvertAutoTestDtoToPostModel(testContainer, classContainer, id);
 
         // Assert
-        Assert.IsInstanceOfType<CreateAutoTestRequest>(actual);
+        Assert.IsInstanceOfType<AutoTestPostModel>(actual);
         Assert.IsNotNull(actual);
     }
 
@@ -64,7 +64,7 @@ public class ConverterTests
         var actual = Converter.ConvertAutoTestDtoToPutModel(testContainer, classContainer, id);
 
         // Assert
-        Assert.IsInstanceOfType<UpdateAutoTestRequest>(actual);
+        Assert.IsInstanceOfType<AutoTestPutModel>(actual);
         Assert.IsNotNull(actual);
     }
 }

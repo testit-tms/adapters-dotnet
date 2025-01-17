@@ -26,18 +26,22 @@ public static class TmsXunitHelper
         }
 
         var testCase = testCaseMessage.TestCase;
+        var nameSpace = GetNameSpace(testCase.TestMethod.TestClass.Class.Name);
+        var className = GetClassName(testCase.TestMethod.TestClass.Class.Name);
+        var externalKey = testCase.DisplayName;
         testResults.TestResult = new TestContainer
         {
             Id = Hash.NewId(),
-            ClassName = GetClassName(testCase.TestMethod.TestClass.Class.Name),
-            Namespace = GetNameSpace(testCase.TestMethod.TestClass.Class.Name),
+            ClassName = className,
+            Namespace = nameSpace,
             Parameters = testCase.TestMethod.Method.GetParameters()
                 .Zip(testCase.TestMethodArguments ?? Array.Empty<object>(), (parameter, value) => new
                 {
                     parameter,
                     value
                 })
-                .ToDictionary(x => x.parameter.Name, x => x.value.ToString())
+                .ToDictionary(x => x.parameter.Name, x => x.value.ToString()),
+            ExternalKey = externalKey,
         };
         UpdateTestDataFromAttributes(testResults.TestResult, testCase);
         AdapterManager.Instance.StartTestCase(testResults.ClassContainer.Id, testResults.TestResult);

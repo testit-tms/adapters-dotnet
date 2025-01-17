@@ -1,3 +1,4 @@
+using Newtonsoft.Json.Linq;
 using System.Collections.Specialized;
 using System.Globalization;
 using TechTalk.SpecFlow;
@@ -56,10 +57,12 @@ public static class TmsHelper
         var scenarioInfo = scenarioContext?.ScenarioInfo ?? EmptyScenarioInfo;
 
         var parameters = GetParameters(scenarioInfo);
+        var externalKey = GetExternalKey(scenarioInfo);
         var testResult = new TestContainer
         {
             Id = Hash.NewId(),
-            Parameters = parameters
+            Parameters = parameters,
+            ExternalKey = externalKey,
         };
         testResult = TmsTagParser.AddTags(testResult, featureInfo, scenarioInfo, parameters);
             
@@ -80,6 +83,15 @@ public static class TmsHelper
         }
 
         return parameters;
+    }
+
+    private static string GetExternalKey(ScenarioInfo scenarioInfo)
+    {
+        var textInfo = CultureInfo.CurrentCulture.TextInfo;
+
+        return textInfo
+            .ToTitleCase(scenarioInfo.Title)
+            .Replace(" ", "");
     }
 
     internal static TestContainer GetCurrentTestCase(ScenarioContext context)

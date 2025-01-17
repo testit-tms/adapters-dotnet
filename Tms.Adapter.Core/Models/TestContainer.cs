@@ -13,4 +13,5 @@ public class TestContainer : ExecutableItem
     public List<Link> ResultLinks { get; set; } = new ();
     public string Message { get; set; }
     public string? Trace { get; set; }
+    public string ExternalKey { get; set; }
 }
