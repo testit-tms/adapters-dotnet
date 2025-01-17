@@ -54,9 +54,9 @@ public class AdapterManager
     public virtual AdapterManager StartTestContainer(ClassContainer container)
     {
         container.Start = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-        
+
         _logger.LogDebug("Starting class container: {@Container}", container);
-        
+
         _storage.Put(container.Id, container);
 
         return this;
@@ -67,12 +67,12 @@ public class AdapterManager
         UpdateTestContainer(parentUuid, c => c.Children.Add(container.Id));
         StartTestContainer(container);
         return this;
-        
     }
+
     public virtual AdapterManager UpdateTestContainer(string uuid, Action<ClassContainer> update)
     {
         _logger.LogDebug("Updating class container with id: {ID}", uuid);
-        
+
         update.Invoke(_storage.Get<ClassContainer>(uuid));
         return this;
     }
@@ -80,7 +80,7 @@ public class AdapterManager
     public virtual AdapterManager StopTestContainer(string uuid)
     {
         _logger.LogDebug("Stopping class container with id: {ID}", uuid);
-        
+
         UpdateTestContainer(uuid, c => c.Stop = DateTimeOffset.Now.ToUnixTimeMilliseconds());
         return this;
     }
@@ -118,9 +118,9 @@ public class AdapterManager
         _storage.Put(uuid, fixtureResult);
         fixtureResult.Stage = Stage.Running;
         fixtureResult.Start = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-        
+
         _logger.LogDebug("Starting fixture with id {ID}: {@Fixture}", uuid, fixtureResult);
-        
+
         _storage.ClearStepContext();
         _storage.StartStep(uuid);
     }
@@ -149,9 +149,9 @@ public class AdapterManager
         _storage.ClearStepContext();
         fixture.Stage = Stage.Finished;
         fixture.Stop = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-        
+
         _logger.LogDebug("Stopping fixture with id {ID}: {@Fixture}", uuid, fixture);
-        
+
         return this;
     }
 
@@ -165,9 +165,9 @@ public class AdapterManager
     {
         testResult.Stage = Stage.Running;
         testResult.Start = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-        
+
         _logger.LogDebug("Starting test container: {@Container}", testResult);
-        
+
         _storage.Put(testResult.Id, testResult);
         _storage.ClearStepContext();
         _storage.StartStep(testResult.Id);
@@ -190,7 +190,7 @@ public class AdapterManager
         UpdateTestCase(beforeStop);
         return StopTestCase(_storage.GetRootStep());
     }
-    
+
     public virtual AdapterManager StopTestCase(string uuid)
     {
         var testResult = _storage.Get<TestContainer>(uuid);
@@ -213,9 +213,9 @@ public class AdapterManager
 
         testResult.Stage = Stage.Finished;
         testResult.Stop = DateTimeOffset.Now.ToUnixTimeMilliseconds();
-        
+
         _logger.LogDebug("Stopping test container: {@Container}", testResult);
-        
+
         _storage.ClearStepContext();
         return this;
     }
@@ -233,7 +233,7 @@ public class AdapterManager
         StartStep(_storage.GetCurrentStep(), uuid, result);
         return this;
     }
-    
+
     public virtual AdapterManager StartStep(string uuid, StepResult result)
     {
         StartStep(_storage.GetCurrentStep(), uuid, result);
@@ -248,7 +248,7 @@ public class AdapterManager
         _storage.AddStep(parentUuid, uuid, stepResult);
 
         _logger.LogDebug("Starting step: {@Step}", stepResult);
-            
+
         return this;
     }
 
@@ -276,9 +276,9 @@ public class AdapterManager
         step.Stage = Stage.Finished;
         step.Stop = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         _storage.StopStep();
-        
+
         _logger.LogDebug("Stopping step with id {ID}: {@Step}", uuid, step);
-        
+
         return this;
     }
 
@@ -305,9 +305,14 @@ public class AdapterManager
     {
         await _client.CreateTestRun();
     }
-    
+
     public async Task CompleteTestRun()
     {
         await _client.CompleteTestRun();
+    }
+
+    public static void ClearInstance()
+    {
+        _instance = null;
     }
 }

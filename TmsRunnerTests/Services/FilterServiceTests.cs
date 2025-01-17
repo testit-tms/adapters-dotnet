@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
-using NSubstitute;
+using Moq;
 using Tms.Adapter.Utils;
 using TmsRunner.Entities.Configuration;
 using TmsRunner.Services;
@@ -10,14 +10,14 @@ namespace TmsRunnerTests.Services;
 [TestClass]
 public class FilterServiceTests
 {
-    private readonly ILogger<FilterService> _logger = Substitute.For<ILogger<FilterService>>();
-    private readonly Replacer _replacer = Substitute.For<Replacer>();
+    private readonly Mock<ILogger<FilterService>> _logger = new();
+    private readonly Mock<Replacer> _replacer = new();
 
     [TestMethod]
     public void FilterTestCases()
     {
         // Arrange
-        var filterService = new FilterService(_logger, _replacer);
+        var filterService = new FilterService(_logger.Object, _replacer.Object);
         var assemblyPath = typeof(FilterServiceTests).Assembly.Location;
         var externalId = new[] { "123" };
         var testcases = new[] { new TestCase { FullyQualifiedName = "test" } };
@@ -33,7 +33,7 @@ public class FilterServiceTests
     public void FilterTestCasesByLabels()
     {
         // Arrange
-        var filterService = new FilterService(_logger, _replacer);
+        var filterService = new FilterService(_logger.Object, _replacer.Object);
         var config = new AdapterConfig
         {
             TestAssemblyPath = typeof(FilterServiceTests).Assembly.Location

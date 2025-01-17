@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
-using NSubstitute;
+using Moq;
 using TestIT.ApiClient.Client;
 using Tms.Adapter.Core.Client;
 using Tms.Adapter.Core.Configurator;
@@ -11,7 +11,7 @@ namespace Tms.Adapter.CoreTests.Client;
 [TestClass]
 public class ClientTests
 {
-    private readonly ILogger<TmsClient> _logger = Substitute.For<ILogger<TmsClient>>();
+    private readonly Mock<ILogger<TmsClient>> _logger = new();
 
     private readonly TmsSettings _settings = new()
     {
@@ -26,7 +26,7 @@ public class ClientTests
     public async Task IsAutotestExist()
     {
         // Arrange
-        var client = new TmsClient(_logger, _settings);
+        var client = new TmsClient(_logger.Object, _settings);
         var id = Guid.NewGuid().ToString();
 
         // Act & Assert
@@ -39,7 +39,7 @@ public class ClientTests
     public async Task UpdateAutotest()
     {
         // Arrange
-        var client = new TmsClient(_logger, _settings);
+        var client = new TmsClient(_logger.Object, _settings);
         var classContainer = new ClassContainer();
         var testContainer = new TestContainer
         {
@@ -56,7 +56,7 @@ public class ClientTests
     public async Task CreateAutotest()
     {
         // Arrange
-        var client = new TmsClient(_logger, _settings);
+        var client = new TmsClient(_logger.Object, _settings);
         var classContainer = new ClassContainer();
         var testContainer = new TestContainer
         {
@@ -73,45 +73,45 @@ public class ClientTests
     public async Task UpdateAutotestLinks()
     {
         // Arrange
-        var client = new TmsClient(_logger, _settings);
+        var client = new TmsClient(_logger.Object, _settings);
         var id = Guid.NewGuid().ToString();
         var links = new List<Link>();
 
         // Act & Assert
         await Assert
             .ThrowsExceptionAsync<ApiException>(
-                async () => await client.UpdateAutotest(id, links).ConfigureAwait(false)).ConfigureAwait(false);
+                async () => await client.UpdateAutotest(id, links, "").ConfigureAwait(false)).ConfigureAwait(false);
     }
 
     [TestMethod]
     public async Task GetWorkItemsLinkedToAutoTest()
     {
         // Arrange
-        var client = new TmsClient(_logger, _settings);
+        var client = new TmsClient(_logger.Object, _settings);
         var id = Guid.NewGuid().ToString();
 
         // Act & Assert
         await Assert.ThrowsExceptionAsync<ApiException>(async () =>
             await client.GetWorkItemsLinkedToAutoTest(id).ConfigureAwait(false)).ConfigureAwait(false);
     }
-    
+
     [TestMethod]
     public async Task DeleteAutoTestLinkFromWorkItem()
     {
         // Arrange
-        var client = new TmsClient(_logger, _settings);
+        var client = new TmsClient(_logger.Object, _settings);
         var id = Guid.NewGuid().ToString();
         const string workItemId = "";
 
         // Act & Assert
         await client.DeleteAutoTestLinkFromWorkItem(id, workItemId).ConfigureAwait(false);
     }
-    
+
     [TestMethod]
     public async Task LinkAutoTestToWorkItems()
     {
         // Arrange
-        var client = new TmsClient(_logger, _settings);
+        var client = new TmsClient(_logger.Object, _settings);
         var id = Guid.NewGuid().ToString();
         var workItemIds = Array.Empty<string>();
 
@@ -123,7 +123,7 @@ public class ClientTests
     public async Task SubmitTestCaseResult()
     {
         // Arrange
-        var client = new TmsClient(_logger, _settings);
+        var client = new TmsClient(_logger.Object, _settings);
         var classContainer = new ClassContainer();
         var testContainer = new TestContainer
         {
@@ -141,7 +141,7 @@ public class ClientTests
     public async Task UploadAttachment()
     {
         // Arrange
-        var client = new TmsClient(_logger, _settings);
+        var client = new TmsClient(_logger.Object, _settings);
         var filename = Path.GetRandomFileName();
         var stream = Stream.Null;
 
@@ -155,7 +155,7 @@ public class ClientTests
     public async Task CreateTestRun()
     {
         // Arrange
-        var client = new TmsClient(_logger, _settings);
+        var client = new TmsClient(_logger.Object, _settings);
 
         // Act & Assert
         await client.CreateTestRun().ConfigureAwait(false);
@@ -165,7 +165,7 @@ public class ClientTests
     public async Task CompleteTestRun()
     {
         // Arrange
-        var client = new TmsClient(_logger, _settings);
+        var client = new TmsClient(_logger.Object, _settings);
 
         // Act & Assert
         await client.CompleteTestRun().ConfigureAwait(false);
