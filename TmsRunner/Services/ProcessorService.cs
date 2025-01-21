@@ -212,7 +212,7 @@ public sealed class ProcessorService(ILogger<ProcessorService> logger,
         }
 
         var autoTestResultRequestBody = GetAutoTestResultsForTestRunModel(autoTest, testResult, traceJson,
-            testCaseSteps, attachmentIds, parameters);
+            testCaseSteps, attachmentIds, parameters, tmsSettings.IgnoreParameters);
 
         await apiClient.SubmitResultToTestRunAsync(tmsSettings.TestRunId, autoTestResultRequestBody).ConfigureAwait(false);
     }
@@ -243,7 +243,8 @@ public sealed class ProcessorService(ILogger<ProcessorService> logger,
                                                                     string traceJson,
                                                                     IReadOnlyCollection<Step> testCaseSteps,
                                                                     List<Guid> attachmentIds,
-                                                                    Dictionary<string, string>? parameters)
+                                                                    Dictionary<string, string>? parameters,
+                                                                    bool isIgnoreParameters)
     {
         var stepResults =
             testCaseSteps
@@ -273,7 +274,7 @@ public sealed class ProcessorService(ILogger<ProcessorService> logger,
             TeardownResults = teardownResults,
             Links = LogParser.GetLinks(traceJson),
             Message = autoTest.Message!.TrimStart(Environment.NewLine.ToCharArray()),
-            Parameters = parameters!,
+            Parameters = isIgnoreParameters ? new Dictionary<string, string>() : parameters!,
             Attachments = attachmentIds,
         };
         if (!string.IsNullOrEmpty(testResult.ErrorStackTrace))

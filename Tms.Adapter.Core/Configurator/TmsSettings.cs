@@ -18,5 +18,6 @@ public class TmsSettings
     public bool AutomaticCreationTestCases { get; set; }
     public bool AutomaticUpdationLinksToTestCases { get; set; }
     public bool CertValidation { get; set; }
+    public bool IgnoreParameters { get; set; }
     public bool IsDebug { get; set; }
 }

@@ -78,6 +78,9 @@ public sealed class AdapterConfig
     [Option("tmsCertValidation", Default = "true", Required = false, HelpText = "Set certificate validation.")]
     public string? TmsCertValidation { get; init; }
 
+    [Option("tmsIgnoreParameters", Default = "false", Required = false, HelpText = "Set ignore parameters.")]
+    public string? TmsIgnoreParameters { get; init; }
+
     public Config ToInternalConfig()
     {
         return new Config
@@ -94,7 +97,8 @@ public sealed class AdapterConfig
             TmsAutomaticCreationTestCases = TmsAutomaticCreationTestCases,
             TmsAutomaticUpdationLinksToTestCases = TmsAutomaticUpdationLinksToTestCases,
             TmsCertValidation = TmsCertValidation,
-            TmsLabelsOfTestsToRun = TmsLabelsOfTestsToRun
+            TmsLabelsOfTestsToRun = TmsLabelsOfTestsToRun,
+            TmsIgnoreParameters = TmsIgnoreParameters
 
         };
     }

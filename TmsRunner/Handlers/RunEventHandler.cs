@@ -78,7 +78,7 @@ public sealed class RunEventHandler(ILogger<RunEventHandler> logger, EventWaitHa
             {
                 continue;
             }
-
+            
             logger.LogDebug("Start test '{Name}' upload", testResult.DisplayName);
 
             try
