@@ -157,7 +157,8 @@ public static class Program
                         provider.GetRequiredService<AdapterConfig>().RunnerPath ?? string.Empty,
                         new ConsoleParameters { LogFilePath = Path.Combine(Directory.GetCurrentDirectory(), "log.txt") }
                     ))
-                    .AddTransient<RunService>();
+                    .AddTransient<RunService>()
+                    .AddSingleton<ITestRunContextService, TestRunContextService>();
             });
     }
 

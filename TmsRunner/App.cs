@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using TestIT.ApiClient.Model;
 using TmsRunner.Entities;
 using TmsRunner.Entities.Configuration;
 using TmsRunner.Managers;
@@ -11,7 +12,8 @@ public class App(ILogger<App> logger,
                  TmsManager tmsManager,
                  TmsSettings tmsSettings,
                  FilterService filterService,
-                 RunService runService)
+                 RunService runService,
+                 ITestRunContextService testRunContext)
 {
     public async Task<int> RunAsync()
     {
@@ -24,6 +26,7 @@ public class App(ILogger<App> logger,
 
         runService.InitialiseRunner();
         var testCases = runService.DiscoverTests();
+        var testRun = new TestRunV2GetModel();
         logger.LogInformation("Discovered Tests Count: {Count}", testCases.Count);
 
         if (testCases.Count == 0)
@@ -37,22 +40,25 @@ public class App(ILogger<App> logger,
         {
             case 0:
                 {
-                    var testCaseForRun = await tmsManager.GetAutoTestsForRunAsync(tmsSettings.TestRunId).ConfigureAwait(false);
+                    testRun = await tmsManager.GetTestRunAsync(tmsSettings.TestRunId).ConfigureAwait(false);
+                    var testCaseForRun = tmsManager.GetAutoTestsForRunAsync(testRun);
                     testCases = filterService.FilterTestCases(adapterConfig.TestAssemblyPath, testCaseForRun, testCases);
-
+                    testRunContext.SetCurrentTestRun(testRun);
                     break;
                 }
             case 2:
-                {
-                    tmsSettings.TestRunId = await tmsManager.CreateTestRunAsync().ConfigureAwait(false);
+            {
+                testRun = await tmsManager.CreateTestRunAsync().ConfigureAwait(false);
+                    tmsSettings.TestRunId = testRun!.Id.ToString();
+                    testRunContext.SetCurrentTestRun(testRun);
 
                     if (!string.IsNullOrEmpty(adapterConfig.TmsLabelsOfTestsToRun))
                     {
                         testCases = filterService.FilterTestCasesByLabels(adapterConfig, testCases);
                     }
 
-                    break;
-                }
+                break;
+            }
         }
 
         logger.LogInformation("Running tests: {Count}", testCases.Count);
