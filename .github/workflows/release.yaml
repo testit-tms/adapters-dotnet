@@ -15,10 +15,10 @@ jobs:
     strategy:
       matrix:
         project: [
-          ./Tms.Adapter,
-          ./Tms.Adapter.Core,
-          ./Tms.Adapter.XUnit,
-          ./Tms.Adapter.SpecFlowPlugin
+          Tms.Adapter,
+          Tms.Adapter.Core,
+          Tms.Adapter.XUnit,
+          Tms.Adapter.SpecFlowPlugin
         ]
     steps:
       - name: Checkout
@@ -32,23 +32,23 @@ jobs:
           dotnet-version: 8.0.x
 
       - name: Restore dependencies
-        run: dotnet restore ${{ matrix.project }}
+        run: dotnet restore ./${{ matrix.project }}
 
       - name: Build project
         run: |
           dotnet build --configuration Release \
-          --no-restore ${{ matrix.project }}
+          --no-restore ./${{ matrix.project }}
 
       - name: Create NuGet package
         run: |
           dotnet pack --configuration Release \
           --no-build --output ${{ env.NUGET_DIR }} \
-          ${{ matrix.project }}
+          ./${{ matrix.project }}
 
       - name: Save artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
-          name: NuGet-package
+          name: NuGet-package-${{ matrix.project }}
           path: ${{ env.NUGET_DIR }}/*.nupkg
   
   publish:
@@ -56,10 +56,11 @@ jobs:
     needs: [ build ]
     steps:
       - name: Download artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
-          name: NuGet-package
+          pattern: NuGet-package-*
           path: ${{ env.NUGET_DIR }}
+          merge-multiple: true
 
       - name: Publish to NuGet.org
         run: |
