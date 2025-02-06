@@ -59,7 +59,8 @@ public static class Program
                     TmsAutomaticCreationTestCases = ac.TmsAutomaticCreationTestCases,
                     TmsRunSettings = ac.TmsRunSettings,
                     TmsAutomaticUpdationLinksToTestCases = ac.TmsAutomaticUpdationLinksToTestCases,
-                    TmsCertValidation = ac.TmsCertValidation
+                    TmsCertValidation = ac.TmsCertValidation,
+                    TmsRerunTestsCount = ac.TmsRerunTestsCount
                 };
             });
 

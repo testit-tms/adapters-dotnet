@@ -10,6 +10,8 @@ public sealed class RunEventHandler(ILogger<RunEventHandler> logger, EventWaitHa
                                     ProcessorService processorService) : ITestRunEventsHandler, IDisposable
 {
     private readonly List<Task> _processTestResultsTasks = [];
+    private readonly List<TestCase> _failedTestCases = new();
+    private readonly object _lockObject = new();
 
     public void HandleLogMessage(TestMessageLevel level, string? message)
     {
@@ -32,10 +34,20 @@ public sealed class RunEventHandler(ILogger<RunEventHandler> logger, EventWaitHa
 
     public void HandleTestRunStatsChange(TestRunChangedEventArgs? testRunChangedArgs)
     {
-        if (testRunChangedArgs is { NewTestResults: not null })
+        if (testRunChangedArgs?.NewTestResults == null) return;
+
+        lock (_lockObject)
         {
-            _processTestResultsTasks.Add(ProcessTestResultsAsync(testRunChangedArgs.NewTestResults));
+            foreach (var result in testRunChangedArgs.NewTestResults)
+            {
+                if (result?.Outcome == TestOutcome.Failed)
+                {
+                    _failedTestCases.Add(result.TestCase);
+                }
+            }
         }
+
+        _processTestResultsTasks.Add(ProcessTestResultsAsync(testRunChangedArgs.NewTestResults));
     }
 
     public void HandleRawMessage(string rawMessage)
@@ -63,6 +75,22 @@ public sealed class RunEventHandler(ILogger<RunEventHandler> logger, EventWaitHa
     public List<Task> GetProcessTestResultsTasks()
     {
         return _processTestResultsTasks;
+    }
+
+    public IEnumerable<TestCase> GetFailedTestCases()
+    {
+        lock (_lockObject)
+        {
+            return _failedTestCases.ToList();
+        }
+    }
+
+    public void ClearFailedTestCases()
+    {
+        lock (_lockObject)
+        {
+            _failedTestCases.Clear();
+        }
     }
 
     private async Task ProcessTestResultsAsync(IEnumerable<TestResult?>? testResults)
@@ -97,6 +125,7 @@ public sealed class RunEventHandler(ILogger<RunEventHandler> logger, EventWaitHa
     public void Dispose()
     {
         _processTestResultsTasks.Clear();
+        _failedTestCases.Clear();
         waitHandle.Dispose();
     }
 }

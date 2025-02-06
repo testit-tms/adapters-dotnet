@@ -19,7 +19,8 @@ public sealed class ClassConfigurationProvider(Config config) : ConfigurationPro
             { "RunSettings", config.TmsRunSettings },
             { "AutomaticCreationTestCases", config.TmsAutomaticCreationTestCases },
             { "AutomaticUpdationLinksToTestCases", config.TmsAutomaticUpdationLinksToTestCases },
-            { "CertValidation", config.TmsCertValidation }
+            { "CertValidation", config.TmsCertValidation },
+            { "RerunTestsCount", config.TmsRerunTestsCount }
         };
 
         Data = data
