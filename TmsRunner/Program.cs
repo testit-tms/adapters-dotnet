@@ -20,6 +20,8 @@ using TmsRunner.Extensions;
 using TmsRunner.Handlers;
 using TmsRunner.Managers;
 using TmsRunner.Services;
+using TmsRunner.Services.Implementations;
+using TmsRunner.Services.Interfaces;
 using TmsRunner.Utils;
 using ConfigurationManager = TmsRunner.Managers.ConfigurationManager;
 
@@ -158,7 +160,7 @@ public static class Program
                         new ConsoleParameters { LogFilePath = Path.Combine(Directory.GetCurrentDirectory(), "log.txt") }
                     ))
                     .AddTransient<RunService>()
-                    .AddSingleton<ITestRunContextService, TestRunContextService>();
+                    .AddTransient<ITestRunContextService, TestRunContextService>();
             });
     }
 

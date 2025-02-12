@@ -1,14 +1,9 @@
 using TestIT.ApiClient.Model;
+using TmsRunner.Services.Interfaces;
 
-namespace TmsRunner.Services;
+namespace TmsRunner.Services.Implementations;
 
-public interface ITestRunContextService
-{
-    void SetCurrentTestRun(TestRunV2GetModel testRun);
-    TestRunV2GetModel? GetCurrentTestRun();
-}
-
-public class TestRunContextService : ITestRunContextService
+internal class TestRunContextService : ITestRunContextService
 {
     private TestRunV2GetModel? _currentTestRun;
 
@@ -21,4 +16,4 @@ public class TestRunContextService : ITestRunContextService
     {
         return _currentTestRun;
     }
-}
+} 

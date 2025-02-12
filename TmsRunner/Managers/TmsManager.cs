@@ -4,7 +4,7 @@ using TestIT.ApiClient.Client;
 using TestIT.ApiClient.Model;
 using TmsRunner.Entities;
 using TmsRunner.Entities.AutoTest;
-using TmsRunner.Services;
+using TmsRunner.Services.Interfaces;
 using TmsRunner.Utils;
 using AutoTest = TmsRunner.Entities.AutoTest.AutoTest;
 
@@ -61,33 +61,36 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
     {
         logger.LogDebug("Submitting test result {@Result} to test run {@Id}", result, id);
 
+        var testRunId = new Guid(id ?? string.Empty);
         var model = Converter.ConvertResultToModel(result, settings.ConfigurationId);
 
-        if (settings.AdapterMode == 0 && settings.IgnoreParameters)
+        if (settings is not { AdapterMode: 0, IgnoreParameters: true })
         {
-            var currentTestRun = testRunContext.GetCurrentTestRun();
-            var matchingResults = currentTestRun?.TestResults?
-                .Where(x => x.AutoTest.ExternalId == result.ExternalId)
-                .ToList();
-
-            if (matchingResults?.Any() == true)
-            {
-                foreach (var matchingResult in matchingResults)
-                {
-                    model.Parameters = matchingResult.Parameters;
-                    await testRunsApi.SetAutoTestResultsForTestRunAsync(new Guid(id ?? string.Empty), [model])
-                        .ConfigureAwait(false);
-                    logger.LogDebug("Submitted result for test point with parameters: {@Parameters}",
-                        matchingResult.Parameters);
-                }
-
-                return;
-            }
+            await testRunsApi.SetAutoTestResultsForTestRunAsync(testRunId, [model])
+                .ConfigureAwait(false);
+            logger.LogDebug("Submit test result to test run {Id} completed successfully", id);
+            
+            return;
         }
-        
-        await testRunsApi.SetAutoTestResultsForTestRunAsync(new Guid(id ?? string.Empty), [model])
-            .ConfigureAwait(false);
-        logger.LogDebug("Submit test result to test run {Id} completed successfully", id);
+
+        var currentTestRun = testRunContext.GetCurrentTestRun();
+        var matchingResults = currentTestRun?.TestResults?
+            .Where(x => x.AutoTest.ExternalId == result.ExternalId)
+            .ToList();
+
+        if (matchingResults is { Count: 0 })
+        {
+            throw new InvalidOperationException($"No matching autotest found for ExternalId: {result.ExternalId}");
+        }
+
+        foreach (var matchingResult in matchingResults)
+        {
+            model.Parameters = matchingResult.Parameters;
+            await testRunsApi.SetAutoTestResultsForTestRunAsync(testRunId, [model])
+                .ConfigureAwait(false);
+            logger.LogDebug("Submitted result for test point with parameters: {@Parameters}",
+                matchingResult.Parameters);
+        }
     }
 
     public async Task<AttachmentModel> UploadAttachmentAsync(string fileName, Stream content)

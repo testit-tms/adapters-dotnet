@@ -4,6 +4,7 @@ using TmsRunner.Entities;
 using TmsRunner.Entities.Configuration;
 using TmsRunner.Managers;
 using TmsRunner.Services;
+using TmsRunner.Services.Interfaces;
 
 namespace TmsRunner;
 
@@ -39,23 +40,23 @@ public class App(ILogger<App> logger,
         switch (tmsSettings.AdapterMode)
         {
             case 0:
-                {
-                    testRun = await tmsManager.GetTestRunAsync(tmsSettings.TestRunId).ConfigureAwait(false);
-                    var testCaseForRun = tmsManager.GetAutoTestsForRunAsync(testRun);
-                    testCases = filterService.FilterTestCases(adapterConfig.TestAssemblyPath, testCaseForRun, testCases);
-                    testRunContext.SetCurrentTestRun(testRun);
-                    break;
-                }
+            {
+                testRun = await tmsManager.GetTestRunAsync(tmsSettings.TestRunId).ConfigureAwait(false);
+                var testCaseForRun = tmsManager.GetAutoTestsForRunAsync(testRun);
+                testCases = filterService.FilterTestCases(adapterConfig.TestAssemblyPath, testCaseForRun, testCases);
+                testRunContext.SetCurrentTestRun(testRun);
+                break;
+            }
             case 2:
             {
                 testRun = await tmsManager.CreateTestRunAsync().ConfigureAwait(false);
-                    tmsSettings.TestRunId = testRun!.Id.ToString();
-                    testRunContext.SetCurrentTestRun(testRun);
+                tmsSettings.TestRunId = testRun!.Id.ToString();
+                testRunContext.SetCurrentTestRun(testRun);
 
-                    if (!string.IsNullOrEmpty(adapterConfig.TmsLabelsOfTestsToRun))
-                    {
-                        testCases = filterService.FilterTestCasesByLabels(adapterConfig, testCases);
-                    }
+                if (!string.IsNullOrEmpty(adapterConfig.TmsLabelsOfTestsToRun))
+                {
+                    testCases = filterService.FilterTestCasesByLabels(adapterConfig, testCases);
+                }
 
                 break;
             }
