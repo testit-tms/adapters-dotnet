@@ -61,7 +61,7 @@ public sealed class RunService(ILogger<RunService> logger,
         var maxRuns = (int.TryParse(config.TmsRerunTestsCount, out int rerunCount) ? rerunCount : 0) + 1; // +1 for initial run
         var testCasesToRun = initialTestCases.ToList();
 
-        while (currentRun <= maxRuns && testCasesToRun.Any())
+        while (testCasesToRun.Count != 0)
         {
             logger.LogInformation(
                 "Running tests (Attempt {CurrentRun} of {MaxRuns}), Number of tests: {TestCount}", 
@@ -69,26 +69,23 @@ public sealed class RunService(ILogger<RunService> logger,
                 maxRuns, 
                 testCasesToRun.Count);
 
-            await RunSelectedTestsAsync(testCasesToRun);
+            await RunSelectedTestsAsync(testCasesToRun).ConfigureAwait(false);
 
-            if (currentRun < maxRuns)
+            if (currentRun >= maxRuns)
             {
-                testCasesToRun = runEventHandler.GetFailedTestCases().ToList();
-                runEventHandler.ClearFailedTestCases();
-                
-                if (testCasesToRun.Any())
-                {
-                    logger.LogInformation(
-                        "Found {FailedCount} failed tests to rerun", 
-                        testCasesToRun.Count);
-                }
-                else
-                {
-                    logger.LogInformation("No failed tests to rerun");
-                    break;
-                }
+                break;
             }
 
+            testCasesToRun = runEventHandler.GetFailedTestCases().ToList();
+            runEventHandler.ClearFailedTestCases();
+
+            if (testCasesToRun.Count == 0)
+            {
+                logger.LogInformation("No failed tests to rerun");
+                break;
+            }
+
+            logger.LogInformation("Found {FailedCount} failed tests to rerun", testCasesToRun.Count);
             currentRun++;
         }
     }

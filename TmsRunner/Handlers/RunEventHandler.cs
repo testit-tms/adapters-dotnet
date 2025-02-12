@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Client;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
 using TmsRunner.Services;
+using System.Collections.Concurrent;
 
 namespace TmsRunner.Handlers;
 
@@ -10,8 +11,7 @@ public sealed class RunEventHandler(ILogger<RunEventHandler> logger, EventWaitHa
                                     ProcessorService processorService) : ITestRunEventsHandler, IDisposable
 {
     private readonly List<Task> _processTestResultsTasks = [];
-    private readonly List<TestCase> _failedTestCases = new();
-    private readonly object _lockObject = new();
+    private readonly ConcurrentBag<TestCase> _failedTestCases = [];
 
     public void HandleLogMessage(TestMessageLevel level, string? message)
     {
@@ -36,14 +36,11 @@ public sealed class RunEventHandler(ILogger<RunEventHandler> logger, EventWaitHa
     {
         if (testRunChangedArgs?.NewTestResults == null) return;
 
-        lock (_lockObject)
+        foreach (var result in testRunChangedArgs.NewTestResults)
         {
-            foreach (var result in testRunChangedArgs.NewTestResults)
+            if (result?.Outcome == TestOutcome.Failed)
             {
-                if (result?.Outcome == TestOutcome.Failed)
-                {
-                    _failedTestCases.Add(result.TestCase);
-                }
+                _failedTestCases.Add(result.TestCase);
             }
         }
 
@@ -79,18 +76,12 @@ public sealed class RunEventHandler(ILogger<RunEventHandler> logger, EventWaitHa
 
     public IEnumerable<TestCase> GetFailedTestCases()
     {
-        lock (_lockObject)
-        {
-            return _failedTestCases.ToList();
-        }
+        return _failedTestCases.ToArray();
     }
 
     public void ClearFailedTestCases()
     {
-        lock (_lockObject)
-        {
-            _failedTestCases.Clear();
-        }
+        _failedTestCases.Clear();
     }
 
     private async Task ProcessTestResultsAsync(IEnumerable<TestResult?>? testResults)
