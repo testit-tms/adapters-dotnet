@@ -18,7 +18,7 @@ public static class Adapter
     {
         Console.WriteLine($"{MessageType.TmsStepLinks}: " + JsonConvert.SerializeObject(new List<Link>
         {
-            new Link
+            new()
             {
                 Title = title,
                 Url = url,

@@ -6,13 +6,11 @@ namespace Tms.Adapter.Core.Logger;
 
 public static class LoggerFactory
 {
-    private static ILoggerFactory _logger;
-    private static readonly object Lock = new object();
+    private static ILoggerFactory? _logger;
+    private static readonly object Lock = new();
 
     public static ILoggerFactory GetLogger(bool isDebug = false)
     {
-        if (_logger != null) return _logger;
-
         lock (Lock)
         {
             if (_logger != null) return _logger;
@@ -30,7 +28,9 @@ public static class LoggerFactory
                     "{Timestamp:HH:mm} [{Level}] ({ThreadId}) {SourceContext}: {Message}{NewLine}{Exception}")
                 .CreateLogger();
 
-            return new SerilogLoggerFactory(serilogLogger);
+            _logger = new SerilogLoggerFactory(serilogLogger);
+            
+            return _logger;
         }
     }
 }

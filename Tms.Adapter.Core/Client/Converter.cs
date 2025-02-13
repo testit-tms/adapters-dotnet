@@ -58,7 +58,7 @@ public static class Converter
             ConfigurationId = new Guid(configurationId),
             Links = ConvertLinksToPostModel(result.ResultLinks),
             Message = result.Message,
-            Traces = result.Trace,
+            Traces = result.Trace ?? string.Empty,
             StartedOn = DateTimeOffset.FromUnixTimeMilliseconds(container.Start).UtcDateTime,
             CompletedOn = DateTimeOffset.FromUnixTimeMilliseconds(container.Stop).UtcDateTime,
             Duration = result.Stop - result.Start,
@@ -111,10 +111,10 @@ public static class Converter
         return links.Select(l =>
             new LinkPostModel(url: l.Url)
             {
-                Title = l.Title,
-                Description = l.Description,
+                Title = l.Title ?? string.Empty,
+                Description = l.Description ?? string.Empty,
                 Type = l.Type != null
-                    ? (LinkType?)Enum.Parse(typeof(LinkType), l.Type.ToString())
+                    ? Enum.Parse<LinkType>(l.Type.ToString())
                     : null
             }
         ).ToList();
@@ -125,10 +125,10 @@ public static class Converter
         return links.Select(l =>
             new LinkPutModel(url: l.Url)
             {
-                Title = l.Title,
-                Description = l.Description,
+                Title = l.Title ?? string.Empty,
+                Description = l.Description ?? string.Empty,
                 Type = l.Type != null
-                    ? (LinkType?)Enum.Parse(typeof(LinkType), l.Type.ToString())
+                    ? Enum.Parse<LinkType>(l.Type.ToString())
                     : null
             }
         ).ToList();

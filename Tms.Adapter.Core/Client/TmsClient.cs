@@ -24,7 +24,7 @@ public class TmsClient : ITmsClient
         _logger = logger;
         _settings = settings;
 
-        var cfg = new Configuration { BasePath = settings.Url };
+        var cfg = new Configuration { BasePath = settings.Url ?? throw new InvalidOperationException($"Value of {nameof(settings.Url)} cannot be null")};
         cfg.AddApiKeyPrefix("Authorization", "PrivateToken");
         cfg.AddApiKey("Authorization", settings.PrivateToken);
 
