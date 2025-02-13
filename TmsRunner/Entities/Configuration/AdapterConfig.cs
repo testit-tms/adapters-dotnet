@@ -82,6 +82,9 @@ public sealed class AdapterConfig
     public string? TmsRerunTestsCount { get; set; }
 
 
+    [Option("tmsIgnoreParameters", Default = "false", Required = false, HelpText = "Set ignore parameters.")]
+    public string? TmsIgnoreParameters { get; init; }
+
     public Config ToInternalConfig()
     {
         return new Config
@@ -98,8 +101,9 @@ public sealed class AdapterConfig
             TmsAutomaticCreationTestCases = TmsAutomaticCreationTestCases,
             TmsAutomaticUpdationLinksToTestCases = TmsAutomaticUpdationLinksToTestCases,
             TmsCertValidation = TmsCertValidation,
+            TmsRerunTestsCount = TmsRerunTestsCount,
             TmsLabelsOfTestsToRun = TmsLabelsOfTestsToRun,
-            TmsRerunTestsCount = TmsRerunTestsCount
+            TmsIgnoreParameters = TmsIgnoreParameters
         };
     }
 

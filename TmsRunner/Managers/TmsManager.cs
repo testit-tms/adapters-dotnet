@@ -4,6 +4,7 @@ using TestIT.ApiClient.Client;
 using TestIT.ApiClient.Model;
 using TmsRunner.Entities;
 using TmsRunner.Entities.AutoTest;
+using TmsRunner.Services;
 using TmsRunner.Utils;
 using AutoTest = TmsRunner.Entities.AutoTest.AutoTest;
 
@@ -13,12 +14,13 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
                               IAttachmentsApiAsync attachmentsApi,
                               IAutoTestsApiAsync autoTestsApi,
                               ITestRunsApiAsync testRunsApi,
-                              TmsSettings settings)
+                              TmsSettings settings,
+                              ITestRunContextService testRunContext)
 {
     private readonly int MAX_TRIES = 10;
     private readonly int WAITING_TIME = 200;
 
-    public async Task<string?> CreateTestRunAsync()
+    public async Task<TestRunV2GetModel?> CreateTestRunAsync()
     {
         var testRunV2PostShortModel = new TestRunV2PostShortModel
         {
@@ -31,20 +33,25 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
         var testRun = await testRunsApi.CreateEmptyAsync(testRunV2PostShortModel).ConfigureAwait(false) ?? throw new Exception($"Could not find project with id: {settings.ProjectId}");
         logger.LogDebug("Created test run {@TestRun}", testRun);
 
-        return testRun.Id.ToString();
+        return testRun;
     }
 
-    public async Task<List<string?>> GetAutoTestsForRunAsync(string? testRunId)
+    public async Task<TestRunV2GetModel?> GetTestRunAsync(string testRunId)
     {
-        logger.LogDebug("Getting autotests for run from test run {Id}", testRunId);
-
-        var testRun = await testRunsApi.GetTestRunByIdAsync(new Guid(testRunId ?? string.Empty)).ConfigureAwait(false);
+        logger.LogDebug("Getting test run {@TestRunId}", testRunId);
+        
+        return await testRunsApi.GetTestRunByIdAsync(new Guid(testRunId ?? string.Empty)).ConfigureAwait(false);
+    }
+    
+    public List<string?> GetAutoTestsForRunAsync(TestRunV2GetModel testRun)
+    {
+        logger.LogDebug("Getting autotests for run from test run {Id}", testRun.Id);
 
         var autotests = testRun.TestResults.Where(x => !x.AutoTest.IsDeleted).Select(x => x.AutoTest.ExternalId).ToList();
 
         logger.LogDebug(
             "Autotests for run from test run {Id}: {@Autotests}",
-            testRunId,
+            testRun.Id,
             autotests);
 
         return autotests as List<string?>;
@@ -54,10 +61,36 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
     {
         logger.LogDebug("Submitting test result {@Result} to test run {@Id}", result, id);
 
+        var testRunId = new Guid(id ?? string.Empty);
         var model = Converter.ConvertResultToModel(result, settings.ConfigurationId);
-        _ = await testRunsApi.SetAutoTestResultsForTestRunAsync(new Guid(id ?? string.Empty), [model]).ConfigureAwait(false);
 
-        logger.LogDebug("Submit test result to test run {Id} is successfully", id);
+        if (settings is not { AdapterMode: 0, IgnoreParameters: true })
+        {
+            await testRunsApi.SetAutoTestResultsForTestRunAsync(testRunId, [model])
+                .ConfigureAwait(false);
+            logger.LogDebug("Submit test result to test run {Id} completed successfully", id);
+            
+            return;
+        }
+
+        var currentTestRun = testRunContext.GetCurrentTestRun();
+        var matchingResults = currentTestRun?.TestResults?
+            .Where(x => x.AutoTest.ExternalId == result.ExternalId)
+            .ToList();
+
+        if (matchingResults is { Count: 0 })
+        {
+            throw new InvalidOperationException($"No matching autotest found for ExternalId: {result.ExternalId}");
+        }
+
+        foreach (var matchingResult in matchingResults)
+        {
+            model.Parameters = matchingResult.Parameters;
+            await testRunsApi.SetAutoTestResultsForTestRunAsync(testRunId, [model])
+                .ConfigureAwait(false);
+            logger.LogDebug("Submitted result for test point with parameters: {@Parameters}",
+                matchingResult.Parameters);
+        }
     }
 
     public async Task<AttachmentModel> UploadAttachmentAsync(string fileName, Stream content)
