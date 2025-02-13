@@ -16,4 +16,5 @@ public sealed record Config
     public string? TmsCertValidation;
     public string? TmsLabelsOfTestsToRun;
     public string? TmsIgnoreParameters;
+    public string? TmsRerunTestsCount;
 }

@@ -16,6 +16,7 @@ public sealed class EnvConfigurationProvider : ConfigurationProvider
     private const string EnvTmsAutomaticUpdationLinksToTestCases = "TMS_AUTOMATIC_UPDATION_LINKS_TO_TEST_CASES";
     private const string EnvTmsCertValidation = "TMS_CERT_VALIDATION";
     private const string EnvTmsIgnoreParameters = "TMS_IGNORE_PARAMETERS";
+    private const string EnvTmsRerunTestsCount = "TMS_ADAPTER_AUTOTESTS_RERUN_COUNT";
 
     public override void Load()
     {
@@ -33,6 +34,7 @@ public sealed class EnvConfigurationProvider : ConfigurationProvider
             { "AutomaticUpdationLinksToTestCases", Environment.GetEnvironmentVariable(EnvTmsAutomaticUpdationLinksToTestCases) },
             { "CertValidation", Environment.GetEnvironmentVariable(EnvTmsCertValidation) },
             { "IgnoreParameters", Environment.GetEnvironmentVariable(EnvTmsIgnoreParameters) },
+            { "RerunTestsCount", Environment.GetEnvironmentVariable(EnvTmsRerunTestsCount) },
         };
 
         Data = data
