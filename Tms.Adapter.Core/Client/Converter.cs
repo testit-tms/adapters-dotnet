@@ -21,10 +21,10 @@ public static class Converter
             Steps = ConvertStepsToModel(result.Steps),
             Setup = ConvertFixturesToModel(container.Befores),
             Teardown = ConvertFixturesToModel(container.Afters),
-            Title = result.Title,
+            Title = result.Title!,
             Description = result.Description,
             Labels = ConvertLabelsToPostModel(result.Labels),
-            ExternalKey = result.ExternalKey,
+            ExternalKey = result.ExternalKey!,
         };
     }
 
@@ -41,10 +41,10 @@ public static class Converter
             Steps = ConvertStepsToModel(result.Steps),
             Setup = ConvertFixturesToModel(container.Befores),
             Teardown = ConvertFixturesToModel(container.Afters),
-            Title = result.Title,
+            Title = result.Title!,
             Description = result.Description,
             Labels = ConvertLabelsToPostModel(result.Labels),
-            ExternalKey = result.ExternalKey,
+            ExternalKey = result.ExternalKey!,
         };
     }
 
@@ -57,7 +57,7 @@ public static class Converter
         {
             ConfigurationId = new Guid(configurationId),
             Links = ConvertLinksToPostModel(result.ResultLinks),
-            Message = result.Message,
+            Message = result.Message!,
             Traces = result.Trace!,
             StartedOn = DateTimeOffset.FromUnixTimeMilliseconds(container.Start).UtcDateTime,
             CompletedOn = DateTimeOffset.FromUnixTimeMilliseconds(container.Stop).UtcDateTime,

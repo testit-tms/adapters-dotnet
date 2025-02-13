@@ -11,7 +11,7 @@ public class Link : IEquatable<Link>
     public string? Description { get; set; }
 
 
-    public override bool Equals(object input) => this.Equals(input as Link);
+    public override bool Equals(object? obj) => this.Equals(obj as Link);
 
     public override int GetHashCode()
     {
@@ -20,6 +20,6 @@ public class Link : IEquatable<Link>
 
     public bool Equals(Link? other)
     {
-        return Type == other?.Type && Title == other?.Title && Url == other.Url && Description == other.Description;
+        return Type == other?.Type && Title == other?.Title && Url == other?.Url && Description == other.Description;
     }
 }

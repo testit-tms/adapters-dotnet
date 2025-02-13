@@ -2,7 +2,7 @@ namespace Tms.Adapter.Core.Configurator;
 
 public class TmsSettings
 {
-    private string _url;
+    private string _url = null!;
 
     public string Url
     {

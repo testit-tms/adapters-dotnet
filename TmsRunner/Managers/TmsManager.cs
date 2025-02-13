@@ -83,7 +83,7 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
             throw new InvalidOperationException($"No matching autotest found for ExternalId: {result.ExternalId}");
         }
 
-        foreach (var matchingResult in matchingResults)
+        foreach (var matchingResult in matchingResults!)
         {
             model.Parameters = matchingResult.Parameters;
             await testRunsApi.SetAutoTestResultsForTestRunAsync(testRunId, [model])

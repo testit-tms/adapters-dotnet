@@ -136,7 +136,7 @@ public class TmsClient : ITmsClient
 
                     return;
                 }
-                catch (ApiException e)
+                catch (ApiException)
                 {
                     _logger.LogError(
                          "Cannot link autotest {AutotestId} to work item {WorkItemId}: work item does not exist",
@@ -147,7 +147,6 @@ public class TmsClient : ITmsClient
                 }
             }
         }
-
     }
 
     public async Task DeleteAutoTestLinkFromWorkItem(string autotestId, string workItemId)
@@ -169,7 +168,7 @@ public class TmsClient : ITmsClient
 
                 return;
             }
-            catch (ApiException e)
+            catch (ApiException)
             {
                 _logger.LogError(
                     "Cannot link autotest {AutotestId} to work item {WorkitemId}",

@@ -45,7 +45,7 @@ public sealed class FilterService(ILogger<FilterService> logger, Replacer replac
         return testCasesToRun;
     }
 
-    private string GetExternalId(MethodInfo testMethod, TestCase testCase)
+    private string? GetExternalId(MethodInfo testMethod, TestCase testCase)
     {
         var attributes = testMethod.GetCustomAttributes(false);
 
@@ -59,7 +59,7 @@ public sealed class FilterService(ILogger<FilterService> logger, Replacer replac
                     .Select(x => x ?? string.Empty)
                     .Zip(parameterValues, (k, v) => new { k, v })
                     .ToDictionary(x => x.k, x => x.v);
-                return replacer.ReplaceParameters(externalId.Value, parameterDictionary);
+                return Replacer.ReplaceParameters(externalId.Value, parameterDictionary);
             }
         }
 

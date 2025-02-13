@@ -2,8 +2,8 @@ namespace Tms.Adapter.Core.Models;
 
 public abstract class ExecutableItem
 {
-    public string DisplayName { get; set; }
-    public string Description { get; set; }
+    public string DisplayName { get; set; } = null!;
+    public string Description { get; set; } = null!;
     public Status Status { get; set; }
 
     public Stage Stage { get; set; }
