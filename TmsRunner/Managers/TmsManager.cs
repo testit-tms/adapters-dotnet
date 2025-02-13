@@ -4,7 +4,7 @@ using TestIT.ApiClient.Client;
 using TestIT.ApiClient.Model;
 using TmsRunner.Entities;
 using TmsRunner.Entities.AutoTest;
-using TmsRunner.Services.Interfaces;
+using TmsRunner.Services;
 using TmsRunner.Utils;
 using AutoTest = TmsRunner.Entities.AutoTest.AutoTest;
 

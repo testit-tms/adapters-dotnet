@@ -1,6 +1,6 @@
 using TestIT.ApiClient.Model;
 
-namespace TmsRunner.Services.Interfaces;
+namespace TmsRunner.Services;
 
 public interface ITestRunContextService
 {

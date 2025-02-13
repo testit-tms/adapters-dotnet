@@ -214,7 +214,8 @@ public sealed class ProcessorService(ILogger<ProcessorService> logger,
         var autoTestResultRequestBody = GetAutoTestResultsForTestRunModel(autoTest, testResult, traceJson,
             testCaseSteps, attachmentIds, parameters, tmsSettings.IgnoreParameters);
 
-        await apiClient.SubmitResultToTestRunAsync(tmsSettings.TestRunId, autoTestResultRequestBody).ConfigureAwait(false);
+        await apiClient.SubmitResultToTestRunAsync(tmsSettings.TestRunId, autoTestResultRequestBody)
+            .ConfigureAwait(false);
     }
 
     private async Task UpdateTestLinkToWorkItems(string autoTestId, List<string> workItemIds)
