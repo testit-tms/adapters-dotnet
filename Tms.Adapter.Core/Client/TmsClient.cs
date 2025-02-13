@@ -86,8 +86,8 @@ public class TmsClient : ITmsClient
         
         var putLinks = links.Select(l => new LinkPutModel(url: l.Url)
             {
-                Title = l.Title,
-                Description = l.Description,
+                Title = l.Title!,
+                Description = l.Description!,
                 Type = l.Type != null
                     ? (LinkType?)Enum.Parse(typeof(LinkType), l.Type.ToString())
                     : null

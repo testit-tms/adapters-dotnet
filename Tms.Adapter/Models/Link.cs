@@ -4,11 +4,11 @@ public class Link : IEquatable<Link>
 {
     public LinkType? Type { get; set; }
 
-    public string Title { get; set; }
+    public string? Title { get; set; }
 
-    public string Url { get; set; }
+    public string Url { get; set; } = null!;
 
-    public string Description { get; set; }
+    public string? Description { get; set; }
 
 
     public override bool Equals(object input) => this.Equals(input as Link);

@@ -10,11 +10,11 @@ public class TmsSettings
         set => _url = value;
     }
 
-    public string PrivateToken { get; set; }
-    public string ProjectId { get; set; }
-    public string ConfigurationId { get; set; }
-    public string TestRunId { get; set; }
-    public string TestRunName { get; set; }
+    public string PrivateToken { get; set; } = null!;
+    public string ProjectId { get; set; } = null!;
+    public string ConfigurationId { get; set; } = null!;
+    public string TestRunId { get; set; } = null!;
+    public string? TestRunName { get; set; }
     public bool AutomaticCreationTestCases { get; set; }
     public bool AutomaticUpdationLinksToTestCases { get; set; }
     public bool CertValidation { get; set; }
