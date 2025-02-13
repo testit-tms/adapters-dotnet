@@ -3,6 +3,7 @@ using Tms.Adapter.Models;
 
 namespace TmsRunner.Entities.AutoTest;
 
+#pragma warning disable CA1051
 public sealed record AutoTestResult
 {
     public List<Link>? Links;

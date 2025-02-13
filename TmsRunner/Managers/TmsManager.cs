@@ -178,7 +178,7 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
 
                     return;
                 }
-                catch (ApiException e)
+                catch (ApiException)
                 {
                     logger.LogError(
                          "Cannot link autotest {AutotestId} to work item {WorkItemId}",
@@ -211,7 +211,7 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
 
                 return;
             }
-            catch (ApiException e)
+            catch (ApiException)
             {
                 logger.LogError(
                     "Cannot link autotest {AutotestId} to work item {WorkitemId}",

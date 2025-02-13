@@ -1,5 +1,6 @@
 namespace Tms.Adapter.Core.Attributes;
 
+[AttributeUsage(AttributeTargets.Method)]
 public class DisplayNameAttribute : Attribute, ITmsAttribute
 {
     public string Value { get; }

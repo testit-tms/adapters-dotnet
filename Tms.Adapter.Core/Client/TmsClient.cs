@@ -89,7 +89,7 @@ public class TmsClient : ITmsClient
                 Title = l.Title!,
                 Description = l.Description!,
                 Type = l.Type != null
-                    ? (LinkType?)Enum.Parse(typeof(LinkType), l.Type.ToString())
+                    ? Enum.Parse<LinkType>(l.Type.ToString())
                     : null
             }
         ).ToList();

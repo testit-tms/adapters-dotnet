@@ -87,7 +87,7 @@ public sealed class LogParser(Replacer replacer)
                             .Select(id => Replacer.ReplaceParameters(id, parameters))
                             .ToList();
 
-                        autoTest.WorkItemIds = workItemIds ?? [];
+                        autoTest.WorkItemIds = (workItemIds ?? [])!;
                         break;
                     }
                 case LinksAttribute links:
@@ -95,7 +95,7 @@ public sealed class LogParser(Replacer replacer)
                         if (links.Value is not null)
                         {
                             links.Value.Title = Replacer.ReplaceParameters(links.Value.Title, parameters);
-                            links.Value.Url = Replacer.ReplaceParameters(links.Value.Url, parameters);
+                            links.Value.Url = Replacer.ReplaceParameters(links.Value.Url, parameters)!;
                             links.Value.Description =
                                 Replacer.ReplaceParameters(links.Value.Description, parameters);
 

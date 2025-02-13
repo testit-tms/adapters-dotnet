@@ -14,7 +14,7 @@ public class AdapterManager
         () => Thread.CurrentThread.ManagedThreadId.ToString();
 
     private static readonly object Obj = new();
-    private static AdapterManager _instance;
+    private static AdapterManager? _instance;
     private readonly ResultStorage _storage;
     private readonly IWriter _writer;
     private readonly ITmsClient _client;

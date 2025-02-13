@@ -144,7 +144,7 @@ public class StepAspect
         {
             return (T)target(args);
         }
-        catch (Exception e)
+        catch (Exception)
         {
             return default(T);
         }
@@ -156,7 +156,7 @@ public class StepAspect
         {
             return await (Task<T>)target(args);
         }
-        catch (Exception e)
+        catch (Exception)
         {
             return default(T);
         }

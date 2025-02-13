@@ -3,6 +3,8 @@ using Tms.Adapter.Models;
 
 namespace TmsRunner.Entities;
 
+#pragma warning disable CA1051
+#pragma warning disable CA1716
 public sealed class Step : StepDto
 {
     public string? Result;
