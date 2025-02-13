@@ -56,7 +56,15 @@ public class App(ILogger<App> logger,
         }
 
         logger.LogInformation("Running tests: {Count}", testCases.Count);
-        await runService.RunSelectedTestsAsync(testCases).ConfigureAwait(false);
+        
+        if (tmsSettings.RerunTestsCount > 0)
+        {
+            await runService.RunTestsWithRerunsAsync(testCases).ConfigureAwait(false);
+        }
+        else
+        {
+            await runService.RunSelectedTestsAsync(testCases).ConfigureAwait(false);
+        }
 
         if (tmsSettings.AdapterMode == 2)
         {

@@ -78,6 +78,10 @@ public sealed class AdapterConfig
     [Option("tmsCertValidation", Default = "true", Required = false, HelpText = "Set certificate validation.")]
     public string? TmsCertValidation { get; init; }
 
+    [Option("tmsRerunTestsCount", Default = "0", Required = false, HelpText = "Number of times to rerun failed tests")]
+    public string? TmsRerunTestsCount { get; set; }
+
+
     public Config ToInternalConfig()
     {
         return new Config
@@ -94,8 +98,8 @@ public sealed class AdapterConfig
             TmsAutomaticCreationTestCases = TmsAutomaticCreationTestCases,
             TmsAutomaticUpdationLinksToTestCases = TmsAutomaticUpdationLinksToTestCases,
             TmsCertValidation = TmsCertValidation,
-            TmsLabelsOfTestsToRun = TmsLabelsOfTestsToRun
-
+            TmsLabelsOfTestsToRun = TmsLabelsOfTestsToRun,
+            TmsRerunTestsCount = TmsRerunTestsCount
         };
     }
 
