@@ -6,11 +6,11 @@ namespace Tms.Adapter.Core.Storage;
 
 public class ResultStorage
 {
-    private readonly ConcurrentDictionary<string, LinkedList<string>> _stepStorage = new();
+    public readonly ConcurrentDictionary<string, LinkedList<string>> _stepStorage = new();
 
-    private readonly ConcurrentDictionary<string, object> _storage = new();
+    public readonly ConcurrentDictionary<string, object> _storage = new();
 
-    private LinkedList<string> Steps => _stepStorage.GetOrAdd(
+    public LinkedList<string> Steps => _stepStorage.GetOrAdd(
         AdapterManager.CurrentTestIdGetter(),
         new LinkedList<string>()
     );
@@ -28,7 +28,7 @@ public class ResultStorage
     public T Remove<T>(string id)
     {
         _storage.TryRemove(id, out var value);
-        
+
         return (T)value;
     }
 
