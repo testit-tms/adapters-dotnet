@@ -17,6 +17,7 @@ public static class Configurator
     private const string TmsAutomaticUpdationLinksToTestCases = "TMS_AUTOMATIC_UPDATION_LINKS_TO_TEST_CASES";
     private const string TmsCertValidation = "TMS_CERT_VALIDATION";
     private const string ConfigFile = "TMS_CONFIG_FILE";
+    private const string TmsIgnoreParameters = "TMS_IGNORE_PARAMETERS";
 
     public static TmsSettings GetConfig()
     {
@@ -109,6 +110,12 @@ public static class Configurator
         if (bool.TryParse(Environment.GetEnvironmentVariable(TmsCertValidation), out var validCert) && !validCert)
         {
             settings.CertValidation = false;
+        }
+
+        if (bool.TryParse(Environment.GetEnvironmentVariable(TmsIgnoreParameters),
+                out var ignoreParams) && ignoreParams)
+        {
+            settings.IgnoreParameters = true;
         }
     }
 

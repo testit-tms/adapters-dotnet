@@ -17,9 +17,11 @@ public sealed class ClassConfigurationProvider(Config config) : ConfigurationPro
             { "AdapterMode", config.TmsAdapterMode },
             { "ConfigFile", config.TmsConfigFile },
             { "RunSettings", config.TmsRunSettings },
+            { "IgnoreParameters", config.TmsIgnoreParameters },
             { "AutomaticCreationTestCases", config.TmsAutomaticCreationTestCases },
             { "AutomaticUpdationLinksToTestCases", config.TmsAutomaticUpdationLinksToTestCases },
-            { "CertValidation", config.TmsCertValidation }
+            { "CertValidation", config.TmsCertValidation },
+            { "RerunTestsCount", config.TmsRerunTestsCount }
         };
 
         Data = data

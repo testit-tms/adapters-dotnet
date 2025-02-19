@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Client;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
 using TmsRunner.Services;
+using System.Collections.Concurrent;
 
 namespace TmsRunner.Handlers;
 
@@ -10,6 +11,7 @@ public sealed class RunEventHandler(ILogger<RunEventHandler> logger, EventWaitHa
                                     ProcessorService processorService) : ITestRunEventsHandler, IDisposable
 {
     private readonly List<Task> _processTestResultsTasks = [];
+    private readonly ConcurrentBag<TestCase> _failedTestCases = [];
 
     public void HandleLogMessage(TestMessageLevel level, string? message)
     {
@@ -32,10 +34,17 @@ public sealed class RunEventHandler(ILogger<RunEventHandler> logger, EventWaitHa
 
     public void HandleTestRunStatsChange(TestRunChangedEventArgs? testRunChangedArgs)
     {
-        if (testRunChangedArgs is { NewTestResults: not null })
+        if (testRunChangedArgs?.NewTestResults == null) return;
+
+        foreach (var result in testRunChangedArgs.NewTestResults)
         {
-            _processTestResultsTasks.Add(ProcessTestResultsAsync(testRunChangedArgs.NewTestResults));
+            if (result?.Outcome == TestOutcome.Failed)
+            {
+                _failedTestCases.Add(result.TestCase);
+            }
         }
+
+        _processTestResultsTasks.Add(ProcessTestResultsAsync(testRunChangedArgs.NewTestResults));
     }
 
     public void HandleRawMessage(string rawMessage)
@@ -65,6 +74,16 @@ public sealed class RunEventHandler(ILogger<RunEventHandler> logger, EventWaitHa
         return _processTestResultsTasks;
     }
 
+    public IEnumerable<TestCase> GetFailedTestCases()
+    {
+        return _failedTestCases.ToArray();
+    }
+
+    public void ClearFailedTestCases()
+    {
+        _failedTestCases.Clear();
+    }
+
     private async Task ProcessTestResultsAsync(IEnumerable<TestResult?>? testResults)
     {
         if (testResults == null)
@@ -78,7 +97,7 @@ public sealed class RunEventHandler(ILogger<RunEventHandler> logger, EventWaitHa
             {
                 continue;
             }
-
+            
             logger.LogDebug("Start test '{Name}' upload", testResult.DisplayName);
 
             try
@@ -97,6 +116,7 @@ public sealed class RunEventHandler(ILogger<RunEventHandler> logger, EventWaitHa
     public void Dispose()
     {
         _processTestResultsTasks.Clear();
+        _failedTestCases.Clear();
         waitHandle.Dispose();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using TestIT.ApiClient.Model;
 using TmsRunner.Entities;
 using TmsRunner.Entities.Configuration;
 using TmsRunner.Managers;
@@ -11,7 +12,8 @@ public class App(ILogger<App> logger,
                  TmsManager tmsManager,
                  TmsSettings tmsSettings,
                  FilterService filterService,
-                 RunService runService)
+                 RunService runService,
+                 ITestRunContextService testRunContext)
 {
     public async Task<int> RunAsync()
     {
@@ -24,6 +26,7 @@ public class App(ILogger<App> logger,
 
         runService.InitialiseRunner();
         var testCases = runService.DiscoverTests();
+        TestRunV2GetModel? testRun;
         logger.LogInformation("Discovered Tests Count: {Count}", testCases.Count);
 
         if (testCases.Count == 0)
@@ -36,27 +39,38 @@ public class App(ILogger<App> logger,
         switch (tmsSettings.AdapterMode)
         {
             case 0:
-                {
-                    var testCaseForRun = await tmsManager.GetAutoTestsForRunAsync(tmsSettings.TestRunId).ConfigureAwait(false);
-                    testCases = filterService.FilterTestCases(adapterConfig.TestAssemblyPath, testCaseForRun, testCases);
-
-                    break;
-                }
+            {
+                testRun = await tmsManager.GetTestRunAsync(tmsSettings.TestRunId).ConfigureAwait(false);
+                var testCaseForRun = tmsManager.GetAutoTestsForRunAsync(testRun);
+                testCases = filterService.FilterTestCases(adapterConfig.TestAssemblyPath, testCaseForRun, testCases);
+                testRunContext.SetCurrentTestRun(testRun);
+                break;
+            }
             case 2:
+            {
+                testRun = await tmsManager.CreateTestRunAsync().ConfigureAwait(false);
+                tmsSettings.TestRunId = testRun!.Id.ToString();
+                testRunContext.SetCurrentTestRun(testRun);
+
+                if (!string.IsNullOrEmpty(adapterConfig.TmsLabelsOfTestsToRun))
                 {
-                    tmsSettings.TestRunId = await tmsManager.CreateTestRunAsync().ConfigureAwait(false);
-
-                    if (!string.IsNullOrEmpty(adapterConfig.TmsLabelsOfTestsToRun))
-                    {
-                        testCases = filterService.FilterTestCasesByLabels(adapterConfig, testCases);
-                    }
-
-                    break;
+                    testCases = filterService.FilterTestCasesByLabels(adapterConfig, testCases);
                 }
+
+                break;
+            }
         }
 
         logger.LogInformation("Running tests: {Count}", testCases.Count);
-        await runService.RunSelectedTestsAsync(testCases).ConfigureAwait(false);
+        
+        if (tmsSettings.RerunTestsCount > 0)
+        {
+            await runService.RunTestsWithRerunsAsync(testCases).ConfigureAwait(false);
+        }
+        else
+        {
+            await runService.RunSelectedTestsAsync(testCases).ConfigureAwait(false);
+        }
 
         if (tmsSettings.AdapterMode == 2)
         {
