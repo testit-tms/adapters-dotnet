@@ -14,6 +14,7 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
                               IAttachmentsApiAsync attachmentsApi,
                               IAutoTestsApiAsync autoTestsApi,
                               ITestRunsApiAsync testRunsApi,
+                              IProjectsApiAsync projectsApi,
                               TmsSettings settings,
                               ITestRunContextService testRunContext)
 {
@@ -226,5 +227,10 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
     public async Task<List<WorkItemIdentifierModel>> GetWorkItemsLinkedToAutoTestAsync(string autotestId)
     {
         return await autoTestsApi.GetWorkItemsLinkedToAutoTestAsync(autotestId);
+    }
+
+    public async Task<ProjectModel> GetProjectByIdAsync()
+    {
+        return await projectsApi.GetProjectByIdAsync(settings.ProjectId!).ConfigureAwait(false);
     }
 }

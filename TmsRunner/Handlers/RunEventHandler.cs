@@ -12,6 +12,7 @@ public sealed class RunEventHandler(ILogger<RunEventHandler> logger, EventWaitHa
 {
     private readonly List<Task> _processTestResultsTasks = [];
     private readonly ConcurrentBag<TestCase> _failedTestCases = [];
+    private bool _hasUploadErrors;
 
     public void HandleLogMessage(TestMessageLevel level, string? message)
     {
@@ -84,6 +85,8 @@ public sealed class RunEventHandler(ILogger<RunEventHandler> logger, EventWaitHa
         _failedTestCases.Clear();
     }
 
+    public bool HasUploadErrors => _hasUploadErrors;
+
     private async Task ProcessTestResultsAsync(IEnumerable<TestResult?>? testResults)
     {
         if (testResults == null)
@@ -103,11 +106,12 @@ public sealed class RunEventHandler(ILogger<RunEventHandler> logger, EventWaitHa
             try
             {
                 await processorService.ProcessAutoTestAsync(testResult).ConfigureAwait(false);
-
+                
                 logger.LogInformation("Success test '{Name}' upload", testResult.DisplayName);
             }
             catch (Exception e)
             {
+                _hasUploadErrors = true;
                 logger.LogError(e, "Failed test '{Name}' upload", testResult.DisplayName);
             }
         }

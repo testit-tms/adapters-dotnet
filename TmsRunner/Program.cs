@@ -145,6 +145,11 @@ public static class Program
                         provider.GetRequiredService<TestIT.ApiClient.Client.Configuration>(),
                         provider.GetRequiredService<HttpClientHandler>()
                     ))
+                    .AddTransient<IProjectsApiAsync, ProjectsApi>(provider => new ProjectsApi(
+                        provider.GetRequiredService<IHttpClientFactory>().CreateClient(nameof(HttpClientNames.Default)),
+                        provider.GetRequiredService<TestIT.ApiClient.Client.Configuration>(),
+                        provider.GetRequiredService<HttpClientHandler>()
+                    ))
                     .AddTransient<App>()
                     .AddTransient<TmsManager>()
                     .AddTransient<Replacer>()
