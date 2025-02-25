@@ -62,8 +62,6 @@ public class App(ILogger<App> logger,
         }
 
         logger.LogInformation("Running tests: {Count}", testCases.Count);
-        logger.LogInformation("RerunCount tmssettings: {RerunTestsCount}", tmsSettings.RerunTestsCount);
-        logger.LogInformation("RerunCount adapter: {RerunTestsCount}", adapterConfig.TmsRerunTestsCount);
         
         bool runSuccess;
         if (tmsSettings.RerunTestsCount > 0)
