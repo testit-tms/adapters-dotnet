@@ -66,7 +66,7 @@ public class App(ILogger<App> logger,
         bool runSuccess;
         if (tmsSettings.RerunTestsCount > 0)
         {
-            runSuccess = await runService.RunTestsWithRerunsAsync(testCases).ConfigureAwait(false);
+            runSuccess = await runService.RunTestsWithRerunsAsync(testCases, tmsSettings.RerunTestsCount).ConfigureAwait(false);
         }
         else
         {

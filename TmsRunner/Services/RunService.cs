@@ -57,10 +57,11 @@ public sealed class RunService(ILogger<RunService> logger,
         return !runEventHandler.HasUploadErrors;
     }
     
-    public async Task<bool> RunTestsWithRerunsAsync(IEnumerable<TestCase> initialTestCases)
+    public async Task<bool> RunTestsWithRerunsAsync(IEnumerable<TestCase> initialTestCases,
+        int? tmsSettingsRerunTestsCount)
     {
         var currentRun = 1;
-        var maxRuns = (int.TryParse(config.TmsRerunTestsCount, out int rerunCount) ? rerunCount : 0) + 1; // +1 for initial run
+        var maxRuns = (tmsSettingsRerunTestsCount ?? 0) + 1; // +1 for initial run
         var testCasesToRun = initialTestCases.ToList();
 
         while (testCasesToRun.Count != 0)

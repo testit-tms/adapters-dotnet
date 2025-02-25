@@ -21,5 +21,5 @@ public sealed record TmsSettings
     public bool AutomaticUpdationLinksToTestCases { get; set; }
     public bool CertValidation { get; set; }
     public bool IgnoreParameters { get; set; }
-    public int RerunTestsCount { get; set; }
+    public int? RerunTestsCount { get; set; }
 }
