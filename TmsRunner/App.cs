@@ -77,8 +77,10 @@ public class App(ILogger<App> logger,
         {
             var project = await tmsManager.GetProjectByIdAsync().ConfigureAwait(false);
             var testRunUrl = new Uri(new Uri(tmsSettings.Url!), $"projects/{project.GlobalId}/test-runs/{tmsSettings.TestRunId}/test-results");
-
+            var failedTests = runService.GetFailedTestCasesCount();
+            
             logger.LogInformation("Test run {testRunUrl} finished.", testRunUrl);
+            logger.LogInformation("Count of failed tests: {Count}", failedTests);
         }
         
         return runSuccess ? 0 : 1;

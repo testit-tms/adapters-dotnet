@@ -56,6 +56,11 @@ public sealed class RunService(ILogger<RunService> logger,
         
         return !runEventHandler.HasUploadErrors;
     }
+
+    public int GetFailedTestCasesCount()
+    {
+        return runEventHandler.GetFailedTestCases().ToList().Count;
+    }
     
     public async Task<bool> RunTestsWithRerunsAsync(IEnumerable<TestCase> initialTestCases,
         int? tmsSettingsRerunTestsCount)
