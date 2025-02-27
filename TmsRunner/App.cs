@@ -63,20 +63,26 @@ public class App(ILogger<App> logger,
 
         logger.LogInformation("Running tests: {Count}", testCases.Count);
         
+        bool runSuccess;
         if (tmsSettings.RerunTestsCount > 0)
         {
-            await runService.RunTestsWithRerunsAsync(testCases).ConfigureAwait(false);
+            runSuccess = await runService.RunTestsWithRerunsAsync(testCases, tmsSettings.RerunTestsCount).ConfigureAwait(false);
         }
         else
         {
-            await runService.RunSelectedTestsAsync(testCases).ConfigureAwait(false);
+            runSuccess = await runService.RunSelectedTestsAsync(testCases).ConfigureAwait(false);
         }
 
         if (tmsSettings.AdapterMode == 2)
         {
-            logger.LogInformation("Test run {TestRunId} finished.", tmsSettings.TestRunId);
+            var project = await tmsManager.GetProjectByIdAsync().ConfigureAwait(false);
+            var testRunUrl = new Uri(new Uri(tmsSettings.Url!), $"projects/{project.GlobalId}/test-runs/{tmsSettings.TestRunId}/test-results");
+            var failedTests = runService.GetFailedTestCasesCount();
+            
+            logger.LogInformation("Test run {testRunUrl} finished.", testRunUrl);
+            logger.LogInformation("Count of failed tests: {Count}", failedTests);
         }
-
-        return 0;
+        
+        return runSuccess ? 0 : 1;
     }
 }

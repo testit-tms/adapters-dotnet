@@ -278,10 +278,8 @@ public sealed class ProcessorService(ILogger<ProcessorService> logger,
             Parameters = isIgnoreParameters ? new Dictionary<string, string>() : parameters!,
             Attachments = attachmentIds,
         };
-        if (!string.IsNullOrEmpty(testResult.ErrorStackTrace))
-        {
-            autoTestResultRequestBody.Traces = testResult.ErrorStackTrace.TrimStart();
-        }
+        
+        autoTestResultRequestBody.Traces = autoTestResultRequestBody.Message + "\n" + testResult.ErrorStackTrace?.TrimStart();
 
         return autoTestResultRequestBody;
     }

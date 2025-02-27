@@ -48,17 +48,25 @@ public sealed class RunService(ILogger<RunService> logger,
         return discoveryEventHandler.GetTestCases();
     }
 
-    public async Task RunSelectedTestsAsync(IEnumerable<TestCase> testCases)
+    public async Task<bool> RunSelectedTestsAsync(IEnumerable<TestCase> testCases)
     {
         consoleWrapper.RunTests(testCases, config.TmsRunSettings, runEventHandler);
         runEventHandler.WaitForEnd();
         await Task.WhenAll(runEventHandler.GetProcessTestResultsTasks()).ConfigureAwait(false);
+        
+        return !runEventHandler.HasUploadErrors;
+    }
+
+    public int GetFailedTestCasesCount()
+    {
+        return runEventHandler.GetFailedTestCases().ToList().Count;
     }
     
-    public async Task RunTestsWithRerunsAsync(IEnumerable<TestCase> initialTestCases)
+    public async Task<bool> RunTestsWithRerunsAsync(IEnumerable<TestCase> initialTestCases,
+        int? tmsSettingsRerunTestsCount)
     {
         var currentRun = 1;
-        var maxRuns = (int.TryParse(config.TmsRerunTestsCount, out int rerunCount) ? rerunCount : 0) + 1; // +1 for initial run
+        var maxRuns = (tmsSettingsRerunTestsCount ?? 0) + 1; // +1 for initial run
         var testCasesToRun = initialTestCases.ToList();
 
         while (testCasesToRun.Count != 0)
@@ -88,5 +96,7 @@ public sealed class RunService(ILogger<RunService> logger,
             logger.LogInformation("Found {FailedCount} failed tests to rerun", testCasesToRun.Count);
             currentRun++;
         }
+
+        return !runEventHandler.HasUploadErrors;
     }
 }
