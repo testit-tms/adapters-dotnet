@@ -6,11 +6,11 @@ namespace Tms.Adapter.Core.Storage;
 
 public class ResultStorage
 {
-    public readonly ConcurrentDictionary<string, LinkedList<string>> _stepStorage = new();
+    private readonly ConcurrentDictionary<string, LinkedList<string>> _stepStorage = new();
 
-    public readonly ConcurrentDictionary<string, object> _storage = new();
+    private readonly ConcurrentDictionary<string, object> _storage = new();
 
-    public LinkedList<string> Steps => _stepStorage.GetOrAdd(
+    private LinkedList<string> Steps => _stepStorage.GetOrAdd(
         AdapterManager.CurrentTestIdGetter(),
         new LinkedList<string>()
     );
