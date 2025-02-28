@@ -25,7 +25,7 @@ public class TmsBindingInvoker : BindingInvoker
     {
         if (binding is not HookBinding hook)
             return base.InvokeBinding(binding, contextManager, arguments, testTracer, out duration);
-            
+
         var featureContainerId = TmsHelper.GetFeatureContainerId(contextManager.FeatureContext?.FeatureInfo);
 
         switch (hook.HookType)

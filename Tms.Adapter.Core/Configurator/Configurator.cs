@@ -21,7 +21,7 @@ public static class Configurator
 
     public static TmsSettings GetConfig()
     {
-        var config = new TmsSettings 
+        var config = new TmsSettings
         {
             AutomaticCreationTestCases  = false,
             AutomaticUpdationLinksToTestCases = false,

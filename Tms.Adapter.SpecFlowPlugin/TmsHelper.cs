@@ -16,7 +16,7 @@ public static class TmsHelper
 
     private static readonly ScenarioInfo EmptyScenarioInfo =
         new ScenarioInfo("Unknown", string.Empty, Array.Empty<string>(), new OrderedDictionary());
-        
+
     internal static FixtureResult GetFixtureResult(HookBinding hook)
     {
         return new FixtureResult
@@ -65,7 +65,7 @@ public static class TmsHelper
             ExternalKey = externalKey,
         };
         testResult = TmsTagParser.AddTags(testResult, featureInfo, scenarioInfo, parameters);
-            
+
         AdapterManager.Instance.StartTestCase(containerId, testResult);
         scenarioContext?.Set(testResult);
         featureContext?.Get<HashSet<TestContainer>>().Add(testResult);

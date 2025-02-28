@@ -28,7 +28,7 @@ public class ResultStorage
     public T Remove<T>(string id)
     {
         _storage.TryRemove(id, out var value);
-        
+
         return (T)value;
     }
 

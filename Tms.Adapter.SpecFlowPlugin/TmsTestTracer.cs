@@ -24,26 +24,26 @@ public class TmsTestTracer : TestTracer, ITestTracer
     void ITestTracer.TraceStep(StepInstance stepInstance, bool showAdditionalArguments)
     {
         TraceStep(stepInstance, showAdditionalArguments);
-            
+
         var stepResult = new StepResult
         {
             DisplayName = $"{stepInstance.Keyword} {stepInstance.Text}"
         };
-            
+
         Adapter.StartStep(Hash.NewId(), stepResult);
     }
 
     void ITestTracer.TraceStepDone(BindingMatch match, object[] arguments, TimeSpan duration)
     {
         TraceStepDone(match, arguments, duration);
-            
+
         Adapter.StopStep(x => x.Status = Status.Passed);
     }
 
     void ITestTracer.TraceError(Exception ex, TimeSpan duration)
     {
         TraceError(ex, duration);
-            
+
         Adapter.StopStep(x => x.Status = Status.Failed);
         Adapter.UpdateTestCase(
             x =>
@@ -57,14 +57,14 @@ public class TmsTestTracer : TestTracer, ITestTracer
     void ITestTracer.TraceStepSkipped()
     {
         TraceStepSkipped();
-            
+
         Adapter.StopStep(x => x.Status = Status.Skipped);
     }
 
     void ITestTracer.TraceStepPending(BindingMatch match, object[] arguments)
     {
         TraceStepPending(match, arguments);
-            
+
         Adapter.StopStep(x => x.Status = Status.Skipped);
     }
 
@@ -72,7 +72,7 @@ public class TmsTestTracer : TestTracer, ITestTracer
         CultureInfo bindingCulture, List<BindingMatch> matchesWithoutScopeCheck)
     {
         TraceNoMatchingStepDefinition(stepInstance, targetLanguage, bindingCulture, matchesWithoutScopeCheck);
-            
+
         Adapter.StopStep(x => x.Status = Status.Failed);
         Adapter.UpdateTestCase(x =>
         {

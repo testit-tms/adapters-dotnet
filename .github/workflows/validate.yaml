@@ -36,7 +36,9 @@ jobs:
       matrix:
         project: [
           ./TmsRunnerTests,
-          ./Tms.Adapter.CoreTests
+          ./Tms.Adapter.CoreTests,
+          ./Tms.Adapter.XUnitTests,
+          ./Tms.Adapter.SpecFlowPluginTests,
         ]
     steps:
       - name: Checkout
