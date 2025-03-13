@@ -18,7 +18,7 @@ public class Writer : IWriter
         _tmsSettings = tmsSettings;
     }
 
-    public async Task Write(TestContainer result, ClassContainer container)
+    public async Task Write(TestContainer result, ClassContainer resultContainer)
     {
         _logger.LogDebug("Write autotest {@Autotest}", result);
 
@@ -30,16 +30,16 @@ public class Writer : IWriter
             {
                 if (result.Status != Status.Failed)
                 {
-                    await _client.UpdateAutotest(result, container);
+                    await _client.UpdateAutotest(result, resultContainer);
                 }
                 else
                 {
-                    await _client.UpdateAutotest(result.ExternalId, result.Links, result.ExternalKey);
+                    await _client.UpdateAutotest(result.ExternalId, result.Links, result.ExternalKey!);
                 }
             }
             else
             {
-                await _client.CreateAutotest(result, container);
+                await _client.CreateAutotest(result, resultContainer);
             }
 
             if (result.WorkItemIds.Count > 0)
@@ -47,7 +47,7 @@ public class Writer : IWriter
                 await UpdateTestLinkToWorkItems(result.ExternalId, result.WorkItemIds);
             }
 
-            await _client.SubmitTestCaseResult(result, container);
+            await _client.SubmitTestCaseResult(result, resultContainer);
 
             _logger.LogDebug("Autotest with ID {ID} successfully written", result.ExternalId);
         }

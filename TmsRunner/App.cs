@@ -40,10 +40,10 @@ public class App(ILogger<App> logger,
         {
             case 0:
             {
-                testRun = await tmsManager.GetTestRunAsync(tmsSettings.TestRunId).ConfigureAwait(false);
-                var testCaseForRun = tmsManager.GetAutoTestsForRunAsync(testRun);
+                testRun = await tmsManager.GetTestRunAsync(tmsSettings.TestRunId!).ConfigureAwait(false);
+                var testCaseForRun = tmsManager.GetAutoTestsForRunAsync(testRun!);
                 testCases = filterService.FilterTestCases(adapterConfig.TestAssemblyPath, testCaseForRun, testCases);
-                testRunContext.SetCurrentTestRun(testRun);
+                testRunContext.SetCurrentTestRun(testRun!);
                 break;
             }
             case 2:

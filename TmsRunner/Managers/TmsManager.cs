@@ -84,7 +84,7 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
             throw new InvalidOperationException($"No matching autotest found for ExternalId: {result.ExternalId}");
         }
 
-        foreach (var matchingResult in matchingResults)
+        foreach (var matchingResult in matchingResults!)
         {
             model.Parameters = matchingResult.Parameters;
             await testRunsApi.SetAutoTestResultsForTestRunAsync(testRunId, [model])
@@ -179,7 +179,7 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
 
                     return;
                 }
-                catch (ApiException e)
+                catch (ApiException)
                 {
                     logger.LogError(
                          "Cannot link autotest {AutotestId} to work item {WorkItemId}",
@@ -212,7 +212,7 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
 
                 return;
             }
-            catch (ApiException e)
+            catch (ApiException)
             {
                 logger.LogError(
                     "Cannot link autotest {AutotestId} to work item {WorkitemId}",
