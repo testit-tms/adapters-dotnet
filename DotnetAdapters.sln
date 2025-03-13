@@ -22,9 +22,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tms.Adapter.XUnit", "Tms.Ad
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tms.Adapter.SpecFlowPlugin", "Tms.Adapter.SpecFlowPlugin\Tms.Adapter.SpecFlowPlugin.csproj", "{47C8A533-91F4-43E9-B75B-5DA46A9A05AD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tms.Adapter.XUnitTests", "Tms.Adapter.XUnitTests\Tms.Adapter.XUnitTests.csproj", "{520E58F9-E839-4B0B-A968-4F36AE09445A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tms.Adapter.XUnitTests", "Tms.Adapter.XUnitTests\Tms.Adapter.XUnitTests.csproj", "{520E58F9-E839-4B0B-A968-4F36AE09445A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tms.Adapter.SpecFlowPluginTests", "Tms.Adapter.SpecFlowPluginTests\Tms.Adapter.SpecFlowPluginTests.csproj", "{2335593F-5DB2-47D0-B1E8-61796FF4DA3E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tms.Adapter.SpecFlowPluginTests", "Tms.Adapter.SpecFlowPluginTests\Tms.Adapter.SpecFlowPluginTests.csproj", "{2335593F-5DB2-47D0-B1E8-61796FF4DA3E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{A1DCE003-191B-4FEA-AAF9-106B7566BEE1}"
 EndProject
