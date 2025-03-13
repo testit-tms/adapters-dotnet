@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-		<Version>1.7.2</Version>
+		    <Version>1.8.0-TMS-CLOUD</Version>
         <TargetFramework>netstandard2.1</TargetFramework>
         <Nullable>enable</Nullable>
         <IsPackable>true</IsPackable>
@@ -13,7 +13,7 @@
         <RepositoryUrl>https://github.com/testit-tms/adapters-dotnet</RepositoryUrl>
         <PackageProjectUrl>https://testit.software</PackageProjectUrl>
         <ImplicitUsings>enable</ImplicitUsings>
-		<LangVersion>default</LangVersion>
+		    <LangVersion>default</LangVersion>
         <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <AnalysisLevel>latest-recommended</AnalysisLevel>
