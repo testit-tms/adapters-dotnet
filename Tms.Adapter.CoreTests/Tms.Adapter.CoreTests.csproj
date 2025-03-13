@@ -33,7 +33,10 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Tms.Adapter.Core\Tms.Adapter.Core.csproj"/>
+        <PackageReference Include="TestIt.ApiClient" Version="4.2.0-TMS-CLOUD" />
     </ItemGroup>
+    
+
 
     <ItemGroup>
         <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting"/>
