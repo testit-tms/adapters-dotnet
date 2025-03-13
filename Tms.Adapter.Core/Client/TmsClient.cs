@@ -224,12 +224,12 @@ public class TmsClient : ITmsClient
             return;
         }
 
-        var testRunV2PostShortModel = new TestRunV2PostShortModel
+        var createEmptyTestRunApiModel = new CreateEmptyTestRunApiModel
         {
             ProjectId = new Guid(_settings.ProjectId),
             Name = (string.IsNullOrEmpty(_settings.TestRunName) ? null : _settings.TestRunName)!
         };
-        var testRun = await _testRuns.CreateEmptyAsync(testRunV2PostShortModel);
+        var testRun = await _testRuns.CreateEmptyAsync(createEmptyTestRunApiModel);
 
         _settings.TestRunId = testRun.Id.ToString();
 
@@ -255,21 +255,21 @@ public class TmsClient : ITmsClient
         _logger.LogDebug("Complete test run is successfully");
     }
 
-    public async Task<AutoTestModel?> GetAutotestByExternalId(string externalId)
+    public async Task<AutoTestApiResult?> GetAutotestByExternalId(string externalId)
     {
         _logger.LogDebug("Getting autotest by external id {Id}", externalId);
 
-        var filter = new ApiV2AutoTestsSearchPostRequest(
-            filter: new AutotestsSelectModelFilter
+        var filter = new  AutoTestSearchApiModel(
+            filter: new AutoTestFilterApiModel
             {
                 ExternalIds = new List<string> { externalId },
                 ProjectIds = new List<Guid> { new Guid(_settings.ProjectId) },
                 IsDeleted = false
             },
-            includes: new AutotestsSelectModelIncludes()
+            includes: new  AutoTestSearchIncludeApiModel()
         );
 
-        var autotests = await _autoTests.ApiV2AutoTestsSearchPostAsync(apiV2AutoTestsSearchPostRequest: filter);
+        var autotests = await _autoTests.ApiV2AutoTestsSearchPostAsync(autoTestSearchApiModel: filter);
         var autotest = autotests.FirstOrDefault();
 
         _logger.LogDebug(
