@@ -88,6 +88,9 @@ jobs:
 
       - name: Upload coverage to Coveralls
         run: |
+          echo "Listing all files in ./downloaded-coverage-reports/:"
+          ls -R ./downloaded-coverage-reports/
           for report in ./downloaded-coverage-reports/*/coverage.opencover.xml; do
+            echo $report
             csmacnz.Coveralls --opencover -i "${report}" --repo-token ${{ secrets.GITHUB_TOKEN }}
           done
