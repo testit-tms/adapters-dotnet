@@ -89,5 +89,5 @@ jobs:
       - name: Upload coverage to Coveralls
         run: |
           for report in ./downloaded-coverage-reports/*/coverage.opencover.xml; do
-            csmacnz.Coveralls --opencover -i "$report" --repo-token ${{ secrets.GITHUB_TOKEN }}
+            csmacnz.Coveralls --opencover -i "${report}" --repo-token ${{ secrets.GITHUB_TOKEN }}
           done
