@@ -92,5 +92,5 @@ jobs:
           ls -R ./downloaded-coverage-reports/
           for report in ./downloaded-coverage-reports/*/coverage.cobertura.xml; do
             echo $report
-            csmacnz.Coveralls --opencover -i "${report}" --repo-token ${{ secrets.GITHUB_TOKEN }}
+            csmacnz.Coveralls --opencover -i "${report}" --repoToken ${{ secrets.GITHUB_TOKEN }}
           done
