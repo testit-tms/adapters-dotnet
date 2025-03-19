@@ -58,4 +58,4 @@ jobs:
       - name: Tests 
         run: | 
             dotnet test ${{ matrix.project }} --collect:"XPlat Code Coverage"
-            coveralls.net --opencover -i ./coverage/coverage.opencover.xml --repo-token ${{ secrets.GITHUB_TOKEN }}
+            csmacnz.Coveralls --opencover -i ./coverage/coverage.opencover.xml --repo-token ${{ secrets.GITHUB_TOKEN }}
