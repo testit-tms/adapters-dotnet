@@ -76,10 +76,7 @@ jobs:
       - name: Test
         run: |
           ${{ env.TMS_RUNNER }} --runner "${{ env.VSTEST_CONSOLE }}" --testassembly "${{ env.TEST_DLL }}"
-      - name: Install coveralls.net
-        run: dotnet tool install -g coveralls.net
+          
       - name: Validate
         run: |
-          dotnet test --configuration Debug --collect:"XPlat Code Coverage" --no-build --logger:"console;verbosity=detailed" api-validator-dotnet
-      - name: Upload coverage to Coveralls
-        run: coveralls.net --opencover -i ./coverage/coverage.opencover.xml --repo-token ${{ secrets.GITHUB_TOKEN }}
+          dotnet test --configuration Debug --no-build --logger:"console;verbosity=detailed" api-validator-dotnet

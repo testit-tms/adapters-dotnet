@@ -52,5 +52,10 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore ${{ matrix.project }}
 
-      - name: Build project
-        run: dotnet test ${{ matrix.project }}
+      - name: Install coveralls.net
+        run: dotnet tool install -g coveralls.net
+        
+      - name: Tests 
+        run: | 
+            dotnet test ${{ matrix.project }} --collect:"XPlat Code Coverage"
+            coveralls.net --opencover -i ./coverage/coverage.opencover.xml --repo-token ${{ secrets.GITHUB_TOKEN }}
