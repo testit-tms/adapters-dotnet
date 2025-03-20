@@ -56,7 +56,9 @@ jobs:
         run: dotnet tool install -g coveralls.net
         
       - name: Tests 
-        run: dotnet test ./${{ matrix.project }} --collect:"XPlat Code Coverage" --results-directory ./coverage-reports/${{ matrix.project }}/
+        run: | 
+            dotnet test ./${{ matrix.project }} --collect:"XPlat Code Coverage" --results-directory ./coverage-reports/${{ matrix.project }}/ 
+            -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
         
       - name: Upload coverage report as artifact
         uses: actions/upload-artifact@v4
@@ -90,7 +92,7 @@ jobs:
         run: |
           echo "Listing all files in ./downloaded-coverage-reports/:"
           ls -R ./downloaded-coverage-reports/
-          for report in ./downloaded-coverage-reports/*/coverage.cobertura.xml; do
+          for report in ./downloaded-coverage-reports/*/coverage.opencover.xml; do
             echo "test $report"
             csmacnz.Coveralls --opencover -i "$report" --repoToken ${{ secrets.GITHUB_TOKEN }}
           done
