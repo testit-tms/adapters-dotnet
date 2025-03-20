@@ -76,7 +76,6 @@ jobs:
       - name: Test
         run: |
           ${{ env.TMS_RUNNER }} --runner "${{ env.VSTEST_CONSOLE }}" --testassembly "${{ env.TEST_DLL }}"
-          
       - name: Validate
         run: |
           dotnet test --configuration Debug --no-build --logger:"console;verbosity=detailed" api-validator-dotnet
