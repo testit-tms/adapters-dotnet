@@ -56,7 +56,9 @@ jobs:
         run: dotnet tool install -g coveralls.net
         
       - name: Tests 
-        run: dotnet test ./${{ matrix.project }} --collect:"XPlat Code Coverage" --results-directory ./coverage-reports/${{ matrix.project }}/ -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+        run: | 
+            dotnet test ./${{ matrix.project }} --collect:"XPlat Code Coverage" --results-directory ./coverage-reports/${{ matrix.project }}/ \
+            -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
         
       - name: Upload coverage report as artifact
         uses: actions/upload-artifact@v4
@@ -85,12 +87,23 @@ jobs:
 
       - name: Install coveralls.net
         run: dotnet tool install -g coveralls.net
+        
+      - name: Extract branch name
+        id: extract_branch
+        run: |
+          BRANCH_NAME=$(echo "$GITHUB_REF" | sed 's/refs\/heads\///')
+          echo "Branch name: $BRANCH_NAME"
+          echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
 
       - name: Upload coverage to Coveralls
         run: |
           echo "Listing all files in ./downloaded-coverage-reports/:"
           ls -R ./downloaded-coverage-reports/
           for report in ./downloaded-coverage-reports/*/coverage.opencover.xml; do
-            echo "test $report"
-            csmacnz.Coveralls --opencover -i "$report" --repoToken ${{ secrets.GITHUB_TOKEN }}
+            csmacnz.Coveralls --opencover -i "$report" --repoToken ${{ secrets.GITHUB_TOKEN }} --commitId "${{ github.sha }}" \
+            --commitBranch "${{ steps.extract_branch.outputs.branch_name }}" \
+            --commitAuthor "${{ github.actor }}" \
+            --commitEmail "${{ github.actor }}@users.noreply.github.com" \
+            --commitMessage "${{ github.event.head_commit.message }}" \
+            --jobId "${{ github.run_id }}"
           done
