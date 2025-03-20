@@ -20,6 +20,6 @@ Supported test frameworks :
 2. [XUnit](https://github.com/testit-tms/adapters-dotnet/tree/main/Tms.Adapter.XUnit)
 3. [SpecFlow](https://github.com/testit-tms/adapters-dotnet/tree/main/Tms.Adapter.SpecFlowPlugin)
 
-<a href='https://coveralls.io/github/testit-tms/adapters-dotnet?branch=feat/TMS-31461_add_coverage'>
-	<img src='https://coveralls.io/repos/github/testit-tms/adapters-dotnet/badge.svg?branch=feat/TMS-31461_add_coverage' alt='Coverage Status' />
+<a href='https://coveralls.io/github/testit-tms/adapters-dotnet?branch=main'>
+	<img src='https://coveralls.io/repos/github/testit-tms/adapters-dotnet/badge.svg?branch=main' alt='Coverage Status' />
 </a>
