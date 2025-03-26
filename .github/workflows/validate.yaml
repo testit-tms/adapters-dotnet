@@ -35,10 +35,10 @@ jobs:
     strategy:
       matrix:
         project: [
-          ./TmsRunnerTests,
-          ./Tms.Adapter.CoreTests,
-          ./Tms.Adapter.XUnitTests,
-          ./Tms.Adapter.SpecFlowPluginTests,
+          TmsRunnerTests,
+          Tms.Adapter.CoreTests,
+          Tms.Adapter.XUnitTests,
+          Tms.Adapter.SpecFlowPluginTests,
         ]
     steps:
       - name: Checkout
@@ -52,5 +52,58 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore ${{ matrix.project }}
 
-      - name: Build project
-        run: dotnet test ${{ matrix.project }}
+      - name: Install coveralls.net
+        run: dotnet tool install -g coveralls.net
+        
+      - name: Tests 
+        run: | 
+            dotnet test ./${{ matrix.project }} --collect:"XPlat Code Coverage" --results-directory ./coverage-reports/${{ matrix.project }}/ \
+            -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
+        
+      - name: Upload coverage report as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report-${{ matrix.project }}
+          path: ./coverage-reports/${{ matrix.project }}/
+          
+  upload-to-coveralls:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup .NET 6
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 6.x
+
+      - name: Download coverage reports
+        uses: actions/download-artifact@v4
+        with:
+          path: ./downloaded-coverage-reports/
+          pattern: coverage-report-*
+          merge-multiple: true
+
+      - name: Install coveralls.net
+        run: dotnet tool install -g coveralls.net
+        
+      - name: Extract branch name
+        id: extract_branch
+        run: |
+          BRANCH_NAME=$(echo "$GITHUB_REF" | sed 's/refs\/heads\///')
+          echo "Branch name: $BRANCH_NAME"
+          echo "branch_name=$BRANCH_NAME" >> $GITHUB_OUTPUT
+
+      - name: Upload coverage to Coveralls
+        run: |
+          for report in ./downloaded-coverage-reports/*/coverage.opencover.xml; do
+            csmacnz.Coveralls --opencover -i "$report" --repoToken ${{ secrets.GITHUB_TOKEN }} \
+            --commitId "${{ github.sha }}" \
+            --commitBranch "${{ steps.extract_branch.outputs.branch_name }}" \
+            --commitAuthor "${{ github.actor }}" \
+            --commitEmail "${{ github.actor }}@users.noreply.github.com" \
+            --commitMessage "${{ github.event.head_commit.message }}" \
+            --jobId "${{ github.run_id }}" \
+            --pullRequest "${{ github.event.pull_request.number }}"
+          done

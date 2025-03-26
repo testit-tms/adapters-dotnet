@@ -22,6 +22,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+		<PackageReference Include="coverlet.collector" Version="6.0.2" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
 		<PackageReference Include="MSTest.TestAdapter" Version="3.2.2">
 			<TreatAsUsed>true</TreatAsUsed>
@@ -38,5 +39,11 @@
 	<ItemGroup>
 		<Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
 	</ItemGroup>
+
+	<PropertyGroup>
+		<CollectCoverage>true</CollectCoverage>
+		<CoverletOutput>./coverage/</CoverletOutput>
+		<CoverletOutputFormat>opencover</CoverletOutputFormat>
+	</PropertyGroup>
 
 </Project>

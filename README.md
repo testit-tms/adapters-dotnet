@@ -19,3 +19,7 @@ Supported test frameworks :
 1. [MsTest/NUnit](https://github.com/testit-tms/adapters-dotnet/tree/main/Tms.Adapter)
 2. [XUnit](https://github.com/testit-tms/adapters-dotnet/tree/main/Tms.Adapter.XUnit)
 3. [SpecFlow](https://github.com/testit-tms/adapters-dotnet/tree/main/Tms.Adapter.SpecFlowPlugin)
+
+<a href='https://coveralls.io/github/testit-tms/adapters-dotnet?branch=main'>
+	<img src='https://coveralls.io/repos/github/testit-tms/adapters-dotnet/badge.svg?branch=main' alt='Coverage Status' />
+</a>
