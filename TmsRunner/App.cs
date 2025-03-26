@@ -26,7 +26,7 @@ public class App(ILogger<App> logger,
 
         runService.InitialiseRunner();
         var testCases = runService.DiscoverTests();
-        TestRunV2GetModel? testRun;
+        TestRunV2ApiResult? testRun;
         logger.LogInformation("Discovered Tests Count: {Count}", testCases.Count);
 
         if (testCases.Count == 0)

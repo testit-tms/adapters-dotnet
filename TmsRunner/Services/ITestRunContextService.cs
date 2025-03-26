@@ -4,6 +4,6 @@ namespace TmsRunner.Services;
 
 public interface ITestRunContextService
 {
-    void SetCurrentTestRun(TestRunV2GetModel testRun);
-    TestRunV2GetModel? GetCurrentTestRun();
+    void SetCurrentTestRun(TestRunV2ApiResult testRun);
+    TestRunV2ApiResult? GetCurrentTestRun();
 } 

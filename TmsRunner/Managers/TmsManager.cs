@@ -21,9 +21,9 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
     private readonly int MAX_TRIES = 10;
     private readonly int WAITING_TIME = 200;
 
-    public async Task<TestRunV2GetModel?> CreateTestRunAsync()
+    public async Task<TestRunV2ApiResult?> CreateTestRunAsync()
     {
-        var testRunV2PostShortModel = new TestRunV2PostShortModel
+        var testRunV2PostShortModel = new CreateEmptyTestRunApiModel
         {
             ProjectId = new Guid(settings.ProjectId ?? string.Empty),
             Name = (string.IsNullOrEmpty(settings.TestRunName) ? null : settings.TestRunName)!
@@ -37,14 +37,14 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
         return testRun;
     }
 
-    public async Task<TestRunV2GetModel?> GetTestRunAsync(string testRunId)
+    public async Task<TestRunV2ApiResult?> GetTestRunAsync(string testRunId)
     {
         logger.LogDebug("Getting test run {@TestRunId}", testRunId);
         
         return await testRunsApi.GetTestRunByIdAsync(new Guid(testRunId ?? string.Empty)).ConfigureAwait(false);
     }
     
-    public List<string?> GetAutoTestsForRunAsync(TestRunV2GetModel testRun)
+    public List<string?> GetAutoTestsForRunAsync(TestRunV2ApiResult testRun)
     {
         logger.LogDebug("Getting autotests for run from test run {Id}", testRun.Id);
 
@@ -110,21 +110,21 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
         return response;
     }
 
-    public async Task<AutoTestModel?> GetAutotestByExternalIdAsync(string? externalId)
+    public async Task<AutoTestApiResult?> GetAutotestByExternalIdAsync(string? externalId)
     {
         logger.LogDebug("Getting autotest by external id {Id}", externalId);
 
-        var filter = new ApiV2AutoTestsSearchPostRequest(
-            filter: new AutotestsSelectModelFilter
+        var model = new AutoTestSearchApiModel(
+            filter: new AutoTestFilterApiModel
             {
                 ExternalIds = [externalId ?? string.Empty],
                 ProjectIds = settings.ProjectId == null ? [] : [new Guid(settings.ProjectId)],
                 IsDeleted = false
             },
-            includes: new AutotestsSelectModelIncludes()
+            includes: new AutoTestSearchIncludeApiModel()
         );
 
-        var autotests = await autoTestsApi.ApiV2AutoTestsSearchPostAsync(apiV2AutoTestsSearchPostRequest: filter).ConfigureAwait(false);
+        var autotests = await autoTestsApi.ApiV2AutoTestsSearchPostAsync(autoTestSearchApiModel: model).ConfigureAwait(false);
         var autotest = autotests.FirstOrDefault();
 
         logger.LogDebug(

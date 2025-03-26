@@ -5,12 +5,17 @@ using Newtonsoft.Json;
 
 using System.Text;
 using System.Text.RegularExpressions;
+using TestIT.ApiClient.Model;
 using Tms.Adapter.Models;
 using TmsRunner.Entities;
 using TmsRunner.Entities.AutoTest;
 using TmsRunner.Managers;
 using TmsRunner.Utils;
+using AutoTest = TmsRunner.Entities.AutoTest.AutoTest;
+using AutoTestStep = TmsRunner.Entities.AutoTest.AutoTestStep;
+using AutoTestStepResult = TmsRunner.Entities.AutoTest.AutoTestStepResult;
 using File = Tms.Adapter.Models.File;
+using TmsRunner.Extensions;
 
 namespace TmsRunner.Services;
 
@@ -188,22 +193,22 @@ public sealed class ProcessorService(ILogger<ProcessorService> logger,
             .ToList();
 
 
-        var existAutotest = await apiClient.GetAutotestByExternalIdAsync(autoTest.ExternalId).ConfigureAwait(false);
-
-        if (existAutotest == null)
+        var existAutotestResult = await apiClient.GetAutotestByExternalIdAsync(autoTest.ExternalId).ConfigureAwait(false);
+        if (existAutotestResult == null)
         {
-            existAutotest = await apiClient.CreateAutotestAsync(autoTest).ConfigureAwait(false);
+            var existAutotestModel = await apiClient.CreateAutotestAsync(autoTest).ConfigureAwait(false);
+            existAutotestResult = existAutotestModel.ToApiResult();
         }
         else
         {
-            autoTest.IsFlaky = existAutotest.IsFlaky;
+            autoTest.IsFlaky = existAutotestResult.IsFlaky;
 
             await apiClient.UpdateAutotestAsync(autoTest).ConfigureAwait(false);
         }
 
         if (autoTest.WorkItemIds.Count > 0)
         {
-            await UpdateTestLinkToWorkItems(existAutotest.Id.ToString(), autoTest.WorkItemIds);
+            await UpdateTestLinkToWorkItems(existAutotestResult.Id.ToString(), autoTest.WorkItemIds);
         }
 
         if (!string.IsNullOrEmpty(testResult.ErrorMessage))
