@@ -4,14 +4,14 @@ namespace TmsRunner.Services.Implementations;
 
 internal class TestRunContextService : ITestRunContextService
 {
-    private TestRunV2GetModel? _currentTestRun;
+    private TestRunV2ApiResult? _currentTestRun;
 
-    public void SetCurrentTestRun(TestRunV2GetModel testRun)
+    public void SetCurrentTestRun(TestRunV2ApiResult testRun)
     {
         _currentTestRun = testRun;
     }
 
-    public TestRunV2GetModel? GetCurrentTestRun()
+    public TestRunV2ApiResult? GetCurrentTestRun()
     {
         return _currentTestRun;
     }
