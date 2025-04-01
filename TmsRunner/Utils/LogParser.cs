@@ -56,6 +56,11 @@ public sealed class LogParser(Replacer replacer)
         var methodFullName = GetFullyQualifiedMethodName(testResult.TestCase.FullyQualifiedName);
         var method = Reflector.GetMethodMetadata(testResult.TestCase.Source, methodFullName, parameters);
 
+        if (parameters == null || parameters.Count == 0)
+        {
+            parameters = GetParametersFromReflection(method, testResult);
+        }
+
         var autoTest = new AutoTest
         {
             Namespace = method.Namespace,
@@ -147,6 +152,45 @@ public sealed class LogParser(Replacer replacer)
         }
 
         return messages;
+    }
+    
+    private static Dictionary<string, string>? GetParametersFromReflection(MethodMetadata method, TestResult testResult)
+    {
+        try
+        {
+            var parameters = new Dictionary<string, string>();
+            
+            var displayName = testResult.DisplayName;
+            
+            if (displayName == null)
+            {
+                return parameters;
+            }
+
+            var parametersStart = displayName.IndexOf('(');
+            var parametersEnd = displayName.LastIndexOf(')');
+
+            if (parametersStart <= 0 || parametersEnd <= parametersStart)
+            {
+                return parameters;
+            }
+
+            var parametersString = displayName.Substring(parametersStart + 1, parametersEnd - parametersStart - 1);
+            var paramValues = parametersString.Split(',')
+                .Select(p => p.Trim())
+                .ToList();
+            
+            for (var i = 0; i < method.Parameters?.Count && i < paramValues.Count; i++)
+            {
+                parameters[method.Parameters[i]!] = paramValues[i];
+            }
+
+            return parameters;
+        }
+        catch
+        {
+            return null;
+        }
     }
 
     private static string GetFullyQualifiedMethodName(string testName)
