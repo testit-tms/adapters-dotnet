@@ -133,7 +133,10 @@ public static class ConfigurationManager
         }
         catch (XmlException ex)
         {
-            throw new XmlException($"RunSettings XML is invalid. Error: {ex.Message} at Line: {ex.LineNumber}, Position: {ex.LinePosition}");
+            throw new XmlException($"RunSettings XML is invalid. " +
+                                   $"Error: {ex.Message} " +
+                                   $"at Line: {ex.LineNumber}, " +
+                                   $"Position: {ex.LinePosition}");
         }
     }
 }
