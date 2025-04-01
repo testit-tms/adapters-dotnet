@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System.Configuration;
+using System.Xml;
 using TmsRunner.Entities;
 using TmsRunner.Entities.Configuration;
 using TmsRunner.Extensions;
@@ -119,20 +120,20 @@ public static class ConfigurationManager
 
     private static bool IsValidXml(string xmlStr)
     {
+        if (string.IsNullOrEmpty(xmlStr))
+        {
+            return false;
+        }
+
         try
         {
-            if (string.IsNullOrEmpty(xmlStr))
-            {
-                return false;
-            }
-
-            var xmlDoc = new System.Xml.XmlDocument();
+            var xmlDoc = new XmlDocument();
             xmlDoc.LoadXml(xmlStr);
             return true;
         }
-        catch (System.Xml.XmlException)
+        catch (XmlException ex)
         {
-            return false;
+            throw new XmlException($"RunSettings XML is invalid. Error: {ex.Message} at Line: {ex.LineNumber}, Position: {ex.LinePosition}");
         }
     }
 }
