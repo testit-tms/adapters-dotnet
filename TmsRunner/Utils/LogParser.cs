@@ -156,10 +156,11 @@ public sealed class LogParser(Replacer replacer)
     
     private static Dictionary<string, string>? GetParametersFromReflection(MethodMetadata method, TestResult testResult)
     {
-        try
-        {
             var parameters = new Dictionary<string, string>();
-            
+
+
+        try
+        {            
             var displayName = testResult.DisplayName;
             
             if (displayName == null)
@@ -189,7 +190,7 @@ public sealed class LogParser(Replacer replacer)
         }
         catch
         {
-            return null;
+            return parameters;
         }
     }
 
