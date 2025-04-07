@@ -160,37 +160,42 @@ public sealed class LogParser(Replacer replacer)
 
         try
         {
-            var displayName = testResult.DisplayName;
-
-            if (displayName == null)
+            var paramValues = GetParamsFromDisplayName(testResult);
+            if (paramValues == null)
             {
                 return parameters;
             }
-
-            var parametersStart = displayName.IndexOf('(');
-            var parametersEnd = displayName.LastIndexOf(')');
-
-            if (parametersStart <= 0 || parametersEnd <= parametersStart)
-            {
-                return parameters;
-            }
-
-            var parametersString = displayName.Substring(parametersStart + 1, parametersEnd - parametersStart - 1);
-            var paramValues = parametersString.Split(',')
-                .Select(p => p.Trim())
-                .ToList();
-
+            
             for (var i = 0; i < method.Parameters?.Count && i < paramValues.Count; i++)
             {
                 parameters[method.Parameters[i]!] = paramValues[i];
             }
-
-            return parameters;
         }
         catch
         {
-            return parameters;
+            // ignored
         }
+        
+        return parameters;
+    }
+
+    private static List<string>? GetParamsFromDisplayName(TestResult testResult)
+    {
+        var displayName = testResult.DisplayName;
+        var parametersStart = displayName?.IndexOf('(') ?? -1;
+        var parametersEnd = displayName?.LastIndexOf(')') ?? -1;
+
+        if (parametersStart <= 0 || parametersEnd <= parametersStart)
+        {
+            return null;
+        }
+
+        var parametersString = displayName!.Substring(parametersStart + 1, parametersEnd - parametersStart - 1);
+        var paramValues = parametersString.Split(',')
+            .Select(p => p.Trim())
+            .ToList();
+
+        return paramValues;
     }
 
     private static string GetFullyQualifiedMethodName(string testName)
