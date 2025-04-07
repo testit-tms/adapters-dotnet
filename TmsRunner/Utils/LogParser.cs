@@ -154,7 +154,7 @@ public sealed class LogParser(Replacer replacer)
         return messages;
     }
 
-    private static Dictionary<string, string>? GetParametersFromReflection(MethodMetadata method, TestResult testResult)
+    private static Dictionary<string, string> GetParametersFromReflection(MethodMetadata method, TestResult testResult)
     {
         var parameters = new Dictionary<string, string>();
 
