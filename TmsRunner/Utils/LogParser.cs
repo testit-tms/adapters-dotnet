@@ -153,16 +153,15 @@ public sealed class LogParser(Replacer replacer)
 
         return messages;
     }
-    
+
     private static Dictionary<string, string>? GetParametersFromReflection(MethodMetadata method, TestResult testResult)
     {
-            var parameters = new Dictionary<string, string>();
-
+        var parameters = new Dictionary<string, string>();
 
         try
-        {            
+        {
             var displayName = testResult.DisplayName;
-            
+
             if (displayName == null)
             {
                 return parameters;
@@ -180,7 +179,7 @@ public sealed class LogParser(Replacer replacer)
             var paramValues = parametersString.Split(',')
                 .Select(p => p.Trim())
                 .ToList();
-            
+
             for (var i = 0; i < method.Parameters?.Count && i < paramValues.Count; i++)
             {
                 parameters[method.Parameters[i]!] = paramValues[i];
