@@ -32,7 +32,8 @@ public sealed class Reflector
             Name = method.Name,
             Namespace = string.Join(".", fullyQualifiedNameArray[..^2]),
             Classname = fullyQualifiedNameArray[^2],
-            Attributes = attributes
+            Attributes = attributes,
+            Parameters = method.GetParameters().Select(p => p.Name).ToList()
         };
     }
 
