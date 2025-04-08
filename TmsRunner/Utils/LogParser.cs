@@ -56,6 +56,11 @@ public sealed class LogParser(Replacer replacer)
         var methodFullName = GetFullyQualifiedMethodName(testResult.TestCase.FullyQualifiedName);
         var method = Reflector.GetMethodMetadata(testResult.TestCase.Source, methodFullName, parameters);
 
+        if (parameters == null || parameters.Count == 0)
+        {
+            parameters = GetParametersFromReflection(method, testResult);
+        }
+
         var autoTest = new AutoTest
         {
             Namespace = method.Namespace,
@@ -147,6 +152,50 @@ public sealed class LogParser(Replacer replacer)
         }
 
         return messages;
+    }
+
+    private static Dictionary<string, string> GetParametersFromReflection(MethodMetadata method, TestResult testResult)
+    {
+        var parameters = new Dictionary<string, string>();
+
+        try
+        {
+            var paramValues = GetParamsFromDisplayName(testResult);
+            if (paramValues == null)
+            {
+                return parameters;
+            }
+            
+            for (var i = 0; i < method.Parameters?.Count && i < paramValues.Count; i++)
+            {
+                parameters[method.Parameters[i]!] = paramValues[i];
+            }
+        }
+        catch
+        {
+            // ignored
+        }
+        
+        return parameters;
+    }
+
+    private static List<string>? GetParamsFromDisplayName(TestResult testResult)
+    {
+        var displayName = testResult.DisplayName;
+        var parametersStart = displayName?.IndexOf('(') ?? -1;
+        var parametersEnd = displayName?.LastIndexOf(')') ?? -1;
+
+        if (parametersStart <= 0 || parametersEnd <= parametersStart)
+        {
+            return null;
+        }
+
+        var parametersString = displayName!.Substring(parametersStart + 1, parametersEnd - parametersStart - 1);
+        var paramValues = parametersString.Split(',')
+            .Select(p => p.Trim())
+            .ToList();
+
+        return paramValues;
     }
 
     private static string GetFullyQualifiedMethodName(string testName)
