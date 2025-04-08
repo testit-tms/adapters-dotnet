@@ -107,3 +107,5 @@ jobs:
             --jobId "${{ github.run_id }}" \
             --pullRequest "${{ github.event.pull_request.number }}"
           done
+      - name: Info
+        run: echo "info name"
