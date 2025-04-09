@@ -22,4 +22,4 @@ Supported test frameworks :
 
 <a href='https://coveralls.io/github/testit-tms/adapters-dotnet?branch=main'>
 	<img src='https://coveralls.io/repos/github/testit-tms/adapters-dotnet/badge.svg?branch=main' alt='Coverage Status' />
-</a> 
+</a>
