@@ -6,12 +6,11 @@ public static class AutoTestModelExtensions
 {
     public static AutoTestApiResult ToApiResult(this AutoTestModel model)
     {
-        return new AutoTestApiResult()
+        return new AutoTestApiResult(name: model.Name)
         {
             Id = model.Id,
             ProjectId = model.ProjectId,
             ExternalId = model.ExternalId,
-            Name = model.Name,
             Classname = model.Classname,
             CreatedById = model.CreatedById,
             CreatedDate = model.CreatedDate,
@@ -34,10 +33,9 @@ public static class AutoTestModelExtensions
 
     private static ConfigurationShortApiResult ToApiResult(this ConfigurationShortModel model)
     {
-        return new ConfigurationShortApiResult()
+        return new ConfigurationShortApiResult(name: model.Name)
         {
-            Id = model.Id,
-            Name = model.Name
+            Id = model.Id
         };
     }
 } 
