@@ -170,7 +170,7 @@ public sealed class LogParser(Replacer replacer)
             {
                 var paramValue = paramValues[i];
                 
-                if (paramValue.Length >= 2)
+                if (paramValue.Length > 2)
                 {
                     var firstChar = paramValue[0];
                     var lastChar = paramValue[^1];
