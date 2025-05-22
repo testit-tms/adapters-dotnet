@@ -170,12 +170,15 @@ public sealed class LogParser(Replacer replacer)
             {
                 var paramValue = paramValues[i];
                 
-                if ((paramValue.StartsWith("\"", StringComparison.OrdinalIgnoreCase) 
-                    && paramValue.EndsWith("\"", StringComparison.OrdinalIgnoreCase)) 
-                    || (paramValue.StartsWith("'", StringComparison.OrdinalIgnoreCase) 
-                        && paramValue.EndsWith("'", StringComparison.OrdinalIgnoreCase)))
+                if (paramValue.Length >= 2)
                 {
-                    paramValue = paramValue[1..^1];
+                    var firstChar = paramValue[0];
+                    var lastChar = paramValue[^1];
+
+                    if ((firstChar == '"' && lastChar == '"') || (firstChar == '\'' && lastChar == '\''))
+                    {
+                        paramValue = paramValue[1..^1];
+                    }
                 }
 
                 parameters[method.Parameters[i]!] = paramValue;
