@@ -168,7 +168,17 @@ public sealed class LogParser(Replacer replacer)
             
             for (var i = 0; i < method.Parameters?.Count && i < paramValues.Count; i++)
             {
-                parameters[method.Parameters[i]!] = paramValues[i];
+                var paramValue = paramValues[i];
+                
+                if ((paramValue.StartsWith("\"", StringComparison.OrdinalIgnoreCase) 
+                    && paramValue.EndsWith("\"", StringComparison.OrdinalIgnoreCase)) 
+                    || (paramValue.StartsWith("'", StringComparison.OrdinalIgnoreCase) 
+                        && paramValue.EndsWith("'", StringComparison.OrdinalIgnoreCase)))
+                {
+                    paramValue = paramValue[1..^1];
+                }
+
+                parameters[method.Parameters[i]!] = paramValue;
             }
         }
         catch
