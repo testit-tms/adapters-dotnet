@@ -21,10 +21,10 @@ public static class Converter
             Steps = ConvertStepsToModel(result.Steps),
             Setup = ConvertFixturesToModel(container.Befores),
             Teardown = ConvertFixturesToModel(container.Afters),
-            Title = result.Title,
+            Title = result.Title!,
             Description = result.Description,
             Labels = ConvertLabelsToPostModel(result.Labels),
-            ExternalKey = result.ExternalKey,
+            ExternalKey = result.ExternalKey!,
         };
     }
 
@@ -41,10 +41,10 @@ public static class Converter
             Steps = ConvertStepsToModel(result.Steps),
             Setup = ConvertFixturesToModel(container.Befores),
             Teardown = ConvertFixturesToModel(container.Afters),
-            Title = result.Title,
+            Title = result.Title!,
             Description = result.Description,
             Labels = ConvertLabelsToPostModel(result.Labels),
-            ExternalKey = result.ExternalKey,
+            ExternalKey = result.ExternalKey!,
         };
     }
 
@@ -57,8 +57,8 @@ public static class Converter
         {
             ConfigurationId = new Guid(configurationId),
             Links = ConvertLinksToPostModel(result.ResultLinks),
-            Message = result.Message,
-            Traces = result.Trace,
+            Message = result.Message!,
+            Traces = result.Trace!,
             StartedOn = DateTimeOffset.FromUnixTimeMilliseconds(container.Start).UtcDateTime,
             CompletedOn = DateTimeOffset.FromUnixTimeMilliseconds(container.Stop).UtcDateTime,
             Duration = result.Stop - result.Start,
@@ -111,10 +111,10 @@ public static class Converter
         return links.Select(l =>
             new LinkPostModel(url: l.Url)
             {
-                Title = l.Title,
-                Description = l.Description,
+                Title = l.Title!,
+                Description = l.Description!,
                 Type = l.Type != null
-                    ? (LinkType?)Enum.Parse(typeof(LinkType), l.Type.ToString())
+                    ? Enum.Parse<LinkType>(l.Type.ToString())
                     : null
             }
         ).ToList();
@@ -125,10 +125,10 @@ public static class Converter
         return links.Select(l =>
             new LinkPutModel(url: l.Url)
             {
-                Title = l.Title,
-                Description = l.Description,
+                Title = l.Title!,
+                Description = l.Description!,
                 Type = l.Type != null
-                    ? (LinkType?)Enum.Parse(typeof(LinkType), l.Type.ToString())
+                    ? Enum.Parse<LinkType>(l.Type.ToString())
                     : null
             }
         ).ToList();
