@@ -27,7 +27,7 @@ public static class AutoTestModelExtensions
             LastTestRunId = model.LastTestRunId,
             LastTestRunName = model.LastTestRunName,
             LastTestResultOutcome = model.LastTestResultOutcome,
-            LastTestResultConfiguration = model.LastTestResultConfiguration.ToApiResult()
+            LastTestResultConfiguration = model.LastTestResultConfiguration?.ToApiResult()
         };
     }
 
