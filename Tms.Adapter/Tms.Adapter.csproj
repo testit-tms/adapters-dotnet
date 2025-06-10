@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <Version>1.9.3-TMS-5.3</Version>
+        <Version>1.9.4-TMS-CLOUD</Version>
         <TargetFramework>netstandard2.1</TargetFramework>
         <Nullable>enable</Nullable>
         <IsPackable>true</IsPackable>
