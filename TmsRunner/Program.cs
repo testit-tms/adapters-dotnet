@@ -82,19 +82,25 @@ public static class Program
 
     private static IHostBuilder CreateHostBuilder(string[] args)
     {
+        var adapterConfig = GetAdapterConfiguration(args);
         var options = new ConfigurationReaderOptions(
             typeof(ConsoleLoggerConfigurationExtensions).Assembly,
             typeof(SerilogExpression).Assembly
         );
 
         return Host.CreateDefaultBuilder()
-            .UseSerilog((context, services, configuration) => configuration
-                .ReadFrom.Configuration(context.Configuration, options)
-                .ReadFrom.Services(services)
-                .Enrich.FromLogContext()
-                .MinimumLevel.Debug()
-                .MinimumLevel.Override("System.Net.Http.HttpClient", LogEventLevel.Warning)
-                .WriteTo.Console(LogEventLevel.Information))
+            .UseSerilog((context, services, configuration) =>
+            {
+                var consoleLogLevel = adapterConfig.IsDebug ? LogEventLevel.Debug : LogEventLevel.Information;
+                
+                configuration
+                    .ReadFrom.Configuration(context.Configuration, options)
+                    .ReadFrom.Services(services)
+                    .Enrich.FromLogContext()
+                    .MinimumLevel.Debug()
+                    .MinimumLevel.Override("System.Net.Http.HttpClient", LogEventLevel.Warning)
+                    .WriteTo.Console(consoleLogLevel);
+            })
             .ConfigureServices((hostContext, services) =>
             {
                 _ = services.AddHttpClient(nameof(HttpClientNames.Default), client =>
@@ -106,14 +112,14 @@ public static class Program
                 .AddPolicyHandler(GetRetryPolicy());
 
                 _ = services
-                    .AddSingleton(GetAdapterConfiguration(args))
+                    .AddSingleton(adapterConfig)
                     .AddSingleton(provider =>
                     {
-                        var adapterConfig = provider.GetRequiredService<AdapterConfig>();
+                        var adpConfig = provider.GetRequiredService<AdapterConfig>();
 
                         return ConfigurationManager.Configure(
-                            adapterConfig.ToInternalConfig(),
-                            Path.GetDirectoryName(adapterConfig.TestAssemblyPath) ?? string.Empty
+                            adpConfig.ToInternalConfig(),
+                            Path.GetDirectoryName(adpConfig.TestAssemblyPath) ?? string.Empty
                         );
                     })
                     .AddSingleton(provider =>

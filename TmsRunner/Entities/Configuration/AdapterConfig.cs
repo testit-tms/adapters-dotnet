@@ -102,7 +102,8 @@ public sealed class AdapterConfig
             TmsCertValidation = TmsCertValidation,
             TmsRerunTestsCount = TmsRerunTestsCount,
             TmsLabelsOfTestsToRun = TmsLabelsOfTestsToRun,
-            TmsIgnoreParameters = TmsIgnoreParameters
+            TmsIgnoreParameters = TmsIgnoreParameters,
+            IsDebug = IsDebug
         };
     }
 
