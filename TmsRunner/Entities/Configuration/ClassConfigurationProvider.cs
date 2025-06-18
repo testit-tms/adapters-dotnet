@@ -21,7 +21,8 @@ public sealed class ClassConfigurationProvider(Config config) : ConfigurationPro
             { "AutomaticCreationTestCases", config.TmsAutomaticCreationTestCases },
             { "AutomaticUpdationLinksToTestCases", config.TmsAutomaticUpdationLinksToTestCases },
             { "CertValidation", config.TmsCertValidation },
-            { "RerunTestsCount", config.TmsRerunTestsCount }
+            { "RerunTestsCount", config.TmsRerunTestsCount },
+            { "IsDebug", config.IsDebug.ToString() }
         };
 
         Data = data
