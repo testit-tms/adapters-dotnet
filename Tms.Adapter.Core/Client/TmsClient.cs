@@ -4,6 +4,7 @@ using TestIT.ApiClient.Client;
 using TestIT.ApiClient.Model;
 using Tms.Adapter.Core.Configurator;
 using Tms.Adapter.Core.Models;
+using Tms.Adapter.Core.Utils;
 using Link = Tms.Adapter.Core.Models.Link;
 using LinkType = TestIT.ApiClient.Model.LinkType;
 
@@ -54,6 +55,9 @@ public class TmsClient : ITmsClient
         var model = Converter.ConvertAutoTestDtoToPostModel(result, container, _settings.ProjectId);
         model.ShouldCreateWorkItem = _settings.AutomaticCreationTestCases;
 
+        // Escape HTML in the model before sending to API
+        HtmlEscapeUtils.EscapeHtmlInObject(model);
+
         await _autoTests.CreateAutoTestAsync(model);
 
         _logger.LogDebug("Create autotest {ExternalId} is successfully", result.ExternalId);
@@ -66,6 +70,9 @@ public class TmsClient : ITmsClient
         var autotest = await GetAutotestByExternalId(result.ExternalId);
         var model = Converter.ConvertAutoTestDtoToPutModel(result, container, _settings.ProjectId);
         model.IsFlaky = autotest?.IsFlaky;
+
+        // Escape HTML in the model before sending to API
+        HtmlEscapeUtils.EscapeHtmlInObject(model);
 
         await _autoTests.UpdateAutoTestAsync(model);
 
@@ -94,6 +101,9 @@ public class TmsClient : ITmsClient
             }
         ).ToList();
 
+        // Escape HTML in putLinks before sending to API
+        HtmlEscapeUtils.EscapeHtmlInObjectList(putLinks);
+
         var operations = new List<Operation>
         {
             new()
@@ -105,7 +115,7 @@ public class TmsClient : ITmsClient
             new()
             {
                 Path = nameof(AutoTestPutModel.ExternalKey),
-                Value = externalKey,
+                Value = HtmlEscapeUtils.EscapeHtmlTags(externalKey),
                 Op = "Replace"
             }
         };
@@ -128,7 +138,11 @@ public class TmsClient : ITmsClient
             {
                 try
                 {
-                    await _autoTests.LinkAutoTestToWorkItemAsync(autotestId, new WorkItemIdModel(workItemId ?? string.Empty)).ConfigureAwait(false);
+                    var workItemModel = new WorkItemIdModel(workItemId ?? string.Empty);
+                    // Escape HTML in the model before sending to API
+                    HtmlEscapeUtils.EscapeHtmlInObject(workItemModel);
+
+                    await _autoTests.LinkAutoTestToWorkItemAsync(autotestId, workItemModel).ConfigureAwait(false);
                     _logger.LogDebug(
                         "Link autotest {AutotestId} to workitem {WorkitemId} is successfully",
                         autotestId,
@@ -191,6 +205,10 @@ public class TmsClient : ITmsClient
         _logger.LogDebug("Submitting test result {@Result} to test run {Id}", result, _settings.TestRunId);
 
         var model = Converter.ConvertResultToModel(result, container, _settings.ConfigurationId);
+        
+        // Escape HTML in the model before sending to API
+        HtmlEscapeUtils.EscapeHtmlInObject(model);
+        
         await _testRuns.SetAutoTestResultsForTestRunAsync(new Guid(_settings.TestRunId),
             new List<AutoTestResultsForTestRunModel> { model });
 
@@ -229,6 +247,10 @@ public class TmsClient : ITmsClient
             ProjectId = new Guid(_settings.ProjectId),
             Name = (string.IsNullOrEmpty(_settings.TestRunName) ? null : _settings.TestRunName)!
         };
+        
+        // Escape HTML in the model before sending to API
+        HtmlEscapeUtils.EscapeHtmlInObject(createEmptyTestRunApiModel);
+        
         var testRun = await _testRuns.CreateEmptyAsync(createEmptyTestRunApiModel);
 
         _settings.TestRunId = testRun.Id.ToString();
@@ -268,6 +290,9 @@ public class TmsClient : ITmsClient
             },
             includes: new  AutoTestSearchIncludeApiModel()
         );
+
+        // Escape HTML in the filter before sending to API
+        HtmlEscapeUtils.EscapeHtmlInObject(filter);
 
         var autotests = await _autoTests.ApiV2AutoTestsSearchPostAsync(autoTestSearchApiModel: filter);
         var autotest = autotests.FirstOrDefault();
