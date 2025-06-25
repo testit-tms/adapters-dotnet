@@ -51,32 +51,29 @@ public class StepAttribute : OnMethodBoundaryAspect
 
         var currentMethodAttributes = _currentMethod.GetCustomAttributes(false);
 
-        if (currentMethodAttributes is not null)
+        foreach (var attribute in currentMethodAttributes)
         {
-            foreach (var attribute in currentMethodAttributes)
+            switch (attribute)
             {
-                switch (attribute)
-                {
-                    case TitleAttribute title:
-                        _title = title.Value;
-                        break;
-                    case DescriptionAttribute description:
-                        _description = description.Value;
-                        break;
-                }
+                case TitleAttribute title:
+                    _title = title.Value;
+                    break;
+                case DescriptionAttribute description:
+                    _description = description.Value;
+                    break;
+            }
 
-                var name = attribute.GetType().Name;
-                switch (name)
-                {
-                    case "TestInitializeAttribute" or "SetUpAttribute" or "ClassInitializeAttribute":
-                        _currentMethodType = CallerMethodType.Setup;
-                        _callerMethodType = CallerMethodType.Setup;
-                        break;
-                    case "TestCleanupAttribute" or "TearDownAttribute" or "ClassCleanupAttribute":
-                        _currentMethodType = CallerMethodType.Teardown;
-                        _callerMethodType = CallerMethodType.Teardown;
-                        break;
-                }
+            var name = attribute.GetType().Name;
+            switch (name)
+            {
+                case "TestInitializeAttribute" or "SetUpAttribute" or "ClassInitializeAttribute":
+                    _currentMethodType = CallerMethodType.Setup;
+                    _callerMethodType = CallerMethodType.Setup;
+                    break;
+                case "TestCleanupAttribute" or "TearDownAttribute" or "ClassCleanupAttribute":
+                    _currentMethodType = CallerMethodType.Teardown;
+                    _callerMethodType = CallerMethodType.Teardown;
+                    break;
             }
         }
 
@@ -89,22 +86,19 @@ public class StepAttribute : OnMethodBoundaryAspect
             else
             {
                 var callerMethodAttributes = _callerMethod.GetCustomAttributes(false);
-                if (callerMethodAttributes is not null)
+                foreach (var attribute in callerMethodAttributes)
                 {
-                    foreach (var attribute in callerMethodAttributes)
+                    var name = attribute.GetType().Name;
+                    _callerMethodType = name switch
                     {
-                        var name = attribute.GetType().Name;
-                        _callerMethodType = name switch
-                        {
-                            "TestInitializeAttribute" or "SetUpAttribute" or "ClassInitializeAttribute" =>
-                                CallerMethodType.Setup,
-                            "TestMethodAttribute" or "FactAttribute" or "TestCaseAttribute" or "TestAttribute" =>
-                                CallerMethodType.TestMethod,
-                            "TestCleanupAttribute" or "TearDownAttribute" or "ClassCleanupAttribute" =>
-                                CallerMethodType.Teardown,
-                            _ => _callerMethodType
-                        };
-                    }
+                        "TestInitializeAttribute" or "SetUpAttribute" or "ClassInitializeAttribute" =>
+                            CallerMethodType.Setup,
+                        "TestMethodAttribute" or "FactAttribute" or "TestCaseAttribute" or "TestAttribute" =>
+                            CallerMethodType.TestMethod,
+                        "TestCleanupAttribute" or "TearDownAttribute" or "ClassCleanupAttribute" =>
+                            CallerMethodType.Teardown,
+                        _ => _callerMethodType
+                    };
                 }
             }
         }
@@ -114,13 +108,13 @@ public class StepAttribute : OnMethodBoundaryAspect
         var newTitle = string.IsNullOrEmpty(_title) ? _currentMethod.Name : _title;
         var newDescription = string.IsNullOrEmpty(_description)
             ? null
-            : replacer.ReplaceParameters(_description, parameters);
+            : Replacer.ReplaceParameters(_description, parameters);
 
         var step = new StepDto
         {
             Guid = _guid,
             StartedOn = _startedAt,
-            Title = replacer.ReplaceParameters(newTitle, parameters),
+            Title = Replacer.ReplaceParameters(newTitle, parameters),
             Description = newDescription,
             CurrentMethod = _currentMethod.Name,
             CallerMethod = _callerMethod?.Name.Replace("$_executor_", ""),
@@ -143,7 +137,7 @@ public class StepAttribute : OnMethodBoundaryAspect
         WriteData("Failed");
     }
 
-    private void WriteData(string outcome, object result = null)
+    private void WriteData(string outcome, object? result = null)
     {
         _completedAt = DateTime.UtcNow;
 

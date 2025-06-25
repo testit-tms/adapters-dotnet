@@ -1,5 +1,6 @@
 namespace Tms.Adapter.Core.Attributes;
 
+[AttributeUsage(AttributeTargets.Method)]
 public class LabelsAttribute : Attribute, ITmsAttribute
 {
     public List<string> Lables { get; }
