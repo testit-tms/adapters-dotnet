@@ -5,7 +5,6 @@ using Newtonsoft.Json;
 
 using System.Text;
 using System.Text.RegularExpressions;
-using TestIT.ApiClient.Model;
 using Tms.Adapter.Models;
 using TmsRunner.Entities;
 using TmsRunner.Entities.AutoTest;
@@ -196,12 +195,16 @@ public sealed class ProcessorService(ILogger<ProcessorService> logger,
         var existAutotestResult = await apiClient.GetAutotestByExternalIdAsync(autoTest.ExternalId).ConfigureAwait(false);
         if (existAutotestResult == null)
         {
+            HtmlEscapeUtils.EscapeHtmlInObject(autoTest);
+
             var existAutotestModel = await apiClient.CreateAutotestAsync(autoTest).ConfigureAwait(false);
             existAutotestResult = existAutotestModel.ToApiResult();
         }
         else
         {
             autoTest.IsFlaky = existAutotestResult.IsFlaky;
+
+            HtmlEscapeUtils.EscapeHtmlInObject(autoTest);
 
             await apiClient.UpdateAutotestAsync(autoTest).ConfigureAwait(false);
         }
@@ -218,6 +221,8 @@ public sealed class ProcessorService(ILogger<ProcessorService> logger,
 
         var autoTestResultRequestBody = GetAutoTestResultsForTestRunModel(autoTest, testResult, traceJson,
             testCaseSteps, attachmentIds, parameters, tmsSettings.IgnoreParameters);
+
+        HtmlEscapeUtils.EscapeHtmlInObject(autoTestResultRequestBody);
 
         await apiClient.SubmitResultToTestRunAsync(tmsSettings.TestRunId, autoTestResultRequestBody)
             .ConfigureAwait(false);
