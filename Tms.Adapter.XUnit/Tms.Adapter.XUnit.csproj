@@ -1,52 +1,53 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-		    <Version>1.9.5-TMS-CLOUD</Version>
-        <TargetFramework>netstandard2.1</TargetFramework>
-        <Nullable>enable</Nullable>
-        <IsPackable>true</IsPackable>
-        <Title>Test IT XUnit adapter</Title>
-        <PackageId>TestIT.Adapter.XUnit</PackageId>
-        <Authors>Integration team</Authors>
-        <Description>Test IT XUnit adapter</Description>
-        <Copyright>Copyright (c) 2019 - 2024 Test IT</Copyright>
-        <RepositoryUrl>https://github.com/testit-tms/adapters-dotnet</RepositoryUrl>
-        <PackageProjectUrl>https://testit.software</PackageProjectUrl>
-        <ImplicitUsings>enable</ImplicitUsings>
-		    <LangVersion>default</LangVersion>
-        <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
-        <PackageReadmeFile>README.md</PackageReadmeFile>
-        <AnalysisLevel>latest-recommended</AnalysisLevel>
-        <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
-        <ErrorReport>none</ErrorReport>
-    </PropertyGroup>
+  <PropertyGroup>
+    <Version>1.9.5-TMS-5.3</Version>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <Nullable>enable</Nullable>
+    <IsPackable>true</IsPackable>
+    <Title>Test IT XUnit adapter</Title>
+    <PackageId>TestIT.Adapter.XUnit</PackageId>
+    <Authors>Integration team</Authors>
+    <Description>Test IT XUnit adapter</Description>
+    <Copyright>Copyright (c) 2019 - 2024 Test IT</Copyright>
+    <RepositoryUrl>https://github.com/testit-tms/adapters-dotnet</RepositoryUrl>
+    <PackageProjectUrl>https://testit.software</PackageProjectUrl>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>default</LangVersion>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <AnalysisLevel>latest-recommended</AnalysisLevel>
+    <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+    <ErrorReport>none</ErrorReport>
+  </PropertyGroup>
 
-    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-      <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-      <WarningLevel>4</WarningLevel>
-    </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
 
-    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-      <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
-      <WarningLevel>4</WarningLevel>
-    </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
 
-    <ItemGroup>
-        <None Include="../LICENSE.md" Pack="true" PackagePath="$(PackageLicenseFile)" />
-        <None Include="./README.md" Pack="true" PackagePath="$(PackageReadmeFile)" />
-    </ItemGroup>
-    
-    <ItemGroup>
-      <PackageReference Include="AspectInjector" Version="2.8.1" />
-      <PackageReference Include="xunit.core" Version="2.4.1" />
-    </ItemGroup>
+  <ItemGroup>
+    <None Include="../LICENSE.md" Pack="true" PackagePath="$(PackageLicenseFile)" />
+    <None Include="./README.md" Pack="true" PackagePath="$(PackageReadmeFile)" />
+  </ItemGroup>
 
-    <ItemGroup>
-      <ProjectReference Include="..\Tms.Adapter.Core\Tms.Adapter.Core.csproj" />
-    </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="AspectInjector" Version="2.8.1" />
+    <PackageReference Include="xunit.core" Version="2.4.1" />
+  </ItemGroup>
 
-	<ItemGroup>
-		<InternalsVisibleTo  Include="Tms.Adapter.XUnitTests" />
-	</ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Tms.Adapter.Core\Tms.Adapter.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo  Include="Tms.Adapter.XUnitTests" />
+  </ItemGroup>
 
 </Project>
+<Version>1.9.5-TMS-5.3</Version>
