@@ -2,7 +2,7 @@ using System.Collections;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
-namespace Tms.Adapter.Core.Utils;
+namespace TmsRunner.Utils;
 
 public static class HtmlEscapeUtils
 {
