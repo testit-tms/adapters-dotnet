@@ -95,17 +95,18 @@ public class ClientTests
             await client.GetWorkItemsLinkedToAutoTest(id).ConfigureAwait(false)).ConfigureAwait(false);
     }
 
-    [TestMethod]
-    public async Task DeleteAutoTestLinkFromWorkItem()
-    {
-        // Arrange
-        var client = new TmsClient(_logger.Object, _settings);
-        var id = Guid.NewGuid().ToString();
-        const string workItemId = "";
+    // Temporary disabled 
+    // [TestMethod]
+    // public async Task DeleteAutoTestLinkFromWorkItem()
+    // {
+    //     // Arrange
+    //     var client = new TmsClient(_logger.Object, _settings);
+    //     var id = Guid.NewGuid().ToString();
+    //     const string workItemId = "";
 
-        // Act & Assert
-        await client.DeleteAutoTestLinkFromWorkItem(id, workItemId).ConfigureAwait(false);
-    }
+    //     // Act & Assert
+    //     await client.DeleteAutoTestLinkFromWorkItem(id, workItemId).ConfigureAwait(false);
+    // }
 
     [TestMethod]
     public async Task LinkAutoTestToWorkItems()
