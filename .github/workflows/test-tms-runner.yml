@@ -4,6 +4,8 @@ on:
   pull_request:
     paths:
       - "Tms.Adapter/**"
+      - "Tms.Adapter.Core/**"
+      - "Tms.Adapter.XUnit/**"
       - "TmsRunner/**"
       - ".github/**/test-tms-runner.yml"
       - "!**.csproj"
