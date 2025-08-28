@@ -1,13 +1,13 @@
 name: Test
 run-name: "#${{ github.run_number }} test by ${{ github.triggering_actor }}"
 on:
-  # pull_request:
-  #   paths:
-  #     - "Tms.Adapter.Core/**"
-  #     - "Tms.Adapter.SpecFlowPlugin/**"
-  #     - "Tms.Adapter.XUnit/**"
-  #     - ".github/**/test.yml"
-  #     - "!**.csproj"
+  pull_request:
+    paths:
+      - "Tms.Adapter.Core/**"
+      - "Tms.Adapter.SpecFlowPlugin/**"
+      - "Tms.Adapter.XUnit/**"
+      - ".github/**/test.yml"
+      - "!**.csproj"
   workflow_dispatch:
 env:
   DOTNET_VERSION: 8
@@ -16,67 +16,68 @@ env:
   TEMP_FILE: tmp/output.txt
   TMS_ADAPTER_MODE: 1
   TMS_CERT_VALIDATION: false
+  TMS_OVERWRITE_EXPECTED: false
   TMS_PRIVATE_TOKEN: ${{ secrets.TESTIT_PRIVATE_TOKEN }}
   TMS_URL: ${{ secrets.TESTIT_URL }}
-# jobs:
-#   test:
-#     name: ${{ matrix.project_name }}
-#     runs-on: ubuntu-latest
-#     strategy:
-#       fail-fast: false
-#       matrix:
-#         include:
-#           - configuration_id: SPECFLOW_CONFIGURATION_ID
-#             package_name: SpecFlowPlugin
-#             project_id: SPECFLOW_PROJECT_ID
-#             project_name: SpecFlowTests
-#           - configuration_id: XUNIT_CONFIGURATION_ID
-#             package_name: XUnit
-#             project_id: XUNIT_PROJECT_ID
-#             project_name: XUnitTests
-#     env:
-#       ADAPTER_PACKAGE: Tms.Adapter.${{ matrix.package_name }}/Tms.Adapter.${{ matrix.package_name }}.csproj
-#       TMS_CONFIGURATION_ID: ${{ secrets[matrix.configuration_id] }}
-#       TMS_PROJECT_ID: ${{ secrets[matrix.project_id] }}
-#       TMS_TEST_RUN_NAME: ${{ matrix.project_name }} TestRun
-#       TEST_ROOT: dotnet-examples/${{ matrix.project_name }}/${{ matrix.project_name }}
-#     steps:
-#       - name: Checkout adapters-dotnet
-#         uses: actions/checkout@v4
-#       - name: Checkout api-validator-dotnet
-#         uses: actions/checkout@v4
-#         with:
-#           repository: testit-tms/api-validator-dotnet
-#           token: ${{ env.GITHUB_PAT }}
-#           path: api-validator-dotnet
-#       - name: Checkout dotnet-examples
-#         uses: actions/checkout@v4
-#         with:
-#           repository: testit-tms/dotnet-examples
-#           path: dotnet-examples
-#       - name: Setup dotnet
-#         uses: actions/setup-dotnet@v4
-#         with:
-#           dotnet-version: ${{ env.DOTNET_VERSION }}
-#       - name: Setup python
-#         uses: actions/setup-python@v5
-#         with:
-#           python-version: ${{ env.PYTHON_VERSION }}
-#       - name: Setup environment
-#         run: |
-#           dotnet remove ${{ env.TEST_ROOT }}/${{ matrix.project_name }}.csproj package TestIT.Adapter.${{ matrix.package_name }}
-#           dotnet add ${{ env.TEST_ROOT }}/${{ matrix.project_name }}.csproj reference Tms.Adapter.Core/Tms.Adapter.Core.csproj
-#           dotnet add ${{ env.TEST_ROOT }}/${{ matrix.project_name }}.csproj reference ${{ env.ADAPTER_PACKAGE }}
-#           dotnet build --configuration Release --property WarningLevel=0 dotnet-examples/${{ matrix.project_name }}
-#           dotnet build --configuration Debug --property WarningLevel=0 api-validator-dotnet
-#           pip install testit-cli
-#       - name: Create TestRun
-#         run: |
-#           testit testrun create --token ${{ env.TMS_PRIVATE_TOKEN }} --output ${{ env.TEMP_FILE }}
-#           echo "TMS_TEST_RUN_ID=$(<${{ env.TEMP_FILE }})" >> $GITHUB_ENV
-#       - name: Test
-#         run: |
-#           dotnet test --configuration Release --collect:"XPlat Code Coverage" --no-build dotnet-examples/${{ matrix.project_name }} || exit 0
-#       - name: Validate
-#         run: |
-#           dotnet test --configuration Debug --no-build --logger:"console;verbosity=detailed" api-validator-dotnet
+jobs:
+  test:
+    name: ${{ matrix.project_name }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - configuration_id: SPECFLOW_CONFIGURATION_ID
+            package_name: SpecFlowPlugin
+            project_id: SPECFLOW_PROJECT_ID
+            project_name: SpecFlowTests
+          - configuration_id: XUNIT_CONFIGURATION_ID
+            package_name: XUnit
+            project_id: XUNIT_PROJECT_ID
+            project_name: XUnitTests
+    env:
+      ADAPTER_PACKAGE: Tms.Adapter.${{ matrix.package_name }}/Tms.Adapter.${{ matrix.package_name }}.csproj
+      TMS_CONFIGURATION_ID: ${{ secrets[matrix.configuration_id] }}
+      TMS_PROJECT_ID: ${{ secrets[matrix.project_id] }}
+      TMS_TEST_RUN_NAME: ${{ matrix.project_name }} TestRun
+      TEST_ROOT: dotnet-examples/${{ matrix.project_name }}/${{ matrix.project_name }}
+    steps:
+      - name: Checkout adapters-dotnet
+        uses: actions/checkout@v4
+      - name: Checkout api-validator-dotnet
+        uses: actions/checkout@v4
+        with:
+          repository: testit-tms/api-validator-dotnet
+          token: ${{ env.GITHUB_PAT }}
+          path: api-validator-dotnet
+      - name: Checkout dotnet-examples
+        uses: actions/checkout@v4
+        with:
+          repository: testit-tms/dotnet-examples
+          path: dotnet-examples
+      - name: Setup dotnet
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+      - name: Setup python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Setup environment
+        run: |
+          dotnet remove ${{ env.TEST_ROOT }}/${{ matrix.project_name }}.csproj package TestIT.Adapter.${{ matrix.package_name }}
+          dotnet add ${{ env.TEST_ROOT }}/${{ matrix.project_name }}.csproj reference Tms.Adapter.Core/Tms.Adapter.Core.csproj
+          dotnet add ${{ env.TEST_ROOT }}/${{ matrix.project_name }}.csproj reference ${{ env.ADAPTER_PACKAGE }}
+          dotnet build --configuration Release --property WarningLevel=0 dotnet-examples/${{ matrix.project_name }}
+          dotnet build --configuration Debug --property WarningLevel=0 api-validator-dotnet
+          pip install testit-cli
+      - name: Create TestRun
+        run: |
+          testit testrun create --token ${{ env.TMS_PRIVATE_TOKEN }} --output ${{ env.TEMP_FILE }}
+          echo "TMS_TEST_RUN_ID=$(<${{ env.TEMP_FILE }})" >> $GITHUB_ENV
+      - name: Test
+        run: |
+          dotnet test --configuration Release --collect:"XPlat Code Coverage" --no-build dotnet-examples/${{ matrix.project_name }} || exit 0
+      - name: Validate
+        run: |
+          dotnet test --configuration Debug --no-build --logger:"console;verbosity=detailed" api-validator-dotnet

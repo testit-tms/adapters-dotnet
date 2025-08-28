@@ -43,6 +43,7 @@ public static class HtmlEscapeUtils
         
         return result;
     }
+    
 
     /// <summary>
     /// Escapes HTML tags in all String properties of an object using reflection

@@ -4,6 +4,8 @@ on:
   pull_request:
     paths:
       - "Tms.Adapter/**"
+      - "Tms.Adapter.Core/**"
+      - "Tms.Adapter.XUnit/**"
       - "TmsRunner/**"
       - ".github/**/test-tms-runner.yml"
       - "!**.csproj"
@@ -15,6 +17,7 @@ env:
   TEMP_FILE: tmp/output.txt
   TMS_ADAPTER_MODE: 1
   TMS_CERT_VALIDATION: false
+  TMS_OVERWRITE_EXPECTED: false
   TMS_PRIVATE_TOKEN: ${{ secrets.TESTIT_PRIVATE_TOKEN }}
   TMS_URL: ${{ secrets.TESTIT_URL }}
 jobs:
