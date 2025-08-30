@@ -2,6 +2,7 @@
 
 namespace TmsRunner.Entities.AutoTest;
 
+#pragma warning disable CA1051
 public sealed record AutoTest
 {
     public string? Namespace;

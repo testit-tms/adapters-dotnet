@@ -1,5 +1,6 @@
 namespace TmsRunner.Entities.AutoTest;
 
+#pragma warning disable CA1051
 public sealed record AutoTestStepResult
 {
     public string? Title;

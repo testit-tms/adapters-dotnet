@@ -93,10 +93,10 @@ public class TmsClient : ITmsClient
         
         var putLinks = links.Select(l => new LinkPutModel(url: l.Url)
             {
-                Title = l.Title,
-                Description = l.Description,
+                Title = l.Title!,
+                Description = l.Description!,
                 Type = l.Type != null
-                    ? (LinkType?)Enum.Parse(typeof(LinkType), l.Type.ToString())
+                    ? Enum.Parse<LinkType>(l.Type.ToString())
                     : null
             }
         ).ToList();
@@ -150,7 +150,7 @@ public class TmsClient : ITmsClient
 
                     return;
                 }
-                catch (ApiException e)
+                catch (ApiException)
                 {
                     _logger.LogError(
                          "Cannot link autotest {AutotestId} to work item {WorkItemId}: work item does not exist",
@@ -161,7 +161,6 @@ public class TmsClient : ITmsClient
                 }
             }
         }
-
     }
 
     public async Task DeleteAutoTestLinkFromWorkItem(string autotestId, string workItemId)
@@ -183,7 +182,7 @@ public class TmsClient : ITmsClient
 
                 return;
             }
-            catch (ApiException e)
+            catch (ApiException)
             {
                 _logger.LogError(
                     "Cannot link autotest {AutotestId} to work item {WorkitemId}",
