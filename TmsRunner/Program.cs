@@ -147,6 +147,11 @@ public static class Program
                         provider.GetRequiredService<TestIT.ApiClient.Client.Configuration>(),
                         provider.GetRequiredService<HttpClientHandler>()
                     ))
+                    .AddTransient<ITestResultsApiAsync, TestResultsApi>(provider => new TestResultsApi(
+                        provider.GetRequiredService<IHttpClientFactory>().CreateClient(nameof(HttpClientNames.Default)),
+                        provider.GetRequiredService<TestIT.ApiClient.Client.Configuration>(),
+                        provider.GetRequiredService<HttpClientHandler>()
+                    ))
                     .AddTransient<IAutoTestsApiAsync, AutoTestsApi>(provider => new AutoTestsApi(
                         provider.GetRequiredService<IHttpClientFactory>().CreateClient(nameof(HttpClientNames.Default)),
                         provider.GetRequiredService<TestIT.ApiClient.Client.Configuration>(),

@@ -1,4 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using TestIT.ApiClient.Api;
 using TestIT.ApiClient.Client;
 using TestIT.ApiClient.Model;
@@ -14,12 +17,14 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
                               IAttachmentsApiAsync attachmentsApi,
                               IAutoTestsApiAsync autoTestsApi,
                               ITestRunsApiAsync testRunsApi,
+                              ITestResultsApiAsync testResultsApi,
                               IProjectsApiAsync projectsApi,
                               TmsSettings settings,
                               ITestRunContextService testRunContext)
 {
     private readonly int MAX_TRIES = 10;
     private readonly int WAITING_TIME = 200;
+    private readonly int TESTS_LIMIT = 100;
 
     public async Task<TestRunV2ApiResult?> CreateTestRunAsync()
     {
@@ -37,25 +42,40 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
         return testRun;
     }
 
-    public async Task<TestRunV2ApiResult?> GetTestRunAsync(string testRunId)
+    public async Task<TestRunV2ApiResult?> GetTestRunAsync()
     {
-        logger.LogDebug("Getting test run {@TestRunId}", testRunId);
+        logger.LogDebug("Getting test run {@TestRunId}", settings.TestRunId);
         
-        return await testRunsApi.GetTestRunByIdAsync(new Guid(testRunId ?? string.Empty)).ConfigureAwait(false);
+        return await testRunsApi.GetTestRunByIdAsync(new Guid(settings.TestRunId ?? string.Empty)).ConfigureAwait(false);
     }
     
-    public List<string?> GetAutoTestsForRunAsync(TestRunV2ApiResult testRun)
+    public async Task<List<string>> GetExternalIdsForRunAsync()
     {
-        logger.LogDebug("Getting autotests for run from test run {Id}", testRun.Id);
+        logger.LogDebug("Getting test results for run from test run {TestRunId} with configuration {ConfigurationId}", settings.TestRunId, settings.ConfigurationId);
 
-        var autotests = testRun.TestResults.Where(x => !x.AutoTest.IsDeleted).Select(x => x.AutoTest.ExternalId).ToList();
+        var externalIds = new List<string>();
+        var skip = 0;
+        var model = Converter.BuildTestResultsFilterApiModel(settings.TestRunId, settings.ConfigurationId);
 
-        logger.LogDebug(
-            "Autotests for run from test run {Id}: {@Autotests}",
-            testRun.Id,
-            autotests);
+        while (true)
+        {
+            var testResults = await getTestResults(skip, model);
 
-        return autotests as List<string?>;
+            if (testResults.Count != 0)
+            {
+                externalIds.AddRange(testResults.Select(x => x.AutotestExternalId).ToList());
+                skip += TESTS_LIMIT;
+
+                continue;
+            }
+
+            return externalIds;
+        }
+    }
+
+    private async Task<List<TestResultShortResponse>> getTestResults(int skip, TestResultsFilterApiModel model)
+    {
+        return await testResultsApi.ApiV2TestResultsSearchPostAsync(skip, TESTS_LIMIT, null, null, null, model);
     }
 
     public async Task SubmitResultToTestRunAsync(string? id, AutoTestResult result)
