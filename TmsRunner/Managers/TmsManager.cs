@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using TestIT.ApiClient.Api;
 using TestIT.ApiClient.Client;
@@ -56,26 +57,25 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
         var skip = 0;
         var model = Converter.BuildTestResultsFilterApiModel(settings.TestRunId, settings.ConfigurationId);
 
-        while (skip >= 0)
+        while (true)
         {
-            var testResults = await testResultsApi.ApiV2TestResultsSearchPostAsync(skip, TESTS_LIMIT, null, null, null, model);
+            var testResults = await getTestResults(skip, model);
 
-            externalIds.AddRange(testResults.Select(x => x.AutotestExternalId).ToList());
-            skip += TESTS_LIMIT;
-
-            if (testResults.Count == 0)
+            if (testResults.Count != 0)
             {
-                skip = -1;
+                externalIds.AddRange(testResults.Select(x => x.AutotestExternalId).ToList());
+                skip += TESTS_LIMIT;
+
+                continue;
             }
+
+            return externalIds;
         }
+    }
 
-        logger.LogDebug(
-            "Autotests for run from test run {TestRunId} with configuration {ConfigurationId}: {@ExternalIds}",
-            settings.TestRunId,
-            settings.ConfigurationId,
-            externalIds);
-
-        return externalIds;
+    private async Task<List<TestResultShortResponse>> getTestResults(int skip, TestResultsFilterApiModel model)
+    {
+        return await testResultsApi.ApiV2TestResultsSearchPostAsync(skip, TESTS_LIMIT, null, null, null, model);
     }
 
     public async Task SubmitResultToTestRunAsync(string? id, AutoTestResult result)
