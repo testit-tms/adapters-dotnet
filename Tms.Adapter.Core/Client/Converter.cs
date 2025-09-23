@@ -52,9 +52,9 @@ public static class Converter
         string configurationId)
     {
         return new AutoTestResultsForTestRunModel(
-            autoTestExternalId: result.ExternalId,
-            outcome: Enum.Parse<AvailableTestResultOutcome>(result.Status.ToString()))
+            autoTestExternalId: result.ExternalId)
         {
+            StatusCode = result.Status.ToString(),
             ConfigurationId = new Guid(configurationId),
             Links = ConvertLinksToPostModel(result.ResultLinks),
             Message = result.Message,

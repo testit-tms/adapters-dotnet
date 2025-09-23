@@ -73,9 +73,9 @@ public static class Converter
         ).ToList();
 
         return new AutoTestResultsForTestRunModel(
-            autoTestExternalId: autotest.ExternalId ?? string.Empty,
-            outcome: Enum.Parse<AvailableTestResultOutcome>(autotest.Outcome?.ToString() ?? string.Empty))
+            autoTestExternalId: autotest.ExternalId ?? string.Empty)
         {
+            StatusCode = autotest.Outcome?.ToString() ?? string.Empty,
             ConfigurationId = new Guid(configurationId ?? string.Empty),
             Links = links ?? [],
             Message = autotest.Message ?? string.Empty,
@@ -118,5 +118,15 @@ public static class Converter
                 s.Title ?? string.Empty,
                 s.Description ?? string.Empty,
                 ConvertStepsToModel(s.Steps) ?? [])).ToList();
+    }
+
+    public static TestResultsFilterApiModel BuildTestResultsFilterApiModel(string testRunId, string configurationId)
+    {
+        return new TestResultsFilterApiModel
+        {
+            TestRunIds = [new Guid(testRunId)],
+            ConfigurationIds = [new Guid(configurationId)],
+            StatusCodes = ["InProgress"]
+        };
     }
 }
