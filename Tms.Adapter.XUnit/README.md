@@ -65,7 +65,7 @@ To create and complete TestRun you can use the [Test IT CLI](https://docs.testit
 ```bash
 $ export TMS_TOKEN=<YOUR_TOKEN>
 $ testit \
-  --mode create
+  testrun create
   --url https://tms.testit.software \
   --project-id 5236eb3f-7c05-46f9-a609-dc0278896464 \
   --testrun-name "New test run" \
@@ -75,10 +75,9 @@ $ export TMS_TEST_RUN_ID=$(cat output.txt)
 
 $ dotnet test
 
-$ testit \
-  --mode finish
+$ testit testrun complete
   --url https://tms.testit.software \
-  --testrun-id $(cat tmp/output.txt) 
+  --testrun-id $(cat tmp/output.txt)
 ```
 
 ### Run with filter
