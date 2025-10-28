@@ -138,7 +138,7 @@ public class TmsClient : ITmsClient
             {
                 try
                 {
-                    var workItemModel = new WorkItemIdModel(workItemId ?? string.Empty);
+                    var workItemModel = new WorkItemIdApiModel(workItemId ?? string.Empty);
                     // Escape HTML in the model before sending to API
                     HtmlEscapeUtils.EscapeHtmlInObject(workItemModel);
 

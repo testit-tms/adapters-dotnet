@@ -191,7 +191,7 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
             {
                 try
                 {
-                    await autoTestsApi.LinkAutoTestToWorkItemAsync(autotestId, new WorkItemIdModel(workItemId ?? string.Empty)).ConfigureAwait(false);
+                    await autoTestsApi.LinkAutoTestToWorkItemAsync(autotestId, new WorkItemIdApiModel(workItemId ?? string.Empty)).ConfigureAwait(false);
                     logger.LogDebug(
                         "Link autotest {AutotestId} to workitem {WorkitemId} is successfully",
                     autotestId,
