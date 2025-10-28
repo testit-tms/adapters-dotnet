@@ -14,7 +14,7 @@ The repository contains new versions of adaptors for dotnet test frameworks.
 | 5.3     | 1.9.2-TMS-5.3   | 1.9.2-TMS-5.3   | 1.9.2-TMS-5.3   | 1.9.2-TMS-5.3   |
 | 5.4     | 1.9.6-TMS-5.4   | 1.9.6-TMS-5.4   | 1.9.6-TMS-5.4   | 1.9.6-TMS-5.4   |
 | 5.5     | 1.10.1-TMS-5.5  | 1.10.1-TMS-5.5  | 1.10.1-TMS-5.5  | 1.10.1-TMS-5.5  |
-| Cloud   | 1.9.9           | 1.9.9           | 1.9.9           | 1.9.9           |
+| Cloud   | 1.10.2          | 1.10.2          | 1.10.2          | 1.10.2          |
 
 
 Supported test frameworks :
