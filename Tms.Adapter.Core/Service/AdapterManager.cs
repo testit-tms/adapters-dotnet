@@ -306,6 +306,11 @@ public class AdapterManager
         await _client.CreateTestRun();
     }
 
+    public async Task UpdateTestRun()
+    {
+        await _client.UpdateTestRun();
+    }
+
     public async Task CompleteTestRun()
     {
         await _client.CompleteTestRun();

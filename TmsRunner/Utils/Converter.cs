@@ -129,4 +129,24 @@ public static class Converter
             StatusCodes = ["InProgress"]
         };
     }
+
+    public static UpdateEmptyTestRunApiModel BuildUpdateEmptyTestRunApiModel(TestRunV2ApiResult testRun)
+    {
+        return new UpdateEmptyTestRunApiModel
+        {
+            Id = testRun.Id,
+            Name = testRun.Name,
+            Description = testRun.Description,
+            LaunchSource = testRun.LaunchSource,
+            Attachments = testRun.Attachments.Select(attachment => new AssignAttachmentApiModel(id: attachment.Id)).ToList(),
+            Links = testRun.Links.Select(link => new UpdateLinkApiModel(
+                id: link.Id,
+                title: link.Title,
+                url: link.Url,
+                description: link.Description,
+                type: link.Type,
+                hasInfo: link.HasInfo
+                )).ToList(),
+        };
+    }
 }
