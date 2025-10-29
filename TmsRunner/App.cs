@@ -85,7 +85,7 @@ public class App(ILogger<App> logger,
             runSuccess = await runService.RunSelectedTestsAsync(testCases).ConfigureAwait(false);
         }
 
-        if (tmsSettings.AdapterMode != 2 && tmsSettings.TestRunName != null && testRun != null && testRun.Name.Equals(tmsSettings.TestRunName)) {
+        if (tmsSettings.AdapterMode != 2 && !string.IsNullOrEmpty(tmsSettings.TestRunName) && testRun != null && testRun.Name.Equals(tmsSettings.TestRunName)) {
             await tmsManager.UpdateTestRunAsync(testRun).ConfigureAwait(false);
         }
 
