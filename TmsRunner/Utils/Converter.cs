@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Xml.Linq;
 using TestIT.ApiClient.Model;
 using TmsRunner.Entities.AutoTest;
 using AutoTest = TmsRunner.Entities.AutoTest.AutoTest;
@@ -132,10 +134,9 @@ public static class Converter
 
     public static UpdateEmptyTestRunApiModel BuildUpdateEmptyTestRunApiModel(TestRunV2ApiResult testRun)
     {
-        return new UpdateEmptyTestRunApiModel
+        return new UpdateEmptyTestRunApiModel(name: testRun.Name)
         {
             Id = testRun.Id,
-            Name = testRun.Name,
             Description = testRun.Description,
             LaunchSource = testRun.LaunchSource,
             Attachments = testRun.Attachments.Select(attachment => new AssignAttachmentApiModel(id: attachment.Id)).ToList(),

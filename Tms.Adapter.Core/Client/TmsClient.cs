@@ -274,12 +274,9 @@ public class TmsClient : ITmsClient
             return;
         }
 
-        testRun.Name = _settings.TestRunName;
-
-        var updateEmptyTestRunApiModel = new UpdateEmptyTestRunApiModel
+        var updateEmptyTestRunApiModel = new UpdateEmptyTestRunApiModel(name: _settings.TestRunName)
         {
             Id = testRun.Id,
-            Name = testRun.Name,
             Description = testRun.Description,
             LaunchSource = testRun.LaunchSource,
             Attachments = testRun.Attachments.Select(attachment => new AssignAttachmentApiModel(id: attachment.Id)).ToList(),

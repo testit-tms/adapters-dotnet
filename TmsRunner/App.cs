@@ -86,6 +86,8 @@ public class App(ILogger<App> logger,
         }
 
         if (tmsSettings.AdapterMode != 2 && !string.IsNullOrEmpty(tmsSettings.TestRunName) && testRun != null && !testRun.Name.Equals(tmsSettings.TestRunName)) {
+            testRun.Name = tmsSettings.TestRunName;
+
             await tmsManager.UpdateTestRunAsync(testRun).ConfigureAwait(false);
         }
 
