@@ -258,6 +258,46 @@ public class TmsClient : ITmsClient
         _logger.LogDebug("Test run id : {ID}", _settings.TestRunId);
     }
 
+    public async Task UpdateTestRun()
+    {
+        _logger.LogDebug("Updating test run");
+
+        if (string.IsNullOrEmpty(_settings.TestRunId) || string.IsNullOrEmpty(_settings.TestRunName))
+        {
+            return;
+        }
+
+        var testRun = await _testRuns.GetTestRunByIdAsync(new Guid(_settings.TestRunId));
+
+        if (testRun.Name.Equals(_settings.TestRunName))
+        {
+            return;
+        }
+
+        var updateEmptyTestRunApiModel = new UpdateEmptyTestRunApiModel(name: _settings.TestRunName)
+        {
+            Id = testRun.Id,
+            Description = testRun.Description,
+            LaunchSource = testRun.LaunchSource,
+            Attachments = testRun.Attachments.Select(attachment => new AssignAttachmentApiModel(id: attachment.Id)).ToList(),
+            Links = testRun.Links.Select(link => new UpdateLinkApiModel(
+                id: link.Id,
+                title: link.Title,
+                url: link.Url,
+                description: link.Description,
+                type: link.Type,
+                hasInfo: link.HasInfo
+                )).ToList(),
+        };
+
+        // Escape HTML in the model before sending to API
+        HtmlEscapeUtils.EscapeHtmlInObject(updateEmptyTestRunApiModel);
+
+        await _testRuns.UpdateEmptyAsync(updateEmptyTestRunApiModel);
+
+        _logger.LogDebug("Test run updated");
+    }
+
     public async Task CompleteTestRun()
     {
         _logger.LogDebug("Completing test run");
