@@ -66,7 +66,7 @@ public class HtmlEscapeUtilsTests
         var result = HtmlEscapeUtils.EscapeHtmlTags(input);
 
         // Assert
-        Assert.AreEqual("Hello \\<script\\>alert('XSS')\\</script\\> World", result);
+        Assert.AreEqual("Hello &lt;script&gt;alert('XSS')&lt;/script&gt; World", result);
     }
 
     [TestMethod]
@@ -107,7 +107,7 @@ public class HtmlEscapeUtilsTests
         var result = HtmlEscapeUtils.EscapeHtmlTags(input);
 
         // Assert
-        Assert.AreEqual("Hello \\<script\\>alert('XSS')\\</script\\> World", result);
+        Assert.AreEqual("Hello \\&lt;script\\&gt;alert('XSS')\\&lt;/script\\&gt; World", result);
     }
 
     [TestMethod]
@@ -120,7 +120,7 @@ public class HtmlEscapeUtilsTests
         var result = HtmlEscapeUtils.EscapeHtmlTags(input);
 
         // Assert - regex properly escapes only non-escaped characters
-        Assert.AreEqual("Hello \\<script\\>alert('XSS')\\</script\\> World", result);
+        Assert.AreEqual("Hello \\&lt;script&gt;alert('XSS')&lt;/script&gt; World", result);
     }
 
     [TestMethod]
@@ -133,7 +133,7 @@ public class HtmlEscapeUtilsTests
         var result = HtmlEscapeUtils.EscapeHtmlTags(input);
 
         // Assert
-        Assert.AreEqual("\\<div\\>\\<span\\>Test\\</span\\>\\</div\\>", result);
+        Assert.AreEqual("&lt;div&gt;&lt;span&gt;Test&lt;/span&gt;&lt;/div&gt;", result);
     }
 
     [TestMethod]
@@ -146,7 +146,7 @@ public class HtmlEscapeUtilsTests
         var result = HtmlEscapeUtils.EscapeHtmlTags(input);
         
         // Assert - only unescaped HTML tags should be escaped
-        Assert.AreEqual("Already \\<escaped\\> and \\<script\\>not escaped\\</script\\>", result);
+        Assert.AreEqual("Already \\&lt;escaped\\&gt; and &lt;script&gt;not escaped&lt;/script&gt;", result);
     }
 
     [TestMethod]
@@ -159,7 +159,7 @@ public class HtmlEscapeUtilsTests
         var result = HtmlEscapeUtils.EscapeHtmlTags(input);
         
         // Assert
-        Assert.AreEqual("\\<div class='test'\\>Content\\</div\\>", result);
+        Assert.AreEqual("&lt;div class='test'&gt;Content&lt;/div&gt;", result);
     }
 
     [TestMethod]
@@ -233,8 +233,8 @@ public class HtmlEscapeUtilsTests
         var result = HtmlEscapeUtils.EscapeHtmlInObject(model);
 
         // Assert
-        Assert.AreEqual("Test\\<script\\>", result.Name);
-        Assert.AreEqual("Description with \\<b\\>bold\\</b\\> text", result.Description);
+        Assert.AreEqual("Test&lt;script&gt;", result.Name);
+        Assert.AreEqual("Description with &lt;b&gt;bold&lt;/b&gt; text", result.Description);
         Assert.AreEqual(42, result.Number); // Numbers should not be affected
     }
 
@@ -254,7 +254,7 @@ public class HtmlEscapeUtilsTests
 
         // Assert
         Assert.IsNull(result.Name);
-        Assert.AreEqual("Valid\\<tag\\>", result.Description);
+        Assert.AreEqual("Valid&lt;tag&gt;", result.Description);
         Assert.AreEqual(10, result.Number);
     }
 
@@ -270,7 +270,7 @@ public class HtmlEscapeUtilsTests
 
         // Assert
         Assert.AreEqual("ReadOnly<script>", result.ReadOnlyProperty); // Should not be escaped
-        Assert.AreEqual("Writable\\<script\\>", result.WritableProperty); // Should be escaped
+        Assert.AreEqual("Writable&lt;script&gt;", result.WritableProperty); // Should be escaped
     }
 
     [TestMethod]
@@ -287,8 +287,8 @@ public class HtmlEscapeUtilsTests
 
         // Assert
         Assert.AreEqual(3, result.StringList.Count);
-        Assert.AreEqual("Item1\\<script\\>", result.StringList[0]);
-        Assert.AreEqual("Item2\\<b\\>bold\\</b\\>", result.StringList[1]);
+        Assert.AreEqual("Item1&lt;script&gt;", result.StringList[0]);
+        Assert.AreEqual("Item2&lt;b&gt;bold&lt;/b&gt;", result.StringList[1]);
         Assert.AreEqual("Item3", result.StringList[2]);
     }
 
@@ -310,10 +310,10 @@ public class HtmlEscapeUtilsTests
 
         // Assert
         Assert.AreEqual(2, result.ObjectList.Count);
-        Assert.AreEqual("Object1\\<script\\>", result.ObjectList[0].Name);
-        Assert.AreEqual("Desc1\\<b\\>", result.ObjectList[0].Description);
-        Assert.AreEqual("Object2\\<div\\>", result.ObjectList[1].Name);
-        Assert.AreEqual("Desc2\\<span\\>", result.ObjectList[1].Description);
+        Assert.AreEqual("Object1&lt;script&gt;", result.ObjectList[0].Name);
+        Assert.AreEqual("Desc1&lt;b&gt;", result.ObjectList[0].Description);
+        Assert.AreEqual("Object2&lt;div&gt;", result.ObjectList[1].Name);
+        Assert.AreEqual("Desc2&lt;span&gt;", result.ObjectList[1].Description);
     }
 
     [TestMethod]
@@ -408,12 +408,12 @@ public class HtmlEscapeUtilsTests
 
         // Assert
         Assert.AreEqual(3, result.Count);
-        Assert.AreEqual("Object1\\<script\\>", result[0].Name);
-        Assert.AreEqual("Desc1\\<b\\>", result[0].Description);
-        Assert.AreEqual("Object2\\<div\\>", result[1].Name);
-        Assert.AreEqual("Desc2\\<span\\>", result[1].Description);
+        Assert.AreEqual("Object1&lt;script&gt;", result[0].Name);
+        Assert.AreEqual("Desc1&lt;b&gt;", result[0].Description);
+        Assert.AreEqual("Object2&lt;div&gt;", result[1].Name);
+        Assert.AreEqual("Desc2&lt;span&gt;", result[1].Description);
         Assert.AreEqual("Object3", result[2].Name);
-        Assert.AreEqual("Desc3\\<img\\>", result[2].Description);
+        Assert.AreEqual("Desc3&lt;img&gt;", result[2].Description);
     }
 
     [TestMethod]
@@ -456,9 +456,9 @@ public class HtmlEscapeUtilsTests
         var result = HtmlEscapeUtils.EscapeHtmlInObject(model);
 
         // Assert
-        Assert.AreEqual("Parent\\<script\\>", result.Name);
-        Assert.AreEqual("Nested\\<b\\>", result.Nested.Name);
-        Assert.AreEqual("Nested description\\<div\\>", result.Nested.Description);
+        Assert.AreEqual("Parent&lt;script&gt;", result.Name);
+        Assert.AreEqual("Nested&lt;b&gt;", result.Nested.Name);
+        Assert.AreEqual("Nested description&lt;div&gt;", result.Nested.Description);
     }
 
     [TestMethod]
@@ -482,10 +482,10 @@ public class HtmlEscapeUtilsTests
         var result = HtmlEscapeUtils.EscapeHtmlInObject(model);
 
         // Assert
-        Assert.AreEqual("Root\\<script\\>", result.Name);
-        Assert.AreEqual("ListItem1\\<b\\>", result.NestedList[0].Name);
-        Assert.AreEqual("DeepNested\\<span\\>", result.NestedList[0].Nested.Name);
-        Assert.AreEqual("Deep\\<div\\>", result.NestedList[0].Nested.Description);
+        Assert.AreEqual("Root&lt;script&gt;", result.Name);
+        Assert.AreEqual("ListItem1&lt;b&gt;", result.NestedList[0].Name);
+        Assert.AreEqual("DeepNested&lt;span&gt;", result.NestedList[0].Nested.Name);
+        Assert.AreEqual("Deep&lt;div&gt;", result.NestedList[0].Nested.Description);
     }
 
     [TestMethod]
@@ -529,7 +529,7 @@ public class HtmlEscapeUtilsTests
         var result = HtmlEscapeUtils.EscapeHtmlInObject(model);
 
         // Assert - only string property should be escaped
-        Assert.AreEqual("Test\\<script\\>", result.StringProperty);
+        Assert.AreEqual("Test&lt;script&gt;", result.StringProperty);
         Assert.AreEqual(true, result.BoolProperty);
         Assert.AreEqual(255, result.ByteProperty);
         Assert.AreEqual('<', result.CharProperty);
@@ -574,7 +574,7 @@ public class HtmlEscapeUtilsTests
         var result = HtmlEscapeUtils.EscapeHtmlInObject(model);
 
         // Assert
-        Assert.AreEqual("Test\\<script\\>", result.Name);
+        Assert.AreEqual("Test&lt;script&gt;", result.Name);
         Assert.AreEqual(TestStatus.Active, result.Status); // Enum should remain unchanged
     }
 
@@ -605,7 +605,7 @@ public class HtmlEscapeUtilsTests
         var result = HtmlEscapeUtils.EscapeHtmlInObject(model);
 
         // Assert - only string property should be escaped, null values should remain null
-        Assert.AreEqual("Test\\<script\\>", result.StringProperty);
+        Assert.AreEqual("Test&lt;script&gt;", result.StringProperty);
         Assert.IsNull(result.NullableBoolProperty);
         Assert.IsNull(result.NullableByteProperty);
         Assert.IsNull(result.NullableCharProperty);
