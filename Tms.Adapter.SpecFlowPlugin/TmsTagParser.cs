@@ -51,26 +51,26 @@ public static class TmsTagParser
             switch (tagName.ToUpper())
             {
                 case ExternalId:
-                    testContainer.ExternalId = Replacer.ReplaceParameters(tagValue, parameters);
+                    testContainer.ExternalId = Replacer.ReplaceParameters(parseSpaceInTag(tagValue), parameters);
                     break;
                 case Title:
-                    testContainer.Title = Replacer.ReplaceParameters(tagValue, parameters);
+                    testContainer.Title = Replacer.ReplaceParameters(parseSpaceInTag(tagValue), parameters);
                     break;
                 case DisplayName:
-                    testContainer.DisplayName = Replacer.ReplaceParameters(tagValue, parameters);
+                    testContainer.DisplayName = Replacer.ReplaceParameters(parseSpaceInTag(tagValue), parameters);
                     break;
                 case Description:
-                    testContainer.Description = Replacer.ReplaceParameters(tagValue, parameters);
+                    testContainer.Description = Replacer.ReplaceParameters(parseSpaceInTag(tagValue), parameters);
                     break;
                 case Labels:
-                    testContainer.Labels = tagValue
+                    testContainer.Labels = parseSpaceInTag(tagValue)
                         .Split(TagValueDelimiter)
                         .ToList();
                     break;
                 case Links:
                     if (IsJson(tagValue))
                     {
-                        var link = GetLink(tagValue);
+                        var link = GetLink(parseSpaceInTag(tagValue));
                         if (link == null)
                             continue;
                         testContainer.Links.Add(new Link(link.Url, link.Title, link.Description,
@@ -78,7 +78,7 @@ public static class TmsTagParser
                     }
                     else if (IsJsonArray(tagValue))
                     {
-                        var links = GetLinks(tagValue);
+                        var links = GetLinks(parseSpaceInTag(tagValue));
 
                         links?.ForEach(link =>
                         {
@@ -92,7 +92,7 @@ public static class TmsTagParser
 
                     break;
                 case WorkItemIds:
-                    testContainer.WorkItemIds = tagValue
+                    testContainer.WorkItemIds = parseSpaceInTag(tagValue)
                         .Split(TagValueDelimiter)
                         .ToList();
                     break;
@@ -152,5 +152,10 @@ public static class TmsTagParser
     private static List<LinkItem?>? GetLinks(string source)
     {
         return JsonConvert.DeserializeObject<List<LinkItem?>>(source);
+    }
+
+    private static string parseSpaceInTag(string tag)
+    {
+        return tag.Replace("\\_", " ");
     }
 }
