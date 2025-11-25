@@ -104,6 +104,8 @@ Description of attributes:
 * `Labels` - tags listed in the autotest card
 * `Links` - links listed in the autotest card
 
+If you want to insert a space in the tags, use the "\\_" character combination.
+
 Description of methods:
 
 * `Adapter.AddLinks` - add links to the autotest result.
