@@ -48,7 +48,16 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
         
         return await testRunsApi.GetTestRunByIdAsync(new Guid(settings.TestRunId ?? string.Empty)).ConfigureAwait(false);
     }
-    
+
+    public async Task UpdateTestRunAsync(TestRunV2ApiResult testRun)
+    {
+        logger.LogDebug("Updating test run {@TestRunId}", settings.TestRunId);
+
+        var model = Converter.BuildUpdateEmptyTestRunApiModel(testRun);
+
+        await testRunsApi.UpdateEmptyAsync(model).ConfigureAwait(false);
+    }
+
     public async Task<List<string>> GetExternalIdsForRunAsync()
     {
         logger.LogDebug("Getting test results for run from test run {TestRunId} with configuration {ConfigurationId}", settings.TestRunId, settings.ConfigurationId);
@@ -191,7 +200,7 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
             {
                 try
                 {
-                    await autoTestsApi.LinkAutoTestToWorkItemAsync(autotestId, new WorkItemIdModel(workItemId ?? string.Empty)).ConfigureAwait(false);
+                    await autoTestsApi.LinkAutoTestToWorkItemAsync(autotestId, new WorkItemIdApiModel(workItemId ?? string.Empty)).ConfigureAwait(false);
                     logger.LogDebug(
                         "Link autotest {AutotestId} to workitem {WorkitemId} is successfully",
                     autotestId,

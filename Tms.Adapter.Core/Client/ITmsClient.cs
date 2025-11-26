@@ -16,6 +16,7 @@ public interface ITmsClient
     Task SubmitTestCaseResult(TestContainer result, ClassContainer container);
     Task<string> UploadAttachment(string fileName, Stream content);
     Task CreateTestRun();
+    Task UpdateTestRun();
     Task CompleteTestRun();
     Task<AutoTestApiResult?> GetAutotestByExternalId(string externalId);
 }

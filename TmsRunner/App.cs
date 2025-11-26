@@ -26,7 +26,7 @@ public class App(ILogger<App> logger,
 
         runService.InitialiseRunner();
         var testCases = runService.DiscoverTests();
-        TestRunV2ApiResult? testRun;
+        TestRunV2ApiResult? testRun = null;
         logger.LogInformation("Discovered Tests Count: {Count}", testCases.Count);
 
         if (testCases.Count == 0)
@@ -53,6 +53,11 @@ public class App(ILogger<App> logger,
                 testRunContext.SetCurrentTestRun(testRun);
                 break;
             }
+            case 1:
+                testRun = await tmsManager.GetTestRunAsync().ConfigureAwait(false);
+
+                testRunContext.SetCurrentTestRun(testRun);
+                break;
             case 2:
             {
                 testRun = await tmsManager.CreateTestRunAsync().ConfigureAwait(false);
@@ -78,6 +83,12 @@ public class App(ILogger<App> logger,
         else
         {
             runSuccess = await runService.RunSelectedTestsAsync(testCases).ConfigureAwait(false);
+        }
+
+        if (tmsSettings.AdapterMode != 2 && !string.IsNullOrEmpty(tmsSettings.TestRunName) && testRun != null && !testRun.Name.Equals(tmsSettings.TestRunName)) {
+            testRun.Name = tmsSettings.TestRunName;
+
+            await tmsManager.UpdateTestRunAsync(testRun).ConfigureAwait(false);
         }
 
         if (tmsSettings.AdapterMode == 2)

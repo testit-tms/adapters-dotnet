@@ -21,6 +21,7 @@ public class TmsBindings
     [BeforeTestRun]
     public static void BeforeTestRun()
     {
+        Adapter.UpdateTestRun().Wait();
         Adapter.CreateTestRun().Wait();
     }
 
