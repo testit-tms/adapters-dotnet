@@ -28,13 +28,13 @@
             <TreatAsUsed>true</TreatAsUsed>
         </PackageReference>
         <PackageReference Include="MSTest.TestFramework" Version="3.2.2"/>
-		<PackageReference Include="MockQueryable.Moq" />
+		<PackageReference Include="MockQueryable.Moq" Version="8.0.1" />
 		<PackageReference Include="Moq" Version="4.20.72" />
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\Tms.Adapter.Core\Tms.Adapter.Core.csproj"/>
-        <PackageReference Include="TestIt.ApiClient" Version="5.2.4-TMS-5.5" />
+        <PackageReference Include="TestIt.ApiClient" Version="5.2.5" />
     </ItemGroup>
 
     <ItemGroup>

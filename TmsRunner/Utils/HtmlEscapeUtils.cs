@@ -12,8 +12,8 @@ public static class HtmlEscapeUtils
     private static readonly Regex HtmlTagPattern = new(@"<\S.*?(?:>|\/>)", RegexOptions.Compiled);
     
     // Regex patterns to escape only non-escaped characters
-    private static readonly Regex LessThanPattern = new(@"(?<!\\)<", RegexOptions.Compiled);
-    private static readonly Regex GreaterThanPattern = new(@"(?<!\\)>", RegexOptions.Compiled);
+    private static readonly Regex LessThanPattern = new(@"<", RegexOptions.Compiled);
+    private static readonly Regex GreaterThanPattern = new(@">", RegexOptions.Compiled);
 
     /// <summary>
     /// Escapes HTML tags to prevent XSS attacks.
@@ -38,8 +38,8 @@ public static class HtmlEscapeUtils
         }
 
         // Use regex with negative lookbehind to escape only non-escaped characters
-        var result = LessThanPattern.Replace(text, "\\<");
-        result = GreaterThanPattern.Replace(result, "\\>");
+        var result = LessThanPattern.Replace(text, "&lt;");
+        result = GreaterThanPattern.Replace(result, "&gt;");
         
         return result;
     }
