@@ -274,6 +274,7 @@ public class ResultStorage
 public class Writer : IWriter
 {
     private readonly ITmsClient _client; // Клиент для общения с Test IT API
+    private readonly TmsSettings _tmsSettings; // Настройки адаптера
     // ... другие поля ...
 
     public async Task Write(TestContainer result, ClassContainer container)
@@ -287,13 +288,18 @@ public class Writer : IWriter
 
             // 2. Создаем или обновляем автотест в Test IT
             if (autotestExists) {
-                await _client.UpdateAutotest(result, container);
+                // Для упавших тестов обновляем только ссылки, для остальных - полную информацию
+                if (result.Status != Status.Failed) {
+                    await _client.UpdateAutotest(result, container);
+                } else {
+                    await _client.UpdateAutotest(result.ExternalId, result.Links, result.ExternalKey);
+                }
             } else {
                 await _client.CreateAutotest(result, container);
             }
 
             // 3. Связываем с Work Items, если нужно
-            if (result.WorkItemIds.Count > 0) { /* ... вызывать _client.LinkAutoTestToWorkItems ... */ }
+            if (result.WorkItemIds.Count > 0) { /* ... обновляем связи с Work Items ... */ }
 
             // 4. Отправляем результат выполнения теста
             await _client.SubmitTestCaseResult(result, container);
@@ -305,6 +311,7 @@ public class Writer : IWriter
     // ... другие методы ...
 }
 ```
+*Объяснение:* Реализация `Writer` использует `ITmsClient` для общения с Test IT API. Она проверяет существование автотеста по `ExternalId`, создает или обновляет его, управляет связями с Work Items и отправляет результаты выполнения теста. Особенность реализации - для упавших тестов обновляются только ссылки, а не вся информация.
 
 ## Заключение
 

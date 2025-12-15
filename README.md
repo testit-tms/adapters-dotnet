@@ -1,6 +1,6 @@
 # Test IT Dotnet Integrations
 
-The repository contains new versions of adaptors for dotnet test frameworks.
+The repository contains adapters for .NET test frameworks that integrate automated tests with the Test IT test management system.
 
 ## Compatibility
 
@@ -17,11 +17,23 @@ The repository contains new versions of adaptors for dotnet test frameworks.
 | Cloud   | 1.10.2          | 1.10.2          | 1.10.2          | 1.10.2          |
 
 
-Supported test frameworks :
+## Project Structure
 
-1. [MsTest/NUnit](https://github.com/testit-tms/adapters-dotnet/tree/main/Tms.Adapter)
-2. [XUnit](https://github.com/testit-tms/adapters-dotnet/tree/main/Tms.Adapter.XUnit)
-3. [SpecFlow](https://github.com/testit-tms/adapters-dotnet/tree/main/Tms.Adapter.SpecFlowPlugin)
+This repository contains several components:
+
+1. **Core Components** (`Tms.Adapter.Core`) - Shared functionality used by all adapters including:
+   - TMS API Client for communication with Test IT
+   - Adapter Manager for controlling test lifecycle
+   - Data models for test information
+   - Metadata attributes for linking tests to Test IT entities
+
+2. **Framework-Specific Adapters**:
+   - [MsTest/NUnit](https://github.com/testit-tms/adapters-dotnet/tree/main/Tms.Adapter) - Adapter for MSTest and NUnit frameworks
+   - [XUnit](https://github.com/testit-tms/adapters-dotnet/tree/main/Tms.Adapter.XUnit) - Adapter for XUnit framework
+   - [SpecFlow](https://github.com/testit-tms/adapters-dotnet/tree/main/Tms.Adapter.SpecFlowPlugin) - Plugin for SpecFlow framework
+
+3. **TmsRunner** - A standalone test runner for MSTest/NUnit tests that can send results directly to Test IT
+
 
 <a href='https://coveralls.io/github/testit-tms/adapters-dotnet?branch=main'>
 	<img src='https://coveralls.io/repos/github/testit-tms/adapters-dotnet/badge.svg?branch=main' alt='Coverage Status' />
