@@ -107,10 +107,7 @@ public sealed class ProcessorService(ILogger<ProcessorService> logger,
 
                         if (parentStep is not null)
                         {
-                            if (attachment.CallerMemberName == parentStep.CurrentMethod)
-                            {
-                                parentStep.Attachments.Add(createdAttachment.Id);
-                            }
+                            parentStep.Attachments.Add(createdAttachment.Id);
                         }
                         else
                         {
@@ -130,10 +127,7 @@ public sealed class ProcessorService(ILogger<ProcessorService> logger,
 
                             if (parentStep is not null)
                             {
-                                if (file.CallerMemberName == parentStep.CurrentMethod)
-                                {
-                                    parentStep.Attachments.Add(attachment.Id);
-                                }
+                                parentStep.Attachments.Add(attachment.Id);
                             }
                             else
                             {
