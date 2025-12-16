@@ -9,7 +9,7 @@ using TmsRunner.Extensions;
 
 namespace TmsRunner.Services;
 
-public sealed class FilterService(ILogger<FilterService> logger, Replacer replacer)
+public sealed class FilterService(ILogger<FilterService> logger)
 {
     private static readonly Regex ParametersRegex = new("\\((.*)\\)");
 
@@ -45,7 +45,7 @@ public sealed class FilterService(ILogger<FilterService> logger, Replacer replac
         return testCasesToRun;
     }
 
-    private string GetExternalId(MethodInfo testMethod, TestCase testCase)
+    private static string? GetExternalId(MethodInfo testMethod, TestCase testCase)
     {
         var attributes = testMethod.GetCustomAttributes(false);
 

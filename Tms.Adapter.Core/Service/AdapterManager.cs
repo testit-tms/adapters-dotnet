@@ -9,13 +9,13 @@ using LoggerFactory = Tms.Adapter.Core.Logger.LoggerFactory;
 
 namespace Tms.Adapter.Core.Service;
 
-public class AdapterManager
+public sealed class AdapterManager
 {
     public static Func<string> CurrentTestIdGetter { get; } =
-        () => Thread.CurrentThread.ManagedThreadId.ToString();
+        () => Environment.CurrentManagedThreadId.ToString();
 
     private static readonly object Obj = new();
-    private static AdapterManager _instance;
+    private static AdapterManager? _instance;
     private readonly ResultStorage _storage;
     private readonly IWriter _writer;
     private readonly ITmsClient _client;
@@ -52,7 +52,7 @@ public class AdapterManager
         _writer = new Writer.Writer(logger.CreateLogger<Writer.Writer>(), _client, config);
     }
 
-    public virtual AdapterManager StartTestContainer(ClassContainer container)
+    public AdapterManager StartTestContainer(ClassContainer container)
     {
         container.Start = DateTimeOffset.Now.ToUnixTimeMilliseconds();
 
@@ -63,14 +63,14 @@ public class AdapterManager
         return this;
     }
 
-    public virtual AdapterManager StartTestContainer(string parentUuid, ClassContainer container)
+    public AdapterManager StartTestContainer(string parentUuid, ClassContainer container)
     {
         UpdateTestContainer(parentUuid, c => c.Children.Add(container.Id));
         StartTestContainer(container);
         return this;
     }
 
-    public virtual AdapterManager UpdateTestContainer(string uuid, Action<ClassContainer> update)
+    public AdapterManager UpdateTestContainer(string uuid, Action<ClassContainer> update)
     {
         _logger.LogDebug("Updating class container with id: {ID}", uuid);
 
@@ -78,7 +78,7 @@ public class AdapterManager
         return this;
     }
 
-    public virtual AdapterManager StopTestContainer(string uuid)
+    public AdapterManager StopTestContainer(string uuid)
     {
         _logger.LogDebug("Stopping class container with id: {ID}", uuid);
 
@@ -86,28 +86,28 @@ public class AdapterManager
         return this;
     }
 
-    public virtual AdapterManager StartBeforeFixture(string parentUuid, FixtureResult result)
+    public AdapterManager StartBeforeFixture(string parentUuid, FixtureResult result)
     {
         var uuid = Hash.NewId();
         StartBeforeFixture(parentUuid, uuid, result);
         return this;
     }
 
-    public virtual AdapterManager StartBeforeFixture(string parentUuid, string uuid, FixtureResult result)
+    public AdapterManager StartBeforeFixture(string parentUuid, string uuid, FixtureResult result)
     {
         UpdateTestContainer(parentUuid, container => container.Befores.Add(result));
         StartFixture(uuid, result);
         return this;
     }
 
-    public virtual AdapterManager StartAfterFixture(string parentUuid, FixtureResult result)
+    public AdapterManager StartAfterFixture(string parentUuid, FixtureResult result)
     {
         var uuid = Guid.NewGuid().ToString("N");
         StartAfterFixture(parentUuid, uuid, result);
         return this;
     }
 
-    public virtual AdapterManager StartAfterFixture(string parentUuid, string uuid, FixtureResult result)
+    public AdapterManager StartAfterFixture(string parentUuid, string uuid, FixtureResult result)
     {
         UpdateTestContainer(parentUuid, container => container.Afters.Add(result));
         StartFixture(uuid, result);
@@ -126,25 +126,25 @@ public class AdapterManager
         _storage.StartStep(uuid);
     }
 
-    public virtual AdapterManager UpdateFixture(Action<FixtureResult> update)
+    public AdapterManager UpdateFixture(Action<FixtureResult> update)
     {
-        UpdateFixture(_storage.GetRootStep(), update);
+        UpdateFixture(_storage.GetRootStep()!, update);
         return this;
     }
 
-    public virtual AdapterManager UpdateFixture(string uuid, Action<FixtureResult> update)
+    public AdapterManager UpdateFixture(string uuid, Action<FixtureResult> update)
     {
         update.Invoke(_storage.Get<FixtureResult>(uuid));
         return this;
     }
 
-    public virtual AdapterManager StopFixture(Action<FixtureResult> beforeStop)
+    public AdapterManager StopFixture(Action<FixtureResult> beforeStop)
     {
         UpdateFixture(beforeStop);
-        return StopFixture(_storage.GetRootStep());
+        return StopFixture(_storage.GetRootStep()!);
     }
 
-    public virtual AdapterManager StopFixture(string uuid)
+    public AdapterManager StopFixture(string uuid)
     {
         var fixture = _storage.Remove<FixtureResult>(uuid);
         _storage.ClearStepContext();
@@ -156,13 +156,13 @@ public class AdapterManager
         return this;
     }
 
-    public virtual AdapterManager StartTestCase(string containerUuid, TestContainer testResult)
+    public AdapterManager StartTestCase(string containerUuid, TestContainer testResult)
     {
         UpdateTestContainer(containerUuid, c => c.Children.Add(testResult.Id));
         return StartTestCase(testResult);
     }
 
-    public virtual AdapterManager StartTestCase(TestContainer testResult)
+    public AdapterManager StartTestCase(TestContainer testResult)
     {
         testResult.Stage = Stage.Running;
         testResult.Start = DateTimeOffset.Now.ToUnixTimeMilliseconds();
@@ -175,24 +175,24 @@ public class AdapterManager
         return this;
     }
 
-    public virtual AdapterManager UpdateTestCase(string uuid, Action<TestContainer> update)
+    public AdapterManager UpdateTestCase(string uuid, Action<TestContainer> update)
     {
         update.Invoke(_storage.Get<TestContainer>(uuid));
         return this;
     }
 
-    public virtual AdapterManager UpdateTestCase(Action<TestContainer> update)
+    public AdapterManager UpdateTestCase(Action<TestContainer> update)
     {
-        return UpdateTestCase(_storage.GetRootStep(), update);
+        return UpdateTestCase(_storage.GetRootStep()!, update);
     }
 
-    public virtual AdapterManager StopTestCase(Action<TestContainer> beforeStop)
+    public AdapterManager StopTestCase(Action<TestContainer> beforeStop)
     {
         UpdateTestCase(beforeStop);
-        return StopTestCase(_storage.GetRootStep());
+        return StopTestCase(_storage.GetRootStep()!);
     }
 
-    public virtual AdapterManager StopTestCase(string uuid)
+    public AdapterManager StopTestCase(string uuid)
     {
         var testResult = _storage.Get<TestContainer>(uuid);
         
@@ -222,27 +222,27 @@ public class AdapterManager
         return this;
     }
 
-    public virtual AdapterManager WriteTestCase(string uuid, string containerId)
+    public AdapterManager WriteTestCase(string uuid, string containerId)
     {
         _writer.Write(_storage.Remove<TestContainer>(uuid),
             _storage.Remove<ClassContainer>(containerId)).Wait();
         return this;
     }
 
-    public virtual AdapterManager StartStep(StepResult result)
+    public AdapterManager StartStep(StepResult result)
     {
         var uuid = Hash.NewId();
-        StartStep(_storage.GetCurrentStep(), uuid, result);
+        StartStep(_storage.GetCurrentStep()!, uuid, result);
         return this;
     }
 
-    public virtual AdapterManager StartStep(string uuid, StepResult result)
+    public AdapterManager StartStep(string uuid, StepResult result)
     {
-        StartStep(_storage.GetCurrentStep(), uuid, result);
+        StartStep(_storage.GetCurrentStep()!, uuid, result);
         return this;
     }
 
-    public virtual AdapterManager StartStep(string parentUuid, string uuid, StepResult stepResult)
+    public AdapterManager StartStep(string parentUuid, string uuid, StepResult stepResult)
     {
         stepResult.Stage = Stage.Running;
         stepResult.Start = DateTimeOffset.Now.ToUnixTimeMilliseconds();
@@ -254,25 +254,25 @@ public class AdapterManager
         return this;
     }
 
-    public virtual AdapterManager UpdateStep(Action<StepResult> update)
+    public AdapterManager UpdateStep(Action<StepResult> update)
     {
-        update.Invoke(_storage.Get<StepResult>(_storage.GetCurrentStep()));
+        update.Invoke(_storage.Get<StepResult>(_storage.GetCurrentStep()!));
         return this;
     }
 
-    public virtual AdapterManager UpdateStep(string uuid, Action<StepResult> update)
+    public AdapterManager UpdateStep(string uuid, Action<StepResult> update)
     {
         update.Invoke(_storage.Get<StepResult>(uuid));
         return this;
     }
 
-    public virtual AdapterManager StopStep(Action<StepResult> beforeStop)
+    public AdapterManager StopStep(Action<StepResult> beforeStop)
     {
         UpdateStep(beforeStop);
-        return StopStep(_storage.GetCurrentStep());
+        return StopStep(_storage.GetCurrentStep()!);
     }
 
-    public virtual AdapterManager StopStep(string uuid)
+    public AdapterManager StopStep(string uuid)
     {
         var step = _storage.Remove<StepResult>(uuid);
         step.Stage = Stage.Finished;
@@ -303,23 +303,23 @@ public class AdapterManager
     public AdapterManager AddAttachments(string filename, Stream content)
     {
         var attachId = _client.UploadAttachment(filename, content).Result;
-        _storage.Get<ExecutableItem>(_storage.GetCurrentStep()).Attachments.Add(attachId);
+        _storage.Get<ExecutableItem>(_storage.GetCurrentStep()!).Attachments.Add(attachId);
         return this;
     }
 
     public async Task CreateTestRun()
     {
-        await _client.CreateTestRun();
+        await _client.CreateTestRun().ConfigureAwait(false);
     }
 
     public async Task UpdateTestRun()
     {
-        await _client.UpdateTestRun();
+        await _client.UpdateTestRun().ConfigureAwait(false);
     }
 
     public async Task CompleteTestRun()
     {
-        await _client.CompleteTestRun();
+        await _client.CompleteTestRun().ConfigureAwait(false);
     }
 
     public static void ClearInstance()

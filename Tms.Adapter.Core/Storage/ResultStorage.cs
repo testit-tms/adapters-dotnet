@@ -22,7 +22,7 @@ public class ResultStorage
 
     public T Put<T>(string uuid, T item)
     {
-        return (T)_storage.GetOrAdd(uuid, item);
+        return (T)_storage.GetOrAdd(uuid, item!);
     }
 
     public T Remove<T>(string id)
@@ -47,12 +47,12 @@ public class ResultStorage
         Steps.RemoveFirst();
     }
 
-    public string GetRootStep()
+    public string? GetRootStep()
     {
         return Steps.Last?.Value;
     }
 
-    public string GetCurrentStep()
+    public string? GetCurrentStep()
     {
         return Steps.First?.Value;
     }

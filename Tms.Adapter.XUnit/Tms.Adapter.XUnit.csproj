@@ -49,4 +49,10 @@
     <InternalsVisibleTo  Include="Tms.Adapter.XUnitTests" />
   </ItemGroup>
 
+
+  <PropertyGroup>
+    <!-- Отключить предупреждения о делегатах LoggerMessage -->
+    <NoWarn>$(NoWarn);CA1848</NoWarn>
+  </PropertyGroup>
+
 </Project>

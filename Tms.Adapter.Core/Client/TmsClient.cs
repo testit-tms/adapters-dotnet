@@ -93,10 +93,10 @@ public class TmsClient : ITmsClient
         
         var putLinks = links.Select(l => new LinkPutModel(url: l.Url)
             {
-                Title = l.Title,
-                Description = l.Description,
+                Title = l.Title!,
+                Description = l.Description!,
                 Type = l.Type != null
-                    ? (LinkType?)Enum.Parse(typeof(LinkType), l.Type.ToString())
+                    ? Enum.Parse<LinkType>(l.Type.ToString())
                     : null
             }
         ).ToList();
@@ -115,12 +115,12 @@ public class TmsClient : ITmsClient
             new()
             {
                 Path = nameof(AutoTestPutModel.ExternalKey),
-                Value = HtmlEscapeUtils.EscapeHtmlTags(externalKey),
+                Value = HtmlEscapeUtils.EscapeHtmlTags(externalKey)!,
                 Op = "Replace"
             }
         };
 
-        await _autoTests.ApiV2AutoTestsIdPatchAsync(autotest.Id, operations);
+        await _autoTests.ApiV2AutoTestsIdPatchAsync(autotest.Id, operations).ConfigureAwait(false);
 
         _logger.LogDebug("Update autotest {ExternalId} is successfully", externalId);
     }
@@ -150,7 +150,7 @@ public class TmsClient : ITmsClient
 
                     return;
                 }
-                catch (ApiException e)
+                catch (ApiException)
                 {
                     _logger.LogError(
                          "Cannot link autotest {AutotestId} to work item {WorkItemId}: work item does not exist",
@@ -183,7 +183,7 @@ public class TmsClient : ITmsClient
 
                 return;
             }
-            catch (ApiException e)
+            catch (ApiException)
             {
                 _logger.LogError(
                     "Cannot link autotest {AutotestId} to work item {WorkitemId}",

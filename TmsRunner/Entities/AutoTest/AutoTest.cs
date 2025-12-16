@@ -13,7 +13,7 @@ public sealed record AutoTest
     public string? Name;
     public string? Title;
     public string? Description;
-    public List<string> WorkItemIds = [];
+    public List<string?> WorkItemIds = [];
     public List<Link>? Links = [];
     public List<string>? Labels;
     public string? MethodName;

@@ -17,7 +17,7 @@ public class FilterServiceTests
     public void FilterTestCases()
     {
         // Arrange
-        var filterService = new FilterService(_logger.Object, _replacer.Object);
+        var filterService = new FilterService(_logger.Object);
         var assemblyPath = typeof(FilterServiceTests).Assembly.Location;
         var externalId = new[] { "123" };
         var testcases = new[] { new TestCase { FullyQualifiedName = "test" } };
@@ -33,7 +33,7 @@ public class FilterServiceTests
     public void FilterTestCasesByLabels()
     {
         // Arrange
-        var filterService = new FilterService(_logger.Object, _replacer.Object);
+        var filterService = new FilterService(_logger.Object);
         var config = new AdapterConfig
         {
             TestAssemblyPath = typeof(FilterServiceTests).Assembly.Location

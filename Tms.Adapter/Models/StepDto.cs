@@ -2,7 +2,9 @@ namespace Tms.Adapter.Models;
 
 public class StepDto
 {
+#pragma warning disable CA1720
     public Guid Guid { get; set; }
+#pragma warning restore CA1720
     public DateTime? StartedOn { get; set; }
     public string? Title { get; set; }
     public string? Description { get; set; }

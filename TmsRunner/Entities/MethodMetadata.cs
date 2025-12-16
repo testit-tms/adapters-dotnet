@@ -6,5 +6,5 @@ public sealed record MethodMetadata
     public string? Namespace;
     public string? Classname;
     public List<Attribute>? Attributes;
-    public List<string?> Parameters;
+    public List<string?> Parameters = new();
 }

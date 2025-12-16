@@ -118,7 +118,7 @@ public static class Converter
     {
         return autotestSteps?.Select(s => new AutoTestStepModel(
                 s.Title ?? string.Empty,
-                s.Description ?? string.Empty,
+                s.Description  ?? string.Empty,
                 ConvertStepsToModel(s.Steps) ?? [])).ToList();
     }
 

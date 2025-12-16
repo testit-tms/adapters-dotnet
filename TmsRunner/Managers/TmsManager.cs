@@ -64,11 +64,11 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
 
         var externalIds = new List<string>();
         var skip = 0;
-        var model = Converter.BuildTestResultsFilterApiModel(settings.TestRunId, settings.ConfigurationId);
+        var model = Converter.BuildTestResultsFilterApiModel(settings.TestRunId!, settings.ConfigurationId!);
 
         while (true)
         {
-            var testResults = await getTestResults(skip, model);
+            var testResults = await GetTestResults(skip, model);
 
             if (testResults.Count != 0)
             {
@@ -82,9 +82,9 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
         }
     }
 
-    private async Task<List<TestResultShortResponse>> getTestResults(int skip, TestResultsFilterApiModel model)
+    private async Task<List<TestResultShortResponse>> GetTestResults(int skip, TestResultsFilterApiModel model)
     {
-        return await testResultsApi.ApiV2TestResultsSearchPostAsync(skip, TESTS_LIMIT, null, null, null, model);
+        return await testResultsApi.ApiV2TestResultsSearchPostAsync(skip, TESTS_LIMIT, null!, null!, null!, model);
     }
 
     public async Task SubmitResultToTestRunAsync(string? id, AutoTestResult result)
@@ -113,7 +113,7 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
             throw new InvalidOperationException($"No matching autotest found for ExternalId: {result.ExternalId}");
         }
 
-        foreach (var matchingResult in matchingResults)
+        foreach (var matchingResult in matchingResults!)
         {
             model.Parameters = matchingResult.Parameters;
             await testRunsApi.SetAutoTestResultsForTestRunAsync(testRunId, [model])
@@ -208,7 +208,7 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
 
                     return;
                 }
-                catch (ApiException e)
+                catch (ApiException)
                 {
                     logger.LogError(
                          "Cannot link autotest {AutotestId} to work item {WorkItemId}",
@@ -241,7 +241,7 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
 
                 return;
             }
-            catch (ApiException e)
+            catch (ApiException)
             {
                 logger.LogError(
                     "Cannot link autotest {AutotestId} to work item {WorkitemId}",

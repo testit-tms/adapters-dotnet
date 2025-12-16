@@ -50,5 +50,10 @@
       <PackageReference Include="System.Configuration.ConfigurationManager" Version="8.0.0" />
       <PackageReference Include="TestIt.ApiClient" Version="5.2.5" />
     </ItemGroup>
+
+    <PropertyGroup>
+        <!-- Отключить предупреждения о делегатах LoggerMessage -->
+        <NoWarn>$(NoWarn);CA1848</NoWarn>
+    </PropertyGroup>
     
 </Project>

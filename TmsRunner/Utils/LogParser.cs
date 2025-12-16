@@ -12,7 +12,7 @@ using TmsRunner.Extensions;
 
 namespace TmsRunner.Utils;
 
-public sealed class LogParser(Replacer replacer)
+public sealed class LogParser
 {
     public static Dictionary<string, string>? GetParameters(string traceJson)
     {
@@ -99,10 +99,10 @@ public sealed class LogParser(Replacer replacer)
                     {
                         if (links.Value is not null)
                         {
-                            links.Value.Title = Replacer.ReplaceParameters(links.Value.Title, parameters);
-                            links.Value.Url = Replacer.ReplaceParameters(links.Value.Url, parameters);
+                            links.Value.Title = Replacer.ReplaceParameters(links.Value.Title!, parameters);
+                            links.Value.Url = Replacer.ReplaceParameters(links.Value.Url!, parameters);
                             links.Value.Description =
-                                Replacer.ReplaceParameters(links.Value.Description, parameters);
+                                Replacer.ReplaceParameters(links.Value.Description, parameters)!;
 
                             autoTest.Links?.Add(links.Value);
                         }
