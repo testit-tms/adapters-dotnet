@@ -205,7 +205,7 @@ public class AdapterManager
 
         _linksByTestId.TryRemove(CurrentTestIdGetter(), out var links);
 
-        if (links.Count > 0 )
+        if (links != null && links.Count > 0 )
         {
             lock (links)
             {
