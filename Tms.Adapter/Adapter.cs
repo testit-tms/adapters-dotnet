@@ -20,9 +20,9 @@ public static class Adapter
         {
             new Link
             {
-                Title = title,
+                Title = title ?? string.Empty,
                 Url = url,
-                Description = description,
+                Description = description ?? string.Empty,
                 Type = type
             }
         }));

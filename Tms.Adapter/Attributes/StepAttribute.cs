@@ -114,13 +114,13 @@ public class StepAttribute : OnMethodBoundaryAspect
         var newTitle = string.IsNullOrEmpty(_title) ? _currentMethod.Name : _title;
         var newDescription = string.IsNullOrEmpty(_description)
             ? null
-            : replacer.ReplaceParameters(_description, parameters);
+            : Replacer.ReplaceParameters(_description, parameters);
 
         var step = new StepDto
         {
             Guid = _guid,
             StartedOn = _startedAt,
-            Title = replacer.ReplaceParameters(newTitle, parameters),
+            Title = Replacer.ReplaceParameters(newTitle, parameters),
             Description = newDescription,
             CurrentMethod = _currentMethod.Name,
             CallerMethod = _callerMethod?.Name.Replace("$_executor_", ""),
@@ -143,7 +143,7 @@ public class StepAttribute : OnMethodBoundaryAspect
         WriteData("Failed");
     }
 
-    private void WriteData(string outcome, object result = null)
+    private void WriteData(string outcome, object? result = null)
     {
         _completedAt = DateTime.UtcNow;
 

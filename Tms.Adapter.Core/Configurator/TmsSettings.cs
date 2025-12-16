@@ -2,7 +2,7 @@ namespace Tms.Adapter.Core.Configurator;
 
 public class TmsSettings
 {
-    private string _url;
+    private string _url = string.Empty;
 
     public string Url
     {
@@ -10,11 +10,11 @@ public class TmsSettings
         set => _url = value;
     }
 
-    public string PrivateToken { get; set; }
-    public string ProjectId { get; set; }
-    public string ConfigurationId { get; set; }
-    public string TestRunId { get; set; }
-    public string TestRunName { get; set; }
+    public string PrivateToken { get; set; } = string.Empty;
+    public string ProjectId { get; set; } = string.Empty;
+    public string ConfigurationId { get; set; } = string.Empty;
+    public string TestRunId { get; set; } = string.Empty;
+    public string TestRunName { get; set; } = string.Empty;
     public bool AutomaticCreationTestCases { get; set; }
     public bool AutomaticUpdationLinksToTestCases { get; set; }
     public bool CertValidation { get; set; }

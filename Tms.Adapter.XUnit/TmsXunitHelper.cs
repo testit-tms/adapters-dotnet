@@ -166,7 +166,7 @@ public static class TmsXunitHelper
         return string.Join('.', items.Take(items.Length - 1));
     }
 
-    private static string ReplaceParameters(string? value, Dictionary<string, string?> parameters)
+    private static string? ReplaceParameters(string? value, Dictionary<string, string?>? parameters)
     {
         if (string.IsNullOrEmpty(value) || parameters is null) return value;
 

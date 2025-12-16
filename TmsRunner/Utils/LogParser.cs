@@ -75,21 +75,21 @@ public sealed class LogParser(Replacer replacer)
             switch (attribute)
             {
                 case ExternalIdAttribute externalId:
-                    autoTest.ExternalId = replacer.ReplaceParameters(externalId.Value, parameters);
+                    autoTest.ExternalId = Replacer.ReplaceParameters(externalId.Value, parameters);
                     break;
                 case DisplayNameAttribute displayName:
-                    autoTest.Name = replacer.ReplaceParameters(displayName.Value, parameters);
+                    autoTest.Name = Replacer.ReplaceParameters(displayName.Value, parameters);
                     break;
                 case TitleAttribute title:
-                    autoTest.Title = replacer.ReplaceParameters(title.Value, parameters);
+                    autoTest.Title = Replacer.ReplaceParameters(title.Value, parameters);
                     break;
                 case DescriptionAttribute description:
-                    autoTest.Description = replacer.ReplaceParameters(description.Value, parameters);
+                    autoTest.Description = Replacer.ReplaceParameters(description.Value, parameters);
                     break;
                 case WorkItemIdsAttribute ids:
                     {
                         var workItemIds = ids.Value?
-                            .Select(id => replacer.ReplaceParameters(id, parameters))
+                            .Select(id => Replacer.ReplaceParameters(id, parameters))
                             .ToList();
 
                         autoTest.WorkItemIds = workItemIds ?? [];
@@ -99,10 +99,10 @@ public sealed class LogParser(Replacer replacer)
                     {
                         if (links.Value is not null)
                         {
-                            links.Value.Title = replacer.ReplaceParameters(links.Value.Title, parameters);
-                            links.Value.Url = replacer.ReplaceParameters(links.Value.Url, parameters);
+                            links.Value.Title = Replacer.ReplaceParameters(links.Value.Title, parameters);
+                            links.Value.Url = Replacer.ReplaceParameters(links.Value.Url, parameters);
                             links.Value.Description =
-                                replacer.ReplaceParameters(links.Value.Description, parameters);
+                                Replacer.ReplaceParameters(links.Value.Description, parameters);
 
                             autoTest.Links?.Add(links.Value);
                         }

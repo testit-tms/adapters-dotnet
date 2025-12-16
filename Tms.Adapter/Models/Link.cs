@@ -4,14 +4,14 @@ public class Link : IEquatable<Link>
 {
     public LinkType? Type { get; set; }
 
-    public string Title { get; set; }
+    public string Title { get; set; } = string.Empty;
 
-    public string Url { get; set; }
+    public string Url { get; set; } = string.Empty;
 
-    public string Description { get; set; }
+    public string Description { get; set; } = string.Empty;
 
 
-    public override bool Equals(object input) => this.Equals(input as Link);
+    public override bool Equals(object? obj) => Equals(obj as Link);
 
     public override int GetHashCode()
     {
