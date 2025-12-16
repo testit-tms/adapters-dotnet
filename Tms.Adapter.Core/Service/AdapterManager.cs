@@ -1,4 +1,5 @@
 using Microsoft.Extensions.Logging;
+using System.Collections.Concurrent;
 using Tms.Adapter.Core.Client;
 using Tms.Adapter.Core.Models;
 using Tms.Adapter.Core.Storage;
@@ -19,8 +20,8 @@ public class AdapterManager
     private readonly IWriter _writer;
     private readonly ITmsClient _client;
     private readonly ILogger<AdapterManager> _logger;
-    private string? _currentMessage;
-    private readonly List<Link> _currentLinks = new();
+    private readonly ConcurrentDictionary<string, string> _messageByTestId = new();
+    private readonly ConcurrentDictionary<string, List<Link>> _linksByTestId = new();
 
     public static AdapterManager Instance
     {
@@ -194,21 +195,22 @@ public class AdapterManager
     public virtual AdapterManager StopTestCase(string uuid)
     {
         var testResult = _storage.Get<TestContainer>(uuid);
+        
+        _messageByTestId.TryRemove(CurrentTestIdGetter(), out var message);
 
-        if (_currentMessage != null)
+        if (!string.IsNullOrEmpty(message) && testResult.Status != Status.Failed)
         {
-            if (testResult.Status != Status.Failed)
-            {
-                testResult.Message = _currentMessage;
-            }
-
-            _currentMessage = null;
+            testResult.Message = message;
         }
 
-        if (_currentLinks.Count > 0)
+        _linksByTestId.TryRemove(CurrentTestIdGetter(), out var links);
+
+        if (links != null && links.Count > 0 )
         {
-            testResult.ResultLinks.AddRange(_currentLinks);
-            _currentLinks.Clear();
+            lock (links)
+            {
+                testResult.ResultLinks.AddRange(links);
+            }
         }
 
         testResult.Stage = Stage.Finished;
@@ -284,13 +286,17 @@ public class AdapterManager
 
     public AdapterManager AddMessage(string message)
     {
-        _currentMessage = message;
+        _messageByTestId[CurrentTestIdGetter()] = message;
         return this;
     }
 
     public AdapterManager AddLinks(IEnumerable<Link> links)
     {
-        _currentLinks.AddRange(links);
+        var list = _linksByTestId.GetOrAdd(CurrentTestIdGetter(), _ => new List<Link>());
+        lock (list)
+        {
+            list.AddRange(links);
+        }
         return this;
     }
 
