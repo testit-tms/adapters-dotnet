@@ -5,12 +5,11 @@ using Tms.Adapter.Core.Client;
 using Tms.Adapter.Core.Models;
 using Tms.Adapter.Core.Storage;
 using Tms.Adapter.Core.Utils;
-using Tms.Adapter.Core.Writer;
 using LoggerFactory = Tms.Adapter.Core.Logger.LoggerFactory;
 
 namespace Tms.Adapter.Core.Service;
 
-public sealed class AdapterManager
+public sealed class AdapterManager : IDisposable
 {
     public static Func<string> CurrentTestIdGetter { get; } =
         () => Environment.CurrentManagedThreadId.ToString(CultureInfo.InvariantCulture);
@@ -326,5 +325,10 @@ public sealed class AdapterManager
     public static void ClearInstance()
     {
         _instance = null;
+    }
+
+    public void Dispose()
+    {
+        _client.Dispose();
     }
 }

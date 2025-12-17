@@ -6,8 +6,8 @@ namespace Tms.Adapter.XUnit;
 
 public class TmsXunitTestCase : XunitTestCase, ITmsAccessor
 {
-    public ClassContainer ClassContainer { get; set; }
-    public TestContainer TestResult { get; set; }
+    public ClassContainer? ClassContainer { get; set; }
+    public TestContainer? TestResult { get; set; }
 
     public TmsXunitTestCase(IMessageSink diagnosticMessageSink, TestMethodDisplay testMethodDisplay,
         TestMethodDisplayOptions defaultMethodDisplayOptions,
@@ -33,8 +33,11 @@ public class TmsXunitTestCase : XunitTestCase, ITmsAccessor
     {
         StepManager.TestResultAccessor = this;
         messageBus = new TmsMessageBus(messageBus);
-        var summary = await base.RunAsync(diagnosticMessageSink, messageBus, constructorArguments, aggregator,
-            cancellationTokenSource);
+        var summary = await base
+            .RunAsync(diagnosticMessageSink, messageBus, 
+                constructorArguments, aggregator,
+                cancellationTokenSource)
+            .ConfigureAwait(false);
         return summary;
     }
 }

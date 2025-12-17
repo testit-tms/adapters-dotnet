@@ -2,15 +2,15 @@ namespace TmsRunner.Entities.AutoTest;
 
 public sealed record AutoTestStepResult
 {
-    public string? Title;
-    public string? Description;
-    public DateTime? StartedOn;
-    public DateTime? CompletedOn;
-    public long? Duration;
-    public List<Guid>? Attachments;
-    public Dictionary<string, string>? Parameters;
-    public List<AutoTestStepResult>? Steps;
-    public string? Outcome;
+    public string? Title { get; init; }
+    public string? Description { get; init; }
+    public DateTime? StartedOn { get; init; }
+    public DateTime? CompletedOn { get; init; }
+    public long? Duration { get; init; }
+    public List<Guid>? Attachments { get; init; }
+    public Dictionary<string, string>? Parameters { get; init; }
+    public List<AutoTestStepResult>? Steps { get; init; }
+    public string? Outcome { get; init; }
 
     public static AutoTestStepResult ConvertFromStep(Step step)
     {

@@ -144,7 +144,7 @@ public class StepAspect
         {
             return (T)target(args);
         }
-        catch (Exception e)
+        catch (Exception)
         {
             return default(T);
         }
@@ -154,11 +154,11 @@ public class StepAspect
     {
         try
         {
-            return await (Task<T>)target(args);
+            return await ((Task<T>)target(args)).ConfigureAwait(false);
         }
-        catch (Exception e)
+        catch (Exception)
         {
-            return default(T);
+            return default!;
         }
     }
 }
