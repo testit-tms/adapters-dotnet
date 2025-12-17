@@ -22,7 +22,7 @@ public static class StepManager
             Start = DateTimeOffset.Now.ToUnixTimeMilliseconds()
         };
 
-        AdapterManager.Instance.StartBeforeFixture(TestResultAccessor.ClassContainer.Id, fixtureResult);
+        AdapterManager.Instance.StartBeforeFixture(TestResultAccessor.ClassContainer!.Id, fixtureResult);
     }
 
     public static void StartAfterFixture(string name)
@@ -34,7 +34,7 @@ public static class StepManager
             Start = DateTimeOffset.Now.ToUnixTimeMilliseconds()
         };
 
-        AdapterManager.Instance.StartAfterFixture(TestResultAccessor.ClassContainer.Id, fixtureResult);
+        AdapterManager.Instance.StartAfterFixture(TestResultAccessor.ClassContainer!.Id, fixtureResult);
     }
 
     public static void StopFixture(Action<FixtureResult>? updateResults = null)
@@ -51,7 +51,7 @@ public static class StepManager
     {
         var newTestResult = TestResultAccessor.TestResult;
         StopFixture(updateResults);
-        AdapterManager.Instance.StartTestCase(TestResultAccessor.ClassContainer.Id, newTestResult);
+        AdapterManager.Instance.StartTestCase(TestResultAccessor.ClassContainer!.Id, newTestResult!);
     }
 
     public static void StartStep(string name, Action<StepResult>? updateResults = null)

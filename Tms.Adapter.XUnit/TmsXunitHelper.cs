@@ -44,7 +44,7 @@ public static class TmsXunitHelper
             ExternalKey = externalKey,
         };
         UpdateTestDataFromAttributes(testResults.TestResult, testCase);
-        AdapterManager.Instance.StartTestCase(testResults.ClassContainer.Id, testResults.TestResult);
+        AdapterManager.Instance.StartTestCase(testResults.ClassContainer!.Id, testResults.TestResult);
     }
 
     public static void MarkTestCaseAsFailed(ITestFailed testFailed)
@@ -54,7 +54,7 @@ public static class TmsXunitHelper
             return;
         }
 
-        testResults.TestResult.Message = string.Join('\n', testFailed.Messages);
+        testResults.TestResult!.Message = string.Join('\n', testFailed.Messages);
         testResults.TestResult.Trace = string.Join('\n', testFailed.StackTraces);
         testResults.TestResult.Status = Status.Failed;
     }
@@ -66,7 +66,7 @@ public static class TmsXunitHelper
             return;
         }
 
-        testResults.TestResult.Status = Status.Passed;
+        testResults.TestResult!.Status = Status.Passed;
     }
 
     public static void MarkTestCaseAsSkipped(ITestCaseMessage testCaseMessage)
@@ -76,7 +76,7 @@ public static class TmsXunitHelper
             return;
         }
 
-        testResults.TestResult.Message = testCaseMessage.TestCase.SkipReason;
+        testResults.TestResult!.Message = testCaseMessage.TestCase.SkipReason;
         testResults.TestResult.Status = Status.Skipped;
     }
 
@@ -87,8 +87,8 @@ public static class TmsXunitHelper
             return;
         }
 
-        AdapterManager.Instance.StopTestCase(testResults.TestResult.Id);
-        AdapterManager.Instance.StopTestContainer(testResults.ClassContainer.Id);
+        AdapterManager.Instance.StopTestCase(testResults.TestResult!.Id);
+        AdapterManager.Instance.StopTestContainer(testResults.ClassContainer!.Id);
         AdapterManager.Instance.WriteTestCase(testResults.TestResult.Id, testResults.ClassContainer.Id);
     }
 

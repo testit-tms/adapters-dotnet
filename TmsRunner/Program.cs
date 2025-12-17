@@ -1,4 +1,5 @@
-﻿using CommandLine;
+﻿using System.Globalization;
+using CommandLine;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.TestPlatform.VsTestConsole.TranslationLayer;
@@ -99,7 +100,7 @@ public static class Program
                     .Enrich.FromLogContext()
                     .MinimumLevel.Debug()
                     .MinimumLevel.Override("System.Net.Http.HttpClient", LogEventLevel.Warning)
-                    .WriteTo.Console(consoleLogLevel);
+                    .WriteTo.Console(consoleLogLevel, formatProvider: CultureInfo.InvariantCulture);
             })
             .ConfigureServices((hostContext, services) =>
             {

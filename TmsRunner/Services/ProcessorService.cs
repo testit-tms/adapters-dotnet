@@ -21,8 +21,7 @@ namespace TmsRunner.Services;
 
 public sealed class ProcessorService(ILogger<ProcessorService> logger,
                                      TmsManager apiClient,
-                                     TmsSettings tmsSettings,
-                                     LogParser parser)
+                                     TmsSettings tmsSettings)
 {
     private async Task<List<StepModel>> GetStepsWithAttachmentsAsync(string? traceJson, List<Guid> attachmentIds)
     {

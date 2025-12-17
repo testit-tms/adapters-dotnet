@@ -10,7 +10,7 @@ using ITestMethod = Xunit.Abstractions.ITestMethod;
 namespace Tms.Adapter.XUnitTests;
 #pragma warning disable CA1707
 [TestClass]
-public class TmsMessageBusTests
+public class TmsMessageBusTests : IDisposable
 {
     private readonly TmsMessageBus _messageBus;
     private readonly TmsXunitTestCase _testCase;
@@ -106,7 +106,7 @@ public class TmsMessageBusTests
         Assert.AreEqual(_testCase.TestResult.Stage, Stage.Running);
         Assert.AreNotEqual(_testCase.TestResult.Start, 0);
         Assert.AreEqual(_testCase.TestResult.Stop, 0);
-        Assert.AreEqual(_testCase.ClassContainer.Children.First(), _testCase.TestResult.Id);
+        Assert.AreEqual(_testCase.ClassContainer!.Children.First(), _testCase.TestResult.Id);
     }
 
     [TestMethod]
@@ -119,15 +119,15 @@ public class TmsMessageBusTests
         var message = RandomUtils.GetRandomString();
         var trace = RandomUtils.GetRandomString();
 
-        MessageStubs.testFailed.SetupGet(message => message.Messages).Returns([message]);
-        MessageStubs.testFailed.SetupGet(message => message.StackTraces).Returns([trace]);
+        MessageStubs.testFailed.SetupGet(m => m.Messages).Returns([message]);
+        MessageStubs.testFailed.SetupGet(m => m.StackTraces).Returns([trace]);
 
         // Act
         var result = _messageBus.QueueMessage(MessageStubs.testFailed.Object);
 
         // Assert
         Assert.IsFalse(result);
-        Assert.AreEqual(_testCase.TestResult.Status, Status.Failed);
+        Assert.AreEqual(_testCase.TestResult!.Status, Status.Failed);
         Assert.AreEqual(_testCase.TestResult.Message, message);
         Assert.AreEqual(_testCase.TestResult.Trace, trace);
     }
@@ -144,7 +144,7 @@ public class TmsMessageBusTests
 
         // Assert
         Assert.IsFalse(result);
-        Assert.AreEqual(_testCase.TestResult.Status, Status.Passed);
+        Assert.AreEqual(_testCase.TestResult!.Status, Status.Passed);
     }
 
     [TestMethod]
@@ -160,8 +160,15 @@ public class TmsMessageBusTests
 
         // Assert
         Assert.IsFalse(result);
-        Assert.AreEqual(_testCase.TestResult.Stage, Stage.Finished);
+        Assert.AreEqual(_testCase.TestResult!.Stage, Stage.Finished);
         Assert.AreNotEqual(_testCase.TestResult.Stop, 0);
-        Assert.AreNotEqual(_testCase.ClassContainer.Stop, 0);
+        Assert.AreNotEqual(_testCase.ClassContainer!.Stop, 0);
+    }
+
+    public void Dispose()
+    {
+        _testCase.Dispose();
+        _messageBus.Dispose();
+        GC.SuppressFinalize(this);
     }
 }
