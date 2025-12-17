@@ -7,8 +7,10 @@ using System.Collections.Concurrent;
 
 namespace TmsRunner.Handlers;
 
+#pragma warning disable CA1711
 public sealed class RunEventHandler(ILogger<RunEventHandler> logger, EventWaitHandle waitHandle,
-                                    ProcessorService processorService) : ITestRunEventsHandler, IDisposable
+
+    ProcessorService processorService) : ITestRunEventsHandler, IDisposable
 {
     private readonly List<Task> _processTestResultsTasks = [];
     private readonly ConcurrentBag<TestCase> _failedTestCases = [];
@@ -124,3 +126,4 @@ public sealed class RunEventHandler(ILogger<RunEventHandler> logger, EventWaitHa
         waitHandle.Dispose();
     }
 }
+#pragma warning restore CA1711

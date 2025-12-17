@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Globalization;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 
 using Newtonsoft.Json;
@@ -205,7 +206,7 @@ public sealed class ProcessorService(ILogger<ProcessorService> logger,
 
         if (autoTest.WorkItemIds.Count > 0)
         {
-            await UpdateTestLinkToWorkItems(existAutotestResult.Id.ToString(), autoTest.WorkItemIds);
+            await UpdateTestLinkToWorkItems(existAutotestResult.Id.ToString(), autoTest.WorkItemIds).ConfigureAwait(false);
         }
 
         if (!string.IsNullOrEmpty(testResult.ErrorMessage))
@@ -222,25 +223,23 @@ public sealed class ProcessorService(ILogger<ProcessorService> logger,
             .ConfigureAwait(false);
     }
 
-    private async Task UpdateTestLinkToWorkItems(string autoTestId, List<string> workItemIds)
+    private async Task UpdateTestLinkToWorkItems(string autoTestId, List<string?> workItemIds)
     {
-        var linkedWorkItems = await apiClient.GetWorkItemsLinkedToAutoTestAsync(autoTestId);
+        var linkedWorkItems = await apiClient.GetWorkItemsLinkedToAutoTestAsync(autoTestId).ConfigureAwait(false);
 
         foreach (var linkedWorkItem in linkedWorkItems) {
-            var linkedWorkItemId = linkedWorkItem.GlobalId.ToString();
+            var linkedWorkItemId = linkedWorkItem.GlobalId.ToString(CultureInfo.InvariantCulture);
 
-            if (workItemIds.Contains(linkedWorkItemId)) {
-                workItemIds.Remove(linkedWorkItemId);
-
+            if (workItemIds.Remove(linkedWorkItemId)) {
                 continue;
             }
 
             if (tmsSettings.AutomaticUpdationLinksToTestCases) {
-                await apiClient.DeleteAutoTestLinkFromWorkItemAsync(autoTestId, linkedWorkItemId);
+                await apiClient.DeleteAutoTestLinkFromWorkItemAsync(autoTestId, linkedWorkItemId).ConfigureAwait(false);
             }
         }
 
-        await apiClient.LinkAutoTestToWorkItemAsync(autoTestId, workItemIds);
+        await apiClient.LinkAutoTestToWorkItemAsync(autoTestId, workItemIds).ConfigureAwait(false);
     }
 
     private static AutoTestResult GetAutoTestResultsForTestRunModel(AutoTest autoTest,
@@ -279,7 +278,7 @@ public sealed class ProcessorService(ILogger<ProcessorService> logger,
             TeardownResults = teardownResults,
             Links = LogParser.GetLinks(traceJson),
             Message = autoTest.Message!.TrimStart(Environment.NewLine.ToCharArray()),
-            Parameters = isIgnoreParameters ? new Dictionary<string, string>() : parameters!,
+            Parameters = isIgnoreParameters ? [] : parameters!,
             Attachments = attachmentIds,
         };
         

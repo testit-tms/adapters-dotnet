@@ -307,11 +307,11 @@ public class TmsClient : ITmsClient
             return;
         }
 
-        var testRun = await _testRuns.GetTestRunByIdAsync(new Guid(_settings.TestRunId));
+        var testRun = await _testRuns.GetTestRunByIdAsync(new Guid(_settings.TestRunId)).ConfigureAwait(false);
 
-        if (testRun.StateName != TestRunState.Completed)
+        if (testRun.Status.Type != TestStatusApiType.Succeeded)
         {
-            await _testRuns.CompleteTestRunAsync(new Guid(_settings.TestRunId));
+            await _testRuns.CompleteTestRunAsync(new Guid(_settings.TestRunId)).ConfigureAwait(false);
         }
 
         _logger.LogDebug("Complete test run is successfully");
@@ -334,7 +334,7 @@ public class TmsClient : ITmsClient
         // Escape HTML in the filter before sending to API
         HtmlEscapeUtils.EscapeHtmlInObject(filter);
 
-        var autotests = await _autoTests.ApiV2AutoTestsSearchPostAsync(autoTestSearchApiModel: filter);
+        var autotests = await _autoTests.ApiV2AutoTestsSearchPostAsync(autoTestSearchApiModel: filter).ConfigureAwait(false);
         var autotest = autotests.FirstOrDefault();
 
         _logger.LogDebug(

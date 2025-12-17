@@ -5,8 +5,9 @@ using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
 
 namespace TmsRunner.Handlers;
 
+#pragma warning disable CA1711
 public sealed class DiscoveryEventHandler(ILogger<DiscoveryEventHandler> logger,
-                                          EventWaitHandle waitHandle) : ITestDiscoveryEventsHandler, IDisposable
+    EventWaitHandle waitHandle) : ITestDiscoveryEventsHandler, IDisposable
 {
     private readonly List<TestCase> _discoveredTestCases = [];
 
@@ -63,3 +64,4 @@ public sealed class DiscoveryEventHandler(ILogger<DiscoveryEventHandler> logger,
         waitHandle.Dispose();
     }
 }
+#pragma warning restore CA1711
