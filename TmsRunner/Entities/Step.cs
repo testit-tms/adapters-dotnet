@@ -5,15 +5,15 @@ namespace TmsRunner.Entities;
 
 public sealed class Step : StepDto
 {
-    public string? Result;
-    public DateTime? CompletedOn;
-    public long Duration;
-    public List<Step> Steps = [];
-    public Step? ParentStep;
-    public int NestingLevel;
-    public List<Link> Links = [];
-    public List<Guid> Attachments = [];
-    public string? Outcome;
+    public string? Result { get; set; }
+    public DateTime? CompletedOn { get; set; }
+    public long Duration { get; set; }
+    public List<Step> Steps { get; set; } = [];
+    public Step? ParentStep { get; set; }
+    public int NestingLevel { get; set; }
+    public List<Link> Links { get; set; } = [];
+    public List<Guid> Attachments { get; set; } = [];
+    public string? Outcome { get; set; }
     private string? _stackTrace;
 
     public string StackTrace()

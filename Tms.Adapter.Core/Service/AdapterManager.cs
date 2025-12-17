@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Logging;
 using System.Collections.Concurrent;
+using System.Globalization;
 using Tms.Adapter.Core.Client;
 using Tms.Adapter.Core.Models;
 using Tms.Adapter.Core.Storage;
@@ -12,13 +13,13 @@ namespace Tms.Adapter.Core.Service;
 public sealed class AdapterManager
 {
     public static Func<string> CurrentTestIdGetter { get; } =
-        () => Environment.CurrentManagedThreadId.ToString();
+        () => Environment.CurrentManagedThreadId.ToString(CultureInfo.InvariantCulture);
 
     private static readonly object Obj = new();
     private static AdapterManager? _instance;
     private readonly ResultStorage _storage;
-    private readonly IWriter _writer;
-    private readonly ITmsClient _client;
+    private readonly Writer.Writer _writer;
+    private readonly TmsClient _client;
     private readonly ILogger<AdapterManager> _logger;
     private readonly ConcurrentDictionary<string, string> _messageByTestId = new();
     private readonly ConcurrentDictionary<string, List<Link>> _linksByTestId = new();

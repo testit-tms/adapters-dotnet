@@ -37,7 +37,7 @@ public static class StepManager
         AdapterManager.Instance.StartAfterFixture(TestResultAccessor.ClassContainer.Id, fixtureResult);
     }
 
-    public static void StopFixture(Action<FixtureResult> updateResults = null)
+    public static void StopFixture(Action<FixtureResult>? updateResults = null)
     {
         AdapterManager.Instance.StopFixture(result =>
         {
@@ -47,14 +47,14 @@ public static class StepManager
         });
     }
 
-    public static void StopFixtureSuppressTestCase(Action<FixtureResult> updateResults = null)
+    public static void StopFixtureSuppressTestCase(Action<FixtureResult>? updateResults = null)
     {
         var newTestResult = TestResultAccessor.TestResult;
         StopFixture(updateResults);
         AdapterManager.Instance.StartTestCase(TestResultAccessor.ClassContainer.Id, newTestResult);
     }
 
-    public static void StartStep(string name, Action<StepResult> updateResults = null)
+    public static void StartStep(string name, Action<StepResult>? updateResults = null)
     {
         var stepResult = new StepResult
         {
@@ -67,7 +67,7 @@ public static class StepManager
         AdapterManager.Instance.StartStep(stepResult);
     }
 
-    public static void PassStep(Action<StepResult> updateResults = null)
+    public static void PassStep(Action<StepResult>? updateResults = null)
     {
         AdapterManager.Instance.StopStep(result =>
         {

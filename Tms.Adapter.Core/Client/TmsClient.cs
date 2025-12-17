@@ -10,7 +10,7 @@ using LinkType = TestIT.ApiClient.Model.LinkType;
 
 namespace Tms.Adapter.Core.Client;
 
-public class TmsClient : ITmsClient
+public class TmsClient : ITmsClient, IDisposable
 {
     private readonly ILogger<TmsClient> _logger;
     private readonly TmsSettings _settings;
@@ -267,9 +267,9 @@ public class TmsClient : ITmsClient
             return;
         }
 
-        var testRun = await _testRuns.GetTestRunByIdAsync(new Guid(_settings.TestRunId));
+        var testRun = await _testRuns.GetTestRunByIdAsync(new Guid(_settings.TestRunId)).ConfigureAwait(false);
 
-        if (testRun.Name.Equals(_settings.TestRunName))
+        if (testRun.Name.Equals(_settings.TestRunName, StringComparison.Ordinal))
         {
             return;
         }
@@ -349,5 +349,12 @@ public class TmsClient : ITmsClient
             externalId);
 
         return autotest;
+    }
+
+    public void Dispose()
+    {
+        _autoTests.Dispose();
+        _testRuns.Dispose();
+        _attachments.Dispose();
     }
 }
