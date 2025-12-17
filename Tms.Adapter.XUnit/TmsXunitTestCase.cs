@@ -19,12 +19,14 @@ public class TmsXunitTestCase : XunitTestCase, ITmsAccessor
 
     public TmsXunitTestCase(IMessageSink diagnosticMessageSink, TestMethodDisplay defaultMethodDisplay,
         ITestMethod testMethod, object[]? testMethodArguments = null)
+#pragma warning disable CS0618 // Type or member is obsolete
         : base(diagnosticMessageSink, defaultMethodDisplay, testMethod, testMethodArguments)
+#pragma warning restore CS0618 // Type or member is obsolete
     { 
     }
 
     // TODO: handle carefully
-    public TmsXunitTestCase() { }
+    // public TmsXunitTestCase() { }
 
     public override async Task<RunSummary> RunAsync(IMessageSink diagnosticMessageSink,
         IMessageBus messageBus,

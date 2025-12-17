@@ -37,7 +37,7 @@ namespace Tms.Adapter.SpecFlowPluginTests
             var id = TmsHelper.GetFeatureContainerId(featureInfo!);
 
             // Assert
-            Assert.AreEqual(id, featureInfo.GetHashCode().ToString(CultureInfo.InvariantCulture));
+            Assert.AreEqual(id, featureInfo!.GetHashCode().ToString(CultureInfo.InvariantCulture));
         }
 
         [TestMethod]

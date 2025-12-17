@@ -8,7 +8,7 @@ using Tms.Adapter.Core.Utils;
 using ITestMethod = Xunit.Abstractions.ITestMethod;
 
 namespace Tms.Adapter.XUnitTests;
-
+#pragma warning disable CA1707
 [TestClass]
 public class TmsMessageBusTests
 {
@@ -53,7 +53,7 @@ public class TmsMessageBusTests
         {
             var displayName = _testCase.DisplayName;
         }
-        catch (Exception ex)
+        catch (Exception)
         {
         }
     }
@@ -82,7 +82,7 @@ public class TmsMessageBusTests
 
         // Assert
         Assert.IsFalse(result);
-        Assert.IsNotNull(_testCase.ClassContainer.Id);
+        Assert.IsNotNull(_testCase.ClassContainer!.Id);
         Assert.AreNotEqual(_testCase.ClassContainer.Start, 0);
         Assert.AreEqual(_testCase.ClassContainer.Stop, 0);
     }
@@ -98,7 +98,7 @@ public class TmsMessageBusTests
 
         // Assert
         Assert.IsFalse(result);
-        Assert.IsNotNull(_testCase.TestResult.Id);
+        Assert.IsNotNull(_testCase.TestResult!.Id);
         Assert.IsNotNull(_testCase.TestResult.ExternalId);
         Assert.AreEqual(_testCase.TestResult.ClassName, _className);
         Assert.AreEqual(_testCase.TestResult.DisplayName, _methodName);

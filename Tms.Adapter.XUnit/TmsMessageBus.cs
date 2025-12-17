@@ -12,8 +12,11 @@ public class TmsMessageBus : IMessageBus
         _inner = inner;
     }
 
-    public void Dispose() => _inner.Dispose();
-
+    public void Dispose()
+    {
+        _inner.Dispose();
+        GC.SuppressFinalize(this);
+    }
     public bool QueueMessage(IMessageSinkMessage message)
     {
         switch (message)

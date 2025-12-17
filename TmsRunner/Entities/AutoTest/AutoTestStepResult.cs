@@ -12,19 +12,19 @@ public sealed record AutoTestStepResult
     public List<AutoTestStepResult>? Steps { get; init; }
     public string? Outcome { get; init; }
 
-    public static AutoTestStepResult ConvertFromStep(Step step)
+    public static AutoTestStepResult ConvertFromStep(StepModel stepModel)
     {
         return new AutoTestStepResult
         {
-            Title = step.Title,
-            Description = step.Description,
-            Steps = step.Steps.Select(ConvertFromStep).ToList(),
-            StartedOn = step.StartedOn,
-            CompletedOn = step.CompletedOn,
-            Duration = step.Duration,
-            Attachments = step.Attachments,
-            Parameters = step.Args,
-            Outcome = step.Outcome
+            Title = stepModel.Title,
+            Description = stepModel.Description,
+            Steps = stepModel.Steps.Select(ConvertFromStep).ToList(),
+            StartedOn = stepModel.StartedOn,
+            CompletedOn = stepModel.CompletedOn,
+            Duration = stepModel.Duration,
+            Attachments = stepModel.Attachments,
+            Parameters = stepModel.Args,
+            Outcome = stepModel.Outcome
         };
     }
 }

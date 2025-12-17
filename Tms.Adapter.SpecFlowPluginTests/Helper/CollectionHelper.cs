@@ -14,9 +14,11 @@ namespace Tms.Adapter.SpecFlowPluginTests.Helper;
 
 public static class CollectionHelper
 {
-    public static ContextManager GetContextManager(SpecFlowConfiguration specFlowConfiguration, TmsTestTracer testTracer, string[] tags = null)
+    public static ContextManager GetContextManager(SpecFlowConfiguration specFlowConfiguration, 
+        TmsTestTracer testTracer, string[]? tags = null)
     {
-        var featureInfo = new FeatureInfo(CultureInfo.GetCultureInfo("en-US"), "Features", "StepsTests", null);
+        var featureInfo = new FeatureInfo(CultureInfo
+            .GetCultureInfo("en-US"), "Features", "StepsTests", null);
         var scenarioInfo = new ScenarioInfo("", null, tags, new OrderedDictionary());
 
         var testThreadContainer = new ObjectContainer();

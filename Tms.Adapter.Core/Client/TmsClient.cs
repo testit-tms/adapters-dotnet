@@ -356,5 +356,8 @@ public class TmsClient : ITmsClient, IDisposable
         _autoTests.Dispose();
         _testRuns.Dispose();
         _attachments.Dispose();
+        
+        // так как ресурсы уже освобождены
+        GC.SuppressFinalize(this);
     }
 }

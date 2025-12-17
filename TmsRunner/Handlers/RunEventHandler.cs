@@ -61,7 +61,7 @@ public sealed class RunEventHandler(ILogger<RunEventHandler> logger, EventWaitHa
         return -1;
     }
 
-    public bool AttachDebuggerToProcess(int pid)
+    public static bool AttachDebuggerToProcess(int pid)
     {
         // No op
         return false;

@@ -51,7 +51,7 @@ public sealed class LogParser
     }
 
     // TODO: write unit tests
-    public AutoTest GetAutoTest(TestResult testResult, Dictionary<string, string>? parameters)
+    public static AutoTest GetAutoTest(TestResult testResult, Dictionary<string, string>? parameters)
     {
         var methodFullName = GetFullyQualifiedMethodName(testResult.TestCase.FullyQualifiedName);
         var method = Reflector.GetMethodMetadata(testResult.TestCase.Source, methodFullName, parameters);

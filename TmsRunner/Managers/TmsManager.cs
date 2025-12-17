@@ -36,7 +36,8 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
 
         logger.LogDebug("Creating test run {@TestRun}", testRunV2PostShortModel);
 
-        var testRun = await testRunsApi.CreateEmptyAsync(testRunV2PostShortModel).ConfigureAwait(false) ?? throw new Exception($"Could not find project with id: {settings.ProjectId}");
+        var testRun = await testRunsApi.CreateEmptyAsync(testRunV2PostShortModel).ConfigureAwait(false) 
+                      ?? throw new ArgumentException($"Could not find project with id: {settings.ProjectId}");
         logger.LogDebug("Created test run {@TestRun}", testRun);
 
         return testRun;
