@@ -1,4 +1,5 @@
-﻿using Tms.Adapter.SpecFlowPlugin;
+﻿using System.Globalization;
+using Tms.Adapter.SpecFlowPlugin;
 using Tms.Adapter.SpecFlowPluginTests.Helper;
 using TechTalk.SpecFlow.Bindings;
 using Tms.Adapter.Core.Models;
@@ -33,10 +34,10 @@ namespace Tms.Adapter.SpecFlowPluginTests
             var featureInfo = contextManager.FeatureContext?.FeatureInfo;
 
             // Act
-            var id = TmsHelper.GetFeatureContainerId(featureInfo);
+            var id = TmsHelper.GetFeatureContainerId(featureInfo!);
 
             // Assert
-            Assert.AreEqual(id, featureInfo.GetHashCode().ToString());
+            Assert.AreEqual(id, featureInfo.GetHashCode().ToString(CultureInfo.InvariantCulture));
         }
 
         [TestMethod]
@@ -76,7 +77,7 @@ namespace Tms.Adapter.SpecFlowPluginTests
                 { "Description", RandomUtils.GetRandomString() },
                 { "Labels", RandomUtils.GetRandomString() + tagValueDelimiter + RandomUtils.GetRandomString() },
                 { "Links", JsonConvert.SerializeObject(linkDictionary)},
-                { "WorkItemIds", new Random().Next().ToString() + tagValueDelimiter + new Random().Next().ToString() }
+                { "WorkItemIds", new Random().Next().ToString(CultureInfo.InvariantCulture) + tagValueDelimiter + new Random().Next().ToString(CultureInfo.InvariantCulture) }
             };
             var tags = tagsDictionary.Select(i => i.Key + "=" + i.Value).ToArray();
             

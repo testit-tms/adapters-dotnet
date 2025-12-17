@@ -1,3 +1,4 @@
+using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Bindings;
 using TechTalk.SpecFlow.Configuration;
 using TechTalk.SpecFlow.ErrorHandling;
@@ -39,7 +40,7 @@ public class TmsBindingInvoker : BindingInvoker
                     };
                     Adapter.StartTestContainer(featureContainer);
 
-                    contextManager.FeatureContext.Set(new HashSet<ClassContainer>());
+                    contextManager.FeatureContext!.Set(new HashSet<ClassContainer>());
                     contextManager.FeatureContext.Set(new HashSet<TestContainer>());
 
                     return base.InvokeBinding(binding, contextManager, arguments, testTracer, out duration);
@@ -152,7 +153,7 @@ public class TmsBindingInvoker : BindingInvoker
                 }
                 catch (Exception ex)
                 {
-                    var scenario = contextManager.FeatureContext.Get<HashSet<TestContainer>>().Last();
+                    var scenario = contextManager.FeatureContext!.Get<HashSet<TestContainer>>().Last();
                     Adapter
                         .StopFixture(x => x.Status = Status.Failed)
                         .UpdateTestCase(scenario.Id,
@@ -179,7 +180,7 @@ public class TmsBindingInvoker : BindingInvoker
 
     private static void StartFixture(HookBinding hook, string containerId)
     {
-        if (hook.HookType.ToString().StartsWith("Before"))
+        if (hook.HookType.ToString().StartsWith("Before", StringComparison.InvariantCulture))
             Adapter.StartBeforeFixture(containerId, Hash.NewId(), TmsHelper.GetFixtureResult(hook));
         else
             Adapter.StartAfterFixture(containerId, Hash.NewId(), TmsHelper.GetFixtureResult(hook));

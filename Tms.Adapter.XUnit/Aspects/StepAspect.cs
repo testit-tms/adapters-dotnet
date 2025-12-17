@@ -146,7 +146,7 @@ public class StepAspect
         }
         catch (Exception)
         {
-            return default(T);
+            return default!;
         }
     }
 

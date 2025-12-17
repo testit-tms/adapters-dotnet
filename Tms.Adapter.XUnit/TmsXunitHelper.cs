@@ -111,15 +111,15 @@ public static class TmsXunitHelper
             switch (((IReflectionAttributeInfo)attribute).Attribute)
             {
                 case DescriptionAttribute description:
-                    testResult.Description = ReplaceParameters(description.Value, testResult.Parameters);
+                    testResult.Description = ReplaceParameters(description.Value, testResult.Parameters!);
                     break;
 
                 case DisplayNameAttribute displayName:
-                    testResult.DisplayName = ReplaceParameters(displayName.Value, testResult.Parameters);
+                    testResult.DisplayName = ReplaceParameters(displayName.Value, testResult.Parameters!);
                     break;
 
                 case ExternalIdAttribute externalId:
-                    testResult.ExternalId = ReplaceParameters(externalId.Value, testResult.Parameters);
+                    testResult.ExternalId = ReplaceParameters(externalId.Value, testResult.Parameters!);
                     break;
 
                 case LabelsAttribute labels:
@@ -127,7 +127,7 @@ public static class TmsXunitHelper
                     break;
 
                 case TitleAttribute title:
-                    testResult.Title = ReplaceParameters(title.Value, testResult.Parameters);
+                    testResult.Title = ReplaceParameters(title.Value, testResult.Parameters!);
                     break;
 
                 case WorkItemIdsAttribute workItemIds:

@@ -3,6 +3,8 @@ using Tms.Adapter.Core.Models;
 
 namespace Tms.Adapter.SpecFlowPluginTests;
 
+#pragma warning disable CA1707
+
 [TestClass]
 public class TmsBindingInvokerTests : TestsBase
 {

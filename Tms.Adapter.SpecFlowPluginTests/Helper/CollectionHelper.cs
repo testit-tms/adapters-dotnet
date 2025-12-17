@@ -39,7 +39,7 @@ public static class CollectionHelper
         return new HookBinding(bindingMethod, hookType, null, hookOrder);
     }
 
-    public static HookBinding GetHookBinding(StatusBinding status)
+    private static HookBinding GetHookBinding(StatusBinding status)
     {
         switch (status)
         {
@@ -59,15 +59,15 @@ public static class CollectionHelper
                 return GetHookBinding(typeof(TmsBindings).GetMethod("LastAfterFeature"), HookType.AfterFeature, int.MaxValue);
 
             default:
-                throw new Exception($"Invalid status of type Hook");
+                throw new InvalidDataException($"Invalid status of type Hook");
         }
     }
 
-    public static void InvokeBindingHelper(this IBindingInvoker _bindingInvoker, StatusBinding statusBinding, ITestTracer testTracer, IContextManager contextManager)
+    public static void InvokeBindingHelper(this IBindingInvoker bindingInvoker, StatusBinding statusBinding, ITestTracer testTracer, IContextManager contextManager)
     {
         var binding = GetHookBinding(statusBinding);
 
-        _bindingInvoker.InvokeBinding(binding, contextManager, null, testTracer, out TimeSpan _);
+        bindingInvoker.InvokeBinding(binding, contextManager, null, testTracer, out TimeSpan _);
     }
 }
 
