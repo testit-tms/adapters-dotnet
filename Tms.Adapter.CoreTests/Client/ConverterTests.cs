@@ -15,7 +15,6 @@ public class ConverterTests
         var classContainer = new ClassContainer();
         var testContainer = new TestContainer
         {
-            Id = "",
             ExternalId = Guid.NewGuid().ToString(),
             DisplayName = Empty
         };
@@ -36,7 +35,6 @@ public class ConverterTests
         var classContainer = new ClassContainer();
         var testContainer = new TestContainer
         {
-            Id = "",
             ExternalId = Guid.NewGuid().ToString(),
             Status = Status.Passed
         };
@@ -57,7 +55,6 @@ public class ConverterTests
         var classContainer = new ClassContainer();
         var testContainer = new TestContainer
         {
-            Id = "",
             ExternalId = Guid.NewGuid().ToString(),
             DisplayName = Empty
         };

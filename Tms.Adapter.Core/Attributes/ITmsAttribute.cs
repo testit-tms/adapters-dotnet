@@ -1,5 +1,5 @@
 namespace Tms.Adapter.Core.Attributes;
 
-public interface ITmsAttribute
-{
-}
+#pragma warning disable CA1711
+public interface ITmsAttribute;
+#pragma warning restore CA1711

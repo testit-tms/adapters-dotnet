@@ -1,11 +1,7 @@
 namespace Tms.Adapter.Core.Attributes;
 
-public class DescriptionAttribute : Attribute, ITmsAttribute
+[AttributeUsage(AttributeTargets.Method | AttributeTargets.Class | AttributeTargets.Delegate)]
+public class DescriptionAttribute(string value) : Attribute, ITmsAttribute
 {
-    public string Value { get; }
-
-    public DescriptionAttribute(string value)
-    {
-        Value = value;
-    }
+    public string Value { get; } = value;
 }

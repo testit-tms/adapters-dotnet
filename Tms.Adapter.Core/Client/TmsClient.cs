@@ -317,15 +317,21 @@ public class TmsClient : ITmsClient
         _logger.LogDebug("Complete test run is successfully");
     }
 
-    public async Task<AutoTestApiResult?> GetAutotestByExternalId(string externalId)
+    public async Task<AutoTestApiResult?> GetAutotestByExternalId(string? externalId)
     {
         _logger.LogDebug("Getting autotest by external id {Id}", externalId);
 
+        var externalIds = new List<string>();
+        if (externalId != null)
+        {
+            externalIds = [externalId];
+        }
+        
         var filter = new  AutoTestSearchApiModel(
             filter: new AutoTestFilterApiModel
             {
-                ExternalIds = new List<string> { externalId },
-                ProjectIds = new List<Guid> { new Guid(_settings.ProjectId) },
+                ExternalIds = externalIds,
+                ProjectIds = [new(_settings.ProjectId)],
                 IsDeleted = false
             },
             includes: new  AutoTestSearchIncludeApiModel()

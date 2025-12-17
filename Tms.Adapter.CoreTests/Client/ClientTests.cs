@@ -43,7 +43,6 @@ public class ClientTests
         var classContainer = new ClassContainer();
         var testContainer = new TestContainer
         {
-            Id = "",
             ExternalId = Guid.NewGuid().ToString(),
             DisplayName = Empty
         };
@@ -61,7 +60,6 @@ public class ClientTests
         var classContainer = new ClassContainer();
         var testContainer = new TestContainer
         {
-            Id = "",
             ExternalId = Guid.NewGuid().ToString(),
             DisplayName = Empty
         };
@@ -130,7 +128,6 @@ public class ClientTests
         var classContainer = new ClassContainer();
         var testContainer = new TestContainer
         {
-            Id = "",
             ExternalId = Guid.NewGuid().ToString(),
             Status = Status.Passed
         };
