@@ -48,5 +48,10 @@
 	<ItemGroup>
 		<InternalsVisibleTo  Include="Tms.Adapter.SpecFlowPluginTests" />
 	</ItemGroup>
-
+    
+    <PropertyGroup>
+        <!-- Отключить предупреждения о делегатах LoggerMessage -->
+        <NoWarn>$(NoWarn);CA1848</NoWarn>
+    </PropertyGroup>
+    
 </Project>

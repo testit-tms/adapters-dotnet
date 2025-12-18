@@ -1,11 +1,7 @@
 namespace Tms.Adapter.Core.Attributes;
 
-public class WorkItemIdsAttribute : Attribute, ITmsAttribute
+[AttributeUsage(AttributeTargets.Method | AttributeTargets.Class | AttributeTargets.Delegate)]
+public class WorkItemIdsAttribute(params string[] ids) : Attribute, ITmsAttribute
 {
-    public List<string> Ids { get; }
-
-    public WorkItemIdsAttribute(params string[] ids)
-    {
-        Ids = ids.ToList();
-    }
+    public List<string> Ids { get; } = ids.ToList();
 }

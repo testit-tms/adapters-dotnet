@@ -3,6 +3,8 @@ using Tms.Adapter.Core.Models;
 
 namespace Tms.Adapter.SpecFlowPluginTests;
 
+#pragma warning disable CA1707
+
 [TestClass]
 public class TmsBindingInvokerTests : TestsBase
 {
@@ -16,7 +18,7 @@ public class TmsBindingInvokerTests : TestsBase
         _bindingInvoker.InvokeBindingHelper(StatusBinding.FirstBeforeFeature, _testTracer, contextManager);
 
         // Assert
-        Assert.AreEqual(contextManager.FeatureContext.Count, 2);
+        Assert.AreEqual(2, contextManager.FeatureContext.Count);
     }
 
     [TestMethod]
@@ -32,7 +34,7 @@ public class TmsBindingInvokerTests : TestsBase
         // Assert
         var classContainer = contextManager.FeatureContext.Get<HashSet<ClassContainer>>().First();
 
-        Assert.AreEqual(contextManager.ScenarioContext.Count, 1);
+        Assert.AreEqual(1, contextManager.ScenarioContext.Count);
         Assert.AreEqual(classContainer, contextManager.ScenarioContext.Get<ClassContainer>());
 
         Assert.IsNotNull(classContainer.Id);

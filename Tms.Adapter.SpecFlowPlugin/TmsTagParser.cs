@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 
@@ -48,7 +49,7 @@ public static class TmsTagParser
             var tagName = tagInfo[0];
             var tagValue = tagInfo[1];
 
-            switch (tagName.ToUpper())
+            switch (tagName.ToUpper(CultureInfo.InvariantCulture))
             {
                 case ExternalId:
                     testContainer.ExternalId = Replacer.ReplaceParameters(parseSpaceInTag(tagValue), parameters);

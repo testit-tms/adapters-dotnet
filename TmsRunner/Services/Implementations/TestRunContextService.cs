@@ -2,7 +2,7 @@ using TestIT.ApiClient.Model;
 
 namespace TmsRunner.Services.Implementations;
 
-internal class TestRunContextService : ITestRunContextService
+internal sealed class TestRunContextService : ITestRunContextService
 {
     private TestRunV2ApiResult? _currentTestRun;
 

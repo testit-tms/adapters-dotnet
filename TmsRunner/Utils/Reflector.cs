@@ -3,7 +3,7 @@ using TmsRunner.Entities;
 
 namespace TmsRunner.Utils;
 
-public sealed class Reflector
+public static class Reflector
 {
     public static MethodMetadata GetMethodMetadata(string assemblyPath,
                                                    string methodName,
@@ -13,7 +13,7 @@ public sealed class Reflector
         var fullyQualifiedNameArray = methodName.Split(".");
         var type = assembly.GetType(string.Join(".", fullyQualifiedNameArray[..^1]));
         var methods = type?.GetMethods()
-            .Where(m => m.Name.Equals(fullyQualifiedNameArray[^1])).ToList();
+            .Where(m => m.Name.Equals(fullyQualifiedNameArray[^1], StringComparison.Ordinal)).ToList();
 
         if (parameters is not null)
         {
@@ -22,7 +22,10 @@ public sealed class Reflector
                 .ToList();
         }
 
-        var method = (methods?.FirstOrDefault()) ?? throw new ApplicationException($"Method {fullyQualifiedNameArray[^1]} not found!");
+#pragma warning disable CA2201
+        var method = (methods?.FirstOrDefault()) ?? 
+                     throw new InvalidDataException($"Method {fullyQualifiedNameArray[^1]} not found!");
+#pragma warning restore CA2201
         var attributes = method.GetCustomAttributes(false)
             .Select(a => (Attribute)a)
             .ToList();
@@ -37,10 +40,10 @@ public sealed class Reflector
         };
     }
 
-    private static bool CompareParameters(IReadOnlyList<ParameterInfo> methodParameters,
+    private static bool CompareParameters(ParameterInfo[] methodParameters,
                                           Dictionary<string, string> parameters)
     {
-        if (methodParameters.Count != parameters.Count)
+        if (methodParameters.Length != parameters.Count)
         {
             return false;
         }

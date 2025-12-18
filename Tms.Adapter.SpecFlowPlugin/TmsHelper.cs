@@ -28,8 +28,8 @@ public static class TmsHelper
     internal static string GetFeatureContainerId(FeatureInfo featureInfo)
     {
         var id = featureInfo != null
-            ? featureInfo.GetHashCode().ToString()
-            : EmptyFeatureInfo.GetHashCode().ToString();
+            ? featureInfo.GetHashCode().ToString(CultureInfo.InvariantCulture)
+            : EmptyFeatureInfo.GetHashCode().ToString(CultureInfo.InvariantCulture);
 
         return id;
     }
@@ -37,7 +37,7 @@ public static class TmsHelper
     internal static ClassContainer StartTestContainer(FeatureContext featureContext,
         ScenarioContext scenarioContext)
     {
-        var containerId = GetFeatureContainerId(featureContext?.FeatureInfo);
+        var containerId = GetFeatureContainerId(featureContext?.FeatureInfo!);
 
         var scenarioContainer = new ClassContainer
         {
@@ -77,9 +77,10 @@ public static class TmsHelper
     {
         var parameters = new Dictionary<string, string>();
         var argumentsEnumerator = scenarioInfo.Arguments.GetEnumerator();
+        using var argumentsEnumerator1 = argumentsEnumerator as IDisposable;
         while (argumentsEnumerator.MoveNext())
         {
-            parameters.Add(key: argumentsEnumerator.Key.ToString(), value: argumentsEnumerator.Value.ToString());
+            parameters.Add(key: argumentsEnumerator.Key!.ToString(), value: argumentsEnumerator.Value.ToString());
         }
 
         return parameters;

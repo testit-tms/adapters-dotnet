@@ -11,40 +11,40 @@ public static class Converter
     public static AutoTestPostModel ConvertAutoTestDtoToPostModel(TestContainer result, ClassContainer container,
         string projectId)
     {
-        return new AutoTestPostModel(externalId: result.ExternalId, name: result.DisplayName)
+        return new AutoTestPostModel(externalId: result.ExternalId!, name: result.DisplayName!)
         {
-            ExternalId = result.ExternalId,
+            ExternalId = result.ExternalId!,
             Links = ConvertLinksToPostModel(result.Links),
             ProjectId = new Guid(projectId),
-            Namespace = result.Namespace,
-            Classname = result.ClassName,
+            Namespace = result.Namespace!,
+            Classname = result.ClassName!,
             Steps = ConvertStepsToModel(result.Steps),
             Setup = ConvertFixturesToModel(container.Befores),
             Teardown = ConvertFixturesToModel(container.Afters),
-            Title = result.Title,
-            Description = result.Description,
+            Title = result.Title!,
+            Description = result.Description!,
             Labels = ConvertLabelsToPostModel(result.Labels),
-            ExternalKey = result.ExternalKey,
+            ExternalKey = result.ExternalKey!,
         };
     }
 
     public static AutoTestPutModel ConvertAutoTestDtoToPutModel(TestContainer result, ClassContainer container,
         string projectId)
     {
-        return new AutoTestPutModel(externalId: result.ExternalId, name: result.DisplayName)
+        return new AutoTestPutModel(externalId: result.ExternalId!, name: result.DisplayName!)
         {
-            ExternalId = result.ExternalId,
+            ExternalId = result.ExternalId!,
             Links = ConvertLinksToPutModel(result.Links),
             ProjectId = new Guid(projectId),
-            Namespace = result.Namespace,
-            Classname = result.ClassName,
+            Namespace = result.Namespace!,
+            Classname = result.ClassName!,
             Steps = ConvertStepsToModel(result.Steps),
             Setup = ConvertFixturesToModel(container.Befores),
             Teardown = ConvertFixturesToModel(container.Afters),
-            Title = result.Title,
-            Description = result.Description,
+            Title = result.Title!,
+            Description = result.Description!,
             Labels = ConvertLabelsToPostModel(result.Labels),
-            ExternalKey = result.ExternalKey,
+            ExternalKey = result.ExternalKey!,
         };
     }
 
@@ -52,13 +52,13 @@ public static class Converter
         string configurationId)
     {
         return new AutoTestResultsForTestRunModel(
-            autoTestExternalId: result.ExternalId)
+            autoTestExternalId: result.ExternalId!)
         {
             StatusCode = result.Status.ToString(),
             ConfigurationId = new Guid(configurationId),
             Links = ConvertLinksToPostModel(result.ResultLinks),
-            Message = result.Message,
-            Traces = result.Trace,
+            Message = result.Message!,
+            Traces = result.Trace!,
             StartedOn = DateTimeOffset.FromUnixTimeMilliseconds(container.Start).UtcDateTime,
             CompletedOn = DateTimeOffset.FromUnixTimeMilliseconds(container.Stop).UtcDateTime,
             Duration = result.Stop - result.Start,
@@ -76,8 +76,8 @@ public static class Converter
         return dtos
             .Select(s => new AttachmentPutModelAutoTestStepResultsModel
             {
-                Title = s.DisplayName,
-                Description = s.Description,
+                Title = s.DisplayName!,
+                Description = s.Description!,
                 StartedOn = DateTimeOffset.FromUnixTimeMilliseconds(s.Start).UtcDateTime,
                 CompletedOn = DateTimeOffset.FromUnixTimeMilliseconds(s.Stop).UtcDateTime,
                 Duration = s.Stop - s.Start,
@@ -94,8 +94,8 @@ public static class Converter
         return dtos
             .Select(s => new AttachmentPutModelAutoTestStepResultsModel
             {
-                Title = s.DisplayName,
-                Description = s.Description,
+                Title = s.DisplayName!,
+                Description = s.Description!,
                 StartedOn = DateTimeOffset.FromUnixTimeMilliseconds(s.Start).UtcDateTime,
                 CompletedOn = DateTimeOffset.FromUnixTimeMilliseconds(s.Stop).UtcDateTime,
                 Duration = s.Stop - s.Start,
@@ -111,10 +111,10 @@ public static class Converter
         return links.Select(l =>
             new LinkPostModel(url: l.Url)
             {
-                Title = l.Title,
-                Description = l.Description,
+                Title = l.Title!,
+                Description = l.Description!,
                 Type = l.Type != null
-                    ? (LinkType?)Enum.Parse(typeof(LinkType), l.Type.ToString())
+                    ? Enum.Parse<LinkType>(l.Type.ToString())
                     : null
             }
         ).ToList();
@@ -125,10 +125,10 @@ public static class Converter
         return links.Select(l =>
             new LinkPutModel(url: l.Url)
             {
-                Title = l.Title,
-                Description = l.Description,
+                Title = l.Title!,
+                Description = l.Description!,
                 Type = l.Type != null
-                    ? (LinkType?)Enum.Parse(typeof(LinkType), l.Type.ToString())
+                    ? Enum.Parse<LinkType>(l.Type.ToString())
                     : null
             }
         ).ToList();
@@ -145,8 +145,8 @@ public static class Converter
     {
         return stepDtos
             .Select(s => new AutoTestStepModel(
-                s.DisplayName,
-                s.Description,
+                s.DisplayName!,
+                s.Description!,
                 ConvertStepsToModel(s.Steps))).ToList();
     }
 
@@ -154,8 +154,8 @@ public static class Converter
     {
         return fixtures
             .Select(s => new AutoTestStepModel(
-                s.DisplayName,
-                s.Description,
+                s.DisplayName!,
+                s.Description!,
                 ConvertStepsToModel(s.Steps))).ToList();
     }
 }

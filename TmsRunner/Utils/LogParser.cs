@@ -12,7 +12,7 @@ using TmsRunner.Extensions;
 
 namespace TmsRunner.Utils;
 
-public sealed class LogParser(Replacer replacer)
+public static partial class LogParser
 {
     public static Dictionary<string, string>? GetParameters(string traceJson)
     {
@@ -51,7 +51,7 @@ public sealed class LogParser(Replacer replacer)
     }
 
     // TODO: write unit tests
-    public AutoTest GetAutoTest(TestResult testResult, Dictionary<string, string>? parameters)
+    public static AutoTest GetAutoTest(TestResult testResult, Dictionary<string, string>? parameters)
     {
         var methodFullName = GetFullyQualifiedMethodName(testResult.TestCase.FullyQualifiedName);
         var method = Reflector.GetMethodMetadata(testResult.TestCase.Source, methodFullName, parameters);
@@ -75,21 +75,21 @@ public sealed class LogParser(Replacer replacer)
             switch (attribute)
             {
                 case ExternalIdAttribute externalId:
-                    autoTest.ExternalId = replacer.ReplaceParameters(externalId.Value, parameters);
+                    autoTest.ExternalId = Replacer.ReplaceParameters(externalId.Value, parameters);
                     break;
                 case DisplayNameAttribute displayName:
-                    autoTest.Name = replacer.ReplaceParameters(displayName.Value, parameters);
+                    autoTest.Name = Replacer.ReplaceParameters(displayName.Value, parameters);
                     break;
                 case TitleAttribute title:
-                    autoTest.Title = replacer.ReplaceParameters(title.Value, parameters);
+                    autoTest.Title = Replacer.ReplaceParameters(title.Value, parameters);
                     break;
                 case DescriptionAttribute description:
-                    autoTest.Description = replacer.ReplaceParameters(description.Value, parameters);
+                    autoTest.Description = Replacer.ReplaceParameters(description.Value, parameters);
                     break;
                 case WorkItemIdsAttribute ids:
                     {
                         var workItemIds = ids.Value?
-                            .Select(id => replacer.ReplaceParameters(id, parameters))
+                            .Select(id => Replacer.ReplaceParameters(id, parameters))
                             .ToList();
 
                         autoTest.WorkItemIds = workItemIds ?? [];
@@ -99,10 +99,10 @@ public sealed class LogParser(Replacer replacer)
                     {
                         if (links.Value is not null)
                         {
-                            links.Value.Title = replacer.ReplaceParameters(links.Value.Title, parameters);
-                            links.Value.Url = replacer.ReplaceParameters(links.Value.Url, parameters);
+                            links.Value.Title = Replacer.ReplaceParameters(links.Value.Title!, parameters);
+                            links.Value.Url = Replacer.ReplaceParameters(links.Value.Url!, parameters);
                             links.Value.Description =
-                                replacer.ReplaceParameters(links.Value.Description, parameters);
+                                Replacer.ReplaceParameters(links.Value.Description, parameters)!;
 
                             autoTest.Links?.Add(links.Value);
                         }
@@ -133,25 +133,26 @@ public sealed class LogParser(Replacer replacer)
     // TODO: write unit tests
     public static List<MessageMetadata> GetMessages(string traceJson)
     {
-        var messages = new List<MessageMetadata>();
-
-        const string pattern = "([^\\n\\r\\:]*): \\s*([^\\n\\r]*)";
-        var regex = new Regex(pattern);
+        var regex = MessagesRegex();
         var matches = regex.Matches(traceJson);
 
-        foreach (Match match in matches)
-        {
-            if (Enum.TryParse(match.Groups[1].Value, true, out MessageType type))
+        var messages = matches
+            .Select(match =>
             {
-                messages.Add(new MessageMetadata
+                if (Enum.TryParse(match.Groups[1].Value, true, out MessageType type))
                 {
-                    Type = type,
-                    Value = match.Groups[2].Value
-                });
-            }
-        }
+                    return new MessageMetadata
+                    {
+                        Type = type,
+                        Value = match.Groups[2].Value
+                    };
+                }
+                return null;
+            })
+            .Where(x => x != null)
+            .ToList();
 
-        return messages;
+        return messages!;
     }
 
     private static Dictionary<string, string> GetParametersFromReflection(MethodMetadata method, TestResult testResult)
@@ -213,13 +214,16 @@ public sealed class LogParser(Replacer replacer)
 
     private static string GetFullyQualifiedMethodName(string testName)
     {
-        const string pattern = "([^(]*)";
-
-        var regex = new Regex(pattern);
+        var regex = FullyQualifiedMethodNameRegex();
         var fullyQualifiedNameArray = regex
             .Matches(testName)[0]
             .Groups[0].Value;
 
         return fullyQualifiedNameArray;
     }
+
+    [GeneratedRegex(@"([^\n\r\:]*): \s*([^\n\r]*)")]
+    private static partial Regex MessagesRegex();
+    [GeneratedRegex("([^(]*)")]
+    private static partial Regex FullyQualifiedMethodNameRegex();
 }

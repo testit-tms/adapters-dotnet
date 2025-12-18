@@ -14,9 +14,9 @@ public static class Converter
     {
         var links = autotest.Links?.Select(l =>
             new LinkPostModel(
-                l.Title,
-                l.Url,
-                l.Description,
+                l.Title!,
+                l.Url!,
+                l.Description!,
                 Enum.Parse<LinkType>(l.Type.ToString()!))
         ).ToList();
 
@@ -40,9 +40,9 @@ public static class Converter
     {
         var links = autotest.Links?.Select(l =>
             new LinkPutModel(
-                title: l.Title,
-                url: l.Url,
-                description: l.Description,
+                title: l.Title!,
+                url: l.Url!,
+                description: l.Description!,
                 type: Enum.Parse<LinkType>(l.Type.ToString()!))
         ).ToList();
 
@@ -68,9 +68,9 @@ public static class Converter
     {
         var links = autotest.Links?.Select(l =>
             new LinkPostModel(
-                l.Title,
-                l.Url,
-                l.Description,
+                l.Title!,
+                l.Url!,
+                l.Description!,
                 Enum.TryParse<LinkType>(l.Type?.ToString(), true, out var result) ? result : null)
         ).ToList();
 
@@ -118,7 +118,7 @@ public static class Converter
     {
         return autotestSteps?.Select(s => new AutoTestStepModel(
                 s.Title ?? string.Empty,
-                s.Description ?? string.Empty,
+                s.Description  ?? string.Empty,
                 ConvertStepsToModel(s.Steps) ?? [])).ToList();
     }
 

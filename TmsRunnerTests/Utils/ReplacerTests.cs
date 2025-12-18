@@ -17,11 +17,8 @@ public class ReplacerTests
     [TestMethod]
     public void ReplaceParametersValueIsNull()
     {
-        // Arrange
-        var replacer = new Replacer();
-
         // Act
-        var actual = replacer.ReplaceParameters(null, ParametersWithValue);
+        var actual = Replacer.ReplaceParameters(null, ParametersWithValue);
 
         // Assert
         Assert.IsNull(actual);
@@ -30,11 +27,8 @@ public class ReplacerTests
     [TestMethod]
     public void ReplaceParametersValueIsEmptyString()
     {
-        // Arrange
-        var replacer = new Replacer();
-
         // Act
-        var actual = replacer.ReplaceParameters(string.Empty, ParametersWithValue);
+        var actual = Replacer.ReplaceParameters(string.Empty, ParametersWithValue);
 
         // Assert
         Assert.AreEqual(string.Empty, actual);
@@ -44,11 +38,10 @@ public class ReplacerTests
     public void ReplaceParametersParametersIsEmpty()
     {
         // Arrange
-        var replacer = new Replacer();
         var parameters = new Dictionary<string, string>();
 
         // Act
-        var actual = replacer.ReplaceParameters(ValueWithTags, parameters);
+        var actual = Replacer.ReplaceParameters(ValueWithTags, parameters);
 
         // Assert
         Assert.AreEqual(ValueWithTags, actual);
@@ -57,12 +50,10 @@ public class ReplacerTests
     [TestMethod]
     public void ReplaceParametersReplaceTags()
     {
-        // Arrange
-        var replacer = new Replacer();
         const string excepted = "some string first second third";
 
         // Act
-        var actual = replacer.ReplaceParameters(ValueWithTags, ParametersWithValue);
+        var actual = Replacer.ReplaceParameters(ValueWithTags, ParametersWithValue);
 
         // Assert
         Assert.AreEqual(excepted, actual);
@@ -71,12 +62,10 @@ public class ReplacerTests
     [TestMethod]
     public void ReplaceParametersValueWithOutTags()
     {
-        // Arrange
-        var replacer = new Replacer();
         const string excepted = "some string first second third";
 
         // Act
-        var actual = replacer.ReplaceParameters(excepted, ParametersWithValue);
+        var actual = Replacer.ReplaceParameters(excepted, ParametersWithValue);
 
         // Assert
         Assert.AreEqual(excepted, actual);

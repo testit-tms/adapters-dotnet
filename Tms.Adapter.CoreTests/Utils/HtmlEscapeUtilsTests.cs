@@ -279,7 +279,7 @@ public class HtmlEscapeUtilsTests
         // Arrange
         var model = new TestModelWithList
         {
-            StringList = new List<string> { "Item1<script>", "Item2<b>bold</b>", "Item3" }
+            StringList = ["Item1<script>", "Item2<b>bold</b>", "Item3"]
         };
 
         // Act
@@ -298,11 +298,11 @@ public class HtmlEscapeUtilsTests
         // Arrange
         var model = new TestModelWithObjectList
         {
-            ObjectList = new List<TestModel>
-            {
+            ObjectList =
+            [
                 new() { Name = "Object1<script>", Description = "Desc1<b>" },
                 new() { Name = "Object2<div>", Description = "Desc2<span>" }
-            }
+            ]
         };
 
         // Act
@@ -322,7 +322,7 @@ public class HtmlEscapeUtilsTests
         // Arrange
         var model = new TestModelWithList
         {
-            StringList = new List<string>()
+            StringList = []
         };
 
         // Act & Assert
@@ -468,14 +468,14 @@ public class HtmlEscapeUtilsTests
         var model = new TestModelWithComplexNesting
         {
             Name = "Root<script>",
-            NestedList = new List<TestModelWithNested>
-            {
+            NestedList =
+            [
                 new()
                 {
                     Name = "ListItem1<b>",
                     Nested = new TestModel { Name = "DeepNested<span>", Description = "Deep<div>" }
                 }
-            }
+            ]
         };
 
         // Act
@@ -530,7 +530,7 @@ public class HtmlEscapeUtilsTests
 
         // Assert - only string property should be escaped
         Assert.AreEqual("Test&lt;script&gt;", result.StringProperty);
-        Assert.AreEqual(true, result.BoolProperty);
+        Assert.IsTrue(result.BoolProperty);
         Assert.AreEqual(255, result.ByteProperty);
         Assert.AreEqual('<', result.CharProperty);
         Assert.AreEqual(32767, result.ShortProperty);
@@ -645,12 +645,12 @@ public class HtmlEscapeUtilsTests
 
     public class TestModelWithList
     {
-        public List<string> StringList { get; set; } = new();
+        public List<string> StringList { get; set; } = [];
     }
 
     public class TestModelWithObjectList
     {
-        public List<TestModel> ObjectList { get; set; } = new();
+        public List<TestModel> ObjectList { get; set; } = [];
     }
 
     public class TestModelWithNested
@@ -662,7 +662,7 @@ public class HtmlEscapeUtilsTests
     public class TestModelWithComplexNesting
     {
         public string? Name { get; set; }
-        public List<TestModelWithNested> NestedList { get; set; } = new();
+        public List<TestModelWithNested> NestedList { get; set; } = [];
     }
 
     public class TestModelWithSimpleTypes

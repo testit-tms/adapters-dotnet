@@ -26,8 +26,8 @@ namespace Tms.Adapter.SpecFlowPluginTests.Helper
         public TestsBase()
         {
             _specFlowConfiguration = new SpecFlowConfiguration(ConfigSource.Default,
-                customDependencies: new ContainerRegistrationCollection(),
-                generatorCustomDependencies: new ContainerRegistrationCollection(),
+                customDependencies: [],
+                generatorCustomDependencies: [],
                 featureLanguage: new CultureInfo("en-US"),
                 bindingCulture: null,
                 stopAtFirstError: false,
@@ -36,7 +36,7 @@ namespace Tms.Adapter.SpecFlowPluginTests.Helper
                 traceTimings: false,
                 minTracedDuration: new TimeSpan(1000000),
                 StepDefinitionSkeletonStyle.RegexAttribute,
-                additionalStepAssemblies: new List<string>(),
+                additionalStepAssemblies: [],
                 allowDebugGeneratedFiles: false,
                 allowRowTests: true,
                 addNonParallelizableMarkerForTags: [],

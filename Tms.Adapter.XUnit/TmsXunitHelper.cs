@@ -44,7 +44,7 @@ public static class TmsXunitHelper
             ExternalKey = externalKey,
         };
         UpdateTestDataFromAttributes(testResults.TestResult, testCase);
-        AdapterManager.Instance.StartTestCase(testResults.ClassContainer.Id, testResults.TestResult);
+        AdapterManager.Instance.StartTestCase(testResults.ClassContainer!.Id, testResults.TestResult);
     }
 
     public static void MarkTestCaseAsFailed(ITestFailed testFailed)
@@ -54,7 +54,7 @@ public static class TmsXunitHelper
             return;
         }
 
-        testResults.TestResult.Message = string.Join('\n', testFailed.Messages);
+        testResults.TestResult!.Message = string.Join('\n', testFailed.Messages);
         testResults.TestResult.Trace = string.Join('\n', testFailed.StackTraces);
         testResults.TestResult.Status = Status.Failed;
     }
@@ -66,7 +66,7 @@ public static class TmsXunitHelper
             return;
         }
 
-        testResults.TestResult.Status = Status.Passed;
+        testResults.TestResult!.Status = Status.Passed;
     }
 
     public static void MarkTestCaseAsSkipped(ITestCaseMessage testCaseMessage)
@@ -76,7 +76,7 @@ public static class TmsXunitHelper
             return;
         }
 
-        testResults.TestResult.Message = testCaseMessage.TestCase.SkipReason;
+        testResults.TestResult!.Message = testCaseMessage.TestCase.SkipReason;
         testResults.TestResult.Status = Status.Skipped;
     }
 
@@ -87,8 +87,8 @@ public static class TmsXunitHelper
             return;
         }
 
-        AdapterManager.Instance.StopTestCase(testResults.TestResult.Id);
-        AdapterManager.Instance.StopTestContainer(testResults.ClassContainer.Id);
+        AdapterManager.Instance.StopTestCase(testResults.TestResult!.Id);
+        AdapterManager.Instance.StopTestContainer(testResults.ClassContainer!.Id);
         AdapterManager.Instance.WriteTestCase(testResults.TestResult.Id, testResults.ClassContainer.Id);
     }
 
@@ -111,15 +111,15 @@ public static class TmsXunitHelper
             switch (((IReflectionAttributeInfo)attribute).Attribute)
             {
                 case DescriptionAttribute description:
-                    testResult.Description = ReplaceParameters(description.Value, testResult.Parameters);
+                    testResult.Description = ReplaceParameters(description.Value, testResult.Parameters!);
                     break;
 
                 case DisplayNameAttribute displayName:
-                    testResult.DisplayName = ReplaceParameters(displayName.Value, testResult.Parameters);
+                    testResult.DisplayName = ReplaceParameters(displayName.Value, testResult.Parameters!);
                     break;
 
                 case ExternalIdAttribute externalId:
-                    testResult.ExternalId = ReplaceParameters(externalId.Value, testResult.Parameters);
+                    testResult.ExternalId = ReplaceParameters(externalId.Value, testResult.Parameters!);
                     break;
 
                 case LabelsAttribute labels:
@@ -127,7 +127,7 @@ public static class TmsXunitHelper
                     break;
 
                 case TitleAttribute title:
-                    testResult.Title = ReplaceParameters(title.Value, testResult.Parameters);
+                    testResult.Title = ReplaceParameters(title.Value, testResult.Parameters!);
                     break;
 
                 case WorkItemIdsAttribute workItemIds:
@@ -166,7 +166,7 @@ public static class TmsXunitHelper
         return string.Join('.', items.Take(items.Length - 1));
     }
 
-    private static string ReplaceParameters(string? value, Dictionary<string, string?> parameters)
+    private static string? ReplaceParameters(string? value, Dictionary<string, string?>? parameters)
     {
         if (string.IsNullOrEmpty(value) || parameters is null) return value;
 

@@ -1,8 +1,8 @@
 namespace Tms.Adapter.Utils;
 
-public class Replacer
+public static class Replacer
 {
-    public string ReplaceParameters(string? value, Dictionary<string, string>? parameters)
+    public static string? ReplaceParameters(string? value, Dictionary<string, string>? parameters)
     {
         if (string.IsNullOrEmpty(value) || parameters is null) return value;
 

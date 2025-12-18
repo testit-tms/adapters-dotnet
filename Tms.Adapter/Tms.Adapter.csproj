@@ -42,5 +42,10 @@
         <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="17.9.0" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     </ItemGroup>
+    
+    <PropertyGroup>
+        <!-- Отключить предупреждения о делегатах LoggerMessage -->
+        <NoWarn>$(NoWarn);CA1848</NoWarn>
+    </PropertyGroup>
 
 </Project>

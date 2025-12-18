@@ -1,11 +1,7 @@
 namespace Tms.Adapter.Core.Attributes;
 
-public class LabelsAttribute : Attribute, ITmsAttribute
+[AttributeUsage(AttributeTargets.Method | AttributeTargets.Class | AttributeTargets.Delegate)]
+public class LabelsAttribute(params string[] lables) : Attribute, ITmsAttribute
 {
-    public List<string> Lables { get; }
-
-    public LabelsAttribute(params string[] lables)
-    {
-        Lables = lables.ToList();
-    }
+    public List<string> Lables { get; } = lables.ToList();
 }

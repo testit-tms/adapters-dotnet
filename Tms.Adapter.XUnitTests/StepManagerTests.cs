@@ -36,8 +36,8 @@ public class StepManagerTests
         Environment.SetEnvironmentVariable("TMS_CONFIGURATION_ID", Guid.NewGuid().ToString());
         Environment.SetEnvironmentVariable("TMS_TEST_RUN_ID", Guid.NewGuid().ToString());
 
-        AdapterManager.Instance.StartTestContainer(_testCase.ClassContainer);
-        AdapterManager.Instance.StartTestCase(_testCase.ClassContainer.Id, _testCase.TestResult);
+        AdapterManager.Instance.StartTestContainer(_testCase.ClassContainer!);
+        AdapterManager.Instance.StartTestCase(_testCase.ClassContainer!.Id, _testCase.TestResult!);
     }
 
     [TestCleanup]
@@ -56,7 +56,7 @@ public class StepManagerTests
         StepManager.StartBeforeFixture(name);
 
         // Assert
-        Assert.AreEqual(_testCase.ClassContainer.Befores.First().DisplayName, name);
+        Assert.AreEqual(_testCase.ClassContainer!.Befores.First().DisplayName, name);
         Assert.AreNotEqual(_testCase.ClassContainer.Befores.First().Start, 0);
         Assert.AreEqual(_testCase.ClassContainer.Befores.First().Stage, Stage.Running);
     }
@@ -71,7 +71,7 @@ public class StepManagerTests
         StepManager.StartAfterFixture(name);
 
         // Assert
-        Assert.AreEqual(_testCase.ClassContainer.Afters.First().DisplayName, name);
+        Assert.AreEqual(_testCase.ClassContainer!.Afters.First().DisplayName, name);
         Assert.AreNotEqual(_testCase.ClassContainer.Afters.First().Start, 0);
         Assert.AreEqual(_testCase.ClassContainer.Afters.First().Stage, Stage.Running);
     }
@@ -87,7 +87,7 @@ public class StepManagerTests
         StepManager.StartStep(name, result => result.Description = description);
 
         // Assert
-        Assert.AreEqual(_testCase.TestResult.Steps.First().Description, description);
+        Assert.AreEqual(_testCase.TestResult!.Steps.First().Description, description);
         Assert.AreEqual(_testCase.TestResult.Steps.First().DisplayName, name);
         Assert.AreEqual(_testCase.TestResult.Steps.First().Stage, Stage.Running);
     }
@@ -104,7 +104,7 @@ public class StepManagerTests
         StepManager.PassStep(result => result.Description = description);
 
         // Assert
-        Assert.AreEqual(_testCase.TestResult.Steps.First().DisplayName, name);
+        Assert.AreEqual(_testCase.TestResult!.Steps.First().DisplayName, name);
         Assert.AreEqual(_testCase.TestResult.Steps.First().Stage, Stage.Finished);
         Assert.AreEqual(_testCase.TestResult.Steps.First().Status, Status.Passed);
     }
@@ -137,7 +137,7 @@ public class StepManagerTests
         StepManager.StopFixture(result => result.Description = description);
 
         // Assert
-        Assert.AreEqual(_testCase.ClassContainer.Befores.First().Description, description);
+        Assert.AreEqual(_testCase.ClassContainer!.Befores.First().Description, description);
         Assert.AreEqual(_testCase.ClassContainer.Befores.First().DisplayName, name);
         Assert.AreEqual(_testCase.ClassContainer.Befores.First().Stage, Stage.Finished);
         Assert.AreNotEqual(_testCase.ClassContainer.Befores.First().Stop, 0);
@@ -154,7 +154,7 @@ public class StepManagerTests
         StepManager.StopFixtureSuppressTestCase(result => result.Status = Status.Skipped);
 
         // Assert
-        Assert.AreEqual(_testCase.ClassContainer.Befores.First().DisplayName, name);
+        Assert.AreEqual(_testCase.ClassContainer!.Befores.First().DisplayName, name);
         Assert.AreEqual(_testCase.ClassContainer.Befores.First().Status, Status.Skipped);
     }
 }

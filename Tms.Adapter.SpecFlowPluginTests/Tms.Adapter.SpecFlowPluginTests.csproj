@@ -45,5 +45,10 @@
 		<CoverletOutput>./coverage/</CoverletOutput>
 		<CoverletOutputFormat>opencover</CoverletOutputFormat>
 	</PropertyGroup>
+
+	<PropertyGroup>
+		<!-- Отключить предупреждения о делегатах LoggerMessage -->
+		<NoWarn>$(NoWarn);CA1848</NoWarn>
+	</PropertyGroup>
 	
 </Project>

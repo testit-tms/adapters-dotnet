@@ -41,7 +41,7 @@ public class App(ILogger<App> logger,
             case 0:
             {
                 testRun = await tmsManager.GetTestRunAsync().ConfigureAwait(false);
-                var testCaseForRun = await tmsManager.GetExternalIdsForRunAsync();
+                var testCaseForRun = await tmsManager.GetExternalIdsForRunAsync().ConfigureAwait(false);
 
                 logger.LogDebug(
                     "Autotests for run from test run {TestRunId} with configuration {ConfigurationId}: {@ExternalIds}",
@@ -50,13 +50,13 @@ public class App(ILogger<App> logger,
                     testCaseForRun);
 
                 testCases = filterService.FilterTestCases(adapterConfig.TestAssemblyPath, testCaseForRun, testCases);
-                testRunContext.SetCurrentTestRun(testRun);
+                testRunContext.SetCurrentTestRun(testRun!);
                 break;
             }
             case 1:
                 testRun = await tmsManager.GetTestRunAsync().ConfigureAwait(false);
 
-                testRunContext.SetCurrentTestRun(testRun);
+                testRunContext.SetCurrentTestRun(testRun!);
                 break;
             case 2:
             {
@@ -85,7 +85,9 @@ public class App(ILogger<App> logger,
             runSuccess = await runService.RunSelectedTestsAsync(testCases).ConfigureAwait(false);
         }
 
-        if (tmsSettings.AdapterMode != 2 && !string.IsNullOrEmpty(tmsSettings.TestRunName) && testRun != null && !testRun.Name.Equals(tmsSettings.TestRunName)) {
+        if (tmsSettings.AdapterMode != 2 
+            && !string.IsNullOrEmpty(tmsSettings.TestRunName) 
+            && testRun != null && !testRun.Name.Equals(tmsSettings.TestRunName, StringComparison.Ordinal)) {
             testRun.Name = tmsSettings.TestRunName;
 
             await tmsManager.UpdateTestRunAsync(testRun).ConfigureAwait(false);
@@ -97,7 +99,7 @@ public class App(ILogger<App> logger,
             var testRunUrl = new Uri(new Uri(tmsSettings.Url!), $"projects/{project.GlobalId}/test-runs/{tmsSettings.TestRunId}/test-results");
             var failedTests = runService.GetFailedTestCasesCount();
             
-            logger.LogInformation("Test run {testRunUrl} finished.", testRunUrl);
+            logger.LogInformation("Test run {TestRunUrl} finished.", testRunUrl);
             logger.LogInformation("Count of failed tests: {Count}", failedTests);
         }
         

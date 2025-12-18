@@ -1,3 +1,4 @@
+using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Bindings;
 using TechTalk.SpecFlow.Configuration;
 using TechTalk.SpecFlow.ErrorHandling;
@@ -26,7 +27,7 @@ public class TmsBindingInvoker : BindingInvoker
         if (binding is not HookBinding hook)
             return base.InvokeBinding(binding, contextManager, arguments, testTracer, out duration);
 
-        var featureContainerId = TmsHelper.GetFeatureContainerId(contextManager.FeatureContext?.FeatureInfo);
+        var featureContainerId = TmsHelper.GetFeatureContainerId(contextManager.FeatureContext?.FeatureInfo!);
 
         switch (hook.HookType)
         {
@@ -35,11 +36,11 @@ public class TmsBindingInvoker : BindingInvoker
                 {
                     var featureContainer = new ClassContainer
                     {
-                        Id = TmsHelper.GetFeatureContainerId(contextManager.FeatureContext?.FeatureInfo)
+                        Id = TmsHelper.GetFeatureContainerId(contextManager.FeatureContext?.FeatureInfo!)
                     };
                     Adapter.StartTestContainer(featureContainer);
 
-                    contextManager.FeatureContext.Set(new HashSet<ClassContainer>());
+                    contextManager.FeatureContext!.Set(new HashSet<ClassContainer>());
                     contextManager.FeatureContext.Set(new HashSet<TestContainer>());
 
                     return base.InvokeBinding(binding, contextManager, arguments, testTracer, out duration);
@@ -58,10 +59,10 @@ public class TmsBindingInvoker : BindingInvoker
                     Adapter.StopFixture(x => x.Status = Status.Failed);
 
                     var scenarioContainer =
-                        TmsHelper.StartTestContainer(contextManager.FeatureContext, null);
+                        TmsHelper.StartTestContainer(contextManager.FeatureContext!, null!);
 
                     var scenario = TmsHelper.StartTestCase(scenarioContainer.Id,
-                        contextManager.FeatureContext, null);
+                        contextManager.FeatureContext!, null!);
 
                     Adapter
                         .StopTestCase(x =>
@@ -152,7 +153,7 @@ public class TmsBindingInvoker : BindingInvoker
                 }
                 catch (Exception ex)
                 {
-                    var scenario = contextManager.FeatureContext.Get<HashSet<TestContainer>>().Last();
+                    var scenario = contextManager.FeatureContext!.Get<HashSet<TestContainer>>().Last();
                     Adapter
                         .StopFixture(x => x.Status = Status.Failed)
                         .UpdateTestCase(scenario.Id,
@@ -179,7 +180,7 @@ public class TmsBindingInvoker : BindingInvoker
 
     private static void StartFixture(HookBinding hook, string containerId)
     {
-        if (hook.HookType.ToString().StartsWith("Before"))
+        if (hook.HookType.ToString().StartsWith("Before", StringComparison.InvariantCulture))
             Adapter.StartBeforeFixture(containerId, Hash.NewId(), TmsHelper.GetFixtureResult(hook));
         else
             Adapter.StartAfterFixture(containerId, Hash.NewId(), TmsHelper.GetFixtureResult(hook));
@@ -194,7 +195,7 @@ public class TmsBindingInvoker : BindingInvoker
 
             Adapter
                 .StopTestContainer(c.Id)
-                .WriteTestCase(testContainer?.Id, c.Id);
+                .WriteTestCase(testContainer?.Id!, c.Id);
         }
     }
 }

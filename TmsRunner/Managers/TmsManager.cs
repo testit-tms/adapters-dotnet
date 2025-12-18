@@ -36,7 +36,8 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
 
         logger.LogDebug("Creating test run {@TestRun}", testRunV2PostShortModel);
 
-        var testRun = await testRunsApi.CreateEmptyAsync(testRunV2PostShortModel).ConfigureAwait(false) ?? throw new Exception($"Could not find project with id: {settings.ProjectId}");
+        var testRun = await testRunsApi.CreateEmptyAsync(testRunV2PostShortModel).ConfigureAwait(false) 
+                      ?? throw new ArgumentException($"Could not find project with id: {settings.ProjectId}");
         logger.LogDebug("Created test run {@TestRun}", testRun);
 
         return testRun;
@@ -64,11 +65,11 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
 
         var externalIds = new List<string>();
         var skip = 0;
-        var model = Converter.BuildTestResultsFilterApiModel(settings.TestRunId, settings.ConfigurationId);
+        var model = Converter.BuildTestResultsFilterApiModel(settings.TestRunId!, settings.ConfigurationId!);
 
         while (true)
         {
-            var testResults = await getTestResults(skip, model);
+            var testResults = await GetTestResults(skip, model);
 
             if (testResults.Count != 0)
             {
@@ -82,9 +83,9 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
         }
     }
 
-    private async Task<List<TestResultShortResponse>> getTestResults(int skip, TestResultsFilterApiModel model)
+    private async Task<List<TestResultShortResponse>> GetTestResults(int skip, TestResultsFilterApiModel model)
     {
-        return await testResultsApi.ApiV2TestResultsSearchPostAsync(skip, TESTS_LIMIT, null, null, null, model);
+        return await testResultsApi.ApiV2TestResultsSearchPostAsync(skip, TESTS_LIMIT, null!, null!, null!, model);
     }
 
     public async Task SubmitResultToTestRunAsync(string? id, AutoTestResult result)
@@ -113,6 +114,16 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
             throw new InvalidOperationException($"No matching autotest found for ExternalId: {result.ExternalId}");
         }
 
+        await SetAutoTestResultsForTestRunAsync(model, matchingResults, testRunId).ConfigureAwait(false);
+    }
+    
+    [PerformanceSensitive]
+    private async Task SetAutoTestResultsForTestRunAsync(AutoTestResultsForTestRunModel model, List<TestResultV2GetModel>? matchingResults, Guid testRunId)
+    {
+        if (matchingResults == null)
+        {
+            return;
+        }
         foreach (var matchingResult in matchingResults)
         {
             model.Parameters = matchingResult.Parameters;
@@ -211,9 +222,10 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
                 catch (ApiException e)
                 {
                     logger.LogError(
-                         "Cannot link autotest {AutotestId} to work item {WorkItemId}",
-                    autotestId,
-                    workItemId);
+                        e, 
+                        "Cannot link autotest {AutotestId} to work item {WorkItemId}", 
+                        autotestId,
+                        workItemId);
 
                     Thread.Sleep(WAITING_TIME);
                 }
@@ -244,6 +256,7 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
             catch (ApiException e)
             {
                 logger.LogError(
+                    e, 
                     "Cannot link autotest {AutotestId} to work item {WorkitemId}",
                     autotestId,
                     workItemId);

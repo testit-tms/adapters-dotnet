@@ -4,6 +4,6 @@ namespace TmsRunner.Entities;
 
 public sealed record MessageMetadata
 {
-    public MessageType Type;
-    public string? Value;
+    public MessageType Type { get; init; }
+    public string? Value { get; init; }
 }

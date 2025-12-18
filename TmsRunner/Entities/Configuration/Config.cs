@@ -2,20 +2,20 @@ namespace TmsRunner.Entities.Configuration;
 
 public sealed record Config
 {
-    public string? TmsUrl;
-    public string? TmsPrivateToken;
-    public string? TmsProjectId;
-    public string? TmsConfigurationId;
-    public string? TmsTestRunId;
-    public string? TmsTestRunName;
-    public string? TmsAdapterMode;
-    public string? TmsConfigFile;
-    public string? TmsRunSettings;
-    public string? TmsAutomaticCreationTestCases;
-    public string? TmsAutomaticUpdationLinksToTestCases;
-    public string? TmsCertValidation;
-    public string? TmsLabelsOfTestsToRun;
-    public string? TmsIgnoreParameters;
-    public string? TmsRerunTestsCount;
-    public bool IsDebug;
+    public string? TmsUrl { get; init; }
+    public string? TmsPrivateToken { get; init; }
+    public string? TmsProjectId { get; init; }
+    public string? TmsConfigurationId { get; init; }
+    public string? TmsTestRunId { get; init; }
+    public string? TmsTestRunName { get; init; }
+    public string? TmsAdapterMode { get; init; }
+    public string? TmsConfigFile { get; init; }
+    public string? TmsRunSettings { get; init; }
+    public string? TmsAutomaticCreationTestCases { get; init; }
+    public string? TmsAutomaticUpdationLinksToTestCases { get; init; }
+    public string? TmsCertValidation { get; init; }
+    public string? TmsLabelsOfTestsToRun { get; init; }
+    public string? TmsIgnoreParameters { get; init; }
+    public string? TmsRerunTestsCount { get; init; }
+    public bool IsDebug { get; init; }
 }

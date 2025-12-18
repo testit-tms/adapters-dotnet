@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using System.Globalization;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace TmsRunner.Extensions;
@@ -14,7 +15,7 @@ public static class StringExtension
     {
         var hash = SHA256.HashData(Encoding.UTF8.GetBytes(str));
 
-        return BitConverter.ToUInt32(hash).ToString();
+        return BitConverter.ToUInt32(hash).ToString(CultureInfo.InvariantCulture);
     }
 
     public static string RemoveQuotes(this string str)

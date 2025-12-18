@@ -1,11 +1,7 @@
 namespace Tms.Adapter.Core.Attributes;
 
-public class DisplayNameAttribute : Attribute, ITmsAttribute
+[AttributeUsage(AttributeTargets.Method | AttributeTargets.Class | AttributeTargets.Delegate)]
+public class DisplayNameAttribute(string value) : Attribute, ITmsAttribute
 {
-    public string Value { get; }
-
-    public DisplayNameAttribute(string value)
-    {
-        Value = value;
-    }
+    public string Value { get; } = value;
 }

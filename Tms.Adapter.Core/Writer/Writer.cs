@@ -1,3 +1,4 @@
+using System.Globalization;
 using Microsoft.Extensions.Logging;
 using Tms.Adapter.Core.Configurator;
 using Tms.Adapter.Core.Client;
@@ -18,36 +19,36 @@ public class Writer : IWriter
         _tmsSettings = tmsSettings;
     }
 
-    public async Task Write(TestContainer result, ClassContainer container)
+    public async Task Write(TestContainer result, ClassContainer resultContainer)
     {
         _logger.LogDebug("Write autotest {@Autotest}", result);
 
         try
         {
-            var autotest = await _client.IsAutotestExist(result.ExternalId);
+            var autotest = await _client.IsAutotestExist(result.ExternalId!);
 
             if (autotest)
             {
                 if (result.Status != Status.Failed)
                 {
-                    await _client.UpdateAutotest(result, container);
+                    await _client.UpdateAutotest(result, resultContainer).ConfigureAwait(false);
                 }
                 else
                 {
-                    await _client.UpdateAutotest(result.ExternalId, result.Links, result.ExternalKey);
+                    await _client.UpdateAutotest(result.ExternalId!, result.Links, result.ExternalKey!);
                 }
             }
             else
             {
-                await _client.CreateAutotest(result, container);
+                await _client.CreateAutotest(result, resultContainer).ConfigureAwait(false);
             }
 
             if (result.WorkItemIds.Count > 0)
             {
-                await UpdateTestLinkToWorkItems(result.ExternalId, result.WorkItemIds);
+                await UpdateTestLinkToWorkItems(result.ExternalId!, result.WorkItemIds).ConfigureAwait(false);
             }
 
-            await _client.SubmitTestCaseResult(result, container);
+            await _client.SubmitTestCaseResult(result, resultContainer).ConfigureAwait(false);
 
             _logger.LogDebug("Autotest with ID {ID} successfully written", result.ExternalId);
         }
@@ -69,25 +70,23 @@ public class Writer : IWriter
 
         var autotestId = autotest.Id.ToString();
 
-        var linkedWorkItems = await _client.GetWorkItemsLinkedToAutoTest(autotestId);
+        var linkedWorkItems = await _client.GetWorkItemsLinkedToAutoTest(autotestId).ConfigureAwait(false);
 
         foreach (var linkedWorkItem in linkedWorkItems)
         {
-            var linkedWorkItemId = linkedWorkItem.GlobalId.ToString();
+            var linkedWorkItemId = linkedWorkItem.GlobalId.ToString(CultureInfo.InvariantCulture);
 
-            if (workItemIds.Contains(linkedWorkItemId))
+            if (workItemIds.Remove(linkedWorkItemId))
             {
-                workItemIds.Remove(linkedWorkItemId);
-
                 continue;
             }
 
             if (_tmsSettings.AutomaticUpdationLinksToTestCases)
             {
-                await _client.DeleteAutoTestLinkFromWorkItem(autotestId, linkedWorkItemId);
+                await _client.DeleteAutoTestLinkFromWorkItem(autotestId, linkedWorkItemId).ConfigureAwait(false);
             }
         }
 
-        await _client.LinkAutoTestToWorkItems(autotestId, workItemIds);
+        await _client.LinkAutoTestToWorkItems(autotestId, workItemIds).ConfigureAwait(false);
     }
 }

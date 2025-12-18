@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Globalization;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 
 using Newtonsoft.Json;
@@ -18,18 +19,17 @@ using TmsRunner.Extensions;
 
 namespace TmsRunner.Services;
 
-public sealed class ProcessorService(ILogger<ProcessorService> logger,
+public sealed partial class ProcessorService(ILogger<ProcessorService> logger,
                                      TmsManager apiClient,
-                                     TmsSettings tmsSettings,
-                                     LogParser parser)
+                                     TmsSettings tmsSettings)
 {
-    private async Task<List<Step>> GetStepsWithAttachmentsAsync(string? traceJson, List<Guid> attachmentIds)
+    private async Task<List<StepModel>> GetStepsWithAttachmentsAsync(string? traceJson, List<Guid> attachmentIds)
     {
         var messages = LogParser.GetMessages(traceJson ?? string.Empty);
 
-        var testCaseStepsHierarchical = new List<Step>();
-        var stepsTable = new Dictionary<Guid, Step>();
-        Step? parentStep = null;
+        var testCaseStepsHierarchical = new List<StepModel>();
+        var stepsTable = new Dictionary<Guid, StepModel>();
+        StepModel? parentStep = null;
         var nestingLevel = 1;
 
         foreach (var message in messages)
@@ -38,7 +38,7 @@ public sealed class ProcessorService(ILogger<ProcessorService> logger,
             {
                 case MessageType.TmsStep:
                     {
-                        var step = JsonConvert.DeserializeObject<Step>(message.Value ?? string.Empty);
+                        var step = JsonConvert.DeserializeObject<StepModel>(message.Value ?? string.Empty);
                         if (step == null)
                         {
                             logger.LogWarning("Can not deserialize step: {Step}", message.Value);
@@ -153,8 +153,7 @@ public sealed class ProcessorService(ILogger<ProcessorService> logger,
             return calledMethod;
         }
 
-        const string pattern = "(?<=\\<)(.*)(?=\\>)";
-        var regex = new Regex(pattern);
+        var regex = CalledMethodRegex();
         var match = regex.Match(calledMethod);
 
         return match.Groups[1].Value;
@@ -164,7 +163,7 @@ public sealed class ProcessorService(ILogger<ProcessorService> logger,
     {
         var traceJson = GetTraceJson(testResult);
         var parameters = LogParser.GetParameters(traceJson);
-        var autoTest = parser.GetAutoTest(testResult, parameters);
+        var autoTest = LogParser.GetAutoTest(testResult, parameters);
         autoTest.Message = LogParser.GetMessage(traceJson);
 
         var attachmentIds = new List<Guid>();
@@ -205,7 +204,7 @@ public sealed class ProcessorService(ILogger<ProcessorService> logger,
 
         if (autoTest.WorkItemIds.Count > 0)
         {
-            await UpdateTestLinkToWorkItems(existAutotestResult.Id.ToString(), autoTest.WorkItemIds);
+            await UpdateTestLinkToWorkItems(existAutotestResult.Id.ToString(), autoTest.WorkItemIds).ConfigureAwait(false);
         }
 
         if (!string.IsNullOrEmpty(testResult.ErrorMessage))
@@ -222,31 +221,29 @@ public sealed class ProcessorService(ILogger<ProcessorService> logger,
             .ConfigureAwait(false);
     }
 
-    private async Task UpdateTestLinkToWorkItems(string autoTestId, List<string> workItemIds)
+    private async Task UpdateTestLinkToWorkItems(string autoTestId, List<string?> workItemIds)
     {
-        var linkedWorkItems = await apiClient.GetWorkItemsLinkedToAutoTestAsync(autoTestId);
+        var linkedWorkItems = await apiClient.GetWorkItemsLinkedToAutoTestAsync(autoTestId).ConfigureAwait(false);
 
         foreach (var linkedWorkItem in linkedWorkItems) {
-            var linkedWorkItemId = linkedWorkItem.GlobalId.ToString();
+            var linkedWorkItemId = linkedWorkItem.GlobalId.ToString(CultureInfo.InvariantCulture);
 
-            if (workItemIds.Contains(linkedWorkItemId)) {
-                workItemIds.Remove(linkedWorkItemId);
-
+            if (workItemIds.Remove(linkedWorkItemId)) {
                 continue;
             }
 
             if (tmsSettings.AutomaticUpdationLinksToTestCases) {
-                await apiClient.DeleteAutoTestLinkFromWorkItemAsync(autoTestId, linkedWorkItemId);
+                await apiClient.DeleteAutoTestLinkFromWorkItemAsync(autoTestId, linkedWorkItemId).ConfigureAwait(false);
             }
         }
 
-        await apiClient.LinkAutoTestToWorkItemAsync(autoTestId, workItemIds);
+        await apiClient.LinkAutoTestToWorkItemAsync(autoTestId, workItemIds).ConfigureAwait(false);
     }
 
     private static AutoTestResult GetAutoTestResultsForTestRunModel(AutoTest autoTest,
                                                                     TestResult testResult,
                                                                     string traceJson,
-                                                                    IReadOnlyCollection<Step> testCaseSteps,
+                                                                    IReadOnlyCollection<StepModel> testCaseSteps,
                                                                     List<Guid> attachmentIds,
                                                                     Dictionary<string, string>? parameters,
                                                                     bool isIgnoreParameters)
@@ -279,7 +276,7 @@ public sealed class ProcessorService(ILogger<ProcessorService> logger,
             TeardownResults = teardownResults,
             Links = LogParser.GetLinks(traceJson),
             Message = autoTest.Message!.TrimStart(Environment.NewLine.ToCharArray()),
-            Parameters = isIgnoreParameters ? new Dictionary<string, string>() : parameters!,
+            Parameters = isIgnoreParameters ? [] : parameters!,
             Attachments = attachmentIds,
         };
         
@@ -296,7 +293,7 @@ public sealed class ProcessorService(ILogger<ProcessorService> logger,
         return traceJson;
     }
 
-    private static Step? MapStep(Dictionary<Guid, Step> stepsDictionary, StepResult stepResult)
+    private static StepModel? MapStep(Dictionary<Guid, StepModel> stepsDictionary, StepResult stepResult)
     {
         if (!stepsDictionary.TryGetValue(stepResult.Guid, out var stepToUpdate))
         {
@@ -310,4 +307,7 @@ public sealed class ProcessorService(ILogger<ProcessorService> logger,
 
         return stepToUpdate.ParentStep;
     }
+
+    [GeneratedRegex(@"(?<=\<)(.*)(?=\>)")]
+    private static partial Regex CalledMethodRegex();
 }

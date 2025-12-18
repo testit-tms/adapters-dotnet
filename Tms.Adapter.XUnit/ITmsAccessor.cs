@@ -4,6 +4,6 @@ namespace Tms.Adapter.XUnit;
 
 public interface ITmsAccessor
 {
-    ClassContainer ClassContainer { get; set; }
-    TestContainer TestResult { get; set; }
+    ClassContainer? ClassContainer { get; set; }
+    TestContainer? TestResult { get; set; }
 }

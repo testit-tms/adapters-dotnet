@@ -10,9 +10,9 @@ public class XunitTheoryDiscover : TheoryDiscoverer
     }
 
     public override IEnumerable<IXunitTestCase> Discover(ITestFrameworkDiscoveryOptions discoveryOptions,
-        ITestMethod testMethod, IAttributeInfo factAttribute)
+        ITestMethod testMethod, IAttributeInfo theoryAttribute)
     {
-        var testCases = base.Discover(discoveryOptions, testMethod, factAttribute);
+        var testCases = base.Discover(discoveryOptions, testMethod, theoryAttribute);
 
         foreach (var testCase in testCases)
         {

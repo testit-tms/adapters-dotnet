@@ -1,11 +1,7 @@
 namespace Tms.Adapter.Core.Attributes;
 
-public class ExternalIdAttribute : Attribute, ITmsAttribute
+[AttributeUsage(AttributeTargets.Method | AttributeTargets.Class | AttributeTargets.Delegate)]
+public class ExternalIdAttribute(string value) : Attribute, ITmsAttribute
 {
-    public string Value { get; }
-
-    public ExternalIdAttribute(string value)
-    {
-        Value = value;
-    }
+    public string Value { get; } = value;
 }
