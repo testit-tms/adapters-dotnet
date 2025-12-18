@@ -6,6 +6,7 @@ using Tms.Adapter.Models;
 
 namespace Tms.Adapter.Attributes;
 
+[AttributeUsage(AttributeTargets.Method)]
 public class ParameterizedAttribute : OnMethodBoundaryAspect
 {
     public override void OnEntry(MethodExecutionArgs arg)

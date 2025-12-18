@@ -3,13 +3,13 @@ using TmsRunner.Entities;
 
 namespace TmsRunner.Utils;
 
-public sealed class Reflector
+public static class Reflector
 {
     public static MethodMetadata GetMethodMetadata(string assemblyPath,
                                                    string methodName,
                                                    Dictionary<string, string>? parameters)
     {
-        var assembly = Assembly.LoadFrom(assemblyPath);
+        var assembly = Assembly.Load(assemblyPath);
         var fullyQualifiedNameArray = methodName.Split(".");
         var type = assembly.GetType(string.Join(".", fullyQualifiedNameArray[..^1]));
         var methods = type?.GetMethods()
@@ -23,7 +23,7 @@ public sealed class Reflector
         }
 
 #pragma warning disable CA2201
-        var method = (methods?.FirstOrDefault()) ?? throw new ApplicationException($"Method {fullyQualifiedNameArray[^1]} not found!");
+        var method = (methods?.FirstOrDefault()) ?? throw new InvalidDataException($"Method {fullyQualifiedNameArray[^1]} not found!");
 #pragma warning restore CA2201
         var attributes = method.GetCustomAttributes(false)
             .Select(a => (Attribute)a)

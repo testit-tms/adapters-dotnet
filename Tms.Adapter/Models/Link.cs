@@ -1,6 +1,6 @@
 ﻿namespace Tms.Adapter.Models;
 
-public class Link : IEquatable<Link>
+public sealed class Link : IEquatable<Link>
 {
     public LinkType? Type { get; set; }
 
@@ -9,14 +9,13 @@ public class Link : IEquatable<Link>
     public string? Url { get; set; }
 
     public string? Description { get; set; }
-
-
-    public override bool Equals(object? obj) => Equals(obj as Link);
-
+    
     public override int GetHashCode()
     {
         return HashCode.Combine(Type, Title, Url, Description);
     }
+    
+    public override bool Equals(object? obj) => Equals(obj as Link);
 
     public bool Equals(Link? other)
     {

@@ -12,7 +12,7 @@ using TmsRunner.Extensions;
 
 namespace TmsRunner.Utils;
 
-public sealed class LogParser
+public static class LogParser
 {
     public static Dictionary<string, string>? GetParameters(string traceJson)
     {
@@ -133,25 +133,27 @@ public sealed class LogParser
     // TODO: write unit tests
     public static List<MessageMetadata> GetMessages(string traceJson)
     {
-        var messages = new List<MessageMetadata>();
-
         const string pattern = "([^\\n\\r\\:]*): \\s*([^\\n\\r]*)";
         var regex = new Regex(pattern);
         var matches = regex.Matches(traceJson);
 
-        foreach (Match match in matches)
-        {
-            if (Enum.TryParse(match.Groups[1].Value, true, out MessageType type))
+        var messages = matches
+            .Select(match =>
             {
-                messages.Add(new MessageMetadata
+                if (Enum.TryParse(match.Groups[1].Value, true, out MessageType type))
                 {
-                    Type = type,
-                    Value = match.Groups[2].Value
-                });
-            }
-        }
+                    return new MessageMetadata
+                    {
+                        Type = type,
+                        Value = match.Groups[2].Value
+                    };
+                }
+                return null;
+            })
+            .Where(x => x != null)
+            .ToList();
 
-        return messages;
+        return messages!;
     }
 
     private static Dictionary<string, string> GetParametersFromReflection(MethodMetadata method, TestResult testResult)

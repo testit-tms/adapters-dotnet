@@ -10,7 +10,7 @@ using LinkType = TestIT.ApiClient.Model.LinkType;
 
 namespace Tms.Adapter.Core.Client;
 
-public class TmsClient : ITmsClient, IDisposable
+public sealed class TmsClient : ITmsClient, IDisposable
 {
     private readonly ILogger<TmsClient> _logger;
     private readonly TmsSettings _settings;
@@ -150,12 +150,13 @@ public class TmsClient : ITmsClient, IDisposable
 
                     return;
                 }
-                catch (ApiException)
+                catch (ApiException e) 
                 {
                     _logger.LogError(
-                         "Cannot link autotest {AutotestId} to work item {WorkItemId}: work item does not exist",
-                         autotestId,
-                         workItemId);
+                        e, 
+                        "Cannot link autotest {AutotestId} to work item {WorkItemId}: work item does not exist", 
+                        autotestId, 
+                        workItemId);
 
                     Thread.Sleep(WAITING_TIME);
                 }
@@ -183,9 +184,10 @@ public class TmsClient : ITmsClient, IDisposable
 
                 return;
             }
-            catch (ApiException)
+            catch (ApiException e)
             {
                 _logger.LogError(
+                    e,
                     "Cannot link autotest {AutotestId} to work item {WorkitemId}",
                     autotestId,
                     workItemId);
@@ -197,7 +199,7 @@ public class TmsClient : ITmsClient, IDisposable
 
     public async Task<List<WorkItemIdentifierModel>> GetWorkItemsLinkedToAutoTest(string autotestId)
     {
-        return await _autoTests.GetWorkItemsLinkedToAutoTestAsync(autotestId);
+        return await _autoTests.GetWorkItemsLinkedToAutoTestAsync(autotestId).ConfigureAwait(false);
     }
 
     public async Task SubmitTestCaseResult(TestContainer result, ClassContainer container)
@@ -210,7 +212,7 @@ public class TmsClient : ITmsClient, IDisposable
         HtmlEscapeUtils.EscapeHtmlInObject(model);
         
         await _testRuns.SetAutoTestResultsForTestRunAsync(new Guid(_settings.TestRunId),
-            new List<AutoTestResultsForTestRunModel> { model });
+            [model]).ConfigureAwait(false);
 
         _logger.LogDebug("Submit test result to test run {Id} is successfully", _settings.TestRunId);
     }
@@ -353,11 +355,19 @@ public class TmsClient : ITmsClient, IDisposable
 
     public void Dispose()
     {
+        Dispose(true);
+        // так как ресурсы уже освобождены
+        GC.SuppressFinalize(this);
+    }
+    
+    private void Dispose(bool disposing)
+    {
+        if (!disposing)
+        {
+            return;
+        }
         _autoTests.Dispose();
         _testRuns.Dispose();
         _attachments.Dispose();
-        
-        // так как ресурсы уже освобождены
-        GC.SuppressFinalize(this);
     }
 }

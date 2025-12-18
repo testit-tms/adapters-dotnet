@@ -10,16 +10,15 @@ using Tms.Adapter.Utils;
 
 namespace Tms.Adapter.Attributes;
 
+[AttributeUsage(AttributeTargets.Method)]
 public class StepAttribute : OnMethodBoundaryAspect
 {
-    private MethodBase? _currentMethod;
     private MethodBase? _callerMethod;
     private string? _title;
     private string? _description;
     private CallerMethodType? _callerMethodType;
     private CallerMethodType? _currentMethodType;
     private DateTime? _startedAt;
-    private DateTime? _completedAt;
     private Guid _guid;
 
     public override void OnEntry(MethodExecutionArgs arg)
@@ -28,7 +27,7 @@ public class StepAttribute : OnMethodBoundaryAspect
         _guid = Guid.NewGuid();
 
         var stackTrace = new StackTrace();
-        _currentMethod = arg.Method;
+        var currentMethod = arg.Method;
         var regex = new Regex("at (.*)\\.([^.]*)\\(");
         var caller = regex.Match(stackTrace.ToString().Split(Environment.NewLine)[2]);
         var type = arg.Instance?.GetType();
@@ -49,7 +48,7 @@ public class StepAttribute : OnMethodBoundaryAspect
             .Zip(arguments, (k, v) => new { k, v })
             .ToDictionary(x => x.k, x => x.v);
 
-        var currentMethodAttributes = _currentMethod.GetCustomAttributes(false);
+        var currentMethodAttributes = currentMethod.GetCustomAttributes(false);
 
         if (currentMethodAttributes is not null)
         {
@@ -108,10 +107,8 @@ public class StepAttribute : OnMethodBoundaryAspect
                 }
             }
         }
-
-        var replacer = new Replacer();
-
-        var newTitle = string.IsNullOrEmpty(_title) ? _currentMethod.Name : _title;
+        
+        var newTitle = string.IsNullOrEmpty(_title) ? currentMethod.Name : _title;
         var newDescription = string.IsNullOrEmpty(_description)
             ? null
             : Replacer.ReplaceParameters(_description, parameters);
@@ -122,7 +119,7 @@ public class StepAttribute : OnMethodBoundaryAspect
             StartedOn = _startedAt,
             Title = Replacer.ReplaceParameters(newTitle, parameters),
             Description = newDescription,
-            CurrentMethod = _currentMethod.Name,
+            CurrentMethod = currentMethod.Name,
             CallerMethod = _callerMethod?.Name.Replace("$_executor_", ""),
             Instance = arg.Instance?.GetType().Name,
             Args = parameters,
@@ -145,13 +142,13 @@ public class StepAttribute : OnMethodBoundaryAspect
 
     private void WriteData(string outcome, object? result = null)
     {
-        _completedAt = DateTime.UtcNow;
+        var completedAt = DateTime.UtcNow;
 
         var stepResult = new StepResult
         {
             Guid = _guid,
-            CompletedOn = _completedAt,
-            Duration = (long)((TimeSpan)(_completedAt! - _startedAt!)).TotalMilliseconds,
+            CompletedOn = completedAt,
+            Duration = (long)((TimeSpan)(completedAt! - _startedAt!)).TotalMilliseconds,
             Result = result?.ToString(),
             Outcome = outcome
         };

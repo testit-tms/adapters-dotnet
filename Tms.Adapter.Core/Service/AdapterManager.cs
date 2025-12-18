@@ -292,7 +292,7 @@ public sealed class AdapterManager : IDisposable
 
     public AdapterManager AddLinks(IEnumerable<Link> links)
     {
-        var list = _linksByTestId.GetOrAdd(CurrentTestIdGetter(), _ => new List<Link>());
+        var list = _linksByTestId.GetOrAdd(CurrentTestIdGetter(), _ => []);
         lock (list)
         {
             list.AddRange(links);

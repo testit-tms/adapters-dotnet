@@ -1,6 +1,6 @@
 namespace Tms.Adapter.Utils;
 
-public class Replacer
+public static class Replacer
 {
     public static string? ReplaceParameters(string? value, Dictionary<string, string>? parameters)
     {
