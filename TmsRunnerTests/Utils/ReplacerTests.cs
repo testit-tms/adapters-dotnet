@@ -17,9 +17,6 @@ public class ReplacerTests
     [TestMethod]
     public void ReplaceParametersValueIsNull()
     {
-        // Arrange
-        var replacer = new Replacer();
-
         // Act
         var actual = Replacer.ReplaceParameters(null, ParametersWithValue);
 
@@ -30,9 +27,6 @@ public class ReplacerTests
     [TestMethod]
     public void ReplaceParametersValueIsEmptyString()
     {
-        // Arrange
-        var replacer = new Replacer();
-
         // Act
         var actual = Replacer.ReplaceParameters(string.Empty, ParametersWithValue);
 
@@ -44,7 +38,6 @@ public class ReplacerTests
     public void ReplaceParametersParametersIsEmpty()
     {
         // Arrange
-        var replacer = new Replacer();
         var parameters = new Dictionary<string, string>();
 
         // Act
@@ -57,8 +50,6 @@ public class ReplacerTests
     [TestMethod]
     public void ReplaceParametersReplaceTags()
     {
-        // Arrange
-        var replacer = new Replacer();
         const string excepted = "some string first second third";
 
         // Act
@@ -71,8 +62,6 @@ public class ReplacerTests
     [TestMethod]
     public void ReplaceParametersValueWithOutTags()
     {
-        // Arrange
-        var replacer = new Replacer();
         const string excepted = "some string first second third";
 
         // Act

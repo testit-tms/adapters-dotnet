@@ -11,7 +11,6 @@ namespace TmsRunnerTests.Services;
 public class FilterServiceTests
 {
     private readonly Mock<ILogger<FilterService>> _logger = new();
-    private readonly Mock<Replacer> _replacer = new();
 
     [TestMethod]
     public void FilterTestCases()
