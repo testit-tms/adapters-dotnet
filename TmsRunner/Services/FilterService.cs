@@ -9,9 +9,9 @@ using TmsRunner.Extensions;
 
 namespace TmsRunner.Services;
 
-public sealed class FilterService(ILogger<FilterService> logger)
+public sealed partial class FilterService(ILogger<FilterService> logger)
 {
-    private static readonly Regex ParametersRegex = new("\\((.*)\\)");
+    private static readonly Regex ParametersRegex = MyRegex();
 
     // TODO: write unit tests
     public List<TestCase> FilterTestCases(string? assemblyPath,
@@ -19,13 +19,16 @@ public sealed class FilterService(ILogger<FilterService> logger)
                                           IReadOnlyCollection<TestCase> testCases)
     {
         var testCasesToRun = new List<TestCase>();
+        // note: breaking tests if changing to .Load
         var assembly = Assembly.LoadFrom(assemblyPath ?? string.Empty);
-        var allTestMethods = new List<MethodInfo>(assembly.GetExportedTypes().SelectMany(type => type.GetMethods()));
+        var allTestMethods = new List<MethodInfo>(assembly.GetExportedTypes()
+            .SelectMany(type => type.GetMethods()));
 
         foreach (var testCase in testCases)
         {
             var testMethod = allTestMethods.FirstOrDefault(
-                m => (m.DeclaringType!.FullName + "." + m.Name).Contains(ParametersRegex.Replace(testCase.FullyQualifiedName, string.Empty))
+                m => (m.DeclaringType!.FullName + "." + m.Name)
+                    .Contains(ParametersRegex.Replace(testCase.FullyQualifiedName, string.Empty))
             );
 
             if (testMethod == null)
@@ -54,7 +57,9 @@ public sealed class FilterService(ILogger<FilterService> logger)
             if (attribute is ExternalIdAttribute externalId)
             {
                 var parameterNames = testMethod.GetParameters().Select(x => x.Name?.ToString());
-                var parameterValues = ParametersRegex.Match(testCase.DisplayName).Groups[1].Value.Split(',').Select(x => x.Replace("\"", string.Empty));
+                var parameterValues = ParametersRegex
+                    .Match(testCase.DisplayName).Groups[1].Value.Split(',')
+                    .Select(x => x.Replace("\"", string.Empty));
                 var parameterDictionary = parameterNames
                     .Select(x => x ?? string.Empty)
                     .Zip(parameterValues, (k, v) => new { k, v })
@@ -76,7 +81,8 @@ public sealed class FilterService(ILogger<FilterService> logger)
         foreach (var testCase in testCases)
         {
             var testMethod = allTestMethods.FirstOrDefault(
-                m => (m.DeclaringType!.FullName + "." + m.Name).Contains(ParametersRegex.Replace(testCase.FullyQualifiedName, string.Empty))
+                m => (m.DeclaringType!.FullName + "." + m.Name)
+                    .Contains(ParametersRegex.Replace(testCase.FullyQualifiedName, string.Empty))
             );
 
             if (testMethod == null)
@@ -100,4 +106,7 @@ public sealed class FilterService(ILogger<FilterService> logger)
 
         return testCasesToRun;
     }
+
+    [GeneratedRegex("\\((.*)\\)")]
+    private static partial Regex MyRegex();
 }

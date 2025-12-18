@@ -23,7 +23,8 @@ public static class Reflector
         }
 
 #pragma warning disable CA2201
-        var method = (methods?.FirstOrDefault()) ?? throw new InvalidDataException($"Method {fullyQualifiedNameArray[^1]} not found!");
+        var method = (methods?.FirstOrDefault()) ?? 
+                     throw new InvalidDataException($"Method {fullyQualifiedNameArray[^1]} not found!");
 #pragma warning restore CA2201
         var attributes = method.GetCustomAttributes(false)
             .Select(a => (Attribute)a)

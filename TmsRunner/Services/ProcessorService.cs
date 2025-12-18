@@ -19,7 +19,7 @@ using TmsRunner.Extensions;
 
 namespace TmsRunner.Services;
 
-public sealed class ProcessorService(ILogger<ProcessorService> logger,
+public sealed partial class ProcessorService(ILogger<ProcessorService> logger,
                                      TmsManager apiClient,
                                      TmsSettings tmsSettings)
 {
@@ -153,8 +153,7 @@ public sealed class ProcessorService(ILogger<ProcessorService> logger,
             return calledMethod;
         }
 
-        const string pattern = "(?<=\\<)(.*)(?=\\>)";
-        var regex = new Regex(pattern);
+        var regex = CalledMethodRegex();
         var match = regex.Match(calledMethod);
 
         return match.Groups[1].Value;
@@ -308,4 +307,7 @@ public sealed class ProcessorService(ILogger<ProcessorService> logger,
 
         return stepToUpdate.ParentStep;
     }
+
+    [GeneratedRegex(@"(?<=\<)(.*)(?=\>)")]
+    private static partial Regex CalledMethodRegex();
 }

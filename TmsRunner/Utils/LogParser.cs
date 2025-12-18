@@ -12,7 +12,7 @@ using TmsRunner.Extensions;
 
 namespace TmsRunner.Utils;
 
-public static class LogParser
+public static partial class LogParser
 {
     public static Dictionary<string, string>? GetParameters(string traceJson)
     {
@@ -133,8 +133,7 @@ public static class LogParser
     // TODO: write unit tests
     public static List<MessageMetadata> GetMessages(string traceJson)
     {
-        const string pattern = "([^\\n\\r\\:]*): \\s*([^\\n\\r]*)";
-        var regex = new Regex(pattern);
+        var regex = MessagesRegex();
         var matches = regex.Matches(traceJson);
 
         var messages = matches
@@ -215,13 +214,16 @@ public static class LogParser
 
     private static string GetFullyQualifiedMethodName(string testName)
     {
-        const string pattern = "([^(]*)";
-
-        var regex = new Regex(pattern);
+        var regex = FullyQualifiedMethodNameRegex();
         var fullyQualifiedNameArray = regex
             .Matches(testName)[0]
             .Groups[0].Value;
 
         return fullyQualifiedNameArray;
     }
+
+    [GeneratedRegex(@"([^\n\r\:]*): \s*([^\n\r]*)")]
+    private static partial Regex MessagesRegex();
+    [GeneratedRegex("([^(]*)")]
+    private static partial Regex FullyQualifiedMethodNameRegex();
 }
