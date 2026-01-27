@@ -91,7 +91,7 @@ public sealed class TmsClient : ITmsClient, IDisposable
             return;
         }
         
-        var putLinks = links.Select(l => new LinkPutModel(url: l.Url)
+        var putLinks = links.Select(l => new LinkUpdateApiModel(url: l.Url)
             {
                 Title = l.Title!,
                 Description = l.Description!,
@@ -108,13 +108,13 @@ public sealed class TmsClient : ITmsClient, IDisposable
         {
             new()
             {
-                Path = nameof(AutoTestPutModel.Links),
+                Path = nameof(AutoTestUpdateApiModel.Links),
                 Value = putLinks,
                 Op = "Add"
             },
             new()
             {
-                Path = nameof(AutoTestPutModel.ExternalKey),
+                Path = nameof(AutoTestUpdateApiModel.ExternalKey),
                 Value = HtmlEscapeUtils.EscapeHtmlTags(externalKey)!,
                 Op = "Replace"
             }
@@ -197,7 +197,7 @@ public sealed class TmsClient : ITmsClient, IDisposable
         }
     }
 
-    public async Task<List<WorkItemIdentifierModel>> GetWorkItemsLinkedToAutoTest(string autotestId)
+    public async Task<List<AutoTestWorkItemIdentifierApiResult>> GetWorkItemsLinkedToAutoTest(string autotestId)
     {
         return await _autoTests.GetWorkItemsLinkedToAutoTestAsync(autotestId).ConfigureAwait(false);
     }

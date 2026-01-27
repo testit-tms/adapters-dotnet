@@ -10,17 +10,17 @@ namespace TmsRunner.Utils;
 
 public static class Converter
 {
-    public static AutoTestPostModel ConvertAutoTestDtoToPostModel(AutoTest autotest, string? projectId)
+    public static AutoTestCreateApiModel ConvertAutoTestDtoToPostModel(AutoTest autotest, string? projectId)
     {
         var links = autotest.Links?.Select(l =>
-            new LinkPostModel(
+            new LinkCreateApiModel(
                 l.Title!,
                 l.Url!,
                 l.Description!,
                 Enum.Parse<LinkType>(l.Type.ToString()!))
         ).ToList();
 
-        return new AutoTestPostModel(externalId: autotest.ExternalId ?? string.Empty, name: autotest.Name ?? string.Empty)
+        return new AutoTestCreateApiModel(externalId: autotest.ExternalId ?? string.Empty, name: autotest.Name ?? string.Empty)
         {
             ExternalId = autotest.ExternalId ?? string.Empty,
             Links = links!,
@@ -36,10 +36,10 @@ public static class Converter
         };
     }
 
-    public static AutoTestPutModel ConvertAutoTestDtoToPutModel(AutoTest autotest, string? projectId)
+    public static AutoTestUpdateApiModel ConvertAutoTestDtoToPutModel(AutoTest autotest, string? projectId)
     {
         var links = autotest.Links?.Select(l =>
-            new LinkPutModel(
+            new LinkUpdateApiModel(
                 title: l.Title!,
                 url: l.Url!,
                 description: l.Description!,
@@ -47,7 +47,7 @@ public static class Converter
         ).ToList();
 
 
-        return new AutoTestPutModel(externalId: autotest.ExternalId ?? string.Empty, name: autotest.Name ?? string.Empty)
+        return new AutoTestUpdateApiModel(externalId: autotest.ExternalId ?? string.Empty, name: autotest.Name ?? string.Empty)
         {
             Links = links ?? [],
             ProjectId = new Guid(projectId ?? string.Empty),
@@ -93,9 +93,9 @@ public static class Converter
         };
     }
 
-    private static List<LabelPostModel>? ConvertLabelsToModel(IEnumerable<string>? labels)
+    private static List<LabelApiModel>? ConvertLabelsToModel(IEnumerable<string>? labels)
     {
-        return labels?.Select(l => new LabelPostModel(l)).ToList();
+        return labels?.Select(l => new LabelApiModel(l)).ToList();
     }
 
     private static List<AttachmentPutModelAutoTestStepResultsModel> ConvertResultStepToModel(IEnumerable<AutoTestStepResult>? autotests)
@@ -114,9 +114,9 @@ public static class Converter
         }).ToList() ?? [];
     }
 
-    private static List<AutoTestStepModel>? ConvertStepsToModel(IEnumerable<AutoTestStep>? autotestSteps)
+    private static List<AutoTestStepApiModel>? ConvertStepsToModel(IEnumerable<AutoTestStep>? autotestSteps)
     {
-        return autotestSteps?.Select(s => new AutoTestStepModel(
+        return autotestSteps?.Select(s => new AutoTestStepApiModel(
                 s.Title ?? string.Empty,
                 s.Description  ?? string.Empty,
                 ConvertStepsToModel(s.Steps) ?? [])).ToList();
