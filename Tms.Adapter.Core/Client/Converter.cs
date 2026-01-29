@@ -8,42 +8,42 @@ namespace Tms.Adapter.Core.Client;
 
 public static class Converter
 {
-    public static AutoTestPostModel ConvertAutoTestDtoToPostModel(TestContainer result, ClassContainer container,
+    public static AutoTestCreateApiModel ConvertAutoTestDtoToPostModel(TestContainer result, ClassContainer container,
         string projectId)
     {
-        return new AutoTestPostModel(externalId: result.ExternalId!, name: result.DisplayName!)
+        return new AutoTestCreateApiModel(externalId: result.ExternalId!, name: result.DisplayName!)
         {
             ExternalId = result.ExternalId!,
-            Links = ConvertLinksToPostModel(result.Links),
+            Links = ConvertLinksToCreateApiModel(result.Links),
             ProjectId = new Guid(projectId),
             Namespace = result.Namespace!,
             Classname = result.ClassName!,
-            Steps = ConvertStepsToModel(result.Steps),
-            Setup = ConvertFixturesToModel(container.Befores),
-            Teardown = ConvertFixturesToModel(container.Afters),
+            Steps = ConvertStepsToStepApiModel(result.Steps),
+            Setup = ConvertFixturesToStepApiModel(container.Befores),
+            Teardown = ConvertFixturesToStepApiModel(container.Afters),
             Title = result.Title!,
             Description = result.Description!,
-            Labels = ConvertLabelsToPostModel(result.Labels),
+            Labels = ConvertLabelsToApiModel(result.Labels),
             ExternalKey = result.ExternalKey!,
         };
     }
 
-    public static AutoTestPutModel ConvertAutoTestDtoToPutModel(TestContainer result, ClassContainer container,
+    public static AutoTestUpdateApiModel ConvertAutoTestDtoToPutModel(TestContainer result, ClassContainer container,
         string projectId)
     {
-        return new AutoTestPutModel(externalId: result.ExternalId!, name: result.DisplayName!)
+        return new AutoTestUpdateApiModel(externalId: result.ExternalId!, name: result.DisplayName!)
         {
             ExternalId = result.ExternalId!,
             Links = ConvertLinksToPutModel(result.Links),
             ProjectId = new Guid(projectId),
             Namespace = result.Namespace!,
             Classname = result.ClassName!,
-            Steps = ConvertStepsToModel(result.Steps),
-            Setup = ConvertFixturesToModel(container.Befores),
-            Teardown = ConvertFixturesToModel(container.Afters),
+            Steps = ConvertStepsToStepApiModel(result.Steps),
+            Setup = ConvertFixturesToStepApiModel(container.Befores),
+            Teardown = ConvertFixturesToStepApiModel(container.Afters),
             Title = result.Title!,
             Description = result.Description!,
-            Labels = ConvertLabelsToPostModel(result.Labels),
+            Labels = ConvertLabelsToApiModel(result.Labels),
             ExternalKey = result.ExternalKey!,
         };
     }
@@ -56,7 +56,7 @@ public static class Converter
         {
             StatusCode = result.Status.ToString(),
             ConfigurationId = new Guid(configurationId),
-            Links = ConvertLinksToPostModel(result.ResultLinks),
+            Links = ConvertLinksToLinkPostModels(result.ResultLinks),
             Message = result.Message!,
             Traces = result.Trace!,
             StartedOn = DateTimeOffset.FromUnixTimeMilliseconds(container.Start).UtcDateTime,
@@ -106,7 +106,21 @@ public static class Converter
             }).ToList();
     }
 
-    private static List<LinkPostModel> ConvertLinksToPostModel(IEnumerable<Link> links)
+    private static List<LinkCreateApiModel> ConvertLinksToCreateApiModel(IEnumerable<Link> links)
+    {
+        return links.Select(l =>
+            new LinkCreateApiModel(url: l.Url)
+            {
+                Title = l.Title!,
+                Description = l.Description!,
+                Type = l.Type != null
+                    ? Enum.Parse<LinkType>(l.Type.ToString())
+                    : null
+            }
+        ).ToList();
+    }
+    
+    private static List<LinkPostModel> ConvertLinksToLinkPostModels(IEnumerable<Link> links)
     {
         return links.Select(l =>
             new LinkPostModel(url: l.Url)
@@ -120,10 +134,10 @@ public static class Converter
         ).ToList();
     }
 
-    private static List<LinkPutModel> ConvertLinksToPutModel(IEnumerable<Link> links)
+    private static List<LinkUpdateApiModel> ConvertLinksToPutModel(IEnumerable<Link> links)
     {
         return links.Select(l =>
-            new LinkPutModel(url: l.Url)
+            new LinkUpdateApiModel(url: l.Url)
             {
                 Title = l.Title!,
                 Description = l.Description!,
@@ -134,28 +148,28 @@ public static class Converter
         ).ToList();
     }
 
-    private static List<LabelPostModel> ConvertLabelsToPostModel(IEnumerable<string> labels)
+    private static List<LabelApiModel> ConvertLabelsToApiModel(IEnumerable<string> labels)
     {
         return labels.Select(l =>
-                new LabelPostModel(l))
+                new LabelApiModel(l))
             .ToList();
     }
 
-    private static List<AutoTestStepModel> ConvertStepsToModel(IEnumerable<StepResult> stepDtos)
+    private static List<AutoTestStepApiModel> ConvertStepsToStepApiModel(IEnumerable<StepResult> stepDtos)
     {
         return stepDtos
-            .Select(s => new AutoTestStepModel(
+            .Select(s => new AutoTestStepApiModel(
                 s.DisplayName!,
                 s.Description!,
-                ConvertStepsToModel(s.Steps))).ToList();
+                ConvertStepsToStepApiModel(s.Steps))).ToList();
     }
 
-    private static List<AutoTestStepModel> ConvertFixturesToModel(IEnumerable<FixtureResult> fixtures)
+    private static List<AutoTestStepApiModel> ConvertFixturesToStepApiModel(IEnumerable<FixtureResult> fixtures)
     {
         return fixtures
-            .Select(s => new AutoTestStepModel(
+            .Select(s => new AutoTestStepApiModel(
                 s.DisplayName!,
                 s.Description!,
-                ConvertStepsToModel(s.Steps))).ToList();
+                ConvertStepsToStepApiModel(s.Steps))).ToList();
     }
 }

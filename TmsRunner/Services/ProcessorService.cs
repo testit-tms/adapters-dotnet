@@ -15,7 +15,6 @@ using AutoTest = TmsRunner.Entities.AutoTest.AutoTest;
 using AutoTestStep = TmsRunner.Entities.AutoTest.AutoTestStep;
 using AutoTestStepResult = TmsRunner.Entities.AutoTest.AutoTestStepResult;
 using File = Tms.Adapter.Models.File;
-using TmsRunner.Extensions;
 
 namespace TmsRunner.Services;
 
@@ -190,8 +189,8 @@ public sealed partial class ProcessorService(ILogger<ProcessorService> logger,
         {
             HtmlEscapeUtils.EscapeHtmlInObject(autoTest);
 
-            var existAutotestModel = await apiClient.CreateAutotestAsync(autoTest).ConfigureAwait(false);
-            existAutotestResult = existAutotestModel.ToApiResult();
+            var existAutoTestApiResult = await apiClient.CreateAutotestAsync(autoTest).ConfigureAwait(false);
+            existAutotestResult = existAutoTestApiResult;
         }
         else
         {

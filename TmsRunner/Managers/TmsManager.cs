@@ -175,7 +175,7 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
         return autotest;
     }
 
-    public async Task<AutoTestModel> CreateAutotestAsync(AutoTest dto)
+    public async Task<AutoTestApiResult> CreateAutotestAsync(AutoTest dto)
     {
         logger.LogDebug("Creating autotest {@Autotest}", dto);
 
@@ -266,7 +266,7 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
         }
     }
 
-    public async Task<List<WorkItemIdentifierModel>> GetWorkItemsLinkedToAutoTestAsync(string autotestId)
+    public async Task<List<AutoTestWorkItemIdentifierApiResult>> GetWorkItemsLinkedToAutoTestAsync(string autotestId)
     {
         return await autoTestsApi.GetWorkItemsLinkedToAutoTestAsync(autotestId);
     }

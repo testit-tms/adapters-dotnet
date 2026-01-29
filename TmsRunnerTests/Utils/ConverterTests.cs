@@ -38,7 +38,7 @@ public class ConverterTests
         var actual = Converter.ConvertAutoTestDtoToPutModel(autotest, id);
 
         // Assert
-        Assert.IsInstanceOfType<AutoTestPutModel>(actual);
+        Assert.IsInstanceOfType<AutoTestUpdateApiModel>(actual);
         Assert.IsNotNull(actual);
     }
 
@@ -53,7 +53,7 @@ public class ConverterTests
         var actual = Converter.ConvertAutoTestDtoToPostModel(autotest, id);
 
         // Assert
-        Assert.IsInstanceOfType<AutoTestPostModel>(actual);
+        Assert.IsInstanceOfType<AutoTestCreateApiModel>(actual);
         Assert.IsNotNull(actual);
     }
 }
