@@ -15,7 +15,7 @@ The repository contains adapters for .NET test frameworks that integrate automat
 | 5.4     | 1.9.6-TMS-5.4   | 1.9.6-TMS-5.4   | 1.9.6-TMS-5.4   | 1.9.6-TMS-5.4   |
 | 5.5     | 1.10.1-TMS-5.5  | 1.10.1-TMS-5.5  | 1.10.1-TMS-5.5  | 1.10.1-TMS-5.5  |
 | 5.6     | 1.12.0-TMS-5.6  | 1.12.0-TMS-5.6  | 1.12.0-TMS-5.6  | 1.12.0-TMS-5.6  |
-| Cloud   | 1.10.2 +        | 1.10.2 +        | 1.10.2 +        | 1.10.2 +        |
+| Cloud   | 1.12.0 +        | 1.12.0 +        | 1.12.0 +        | 1.12.0 +        |
 
 1. For current versions, see the releases tab. 
 2. Starting with 5.2, we have added a TMS postscript, which means that the utility is compatible with a specific enterprise version. 
