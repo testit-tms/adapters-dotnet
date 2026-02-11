@@ -139,12 +139,18 @@ public static partial class LogParser
         var messages = matches
             .Select(match =>
             {
-                if (Enum.TryParse(match.Groups[1].Value, true, out MessageType type))
+                if (match.Groups.Count < 3)
+                {
+                    return null;
+                }
+                var typeStr = match.Groups[1].Value;
+                var valueStr = match.Groups[2].Value;
+                if (Enum.TryParse(typeStr, true, out MessageType type))
                 {
                     return new MessageMetadata
                     {
                         Type = type,
-                        Value = match.Groups[2].Value
+                        Value = valueStr
                     };
                 }
                 return null;
