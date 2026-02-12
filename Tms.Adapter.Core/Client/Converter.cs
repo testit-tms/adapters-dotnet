@@ -23,7 +23,7 @@ public static class Converter
             Teardown = ConvertFixturesToStepApiModel(container.Afters),
             Title = result.Title!,
             Description = result.Description!,
-            Labels = ConvertLabelsToApiModel(result.Labels),
+            Tags = result.Tags,
             ExternalKey = result.ExternalKey!,
         };
     }
@@ -43,7 +43,7 @@ public static class Converter
             Teardown = ConvertFixturesToStepApiModel(container.Afters),
             Title = result.Title!,
             Description = result.Description!,
-            Labels = ConvertLabelsToApiModel(result.Labels),
+            Tags = result.Tags,
             ExternalKey = result.ExternalKey!,
         };
     }

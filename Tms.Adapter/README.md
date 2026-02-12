@@ -91,7 +91,7 @@ Description of attributes:
 * `ExternalId` - unique internal autotest ID (used in Test IT)
 * `Title` - autotest name specified in the autotest card. If not specified, the name from the displayName method is used
 * `Description` - autotest description specified in the autotest card
-* `Labels` - tags listed in the autotest card
+* `Tags` - tags listed in the autotest card
 * `Links` - links listed in the autotest card
 * `Step` - the designation of the step
 
@@ -139,7 +139,7 @@ public class SampleTests {
     [ExternalId("all_annotations_test")]
     [Title("All Annotations Test Title")]
     [DisplayName("All Annotations Test Display Name")]
-    [Labels("tag01", "tag02")]
+    [Tags("tag01", "tag02")]
     [Atr.Description("All Annotations Test Description")]
     [Links(url: "https://testit.ru/", LinkType.Related, "TestTitle", "TestDescr")]
     [Links(url: "https://testit.ru/", LinkType.Defect)]
