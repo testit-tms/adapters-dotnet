@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 
@@ -44,8 +44,12 @@ public sealed partial class ProcessorService(ILogger<ProcessorService> logger,
                             break;
                         }
 
-                        stepsTable.Add(step.Guid, step);
-                        
+                        if (!stepsTable.TryAdd(step.Guid, step))
+                        {
+                            logger.LogWarning("Duplicate step Guid ignored: {Guid}", step.Guid);
+                            break;
+                        }
+
                         if ((step.CallerMethodType != null && parentStep == null) ||
                             (step.CurrentMethodType != null && parentStep == null))
                         {
@@ -100,7 +104,12 @@ public sealed partial class ProcessorService(ILogger<ProcessorService> logger,
                 case MessageType.TmsStepAttachmentAsText:
                     {
                         var attachment = JsonConvert.DeserializeObject<File>(message.Value ?? string.Empty);
-                        using var ms = new MemoryStream(Encoding.UTF8.GetBytes(attachment!.Content));
+                        if (attachment == null)
+                        {
+                            logger.LogWarning("Can not deserialize attachment: {Attachment}", message.Value ?? string.Empty);
+                            break;
+                        }
+                        using var ms = new MemoryStream(Encoding.UTF8.GetBytes(attachment.Content ?? ""));
                         var createdAttachment =
                             await apiClient.UploadAttachmentAsync(Path.GetFileName(attachment.Name), ms).ConfigureAwait(false);
 
@@ -118,8 +127,13 @@ public sealed partial class ProcessorService(ILogger<ProcessorService> logger,
                 case MessageType.TmsStepAttachment:
                     {
                         var file = JsonConvert.DeserializeObject<File>(message.Value ?? string.Empty);
+                        if (file == null)
+                        {
+                            logger.LogWarning("Can not deserialize attachment file: {File}", message.Value ?? string.Empty);
+                            break;
+                        }
 
-                        if (System.IO.File.Exists(file!.PathToFile))
+                        if (!string.IsNullOrEmpty(file.PathToFile) && System.IO.File.Exists(file.PathToFile))
                         {
                             await using var fs = new FileStream(file.PathToFile, FileMode.Open, FileAccess.Read);
                             var attachment = await apiClient.UploadAttachmentAsync(Path.GetFileName(file.PathToFile), fs).ConfigureAwait(false);
@@ -155,7 +169,7 @@ public sealed partial class ProcessorService(ILogger<ProcessorService> logger,
         var regex = CalledMethodRegex();
         var match = regex.Match(calledMethod);
 
-        return match.Groups[1].Value;
+        return match.Success ? match.Groups[1].Value : calledMethod;
     }
 
     public async Task ProcessAutoTestAsync(TestResult testResult)
@@ -174,7 +188,7 @@ public sealed partial class ProcessorService(ILogger<ProcessorService> logger,
             .ToList();
 
         autoTest.Steps = testCaseSteps
-            .Where(x => x.CallerMethodType == CallerMethodType.TestMethod)
+            .Where(x => x.CallerMethodType == CallerMethodType.TestMethod || x.CallerMethodType == null)
             .Select(AutoTestStep.ConvertFromStep)
             .ToList();
 
@@ -249,7 +263,7 @@ public sealed partial class ProcessorService(ILogger<ProcessorService> logger,
     {
         var stepResults =
             testCaseSteps
-                .Where(x => x.CallerMethodType == CallerMethodType.TestMethod)
+                .Where(x => x.CallerMethodType == CallerMethodType.TestMethod || x.CallerMethodType == null)
                 .Select(AutoTestStepResult.ConvertFromStep).ToList();
 
         var setupResults =

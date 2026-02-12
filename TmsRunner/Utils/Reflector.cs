@@ -43,22 +43,7 @@ public static class Reflector
     private static bool CompareParameters(ParameterInfo[] methodParameters,
                                           Dictionary<string, string> parameters)
     {
-        if (methodParameters.Length != parameters.Count)
-        {
-            return false;
-        }
-
-        var i = 0;
-        foreach (var parameter in parameters)
-        {
-            if (parameter.Key != methodParameters[i].Name)
-            {
-                return false;
-            }
-
-            i++;
-        }
-
-        return true;
+        return methodParameters.Length == parameters.Count &&
+               methodParameters.All(p => parameters.ContainsKey(p.Name ?? ""));
     }
 }

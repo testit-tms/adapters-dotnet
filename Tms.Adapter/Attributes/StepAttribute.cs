@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using MethodBoundaryAspect.Fody.Attributes;
@@ -26,19 +26,8 @@ public class StepAttribute : OnMethodBoundaryAspect
         _startedAt = DateTime.UtcNow;
         _guid = Guid.NewGuid();
 
-        var stackTrace = new StackTrace();
         var currentMethod = arg.Method;
-        var regex = new Regex("at (.*)\\.([^.]*)\\(");
-        var caller = regex.Match(stackTrace.ToString().Split(Environment.NewLine)[2]);
-        var type = arg.Instance?.GetType();
-
-        if (type is not null)
-        {
-            _callerMethod = type.GetMethod(caller.Groups[2].Value);
-            if (_callerMethod == null)
-                _callerMethod = type.GetMethod(caller.Groups[2].Value,
-                    BindingFlags.Instance | BindingFlags.NonPublic);
-        }
+        _callerMethod = GetCallerMethod(currentMethod);
 
         var arguments = arg.Arguments
             .Select(Convert.ToString)
@@ -120,7 +109,7 @@ public class StepAttribute : OnMethodBoundaryAspect
             Title = Replacer.ReplaceParameters(newTitle, parameters),
             Description = newDescription,
             CurrentMethod = currentMethod.Name,
-            CallerMethod = _callerMethod?.Name.Replace("$_executor_", ""),
+            CallerMethod = GetCallerDisplayName(_callerMethod),
             Instance = arg.Instance?.GetType().Name,
             Args = parameters,
             CallerMethodType = _callerMethodType,
@@ -138,6 +127,51 @@ public class StepAttribute : OnMethodBoundaryAspect
     public override void OnException(MethodExecutionArgs arg)
     {
         WriteData("Failed");
+    }
+
+    private static MethodBase? GetCallerMethod(MethodBase currentMethod)
+    {
+        var frames = new StackTrace().GetFrames();
+        if (frames == null)
+        {
+            return null;
+        }
+
+        var aspectType = typeof(StepAttribute);
+        foreach (var frame in frames)
+        {
+            var method = frame?.GetMethod();
+            if (method == null)
+            {
+                continue;
+            }
+
+            if (method.DeclaringType == aspectType)
+            {
+                continue;
+            }
+
+            if (method == currentMethod)
+            {
+                continue;
+            }
+
+            return method;
+        }
+        return null;
+    }
+
+    private static string? GetCallerDisplayName(MethodBase? method)
+    {
+        if (method == null)
+        {
+            return null;
+        }
+
+        var name = method.Name.Replace("$_executor_", "");
+        var typeName = method.DeclaringType?.Name ?? "";
+        var match = Regex.Match(typeName, @"^<(.+)>d__\d+$");
+        return match.Success ? match.Groups[1].Value : name;
     }
 
     private void WriteData(string outcome, object? result = null)

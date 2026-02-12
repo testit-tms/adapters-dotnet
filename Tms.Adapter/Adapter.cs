@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 
 using Newtonsoft.Json;
 
@@ -31,9 +31,8 @@ public static class Adapter
     public static void AddAttachments(string pathToFile)
     {
         var stackTrace = new StackTrace();
-        var memberName = stackTrace.GetFrame(1)
-            .GetMethod().Name
-            .Replace("$_executor_", string.Empty);
+        var frame = stackTrace.GetFrame(1);
+        var memberName = frame?.GetMethod()?.Name?.Replace("$_executor_", string.Empty) ?? "Unknown";
 
         var fullPath = Path.GetFullPath(pathToFile);
 
@@ -53,9 +52,8 @@ public static class Adapter
     public static void AddAttachments(string content, string name)
     {
         var stackTrace = new StackTrace();
-        var memberName = stackTrace.GetFrame(1)
-            .GetMethod().Name
-            .Replace("$_executor_", string.Empty);
+        var frame = stackTrace.GetFrame(1);
+        var memberName = frame?.GetMethod()?.Name?.Replace("$_executor_", string.Empty) ?? "Unknown";
 
         Console.WriteLine($"{MessageType.TmsStepAttachmentAsText}: " +
                           JsonConvert.SerializeObject(new Models.File
