@@ -73,7 +73,7 @@ public sealed partial class FilterService(ILogger<FilterService> logger)
 
     public List<TestCase> FilterTestCasesByLabels(AdapterConfig config, IReadOnlyCollection<TestCase> testCases)
     {
-        var tagsToRun = config.TmsLabelsOfTestsToRun?.Split(',').Select(x => x.Trim()).ToList();
+        var labelsToRun = config.TmsLabelsOfTestsToRun?.Split(',').Select(x => x.Trim()).ToList();
         var testCasesToRun = new List<TestCase>();
         var assembly = Assembly.LoadFrom(config.TestAssemblyPath ?? string.Empty);
         var allTestMethods = new List<MethodInfo>(assembly.GetExportedTypes().SelectMany(type => type.GetMethods()));
@@ -96,14 +96,14 @@ public sealed partial class FilterService(ILogger<FilterService> logger)
             foreach (var attribute in customAttributes)
             {
                 if (attribute is not LabelsAttribute labelsAttr) continue;
-                if (!(labelsAttr.Value?.Any(x => tagsToRun?.Contains(x) ?? false) ?? false)) continue;
+                if (!(labelsAttr.Value?.Any(x => labelsToRun?.Contains(x) ?? false) ?? false)) continue;
                 if (testCase != null)
                 {
                     testCasesToRun.Add(testCase);
                 }
                 
                 if (attribute is not TagsAttribute tagsAttr) continue;
-                if (!(tagsAttr.Value?.Any(x => tagsToRun?.Contains(x) ?? false) ?? false)) continue;
+                if (!(tagsAttr.Value?.Any(x => labelsToRun?.Contains(x) ?? false) ?? false)) continue;
                 if (testCase != null)
                 {
                     testCasesToRun.Add(testCase);

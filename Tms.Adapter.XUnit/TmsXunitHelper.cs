@@ -123,7 +123,7 @@ public static class TmsXunitHelper
                     break;
 
                 case LabelsAttribute labels:
-                    testResult.Tags = labels.Lables;
+                    testResult.Labels = labels.Lables;
                     break;
                 
                 case TagsAttribute tags:

@@ -111,7 +111,7 @@ public static partial class LogParser
                     }
                 case LabelsAttribute labels:
                     {
-                        autoTest.Tags = labels.Value;
+                        autoTest.Labels = labels.Value;
                         break;
                     }
                 case TagsAttribute tags:

@@ -65,6 +65,10 @@ public static class TmsTagParser
                     testContainer.Description = Replacer.ReplaceParameters(parseSpaceInTag(tagValue), parameters);
                     break;
                 case Labels:
+                    testContainer.Labels = parseSpaceInTag(tagValue)
+                        .Split(TagValueDelimiter)
+                        .ToList();
+                    break;
                 case Tags:
                     testContainer.Tags = parseSpaceInTag(tagValue)
                         .Split(TagValueDelimiter)

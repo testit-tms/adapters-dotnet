@@ -30,6 +30,7 @@ public static class Converter
             Teardown = ConvertStepsToModel(autotest.Teardown) ?? [],
             Title = autotest.Title ?? string.Empty,
             Description = autotest.Description ?? string.Empty,
+            Labels = ConvertLabelsToModel(autotest.Labels) ?? [],
             Tags = autotest.Tags ?? []
         };
     }
@@ -57,6 +58,7 @@ public static class Converter
             Teardown = ConvertStepsToModel(autotest.Teardown) ?? [],
             Title = autotest.Title ?? string.Empty,
             Description = autotest.Description ?? string.Empty,
+            Labels = ConvertLabelsToModel(autotest.Labels) ?? [],
             Tags = autotest.Tags ?? [],
             IsFlaky = autotest.IsFlaky
         };
