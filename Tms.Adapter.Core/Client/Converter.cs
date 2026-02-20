@@ -24,6 +24,7 @@ public static class Converter
             Title = result.Title!,
             Description = result.Description!,
             Labels = ConvertLabelsToApiModel(result.Labels),
+            Tags = result.Tags,
             ExternalKey = result.ExternalKey!,
         };
     }
@@ -44,6 +45,7 @@ public static class Converter
             Title = result.Title!,
             Description = result.Description!,
             Labels = ConvertLabelsToApiModel(result.Labels),
+            Tags = result.Tags,
             ExternalKey = result.ExternalKey!,
         };
     }

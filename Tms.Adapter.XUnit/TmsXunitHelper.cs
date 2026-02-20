@@ -125,6 +125,10 @@ public static class TmsXunitHelper
                 case LabelsAttribute labels:
                     testResult.Labels = labels.Lables;
                     break;
+                
+                case TagsAttribute tags:
+                    testResult.Tags = tags.Tags;
+                    break;
 
                 case TitleAttribute title:
                     testResult.Title = ReplaceParameters(title.Value, testResult.Parameters!);

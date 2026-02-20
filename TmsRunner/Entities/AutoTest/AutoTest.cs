@@ -16,6 +16,7 @@ public sealed record AutoTest
     public List<string?> WorkItemIds { get; set; } = [];
     public List<Link>? Links { get; set; } = [];
     public List<string>? Labels { get; set; }
+    public List<string>? Tags { get; set; }
     public string? MethodName { get; set; }
     public string? Message { get; set; }
     public bool? IsFlaky { get; set; }

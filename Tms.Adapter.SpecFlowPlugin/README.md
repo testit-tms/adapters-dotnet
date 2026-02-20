@@ -101,7 +101,8 @@ Description of attributes:
 * `ExternalId` - unique internal autotest ID (used in Test IT)
 * `Title` - autotest name specified in the autotest card. If not specified, the name from the displayName method is used
 * `Description` - autotest description specified in the autotest card
-* `Labels` - tags listed in the autotest card
+* `Labels` - labels listed in the autotest card
+* `Tags` - tags listed in the autotest card
 * `Links` - links listed in the autotest card
 
 If you want to insert a space in the tags, use the "\\_" character combination.
@@ -123,7 +124,7 @@ Feature: Simple
   @DisplayName=With_all_annotations_success_display_name
   @Title=With_all_annotations_success_title
   @Description=With_all_annotations_success
-  @Labels=Label1,Label2
+  @Tags=Tag1,Tag2
   @Links={"url":"https://test01.example","title":"Example01","description":"Example01_description","type":"Issue"}
   @Links={"url":"https://test02.example","title":"Example02","description":"Example02_description","type":"Issue"}
   @WorkItemIds=123,321

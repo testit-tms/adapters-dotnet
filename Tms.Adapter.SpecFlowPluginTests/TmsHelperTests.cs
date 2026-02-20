@@ -76,6 +76,7 @@ namespace Tms.Adapter.SpecFlowPluginTests
                 { "Title", RandomUtils.GetRandomString() },
                 { "Description", RandomUtils.GetRandomString() },
                 { "Labels", RandomUtils.GetRandomString() + tagValueDelimiter + RandomUtils.GetRandomString() },
+                { "Tags", RandomUtils.GetRandomString() + tagValueDelimiter + RandomUtils.GetRandomString() },
                 { "Links", JsonConvert.SerializeObject(linkDictionary)},
                 { "WorkItemIds", new Random().Next().ToString(CultureInfo.InvariantCulture) + tagValueDelimiter + new Random().Next().ToString(CultureInfo.InvariantCulture) }
             };
@@ -106,6 +107,9 @@ namespace Tms.Adapter.SpecFlowPluginTests
 
             Assert.AreEqual(result.Labels[0], tagsDictionary["Labels"].Split(tagValueDelimiter)[0]);
             Assert.AreEqual(result.Labels[1], tagsDictionary["Labels"].Split(tagValueDelimiter)[1]);
+            
+            Assert.AreEqual(result.Tags[0], tagsDictionary["Tags"].Split(tagValueDelimiter)[0]);
+            Assert.AreEqual(result.Tags[1], tagsDictionary["Tags"].Split(tagValueDelimiter)[1]);
 
             Assert.AreEqual(result.Links[0].Url, linkDictionary["url"]);
             Assert.AreEqual(result.Links[0].Title, linkDictionary["title"]);

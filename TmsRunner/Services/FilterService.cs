@@ -101,6 +101,13 @@ public sealed partial class FilterService(ILogger<FilterService> logger)
                 {
                     testCasesToRun.Add(testCase);
                 }
+                
+                if (attribute is not TagsAttribute tagsAttr) continue;
+                if (!(tagsAttr.Value?.Any(x => labelsToRun?.Contains(x) ?? false) ?? false)) continue;
+                if (testCase != null)
+                {
+                    testCasesToRun.Add(testCase);
+                }
             }
         }
 

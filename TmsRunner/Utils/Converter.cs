@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Xml.Linq;
 using TestIT.ApiClient.Model;
 using TmsRunner.Entities.AutoTest;
 using AutoTest = TmsRunner.Entities.AutoTest.AutoTest;
@@ -32,7 +30,8 @@ public static class Converter
             Teardown = ConvertStepsToModel(autotest.Teardown) ?? [],
             Title = autotest.Title ?? string.Empty,
             Description = autotest.Description ?? string.Empty,
-            Labels = ConvertLabelsToModel(autotest.Labels) ?? []
+            Labels = ConvertLabelsToModel(autotest.Labels) ?? [],
+            Tags = autotest.Tags ?? []
         };
     }
 
@@ -60,6 +59,7 @@ public static class Converter
             Title = autotest.Title ?? string.Empty,
             Description = autotest.Description ?? string.Empty,
             Labels = ConvertLabelsToModel(autotest.Labels) ?? [],
+            Tags = autotest.Tags ?? [],
             IsFlaky = autotest.IsFlaky
         };
     }

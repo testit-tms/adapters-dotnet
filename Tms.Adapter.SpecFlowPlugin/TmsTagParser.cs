@@ -21,6 +21,7 @@ public static class TmsTagParser
     private const string DisplayName = "DISPLAYNAME";
     private const string Description = "DESCRIPTION";
     private const string Labels = "LABELS";
+    private const string Tags = "TAGS";
     private const string Links = "LINKS";
     private const string WorkItemIds = "WORKITEMIDS";
 
@@ -65,6 +66,11 @@ public static class TmsTagParser
                     break;
                 case Labels:
                     testContainer.Labels = parseSpaceInTag(tagValue)
+                        .Split(TagValueDelimiter)
+                        .ToList();
+                    break;
+                case Tags:
+                    testContainer.Tags = parseSpaceInTag(tagValue)
                         .Split(TagValueDelimiter)
                         .ToList();
                     break;
