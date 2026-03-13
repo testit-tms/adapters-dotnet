@@ -88,8 +88,8 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
       - name: Setup environment
         run: |
-          dotnet remove dotnet-examples/${{ matrix.project_name }}/${{ matrix.project_name }}.csproj package TestIT.Adapter
-          dotnet add dotnet-examples/${{ matrix.project_name }}/${{ matrix.project_name }}.csproj reference Tms.Adapter/Tms.Adapter.csproj
+          dotnet remove ${{ env.TEST_ROOT }}/${{ matrix.project_name }}.csproj package TestIT.Adapter
+          dotnet add ${{ env.TEST_ROOT }}/${{ matrix.project_name }}.csproj reference Tms.Adapter/Tms.Adapter.csproj
           dotnet build --configuration Release --property WarningLevel=0 dotnet-examples/${{ matrix.project_name }}
           dotnet build --configuration Release --property WarningLevel=0 TmsRunner
           dotnet build --configuration Debug --property WarningLevel=0 api-validator-dotnet
