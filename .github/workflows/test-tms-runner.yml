@@ -86,6 +86,22 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: ${{ env.PYTHON_VERSION }}
+      - name: Debug workspace structure
+        run: |
+          echo "=== pwd ==="
+          pwd
+          echo "=== ls -la ==="
+          ls -la
+          echo "=== TEST_ROOT=${{ env.TEST_ROOT }} ==="
+          echo "=== Project file path: ${{ env.TEST_ROOT }}/${{ matrix.project_name }}.csproj ==="
+          echo "=== Does project file exist? ==="
+          test -f "${{ env.TEST_ROOT }}/${{ matrix.project_name }}.csproj" && echo "YES" || echo "NO"
+          echo "=== find dotnet-examples -name '*.csproj' ==="
+          find dotnet-examples -name "*.csproj" 2>/dev/null || true
+          echo "=== ls -la dotnet-examples (if exists) ==="
+          ls -la dotnet-examples 2>/dev/null || echo "dotnet-examples not found"
+          echo "=== ls -la dotnet-examples/${{ matrix.project_name }} (if exists) ==="
+          ls -la dotnet-examples/${{ matrix.project_name }} 2>/dev/null || echo "not found"
       - name: Setup environment
         run: |
           dotnet remove ${{ env.TEST_ROOT }}/${{ matrix.project_name }}.csproj package TestIT.Adapter
