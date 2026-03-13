@@ -11,7 +11,6 @@ on:
       - "!**.csproj"
   workflow_dispatch:
 env:
-  DOTNET_VERSION: 8
   GITHUB_PAT: ${{ secrets.SERVICE_ACCOUNT_TOKEN }}
   PYTHON_VERSION: 3.12
   TEMP_FILE: tmp/output.txt
@@ -22,25 +21,49 @@ env:
   TMS_URL: ${{ secrets.TESTIT_URL }}
 jobs:
   test:
-    name: ${{ matrix.project_name }}
+    name: ${{ matrix.project_name }} (.NET ${{ matrix.dotnet_version }})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         include:
-          - configuration_id: MSTEST_CONFIGURATION_ID
+          - dotnet_version: 8.0.x
+            dotnet_framework: net8.0
+            configuration_id: MSTEST_CONFIGURATION_ID
             project_id: MSTEST_PROJECT_ID
             project_name: MsTest
-          - configuration_id: NUNIT_CONFIGURATION_ID
+          - dotnet_version: 8.0.x
+            dotnet_framework: net8.0
+            configuration_id: NUNIT_CONFIGURATION_ID
+            project_id: NUNIT_PROJECT_ID
+            project_name: NUnitTests
+          - dotnet_version: 9.0.x
+            dotnet_framework: net9.0
+            configuration_id: MSTEST_CONFIGURATION_ID
+            project_id: MSTEST_PROJECT_ID
+            project_name: MsTest
+          - dotnet_version: 9.0.x
+            dotnet_framework: net9.0
+            configuration_id: NUNIT_CONFIGURATION_ID
+            project_id: NUNIT_PROJECT_ID
+            project_name: NUnitTests
+          - dotnet_version: 10.0.x
+            dotnet_framework: net10.0
+            configuration_id: MSTEST_CONFIGURATION_ID
+            project_id: MSTEST_PROJECT_ID
+            project_name: MsTest
+          - dotnet_version: 10.0.x
+            dotnet_framework: net10.0
+            configuration_id: NUNIT_CONFIGURATION_ID
             project_id: NUNIT_PROJECT_ID
             project_name: NUnitTests
     env:
       TMS_CONFIGURATION_ID: ${{ secrets[matrix.configuration_id] }}
       TMS_PROJECT_ID: ${{ secrets[matrix.project_id] }}
-      TMS_RUNNER: TmsRunner/bin/Release/net8.0/linux-x64/TmsRunner
+      TMS_RUNNER: TmsRunner/bin/Release/${{ matrix.dotnet_framework }}/linux-x64/TmsRunner
       TMS_TEST_RUN_NAME: ${{ matrix.project_name }} TestRun
       TEST_ROOT: dotnet-examples/${{ matrix.project_name }}/${{ matrix.project_name }}
-      TEST_DLL: ${GITHUB_WORKSPACE}/$TEST_ROOT/bin/Release/net8.0/${{ matrix.project_name }}.dll
+      TEST_DLL: ${{ github.workspace }}/dotnet-examples/${{ matrix.project_name }}/${{ matrix.project_name }}/bin/Release/net8.0/${{ matrix.project_name }}.dll
     steps:
       - name: Checkout adapters-dotnet
         uses: actions/checkout@v4
@@ -58,15 +81,15 @@ jobs:
       - name: Setup dotnet
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
+          dotnet-version: ${{ matrix.dotnet_version }}
       - name: Setup python
         uses: actions/setup-python@v5
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       - name: Setup environment
         run: |
-          dotnet remove ${{ env.TEST_ROOT }}/${{ matrix.project_name }}.csproj package TestIT.Adapter
-          dotnet add ${{ env.TEST_ROOT }}/${{ matrix.project_name }}.csproj reference Tms.Adapter/Tms.Adapter.csproj
+          dotnet remove dotnet-examples/${{ matrix.project_name }}/${{ matrix.project_name }}.csproj package TestIT.Adapter
+          dotnet add dotnet-examples/${{ matrix.project_name }}/${{ matrix.project_name }}.csproj reference Tms.Adapter/Tms.Adapter.csproj
           dotnet build --configuration Release --property WarningLevel=0 dotnet-examples/${{ matrix.project_name }}
           dotnet build --configuration Release --property WarningLevel=0 TmsRunner
           dotnet build --configuration Debug --property WarningLevel=0 api-validator-dotnet
