@@ -7,7 +7,7 @@ public sealed class TestAssemblyLoadContext : AssemblyLoadContext
 {
     private static readonly string[] _skippedAssemblyNames =
     [
-        nameof(Tms.Adapter)
+        "Tms.Adapter"
     ];
 
     private readonly string _basePath;
