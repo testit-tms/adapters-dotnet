@@ -20,9 +20,7 @@ public sealed partial class FilterService(ILogger<FilterService> logger)
                                           IReadOnlyCollection<TestCase> testCases)
     {
         var testCasesToRun = new List<TestCase>();
-        var path = assemblyPath ?? string.Empty;
-        var alc = new TestAssemblyLoadContext(path);
-        var assembly = alc.LoadFromAssemblyPath(Path.GetFullPath(path));
+        var assembly = TestAssemblyLoadContext.LoadTestAssembly(assemblyPath ?? string.Empty);
         var allTestMethods = new List<MethodInfo>(assembly.GetExportedTypes()
             .SelectMany(type => type.GetMethods()));
 
@@ -77,9 +75,7 @@ public sealed partial class FilterService(ILogger<FilterService> logger)
     {
         var labelsToRun = config.TmsLabelsOfTestsToRun?.Split(',').Select(x => x.Trim()).ToList();
         var testCasesToRun = new List<TestCase>();
-        var path = config.TestAssemblyPath ?? string.Empty;
-        var alc = new TestAssemblyLoadContext(path);
-        var assembly = alc.LoadFromAssemblyPath(Path.GetFullPath(path));
+        var assembly = TestAssemblyLoadContext.LoadTestAssembly(config.TestAssemblyPath ?? string.Empty);
         var allTestMethods = new List<MethodInfo>(assembly.GetExportedTypes().SelectMany(type => type.GetMethods()));
 
         foreach (var testCase in testCases)
