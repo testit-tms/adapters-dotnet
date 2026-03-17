@@ -9,7 +9,7 @@ public static class Reflector
                                                    string methodName,
                                                    Dictionary<string, string>? parameters)
     {
-        var assembly = Assembly.LoadFrom(assemblyPath);
+        var assembly = TestAssemblyLoadContext.LoadTestAssembly(assemblyPath);
         var fullyQualifiedNameArray = methodName.Split(".");
         var type = assembly.GetType(string.Join(".", fullyQualifiedNameArray[..^1]));
         var methods = type?.GetMethods()
