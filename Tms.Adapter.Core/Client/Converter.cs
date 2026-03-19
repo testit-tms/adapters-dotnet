@@ -49,6 +49,23 @@ public static class Converter
             ExternalKey = result.ExternalKey!,
         };
     }
+    
+    // Undefined,
+    // Failed,
+    // Passed,
+    // Skipped,
+    private static TestStatusType MapToStatusType(string status)
+    {
+        switch (status)
+        {
+            case "Passed": return TestStatusType.Succeeded;
+            case "Failed": return TestStatusType.Failed;
+            case "Skipped": return TestStatusType.Incomplete;
+            case "Blocked": return TestStatusType.Incomplete;
+            case "InProgress": return TestStatusType.InProgress;
+            default: return TestStatusType.Incomplete;
+        }
+    }
 
     public static AutoTestResultsForTestRunModel ConvertResultToModel(TestContainer result, ClassContainer container,
         string configurationId)
@@ -56,7 +73,7 @@ public static class Converter
         return new AutoTestResultsForTestRunModel(
             autoTestExternalId: result.ExternalId!)
         {
-            StatusCode = result.Status.ToString(),
+            StatusType = MapToStatusType(result.Status.ToString()),
             ConfigurationId = new Guid(configurationId),
             Links = ConvertLinksToLinkPostModels(result.ResultLinks),
             Message = result.Message!,
