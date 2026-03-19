@@ -43,7 +43,7 @@ public sealed class TmsClient : ITmsClient, IDisposable
 
     public async Task<bool> IsAutotestExist(string externalId)
     {
-        var autotest = await GetAutotestByExternalId(externalId);
+        var autotest = await GetAutotestByExternalId(externalId).ConfigureAwait(false);
 
         return autotest != null;
     }
@@ -58,7 +58,7 @@ public sealed class TmsClient : ITmsClient, IDisposable
         // Escape HTML in the model before sending to API
         HtmlEscapeUtils.EscapeHtmlInObject(model);
 
-        await _autoTests.CreateAutoTestAsync(model);
+        await _autoTests.CreateAutoTestAsync(model).ConfigureAwait(false);
 
         _logger.LogDebug("Create autotest {ExternalId} is successfully", result.ExternalId);
     }
@@ -67,14 +67,14 @@ public sealed class TmsClient : ITmsClient, IDisposable
     {
         _logger.LogDebug("Updating autotest {ExternalId}", result.ExternalId);
 
-        var autotest = await GetAutotestByExternalId(result.ExternalId);
+        var autotest = await GetAutotestByExternalId(result.ExternalId).ConfigureAwait(false);
         var model = Converter.ConvertAutoTestDtoToPutModel(result, container, _settings.ProjectId);
         model.IsFlaky = autotest?.IsFlaky;
 
         // Escape HTML in the model before sending to API
         HtmlEscapeUtils.EscapeHtmlInObject(model);
 
-        await _autoTests.UpdateAutoTestAsync(model);
+        await _autoTests.UpdateAutoTestAsync(model).ConfigureAwait(false);
 
         _logger.LogDebug("Update autotest {ExternalId} is successfully", result.ExternalId);
     }
@@ -83,7 +83,7 @@ public sealed class TmsClient : ITmsClient, IDisposable
     {
         _logger.LogDebug("Updating links property for autotest {ExternalId}: {@Links}", externalId, links);
 
-        var autotest = await GetAutotestByExternalId(externalId);
+        var autotest = await GetAutotestByExternalId(externalId).ConfigureAwait(false);
 
         if (autotest == null)
         {
@@ -176,7 +176,7 @@ public sealed class TmsClient : ITmsClient, IDisposable
         {
             try
             {
-                await _autoTests.DeleteAutoTestLinkFromWorkItemAsync(autotestId, workItemId);
+                await _autoTests.DeleteAutoTestLinkFromWorkItemAsync(autotestId, workItemId).ConfigureAwait(false);
                 _logger.LogDebug(
                     "Unlink autotest {AutotestId} from workitem {WorkitemId} is successfully",
                     autotestId,
@@ -226,7 +226,7 @@ public sealed class TmsClient : ITmsClient, IDisposable
                 filename: Path.GetFileName(fileName),
                 content: content,
                 contentType: MimeTypes.GetMimeType(fileName))
-        );
+        ).ConfigureAwait(false);
 
         _logger.LogDebug("Upload attachment {@Attachment} is successfully", response);
 
@@ -253,7 +253,7 @@ public sealed class TmsClient : ITmsClient, IDisposable
         // Escape HTML in the model before sending to API
         HtmlEscapeUtils.EscapeHtmlInObject(createEmptyTestRunApiModel);
         
-        var testRun = await _testRuns.CreateEmptyAsync(createEmptyTestRunApiModel);
+        var testRun = await _testRuns.CreateEmptyAsync(createEmptyTestRunApiModel).ConfigureAwait(false);
 
         _settings.TestRunId = testRun.Id.ToString();
 
@@ -295,7 +295,7 @@ public sealed class TmsClient : ITmsClient, IDisposable
         // Escape HTML in the model before sending to API
         HtmlEscapeUtils.EscapeHtmlInObject(updateEmptyTestRunApiModel);
 
-        await _testRuns.UpdateEmptyAsync(updateEmptyTestRunApiModel);
+        await _testRuns.UpdateEmptyAsync(updateEmptyTestRunApiModel).ConfigureAwait(false);
 
         _logger.LogDebug("Test run updated");
     }
