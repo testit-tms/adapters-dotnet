@@ -6,4 +6,5 @@ public enum Status
     Failed,
     Passed,
     Skipped,
+    InProgress,
 }
