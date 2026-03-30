@@ -32,7 +32,6 @@ public class App(ILogger<App> logger,
         if (testCases.Count == 0)
         {
             logger.LogInformation("Can not found tests for run");
-
             return 1;
         }
 
