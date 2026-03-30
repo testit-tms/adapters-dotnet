@@ -146,8 +146,7 @@ public static class Converter
         {
             TestRunIds = [new Guid(testRunId)],
             ConfigurationIds = [new Guid(configurationId)],
-            // TODO: change to statusTypes
-            StatusCodes = ["InProgress"]
+            StatusTypes = [TestStatusApiType.InProgress]
         };
     }
 
