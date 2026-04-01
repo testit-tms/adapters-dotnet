@@ -1,4 +1,5 @@
 # Test IT TMS Adapter for SpecFlow
+![Test IT](https://raw.githubusercontent.com/testit-tms/adapters-dotnet/main/images/banner.png)
 
 ## Getting Started
 
