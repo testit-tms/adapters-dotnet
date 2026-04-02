@@ -65,7 +65,7 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
       - name: Setup environment
         run: |
-          dotnet remove ${{ env.TEST_ROOT }}/${{ matrix.project_name }}.csproj package TestIT.Adapter.${{ matrix.package_name }}
+          dotnet remove ${{ env.TEST_ROOT }}/${{ matrix.project_name }}.csproj package TestIT.Adapter.${{ matrix.package_name }} || true
           dotnet add ${{ env.TEST_ROOT }}/${{ matrix.project_name }}.csproj reference Tms.Adapter.Core/Tms.Adapter.Core.csproj
           dotnet add ${{ env.TEST_ROOT }}/${{ matrix.project_name }}.csproj reference ${{ env.ADAPTER_PACKAGE }}
           dotnet build --configuration Release --property WarningLevel=0 dotnet-examples/${{ matrix.project_name }}
