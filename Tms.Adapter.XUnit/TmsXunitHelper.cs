@@ -8,6 +8,23 @@ namespace Tms.Adapter.XUnit;
 
 public static class TmsXunitHelper
 {
+    private static int _initialized;
+
+    /// <summary>
+    /// Ensure SyncStorage worker status is set on first test and cleanup is registered.
+    /// </summary>
+    private static void EnsureInitialized()
+    {
+        if (Interlocked.CompareExchange(ref _initialized, 1, 0) == 0)
+        {
+            AdapterManager.Instance.OnRunningStarted();
+            AppDomain.CurrentDomain.ProcessExit += (_, _) =>
+            {
+                AdapterManager.Instance.OnBlockCompleted();
+            };
+        }
+    }
+
     public static void StartTestContainer(ITestCaseStarting testCaseStarting)
     {
         if (testCaseStarting.TestCase is not ITmsAccessor testResults)
@@ -20,6 +37,8 @@ public static class TmsXunitHelper
 
     public static void StartTestCase(ITestCaseMessage testCaseMessage)
     {
+        EnsureInitialized();
+
         if (testCaseMessage.TestCase is not ITmsAccessor testResults)
         {
             return;

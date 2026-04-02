@@ -23,11 +23,13 @@ public class TmsBindings
     {
         Adapter.UpdateTestRun().Wait();
         Adapter.CreateTestRun().Wait();
+        Adapter.OnRunningStarted();
     }
 
     [AfterTestRun]
     public static void AfterTestRun()
     {
+        Adapter.OnBlockCompleted();
         Adapter.CompleteTestRun().Wait();
     }
 
