@@ -19,10 +19,13 @@ public class SyncStorageRunnerTests
             Start = 1_700_000_000_000
         };
 
-        var cut = SyncStorageRunner.ToTestResultCutModel(container);
+        const string projectId = "019581fa-3d2d-7682-b587-fcd508d42b9f";
+        var cut = SyncStorageRunner.ToTestResultCutModel(container, projectId);
 
+        Assert.AreEqual(projectId, cut.ProjectId);
         Assert.AreEqual("ext-1", cut.AutoTestExternalId);
         Assert.AreEqual("Passed", cut.StatusCode);
+        Assert.AreEqual("Succeeded", cut.StatusType);
         Assert.IsNotNull(cut.StartedOn);
     }
 }

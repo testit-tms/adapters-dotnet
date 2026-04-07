@@ -43,15 +43,15 @@ jobs:
       TEST_DLL: ${GITHUB_WORKSPACE}/$TEST_ROOT/bin/Release/net8.0/${{ matrix.project_name }}.dll
     steps:
       - name: Checkout adapters-dotnet
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Checkout api-validator-dotnet
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: testit-tms/api-validator-dotnet
           token: ${{ env.GITHUB_PAT }}
           path: api-validator-dotnet
       - name: Checkout dotnet-examples
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: testit-tms/dotnet-examples
           path: dotnet-examples
@@ -78,7 +78,27 @@ jobs:
           echo "TMS_TEST_RUN_ID=$(<${{ env.TEMP_FILE }})" >> $GITHUB_ENV
       - name: Test
         run: |
-          ${{ env.TMS_RUNNER }} --runner "${{ env.VSTEST_CONSOLE }}" --testassembly "${{ env.TEST_DLL }}"
+          export SYNC_STORAGE_VERSION=$(grep -o 'SyncStorageVersion = "[^"]*"' Tms.Adapter.Core/SyncStorage/SyncStorageRunner.cs | cut -d'"' -f2)
+          
+          mkdir -p .caches
+          wget -O .caches/syncstorage-linux-amd64 \
+          "https://github.com/testit-tms/sync-storage-public/releases/download/${SYNC_STORAGE_VERSION}/syncstorage-${SYNC_STORAGE_VERSION}-linux_amd64"
+          chmod +x .caches/syncstorage-linux-amd64
+          nohup .caches/syncstorage-linux-amd64 --testRunId ${{ env.TMS_TEST_RUN_ID }} --port 49152 \
+          --baseURL ${{ env.TMS_URL }} --privateToken ${{ env.TMS_PRIVATE_TOKEN }}  > service.log 2>&1 & 
+          
+          sleep 1
+          
+          curl -v http://127.0.0.1:49152/health || true
+
+          ${{ env.TMS_RUNNER }} --runner "${{ env.VSTEST_CONSOLE }}" --testassembly "${{ env.TEST_DLL }}" || true
+
+          sleep 1
+
+          curl -v http://127.0.0.1:49152/wait-completion?testRunId=${{ env.TMS_TEST_RUN_ID }} || true
+          
+          cat service.log
+
       - name: Validate
         run: |
           dotnet test --configuration Debug --no-build --logger:"console;verbosity=detailed" api-validator-dotnet

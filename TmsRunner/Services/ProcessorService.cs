@@ -6,7 +6,6 @@ using Newtonsoft.Json;
 
 using System.Text;
 using System.Text.RegularExpressions;
-using SyncStorage.ApiClient.Model;
 using Tms.Adapter.Models;
 using TmsRunner.Entities;
 using TmsRunner.Entities.AutoTest;
@@ -232,14 +231,14 @@ public sealed partial class ProcessorService(ILogger<ProcessorService> logger,
 
         HtmlEscapeUtils.EscapeHtmlInObject(autoTestResultRequestBody);
 
-        if (syncStorageSession.Runner is { IsRunning: true, IsMaster: true } runner && !runner.IsAlreadyInProgress)
+        if (syncStorageSession.Runner is { IsRunning: true, IsMaster: true } runner && !runner.IsAlreadyInProgress
+            && !string.IsNullOrWhiteSpace(tmsSettings.ProjectId))
         {
-            var cut = new TestResultCutApiModel(
-                projectId: default,
-                autoTestExternalId: autoTest.ExternalId ?? string.Empty,
-                statusCode: testResult.Outcome.ToString(),
-                statusType: default,
-                startedOn: testResult.StartTime.UtcDateTime);
+            var cut = Tms.Adapter.Core.Client.Converter.ToTestResultCutApiModel(
+                autoTest.ExternalId ?? string.Empty,
+                testResult.Outcome.ToString(),
+                testResult.StartTime.UtcDateTime,
+                tmsSettings.ProjectId);
 
             if (await runner.SendInProgressTestResultAsync(cut).ConfigureAwait(false))
             {

@@ -303,7 +303,14 @@ public sealed class AdapterManager : IDisposable
     {
         try
         {
-            var cutModel = SyncStorageRunner.ToTestResultCutModel(testContainer);
+            var cfg = Tms.Adapter.Core.Configurator.Configurator.GetConfig();
+            if (string.IsNullOrWhiteSpace(cfg.ProjectId))
+            {
+                _logger.LogWarning("Sync Storage in-progress skipped: ProjectId is not configured.");
+                return false;
+            }
+
+            var cutModel = Converter.ToTestResultCutApiModel(testContainer, cfg.ProjectId);
 
             _logger.LogDebug(
                 "Sending to SyncStorage: ExternalId={ExternalId}, Status={Status}",

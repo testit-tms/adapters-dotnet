@@ -2,6 +2,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Microsoft.Extensions.Logging;
 using SyncStorage.ApiClient.Model;
+using Tms.Adapter.Core.Client;
 
 namespace Tms.Adapter.Core.SyncStorage;
 
@@ -180,20 +181,9 @@ public sealed class SyncStorageRunner : IDisposable
     /// <summary>
     /// Convert a TestContainer to a cut model for SyncStorage.
     /// </summary>
-    public static TestResultCutApiModel ToTestResultCutModel(Models.TestContainer testContainer)
+    public static TestResultCutApiModel ToTestResultCutModel(Models.TestContainer testContainer, string projectId)
     {
-        DateTime? startedOn = null;
-        if (testContainer.Start > 0)
-        {
-            startedOn = DateTimeOffset.FromUnixTimeMilliseconds(testContainer.Start).UtcDateTime;
-        }
-
-        return new TestResultCutApiModel(
-            projectId: default,
-            autoTestExternalId: testContainer.ExternalId ?? string.Empty,
-            statusCode: testContainer.Status.ToString(),
-            statusType: default,
-            startedOn: startedOn);
+        return Converter.ToTestResultCutApiModel(testContainer, projectId);
     }
 
     #region Private methods

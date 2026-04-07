@@ -54,7 +54,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Tms.Adapter\Tms.Adapter.csproj" />
     <ProjectReference Include="..\Tms.Adapter.Core\Tms.Adapter.Core.csproj" />
-    <ProjectReference Include="..\SyncStorage.ApiClient\SyncStorage.ApiClient.csproj" />
   </ItemGroup>
 
   <ItemGroup>

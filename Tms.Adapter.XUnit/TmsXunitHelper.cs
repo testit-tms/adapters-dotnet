@@ -17,7 +17,6 @@ public static class TmsXunitHelper
     {
         if (Interlocked.CompareExchange(ref _initialized, 1, 0) == 0)
         {
-            AdapterManager.Instance.OnRunningStarted();
             AppDomain.CurrentDomain.ProcessExit += (_, _) =>
             {
                 AdapterManager.Instance.OnBlockCompleted();
@@ -25,9 +24,28 @@ public static class TmsXunitHelper
         }
     }
 
+    public static void OnRunStarted()
+    {
+        EnsureInitialized();
+        AdapterManager.Instance.OnRunningStarted();
+    }
+
+    public static void OnRunFinished()
+    {
+        EnsureInitialized();
+        AdapterManager.Instance.OnBlockCompleted();
+    }
+
+    public static void OnTestCaseStarted()
+    {
+        EnsureInitialized();
+        AdapterManager.Instance.OnRunningStarted();
+    }
+
     public static void StartTestContainer(ITestCaseStarting testCaseStarting)
     {
         EnsureInitialized();
+        AdapterManager.Instance.OnRunningStarted();
 
         if (testCaseStarting.TestCase is not ITmsAccessor testResults)
         {
@@ -43,6 +61,8 @@ public static class TmsXunitHelper
         {
             return;
         }
+        AdapterManager.Instance.OnRunningStarted();
+
 
         var testCase = testCaseMessage.TestCase;
         var nameSpace = GetNameSpace(testCase.TestMethod.TestClass.Class.Name);

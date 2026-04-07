@@ -43,15 +43,15 @@ jobs:
       TEST_ROOT: dotnet-examples/${{ matrix.project_name }}/${{ matrix.project_name }}
     steps:
       - name: Checkout adapters-dotnet
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Checkout api-validator-dotnet
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: testit-tms/api-validator-dotnet
           token: ${{ env.GITHUB_PAT }}
           path: api-validator-dotnet
       - name: Checkout dotnet-examples
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: testit-tms/dotnet-examples
           path: dotnet-examples
