@@ -6,6 +6,8 @@ using AutoTestResult = TmsRunner.Entities.AutoTest.AutoTestResult;
 
 namespace TmsRunnerTests.Utils;
 
+#pragma warning disable CA1707
+
 [TestClass]
 public class ConverterTests
 {
@@ -25,6 +27,20 @@ public class ConverterTests
         // Assert
         Assert.IsInstanceOfType<AutoTestResultsForTestRunModel>(actual);
         Assert.IsNotNull(actual);
+    }
+
+    [TestMethod]
+    public void ConvertResultToModel_ForceInProgress_SetsInProgressStatus()
+    {
+        var id = Guid.NewGuid().ToString();
+        var result = new AutoTestResult
+        {
+            Outcome = TestOutcome.Passed
+        };
+
+        var actual = Converter.ConvertResultToModel(result, id, forceInProgressStatus: true);
+
+        Assert.AreEqual(TestStatusType.InProgress, actual.StatusType);
     }
 
     [TestMethod]
@@ -57,3 +73,5 @@ public class ConverterTests
         Assert.IsNotNull(actual);
     }
 }
+
+#pragma warning restore CA1707

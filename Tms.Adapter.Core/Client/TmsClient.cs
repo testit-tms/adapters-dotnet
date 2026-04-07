@@ -50,7 +50,10 @@ public sealed class TmsClient : ITmsClient, IDisposable
 
     public async Task CreateAutotest(TestContainer result, ClassContainer container)
     {
-        _logger.LogDebug("Creating autotest {ExternalId}", result.ExternalId);
+        if (_logger.IsEnabled(LogLevel.Debug))
+        {
+            _logger.LogDebug("Creating autotest {ExternalId}", result.ExternalId);
+        }
 
         var model = Converter.ConvertAutoTestDtoToPostModel(result, container, _settings.ProjectId);
         model.ShouldCreateWorkItem = _settings.AutomaticCreationTestCases;
@@ -60,12 +63,18 @@ public sealed class TmsClient : ITmsClient, IDisposable
 
         await _autoTests.CreateAutoTestAsync(model).ConfigureAwait(false);
 
-        _logger.LogDebug("Create autotest {ExternalId} is successfully", result.ExternalId);
+        if (_logger.IsEnabled(LogLevel.Debug))
+        {
+            _logger.LogDebug("Create autotest {ExternalId} is successfully", result.ExternalId);
+        }
     }
 
     public async Task UpdateAutotest(TestContainer result, ClassContainer container)
     {
-        _logger.LogDebug("Updating autotest {ExternalId}", result.ExternalId);
+        if (_logger.IsEnabled(LogLevel.Debug))
+        {
+            _logger.LogDebug("Updating autotest {ExternalId}", result.ExternalId);
+        }
 
         var autotest = await GetAutotestByExternalId(result.ExternalId).ConfigureAwait(false);
         var model = Converter.ConvertAutoTestDtoToPutModel(result, container, _settings.ProjectId);
@@ -76,12 +85,18 @@ public sealed class TmsClient : ITmsClient, IDisposable
 
         await _autoTests.UpdateAutoTestAsync(model).ConfigureAwait(false);
 
-        _logger.LogDebug("Update autotest {ExternalId} is successfully", result.ExternalId);
+        if (_logger.IsEnabled(LogLevel.Debug))
+        {
+            _logger.LogDebug("Update autotest {ExternalId} is successfully", result.ExternalId);
+        }
     }
 
     public async Task UpdateAutotest(string externalId, List<Link> links, string externalKey)
     {
-        _logger.LogDebug("Updating links property for autotest {ExternalId}: {@Links}", externalId, links);
+        if (_logger.IsEnabled(LogLevel.Debug))
+        {
+            _logger.LogDebug("Updating links property for autotest {ExternalId}: {@Links}", externalId, links);
+        }
 
         var autotest = await GetAutotestByExternalId(externalId).ConfigureAwait(false);
 
@@ -122,17 +137,23 @@ public sealed class TmsClient : ITmsClient, IDisposable
 
         await _autoTests.ApiV2AutoTestsIdPatchAsync(autotest.Id, operations).ConfigureAwait(false);
 
-        _logger.LogDebug("Update autotest {ExternalId} is successfully", externalId);
+        if (_logger.IsEnabled(LogLevel.Debug))
+        {
+            _logger.LogDebug("Update autotest {ExternalId} is successfully", externalId);
+        }
     }
 
     public async Task LinkAutoTestToWorkItems(string autotestId, IEnumerable<string> workItemIds)
     {
         foreach (var workItemId in workItemIds)
         {
-            _logger.LogDebug(
-                "Linking autotest {AutotestId} to workitem {WorkitemId}",
-                autotestId,
-                workItemId);
+            if (_logger.IsEnabled(LogLevel.Debug))
+            {
+                _logger.LogDebug(
+                    "Linking autotest {AutotestId} to workitem {WorkitemId}",
+                    autotestId,
+                    workItemId);
+            }
 
             for (var attempts = 0; attempts < MAX_TRIES; attempts++)
             {
@@ -143,10 +164,13 @@ public sealed class TmsClient : ITmsClient, IDisposable
                     HtmlEscapeUtils.EscapeHtmlInObject(workItemModel);
 
                     await _autoTests.LinkAutoTestToWorkItemAsync(autotestId, workItemModel).ConfigureAwait(false);
-                    _logger.LogDebug(
-                        "Link autotest {AutotestId} to workitem {WorkitemId} is successfully",
-                        autotestId,
-                        workItemId);
+                    if (_logger.IsEnabled(LogLevel.Debug))
+                    {
+                        _logger.LogDebug(
+                            "Link autotest {AutotestId} to workitem {WorkitemId} is successfully",
+                            autotestId,
+                            workItemId);
+                    }
 
                     return;
                 }
@@ -167,10 +191,13 @@ public sealed class TmsClient : ITmsClient, IDisposable
 
     public async Task DeleteAutoTestLinkFromWorkItem(string autotestId, string workItemId)
     {
-        _logger.LogDebug(
-            "Unlink autotest {AutotestId} from workitem {WorkitemId}",
-            autotestId,
-            workItemId);
+        if (_logger.IsEnabled(LogLevel.Debug))
+        {
+            _logger.LogDebug(
+                "Unlink autotest {AutotestId} from workitem {WorkitemId}",
+                autotestId,
+                workItemId);
+        }
 
         for (var attempts = 0; attempts < MAX_TRIES; attempts++)
         {

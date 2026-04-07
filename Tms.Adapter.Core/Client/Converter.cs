@@ -1,3 +1,4 @@
+using SyncStorage.ApiClient.Model;
 using TestIT.ApiClient.Model;
 using Tms.Adapter.Core.Models;
 using Link = Tms.Adapter.Core.Models.Link;
@@ -190,5 +191,47 @@ public static class Converter
                 s.DisplayName!,
                 s.Description!,
                 ConvertStepsToStepApiModel(s.Steps))).ToList();
+    }
+
+    /// <summary>
+    /// Sync Storage cut: <paramref name="statusCode"/> is the adapter outcome as string (Passed/Failed/...);
+    /// <see cref="TestResultCutApiModel.StatusType"/> is the TMS API status name (Succeeded/Failed/...) from <see cref="MapToStatusType"/>.
+    /// </summary>
+    public static TestResultCutApiModel ToTestResultCutApiModel(TestContainer result, string projectId)
+    {
+        if (string.IsNullOrWhiteSpace(projectId))
+            throw new ArgumentException("projectId is required.", nameof(projectId));
+
+        var statusCode = result.Status == Status.Undefined ? nameof(Status.Passed) : result.Status.ToString();
+        DateTime? startedOn = result.Start > 0
+            ? DateTimeOffset.FromUnixTimeMilliseconds(result.Start).AddSeconds(-1).UtcDateTime
+            : null;
+
+        return new TestResultCutApiModel(
+            projectId: projectId,
+            autoTestExternalId: result.ExternalId ?? string.Empty,
+            statusCode: statusCode,
+            statusType: MapToStatusType(statusCode).ToString(),
+            startedOn: startedOn);
+    }
+
+    /// <summary>
+    /// Same mapping for runners (e.g. vstest) that already have outcome as string.
+    /// </summary>
+    public static TestResultCutApiModel ToTestResultCutApiModel(
+        string autoTestExternalId,
+        string statusCode,
+        DateTime? startedOn,
+        string projectId)
+    {
+        if (string.IsNullOrWhiteSpace(projectId))
+            throw new ArgumentException("projectId is required.", nameof(projectId));
+
+        return new TestResultCutApiModel(
+            projectId: projectId,
+            autoTestExternalId: autoTestExternalId,
+            statusCode: statusCode,
+            statusType: MapToStatusType(statusCode).ToString(),
+            startedOn: startedOn);
     }
 }

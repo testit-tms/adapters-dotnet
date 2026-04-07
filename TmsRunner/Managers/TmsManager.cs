@@ -88,12 +88,12 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
         return await testResultsApi.ApiV2TestResultsSearchPostAsync(skip, TESTS_LIMIT, null!, null!, null!, model);
     }
 
-    public async Task SubmitResultToTestRunAsync(string? id, AutoTestResult result)
+    public async Task SubmitResultToTestRunAsync(string? id, AutoTestResult result, bool forceInProgressStatus = false)
     {
         logger.LogDebug("Submitting test result {@Result} to test run {@Id}", result, id);
 
         var testRunId = new Guid(id ?? string.Empty);
-        var model = Converter.ConvertResultToModel(result, settings.ConfigurationId);
+        var model = Converter.ConvertResultToModel(result, settings.ConfigurationId, forceInProgressStatus);
 
         if (settings is not { AdapterMode: 0, IgnoreParameters: true })
         {

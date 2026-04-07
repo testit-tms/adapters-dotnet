@@ -55,6 +55,8 @@ namespace Tms.Adapter.SpecFlowPluginTests.Helper
         [TestInitialize]
         public virtual void TestSetup()
         {
+            AdapterManager.ClearInstance();
+            Environment.SetEnvironmentVariable("TMS_DISABLE_NETWORK", "true");
             Environment.SetEnvironmentVariable("TMS_URL", "https://example.com");
             Environment.SetEnvironmentVariable("TMS_PRIVATE_TOKEN", "token");
             Environment.SetEnvironmentVariable("TMS_PROJECT_ID", Guid.NewGuid().ToString());

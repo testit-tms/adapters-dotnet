@@ -23,9 +23,16 @@ public class Writer : IWriter
     {
         _logger.LogDebug("Write autotest {@Autotest}", result);
 
+        var externalId = result.ExternalId;
+        if (string.IsNullOrWhiteSpace(externalId))
+        {
+            _logger.LogWarning("Skip write: externalId is empty");
+            return;
+        }
+
         try
         {
-            var autotest = await _client.IsAutotestExist(result.ExternalId!);
+            var autotest = await _client.IsAutotestExist(externalId);
 
             if (autotest)
             {
@@ -45,7 +52,7 @@ public class Writer : IWriter
 
             if (result.WorkItemIds.Count > 0)
             {
-                await UpdateTestLinkToWorkItems(result.ExternalId!, result.WorkItemIds).ConfigureAwait(false);
+                await UpdateTestLinkToWorkItems(externalId, result.WorkItemIds).ConfigureAwait(false);
             }
 
             await _client.SubmitTestCaseResult(result, resultContainer).ConfigureAwait(false);
@@ -54,7 +61,7 @@ public class Writer : IWriter
         }
         catch (Exception e)
         {
-            _logger.LogError(e, "Can not write autotest with ID {ID}", result.ExternalId);
+            _logger.LogError(e, "Can not write autotest with ID {ID}", externalId);
         }
     }
 

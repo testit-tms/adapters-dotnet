@@ -82,7 +82,8 @@ public static class Converter
         }
     }
 
-    public static AutoTestResultsForTestRunModel ConvertResultToModel(AutoTestResult result, string? configurationId)
+    public static AutoTestResultsForTestRunModel ConvertResultToModel(AutoTestResult result, string? configurationId,
+        bool forceInProgressStatus = false)
     {
         var links = result.Links?.Select(l =>
             new LinkPostModel(
@@ -95,7 +96,9 @@ public static class Converter
         return new AutoTestResultsForTestRunModel(
             autoTestExternalId: result.ExternalId ?? string.Empty)
         {
-            StatusType = MapToStatusType(result.Outcome?.ToString() ?? string.Empty), 
+            StatusType = forceInProgressStatus
+                ? TestStatusType.InProgress
+                : MapToStatusType(result.Outcome?.ToString() ?? string.Empty),
             ConfigurationId = new Guid(configurationId ?? string.Empty),
             Links = links ?? [],
             Message = result.Message ?? string.Empty,

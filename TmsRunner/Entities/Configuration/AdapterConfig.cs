@@ -84,6 +84,9 @@ public sealed class AdapterConfig
     [Option("tmsIgnoreParameters", Default = "false", Required = false, HelpText = "Set ignore parameters.")]
     public string? TmsIgnoreParameters { get; init; }
 
+    [Option("tmsSyncStoragePort", Required = false, HelpText = "Sync Storage local port (default 49152).")]
+    public string? TmsSyncStoragePort { get; init; }
+
     public Config ToInternalConfig()
     {
         return new Config
@@ -103,6 +106,7 @@ public sealed class AdapterConfig
             TmsRerunTestsCount = TmsRerunTestsCount,
             TmsLabelsOfTestsToRun = TmsLabelsOfTestsToRun,
             TmsIgnoreParameters = TmsIgnoreParameters,
+            TmsSyncStoragePort = TmsSyncStoragePort,
             IsDebug = IsDebug
         };
     }
