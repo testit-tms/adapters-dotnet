@@ -26,6 +26,7 @@ public sealed class AdapterManager : IDisposable
     private readonly ILogger<AdapterManager> _logger;
     private readonly ConcurrentDictionary<string, string> _messageByTestId = new();
     private readonly ConcurrentDictionary<string, List<Link>> _linksByTestId = new();
+    private readonly object _writeLock = new();
 
     private SyncStorageRunner? _syncStorageRunner;
 
@@ -294,28 +295,32 @@ public sealed class AdapterManager : IDisposable
 
     public AdapterManager WriteTestCase(string uuid, string containerId)
     {
-        var testContainer = _storage.Remove<TestContainer>(uuid);
-        var classContainer = _storage.Remove<ClassContainer>(containerId);
-
-        if (testContainer == null || classContainer == null)
+        lock (_writeLock)
         {
-            _logger.LogDebug("Skip write: test or container not found (testId={TestId}, containerId={ContainerId})",
-                uuid, containerId);
-            return this;
-        }
+            var testContainer = _storage.Remove<TestContainer>(uuid);
+            var classContainer = _storage.Remove<ClassContainer>(containerId);
 
-        // Handle Sync Storage integration — master sends first result as InProgress
-        if (IsSyncStorageActive() && IsMasterAndNoInProgress())
-        {
-            if (TrySendToSyncStorageAndWriteInProgress(testContainer, classContainer))
+            if (testContainer == null || classContainer == null)
             {
+                _logger.LogDebug("Skip write: test or container not found (testId={TestId}, containerId={ContainerId})",
+                    uuid, containerId);
                 return this;
             }
-            // Fall through to normal write on failure
-        }
 
-        _writer.Write(testContainer, classContainer).Wait();
-        return this;
+            // Serialize writes so the in-progress master result is always flushed first.
+            // This prevents parallel test threads from writing other results ahead of it.
+            if (IsSyncStorageActive() && IsMasterAndNoInProgress())
+            {
+                if (TrySendToSyncStorageAndWriteInProgress(testContainer, classContainer))
+                {
+                    return this;
+                }
+                // Fall through to normal write on failure
+            }
+
+            _writer.Write(testContainer, classContainer).Wait();
+            return this;
+        }
     }
 
     /// <summary>
