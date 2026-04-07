@@ -12,7 +12,7 @@ namespace Tms.Adapter.Core.SyncStorage;
 /// </summary>
 public sealed class SyncStorageRunner : IDisposable
 {
-    private const string SyncStorageVersion = "v0.2.0";
+    private const string SyncStorageVersion = "v0.2.0-tms-5.7";
 
     private const string SyncStorageRepoUrl =
         "https://github.com/testit-tms/sync-storage-public/releases/download/";
