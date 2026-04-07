@@ -7,6 +7,11 @@ namespace TmsRunner.Utils;
 public static class HtmlEscapeUtils
 {
     private const string NoEscapeHtmlEnvVar = "NO_ESCAPE_HTML";
+    private static readonly HashSet<string> NoEscapePropertyNames = new(StringComparer.Ordinal)
+    {
+        "ExternalId",
+        "AutoTestExternalId"
+    };
 
     // Regex pattern to detect HTML tags
     private static readonly Regex HtmlTagPattern = new(@"<\S.*?(?:>|\/>)", RegexOptions.Compiled);
@@ -119,6 +124,9 @@ public static class HtmlEscapeUtils
             {
                 // Only process writable properties
                 if (!property.CanRead || !property.CanWrite)
+                    continue;
+
+                if (NoEscapePropertyNames.Contains(property.Name))
                     continue;
 
                 var value = property.GetValue(obj);
