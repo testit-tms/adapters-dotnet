@@ -14,6 +14,7 @@ The repository contains adapters for .NET test frameworks that integrate automat
 | 5.3     | 1.9.2-TMS-5.3   | 1.9.2-TMS-5.3   | 1.9.2-TMS-5.3   | 1.9.2-TMS-5.3   |
 | 5.4     | 1.9.6-TMS-5.4   | 1.9.6-TMS-5.4   | 1.9.6-TMS-5.4   | 1.9.6-TMS-5.4   |
 | 5.5     | 1.10.1-TMS-5.5  | 1.10.1-TMS-5.5  | 1.10.1-TMS-5.5  | 1.10.1-TMS-5.5  |
+| 5.6     | 1.12.0-TMS-5.6  | 1.12.0-TMS-5.6  | 1.12.0-TMS-5.6  | 1.12.0-TMS-5.6  |
 | 5.7     | 2.0.0-TMS-5.7   | 2.0.0-TMS-5.7   | 2.0.0-TMS-5.7   | 2.0.0-TMS-5.7   |
 | Cloud   | 2.0.0 +         | 2.0.0 +         | 2.0.0 +         | 2.0.0 +         |
 
