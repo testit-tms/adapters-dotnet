@@ -13,6 +13,7 @@ namespace Tms.Adapter.Core.Service;
 public sealed class AdapterManager : IDisposable
 {
     private const string InProgressLiteral = "InProgress";
+    private const string DisableNetworkEnvVar = "TMS_DISABLE_NETWORK";
 
     public static Func<string> CurrentTestIdGetter { get; } =
         () => Environment.CurrentManagedThreadId.ToString(CultureInfo.InvariantCulture);
@@ -21,7 +22,7 @@ public sealed class AdapterManager : IDisposable
     private static AdapterManager? _instance;
     private readonly ResultStorage _storage;
     private readonly Writer.Writer _writer;
-    private readonly TmsClient _client;
+    private readonly ITmsClient _client;
     private readonly ILogger<AdapterManager> _logger;
     private readonly ConcurrentDictionary<string, string> _messageByTestId = new();
     private readonly ConcurrentDictionary<string, List<Link>> _linksByTestId = new();
@@ -52,12 +53,23 @@ public sealed class AdapterManager : IDisposable
         var config = Configurator.Configurator.GetConfig();
         var logger = LoggerFactory.GetLogger(config.IsDebug);
         _logger = logger.CreateLogger<AdapterManager>();
-        _client = new TmsClient(logger.CreateLogger<TmsClient>(), config);
+        _client = IsNetworkDisabled()
+            ? new NoopTmsClient()
+            : new TmsClient(logger.CreateLogger<TmsClient>(), config);
         _storage = new ResultStorage();
         _writer = new Writer.Writer(logger.CreateLogger<Writer.Writer>(), _client, config);
 
         // Initialize Sync Storage
-        InitializeSyncStorage(config, logger);
+        if (!IsNetworkDisabled())
+        {
+            InitializeSyncStorage(config, logger);
+        }
+    }
+
+    private static bool IsNetworkDisabled()
+    {
+        return string.Equals(Environment.GetEnvironmentVariable(DisableNetworkEnvVar), "true",
+            StringComparison.OrdinalIgnoreCase);
     }
 
     private void InitializeSyncStorage(Configurator.TmsSettings config, ILoggerFactory loggerFactory)
@@ -129,6 +141,9 @@ public sealed class AdapterManager : IDisposable
     {
         _logger.LogDebug("Updating class container with id: {ID}", uuid);
 
+        // SpecFlow (and some runners) can reference a "root" container id (e.g. feature hash)
+        // that wasn't explicitly started. Ensure it exists to avoid KeyNotFoundException.
+        _storage.Put(uuid, new ClassContainer { Id = uuid });
         update.Invoke(_storage.Get<ClassContainer>(uuid));
         return this;
     }
@@ -281,6 +296,13 @@ public sealed class AdapterManager : IDisposable
     {
         var testContainer = _storage.Remove<TestContainer>(uuid);
         var classContainer = _storage.Remove<ClassContainer>(containerId);
+
+        if (testContainer == null || classContainer == null)
+        {
+            _logger.LogDebug("Skip write: test or container not found (testId={TestId}, containerId={ContainerId})",
+                uuid, containerId);
+            return this;
+        }
 
         // Handle Sync Storage integration — master sends first result as InProgress
         if (IsSyncStorageActive() && IsMasterAndNoInProgress())
@@ -496,6 +518,9 @@ public sealed class AdapterManager : IDisposable
     public void Dispose()
     {
         _syncStorageRunner?.Dispose();
-        _client.Dispose();
+        if (_client is IDisposable disposable)
+        {
+            disposable.Dispose();
+        }
     }
 }

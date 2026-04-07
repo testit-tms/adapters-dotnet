@@ -7,7 +7,7 @@ namespace Tms.Adapter.SpecFlowPlugin;
 [Binding]
 public class TmsBindings
 {
-    private static readonly AdapterManager Adapter = AdapterManager.Instance;
+    private static AdapterManager Adapter => AdapterManager.Instance;
 
     private readonly FeatureContext _featureContext;
     private readonly ScenarioContext _scenarioContext;

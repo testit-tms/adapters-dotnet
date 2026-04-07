@@ -12,7 +12,7 @@ namespace Tms.Adapter.SpecFlowPlugin;
 
 public class TmsBindingInvoker : BindingInvoker
 {
-    private static readonly AdapterManager Adapter = AdapterManager.Instance;
+    private static AdapterManager Adapter => AdapterManager.Instance;
 
     public TmsBindingInvoker(SpecFlowConfiguration specFlowConfiguration, IErrorProvider errorProvider,
         ISynchronousBindingDelegateInvoker synchronousBindingDelegateInvoker) : base(
