@@ -33,11 +33,12 @@ public sealed class SyncStorageRunner : IDisposable
     private bool _isRunning;
     private bool _isExternal;
     private bool _isMaster;
-    private bool _isAlreadyInProgress;
+    // 0 -> not sent, 1 -> sent/reserved; must be atomic because xUnit can run tests in parallel.
+    private int _inProgressSent;
 
     public bool IsRunning => _isRunning;
     public bool IsMaster => _isMaster;
-    public bool IsAlreadyInProgress => _isAlreadyInProgress;
+    public bool IsAlreadyInProgress => _inProgressSent == 1;
 
     public SyncStorageRunner(
         string testRunId,
@@ -117,7 +118,9 @@ public sealed class SyncStorageRunner : IDisposable
             return false;
         }
 
-        if (_isAlreadyInProgress)
+        // Reserve a single "in_progress" slot across threads/process messages.
+        // If the send fails, we release the reservation to allow retry on a later test.
+        if (Interlocked.CompareExchange(ref _inProgressSent, 1, 0) != 0)
         {
             _logger.LogDebug("Test already in progress, skipping duplicate send");
             return false;
@@ -126,6 +129,7 @@ public sealed class SyncStorageRunner : IDisposable
         if (_client == null)
         {
             _logger.LogError("SyncStorageClient not initialized");
+            Interlocked.Exchange(ref _inProgressSent, 0);
             return false;
         }
 
@@ -133,17 +137,19 @@ public sealed class SyncStorageRunner : IDisposable
         {
             var success = await _client.SendInProgressTestResultAsync(_testRunId, model).ConfigureAwait(false);
 
-            if (success)
+            if (!success)
             {
-                _isAlreadyInProgress = true;
-                _logger.LogDebug("Successfully sent in-progress test result to SyncStorage");
+                Interlocked.Exchange(ref _inProgressSent, 0);
+                return false;
             }
 
+            _logger.LogDebug("Successfully sent in-progress test result to SyncStorage");
             return success;
         }
         catch (Exception ex)
         {
             _logger.LogWarning(ex, "Failed to send test result to SyncStorage");
+            Interlocked.Exchange(ref _inProgressSent, 0);
             return false;
         }
     }
@@ -153,7 +159,7 @@ public sealed class SyncStorageRunner : IDisposable
     /// </summary>
     public void SetIsAlreadyInProgress(bool value)
     {
-        _isAlreadyInProgress = value;
+        Interlocked.Exchange(ref _inProgressSent, value ? 1 : 0);
     }
 
     /// <summary>
