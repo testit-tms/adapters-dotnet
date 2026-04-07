@@ -63,7 +63,8 @@ public static class Program
                     TmsAutomaticUpdationLinksToTestCases = ac.TmsAutomaticUpdationLinksToTestCases,
                     TmsCertValidation = ac.TmsCertValidation,
                     TmsRerunTestsCount = ac.TmsRerunTestsCount,
-                    TmsIgnoreParameters = ac.TmsIgnoreParameters
+                    TmsIgnoreParameters = ac.TmsIgnoreParameters,
+                    TmsSyncStoragePort = ac.TmsSyncStoragePort
                 };
             });
 
@@ -175,7 +176,8 @@ public static class Program
                         new ConsoleParameters { LogFilePath = Path.Combine(Directory.GetCurrentDirectory(), "log.txt") }
                     ))
                     .AddTransient<RunService>()
-                    .AddSingleton<ITestRunContextService, TestRunContextService>(); // we need to keep this singleton ofr entire app context 
+                    .AddSingleton<ITestRunContextService, TestRunContextService>() // we need to keep this singleton ofr entire app context 
+                    .AddSingleton<SyncStorageSession>();
             });
     }
 

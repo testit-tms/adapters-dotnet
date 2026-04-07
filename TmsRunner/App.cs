@@ -8,12 +8,14 @@ using TmsRunner.Services;
 namespace TmsRunner;
 
 public class App(ILogger<App> logger,
+                 ILoggerFactory loggerFactory,
                  AdapterConfig adapterConfig,
                  TmsManager tmsManager,
                  TmsSettings tmsSettings,
                  FilterService filterService,
                  RunService runService,
-                 ITestRunContextService testRunContext)
+                 ITestRunContextService testRunContext,
+                 SyncStorageSession syncStorageSession)
 {
     public async Task<int> RunAsync()
     {
@@ -72,16 +74,25 @@ public class App(ILogger<App> logger,
             }
         }
 
+        await syncStorageSession.TryStartAsync(tmsSettings, loggerFactory).ConfigureAwait(false);
+
         logger.LogInformation("Running tests: {Count}", testCases.Count);
-        
+
         bool runSuccess;
-        if (tmsSettings.RerunTestsCount > 0)
+        try
         {
-            runSuccess = await runService.RunTestsWithRerunsAsync(testCases, tmsSettings.RerunTestsCount).ConfigureAwait(false);
+            if (tmsSettings.RerunTestsCount > 0)
+            {
+                runSuccess = await runService.RunTestsWithRerunsAsync(testCases, tmsSettings.RerunTestsCount).ConfigureAwait(false);
+            }
+            else
+            {
+                runSuccess = await runService.RunSelectedTestsAsync(testCases).ConfigureAwait(false);
+            }
         }
-        else
+        finally
         {
-            runSuccess = await runService.RunSelectedTestsAsync(testCases).ConfigureAwait(false);
+            await syncStorageSession.ShutdownAsync().ConfigureAwait(false);
         }
 
         if (tmsSettings.AdapterMode != 2 

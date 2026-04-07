@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 
 using System.Text;
 using System.Text.RegularExpressions;
+using SyncStorage.ApiClient.Model;
 using Tms.Adapter.Models;
 using TmsRunner.Entities;
 using TmsRunner.Entities.AutoTest;
@@ -20,7 +21,8 @@ namespace TmsRunner.Services;
 
 public sealed partial class ProcessorService(ILogger<ProcessorService> logger,
                                      TmsManager apiClient,
-                                     TmsSettings tmsSettings)
+                                     TmsSettings tmsSettings,
+                                     SyncStorageSession syncStorageSession)
 {
     private async Task<List<StepModel>> GetStepsWithAttachmentsAsync(string? traceJson, List<Guid> attachmentIds)
     {
@@ -229,6 +231,22 @@ public sealed partial class ProcessorService(ILogger<ProcessorService> logger,
             testCaseSteps, attachmentIds, parameters, tmsSettings.IgnoreParameters);
 
         HtmlEscapeUtils.EscapeHtmlInObject(autoTestResultRequestBody);
+
+        if (syncStorageSession.Runner is { IsRunning: true, IsMaster: true } runner && !runner.IsAlreadyInProgress)
+        {
+            var cut = new TestResultCutApiModel(
+                projectId: default,
+                autoTestExternalId: autoTest.ExternalId ?? string.Empty,
+                statusCode: testResult.Outcome.ToString(),
+                statusType: default,
+                startedOn: testResult.StartTime.UtcDateTime);
+
+            if (await runner.SendInProgressTestResultAsync(cut).ConfigureAwait(false))
+            {
+                await apiClient.SubmitResultToTestRunAsync(tmsSettings.TestRunId, autoTestResultRequestBody, true)
+                    .ConfigureAwait(false);
+            }
+        }
 
         await apiClient.SubmitResultToTestRunAsync(tmsSettings.TestRunId, autoTestResultRequestBody)
             .ConfigureAwait(false);

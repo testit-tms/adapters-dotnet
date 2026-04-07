@@ -22,6 +22,7 @@ public sealed class ClassConfigurationProvider(Config config) : ConfigurationPro
             { "AutomaticUpdationLinksToTestCases", config.TmsAutomaticUpdationLinksToTestCases },
             { "CertValidation", config.TmsCertValidation },
             { "RerunTestsCount", config.TmsRerunTestsCount },
+            { "SyncStoragePort", config.TmsSyncStoragePort },
             { "IsDebug", config.IsDebug.ToString() }
         };
 

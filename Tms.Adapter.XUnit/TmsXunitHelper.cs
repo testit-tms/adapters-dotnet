@@ -27,6 +27,8 @@ public static class TmsXunitHelper
 
     public static void StartTestContainer(ITestCaseStarting testCaseStarting)
     {
+        EnsureInitialized();
+
         if (testCaseStarting.TestCase is not ITmsAccessor testResults)
         {
             return;
@@ -37,8 +39,6 @@ public static class TmsXunitHelper
 
     public static void StartTestCase(ITestCaseMessage testCaseMessage)
     {
-        EnsureInitialized();
-
         if (testCaseMessage.TestCase is not ITmsAccessor testResults)
         {
             return;
