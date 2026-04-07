@@ -67,4 +67,51 @@ public class ConverterTests
         Assert.IsInstanceOfType<AutoTestUpdateApiModel>(actual);
         Assert.IsNotNull(actual);
     }
+
+    [TestMethod]
+    public void ToTestResultCutApiModel_FromContainer_MapsUndefinedToPassedAndSucceeded()
+    {
+        var container = new TestContainer
+        {
+            ExternalId = "ext-undefined",
+            Status = Status.Undefined,
+            Start = 1_700_000_000_000
+        };
+        var projectId = Guid.NewGuid().ToString();
+
+        var actual = Converter.ToTestResultCutApiModel(container, projectId);
+
+        Assert.AreEqual(projectId, actual.ProjectId);
+        Assert.AreEqual("ext-undefined", actual.AutoTestExternalId);
+        Assert.AreEqual("Passed", actual.StatusCode);
+        Assert.AreEqual("Succeeded", actual.StatusType);
+        Assert.IsNotNull(actual.StartedOn);
+    }
+
+    [TestMethod]
+    public void ToTestResultCutApiModel_FromArgs_MapsSkippedToIncomplete()
+    {
+        var projectId = Guid.NewGuid().ToString();
+
+        var actual = Converter.ToTestResultCutApiModel("ext-skipped", "Skipped", DateTime.UtcNow, projectId);
+
+        Assert.AreEqual(projectId, actual.ProjectId);
+        Assert.AreEqual("Skipped", actual.StatusCode);
+        Assert.AreEqual("Incomplete", actual.StatusType);
+    }
+
+    [TestMethod]
+    public void ToTestResultCutApiModel_FromContainer_ThrowsWhenProjectIdMissing()
+    {
+        var container = new TestContainer { ExternalId = "ext-1", Status = Status.Passed };
+
+        Assert.ThrowsException<ArgumentException>(() => Converter.ToTestResultCutApiModel(container, ""));
+    }
+
+    [TestMethod]
+    public void ToTestResultCutApiModel_FromArgs_ThrowsWhenProjectIdMissing()
+    {
+        Assert.ThrowsException<ArgumentException>(() =>
+            Converter.ToTestResultCutApiModel("ext-1", "Passed", DateTime.UtcNow, " "));
+    }
 }
