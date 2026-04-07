@@ -64,7 +64,7 @@ jobs:
             -- DataCollectionRunSettings.DataCollectors.DataCollector.Configuration.Format=opencover
         
       - name: Upload coverage report as artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: coverage-report-${{ matrix.project }}
           path: ./coverage-reports/${{ matrix.project }}/
@@ -82,7 +82,7 @@ jobs:
           dotnet-version: 6.x
 
       - name: Download coverage reports
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           path: ./downloaded-coverage-reports/
           pattern: coverage-report-*

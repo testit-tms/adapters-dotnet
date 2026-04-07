@@ -44,7 +44,7 @@ jobs:
           ./${{ matrix.project }}
 
       - name: Save artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: NuGet-package-${{ matrix.project }}
           path: ${{ env.NUGET_DIR }}/*.nupkg
@@ -54,7 +54,7 @@ jobs:
     needs: [ build-pre-publish ]
     steps:
       - name: Download artifacts
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           pattern: NuGet-package-*
           path: ${{ env.NUGET_DIR }}
