@@ -27,61 +27,28 @@ using OpenAPIDateConverter = SyncStorage.ApiClient.Client.OpenAPIDateConverter;
 namespace SyncStorage.ApiClient.Model
 {
     /// <summary>
-    /// RegisterRequest
+    /// InProgressPublishedResponse
     /// </summary>
-    [DataContract(Name = "RegisterRequest")]
-    public partial class RegisterRequest : IValidatableObject
+    [DataContract(Name = "InProgressPublishedResponse")]
+    public partial class InProgressPublishedResponse : IValidatableObject
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="RegisterRequest" /> class.
+        /// Initializes a new instance of the <see cref="InProgressPublishedResponse" /> class.
         /// </summary>
-        /// <param name="pid">pid.</param>
-        /// <param name="testRunId">testRunId.</param>
-        /// <param name="baseUrl">baseUrl.</param>
-        /// <param name="privateToken">privateToken.</param>
-        public RegisterRequest(string pid = default, string testRunId = default, string baseUrl = default, string privateToken = default)
+        /// <param name="published">published.</param>
+        public InProgressPublishedResponse(bool published = default)
         {
-            this.Pid = pid;
-            this.TestRunId = testRunId;
-            this.BaseUrl = baseUrl;
-            this.PrivateToken = privateToken;
+            this.Published = published;
         }
 
         /// <summary>
-        /// Gets or Sets Pid
+        /// Gets or Sets Published
         /// </summary>
         /*
-        <example>worker-12345-1234567890</example>
+        <example>true</example>
         */
-        [DataMember(Name = "pid", EmitDefaultValue = false)]
-        public string Pid { get; set; }
-
-        /// <summary>
-        /// Gets or Sets TestRunId
-        /// </summary>
-        /*
-        <example>test-run-uuid</example>
-        */
-        [DataMember(Name = "testRunId", EmitDefaultValue = false)]
-        public string TestRunId { get; set; }
-
-        /// <summary>
-        /// Gets or Sets BaseUrl
-        /// </summary>
-        /*
-        <example>https://example.com</example>
-        */
-        [DataMember(Name = "baseUrl", EmitDefaultValue = false)]
-        public string BaseUrl { get; set; }
-
-        /// <summary>
-        /// Gets or Sets PrivateToken
-        /// </summary>
-        /*
-        <example>xxxxxxxxxxxxxx</example>
-        */
-        [DataMember(Name = "privateToken", EmitDefaultValue = false)]
-        public string PrivateToken { get; set; }
+        [DataMember(Name = "published", EmitDefaultValue = true)]
+        public bool Published { get; set; }
 
         /// <summary>
         /// Returns the string presentation of the object
@@ -90,11 +57,8 @@ namespace SyncStorage.ApiClient.Model
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append("class RegisterRequest {\n");
-            sb.Append("  Pid: ").Append(Pid).Append("\n");
-            sb.Append("  TestRunId: ").Append(TestRunId).Append("\n");
-            sb.Append("  BaseUrl: ").Append(BaseUrl).Append("\n");
-            sb.Append("  PrivateToken: ").Append(PrivateToken).Append("\n");
+            sb.Append("class InProgressPublishedResponse {\n");
+            sb.Append("  Published: ").Append(Published).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

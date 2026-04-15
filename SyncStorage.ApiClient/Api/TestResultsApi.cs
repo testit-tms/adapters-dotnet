@@ -28,6 +28,27 @@ namespace SyncStorage.ApiClient.Api
     {
         #region Synchronous Operations
         /// <summary>
+        /// Get in-progress published state
+        /// </summary>
+        /// <remarks>
+        ///  Get whether in-progress status has already been published by master node.
+        /// </remarks>
+        /// <exception cref="SyncStorage.ApiClient.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="testRunId">Test Run ID</param>
+        /// <returns>InProgressPublishedResponse</returns>
+        InProgressPublishedResponse InProgressPublishedGet(string testRunId);
+
+        /// <summary>
+        /// Get in-progress published state
+        /// </summary>
+        /// <remarks>
+        ///  Get whether in-progress status has already been published by master node.
+        /// </remarks>
+        /// <exception cref="SyncStorage.ApiClient.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="testRunId">Test Run ID</param>
+        /// <returns>ApiResponse of InProgressPublishedResponse</returns>
+        ApiResponse<InProgressPublishedResponse> InProgressPublishedGetWithHttpInfo(string testRunId);
+        /// <summary>
         /// Save in-progress test result
         /// </summary>
         /// <remarks>
@@ -59,6 +80,29 @@ namespace SyncStorage.ApiClient.Api
     public interface ITestResultsApiAsync : IApiAccessor
     {
         #region Asynchronous Operations
+        /// <summary>
+        /// Get in-progress published state
+        /// </summary>
+        /// <remarks>
+        ///  Get whether in-progress status has already been published by master node.
+        /// </remarks>
+        /// <exception cref="SyncStorage.ApiClient.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="testRunId">Test Run ID</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of InProgressPublishedResponse</returns>
+        System.Threading.Tasks.Task<InProgressPublishedResponse> InProgressPublishedGetAsync(string testRunId, System.Threading.CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Get in-progress published state
+        /// </summary>
+        /// <remarks>
+        ///  Get whether in-progress status has already been published by master node.
+        /// </remarks>
+        /// <exception cref="SyncStorage.ApiClient.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="testRunId">Test Run ID</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of ApiResponse (InProgressPublishedResponse)</returns>
+        System.Threading.Tasks.Task<ApiResponse<InProgressPublishedResponse>> InProgressPublishedGetWithHttpInfoAsync(string testRunId, System.Threading.CancellationToken cancellationToken = default);
         /// <summary>
         /// Save in-progress test result
         /// </summary>
@@ -295,6 +339,121 @@ namespace SyncStorage.ApiClient.Api
                 return _exceptionFactory;
             }
             set { _exceptionFactory = value; }
+        }
+
+        /// <summary>
+        /// Get in-progress published state  Get whether in-progress status has already been published by master node.
+        /// </summary>
+        /// <exception cref="SyncStorage.ApiClient.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="testRunId">Test Run ID</param>
+        /// <returns>InProgressPublishedResponse</returns>
+        public InProgressPublishedResponse InProgressPublishedGet(string testRunId)
+        {
+            SyncStorage.ApiClient.Client.ApiResponse<InProgressPublishedResponse> localVarResponse = InProgressPublishedGetWithHttpInfo(testRunId);
+            return localVarResponse.Data;
+        }
+
+        /// <summary>
+        /// Get in-progress published state  Get whether in-progress status has already been published by master node.
+        /// </summary>
+        /// <exception cref="SyncStorage.ApiClient.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="testRunId">Test Run ID</param>
+        /// <returns>ApiResponse of InProgressPublishedResponse</returns>
+        public SyncStorage.ApiClient.Client.ApiResponse<InProgressPublishedResponse> InProgressPublishedGetWithHttpInfo(string testRunId)
+        {
+            // verify the required parameter 'testRunId' is set
+            if (testRunId == null)
+                throw new SyncStorage.ApiClient.Client.ApiException(400, "Missing required parameter 'testRunId' when calling TestResultsApi->InProgressPublishedGet");
+
+            SyncStorage.ApiClient.Client.RequestOptions localVarRequestOptions = new SyncStorage.ApiClient.Client.RequestOptions();
+
+            string[] _contentTypes = new string[] {
+            };
+
+            // to determine the Accept header
+            string[] _accepts = new string[] {
+                "application/json"
+            };
+
+            var localVarContentType = SyncStorage.ApiClient.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            if (localVarContentType != null) localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
+
+            var localVarAccept = SyncStorage.ApiClient.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            if (localVarAccept != null) localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
+
+            localVarRequestOptions.QueryParameters.Add(SyncStorage.ApiClient.Client.ClientUtils.ParameterToMultiMap("", "testRunId", testRunId));
+
+
+            // make the HTTP request
+            var localVarResponse = this.Client.Get<InProgressPublishedResponse>("/in_progress_published", localVarRequestOptions, this.Configuration);
+
+            if (this.ExceptionFactory != null)
+            {
+                Exception _exception = this.ExceptionFactory("InProgressPublishedGet", localVarResponse);
+                if (_exception != null) throw _exception;
+            }
+
+            return localVarResponse;
+        }
+
+        /// <summary>
+        /// Get in-progress published state  Get whether in-progress status has already been published by master node.
+        /// </summary>
+        /// <exception cref="SyncStorage.ApiClient.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="testRunId">Test Run ID</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of InProgressPublishedResponse</returns>
+        public async System.Threading.Tasks.Task<InProgressPublishedResponse> InProgressPublishedGetAsync(string testRunId, System.Threading.CancellationToken cancellationToken = default)
+        {
+            SyncStorage.ApiClient.Client.ApiResponse<InProgressPublishedResponse> localVarResponse = await InProgressPublishedGetWithHttpInfoAsync(testRunId, cancellationToken).ConfigureAwait(false);
+            return localVarResponse.Data;
+        }
+
+        /// <summary>
+        /// Get in-progress published state  Get whether in-progress status has already been published by master node.
+        /// </summary>
+        /// <exception cref="SyncStorage.ApiClient.Client.ApiException">Thrown when fails to make API call</exception>
+        /// <param name="testRunId">Test Run ID</param>
+        /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
+        /// <returns>Task of ApiResponse (InProgressPublishedResponse)</returns>
+        public async System.Threading.Tasks.Task<SyncStorage.ApiClient.Client.ApiResponse<InProgressPublishedResponse>> InProgressPublishedGetWithHttpInfoAsync(string testRunId, System.Threading.CancellationToken cancellationToken = default)
+        {
+            // verify the required parameter 'testRunId' is set
+            if (testRunId == null)
+                throw new SyncStorage.ApiClient.Client.ApiException(400, "Missing required parameter 'testRunId' when calling TestResultsApi->InProgressPublishedGet");
+
+
+            SyncStorage.ApiClient.Client.RequestOptions localVarRequestOptions = new SyncStorage.ApiClient.Client.RequestOptions();
+
+            string[] _contentTypes = new string[] {
+            };
+
+            // to determine the Accept header
+            string[] _accepts = new string[] {
+                "application/json"
+            };
+
+
+            var localVarContentType = SyncStorage.ApiClient.Client.ClientUtils.SelectHeaderContentType(_contentTypes);
+            if (localVarContentType != null) localVarRequestOptions.HeaderParameters.Add("Content-Type", localVarContentType);
+
+            var localVarAccept = SyncStorage.ApiClient.Client.ClientUtils.SelectHeaderAccept(_accepts);
+            if (localVarAccept != null) localVarRequestOptions.HeaderParameters.Add("Accept", localVarAccept);
+
+            localVarRequestOptions.QueryParameters.Add(SyncStorage.ApiClient.Client.ClientUtils.ParameterToMultiMap("", "testRunId", testRunId));
+
+
+            // make the HTTP request
+
+            var localVarResponse = await this.AsynchronousClient.GetAsync<InProgressPublishedResponse>("/in_progress_published", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+
+            if (this.ExceptionFactory != null)
+            {
+                Exception _exception = this.ExceptionFactory("InProgressPublishedGet", localVarResponse);
+                if (_exception != null) throw _exception;
+            }
+
+            return localVarResponse;
         }
 
         /// <summary>
