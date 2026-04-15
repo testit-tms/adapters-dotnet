@@ -112,7 +112,7 @@ public sealed class TmsClient : ITmsClient, IDisposable
                 Description = l.Description!,
                 Type = l.Type != null
                     ? Enum.Parse<LinkType>(l.Type.ToString())
-                    : null
+                    : LinkType.Related
             }
         ).ToList();
 
