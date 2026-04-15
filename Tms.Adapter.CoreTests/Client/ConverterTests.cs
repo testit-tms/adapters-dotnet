@@ -2,6 +2,8 @@
 using Tms.Adapter.Core.Client;
 using Tms.Adapter.Core.Models;
 using static System.String;
+using ApiLinkType = TestIT.ApiClient.Model.LinkType;
+using CoreLink = Tms.Adapter.Core.Models.Link;
 
 namespace Tms.Adapter.CoreTests.Client;
 
@@ -113,5 +115,37 @@ public class ConverterTests
     {
         Assert.ThrowsException<ArgumentException>(() =>
             Converter.ToTestResultCutApiModel("ext-1", "Passed", DateTime.UtcNow, " "));
+    }
+
+    [TestMethod]
+    public void ConvertAutoTestDtoToPostModel_DefaultsLinkTypeToRelatedWhenMissing()
+    {
+        var classContainer = new ClassContainer();
+        var testContainer = new TestContainer
+        {
+            ExternalId = Guid.NewGuid().ToString(),
+            DisplayName = "test",
+            Links = [new CoreLink("https://example.com", "link", "desc")]
+        };
+
+        var actual = Converter.ConvertAutoTestDtoToPostModel(testContainer, classContainer, Guid.NewGuid().ToString());
+
+        Assert.AreEqual(ApiLinkType.Related, actual.Links.First().Type);
+    }
+
+    [TestMethod]
+    public void ConvertResultToModel_DefaultsLinkTypeToRelatedWhenMissing()
+    {
+        var classContainer = new ClassContainer();
+        var testContainer = new TestContainer
+        {
+            ExternalId = Guid.NewGuid().ToString(),
+            Status = Status.Passed,
+            ResultLinks = [new CoreLink("https://example.com", "link", "desc")]
+        };
+
+        var actual = Converter.ConvertResultToModel(testContainer, classContainer, Guid.NewGuid().ToString());
+
+        Assert.AreEqual(ApiLinkType.Related, actual.Links.First().Type);
     }
 }
