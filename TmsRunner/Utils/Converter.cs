@@ -15,7 +15,9 @@ public static class Converter
                 l.Title!,
                 l.Url!,
                 l.Description!,
-                Enum.Parse<LinkType>(l.Type.ToString()!))
+                l.Type != null
+                    ? Enum.Parse<LinkType>(l.Type.ToString()!)
+                    : LinkType.Related)
         ).ToList();
 
         return new AutoTestCreateApiModel(externalId: autotest.ExternalId ?? string.Empty, name: autotest.Name ?? string.Empty)
@@ -42,7 +44,9 @@ public static class Converter
                 title: l.Title!,
                 url: l.Url!,
                 description: l.Description!,
-                type: Enum.Parse<LinkType>(l.Type.ToString()!))
+                type: l.Type != null
+                    ? Enum.Parse<LinkType>(l.Type.ToString()!)
+                    : LinkType.Related)
         ).ToList();
 
 
@@ -90,7 +94,7 @@ public static class Converter
                 l.Title!,
                 l.Url!,
                 l.Description!,
-                Enum.TryParse<LinkType>(l.Type?.ToString(), true, out var res) ? res : null)
+                Enum.TryParse<LinkType>(l.Type?.ToString(), true, out var res) ? res : LinkType.Related)
         ).ToList();
 
         return new AutoTestResultsForTestRunModel(
