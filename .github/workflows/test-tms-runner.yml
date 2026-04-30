@@ -19,6 +19,7 @@ env:
   TMS_OVERWRITE_EXPECTED: false
   TMS_PRIVATE_TOKEN: ${{ secrets.TESTIT_PRIVATE_TOKEN }}
   TMS_URL: ${{ secrets.TESTIT_URL }}
+  EXAMPLES_TARGET_FRAMEWORK: net8.0
 jobs:
   test:
     name: ${{ matrix.project_name }} (.NET ${{ matrix.dotnet_version }})
@@ -63,7 +64,7 @@ jobs:
       TMS_RUNNER: TmsRunner/bin/Release/${{ matrix.dotnet_framework }}/linux-x64/TmsRunner
       TMS_TEST_RUN_NAME: ${{ matrix.project_name }} TestRun
       TEST_ROOT: dotnet-examples/${{ matrix.project_name }}/${{ matrix.project_name }}
-      TEST_DLL: ${{ github.workspace }}/dotnet-examples/${{ matrix.project_name }}/${{ matrix.project_name }}/bin/Release/${{ matrix.dotnet_framework }}/${{ matrix.project_name }}.dll
+      TEST_DLL: ${{ github.workspace }}/dotnet-examples/${{ matrix.project_name }}/${{ matrix.project_name }}/bin/Release/${{ env.EXAMPLES_TARGET_FRAMEWORK }}/${{ matrix.project_name }}.dll
     steps:
       - name: Checkout adapters-dotnet
         uses: actions/checkout@v5
