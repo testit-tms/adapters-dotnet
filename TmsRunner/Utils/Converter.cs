@@ -15,7 +15,9 @@ public static class Converter
                 l.Title!,
                 l.Url!,
                 l.Description!,
-                Enum.Parse<LinkType>(l.Type.ToString()!))
+                l.Type != null
+                    ? Enum.Parse<LinkType>(l.Type.ToString()!)
+                    : LinkType.Related)
         ).ToList();
 
         return new AutoTestCreateApiModel(externalId: autotest.ExternalId ?? string.Empty, name: autotest.Name ?? string.Empty)
@@ -42,7 +44,9 @@ public static class Converter
                 title: l.Title!,
                 url: l.Url!,
                 description: l.Description!,
-                type: Enum.Parse<LinkType>(l.Type.ToString()!))
+                type: l.Type != null
+                    ? Enum.Parse<LinkType>(l.Type.ToString()!)
+                    : LinkType.Related)
         ).ToList();
 
 
@@ -63,33 +67,54 @@ public static class Converter
             IsFlaky = autotest.IsFlaky
         };
     }
-
-    public static AutoTestResultsForTestRunModel ConvertResultToModel(AutoTestResult autotest, string? configurationId)
+    
+    // None = 0,
+    // Passed = 1,
+    // Failed = 2,
+    // Skipped = 3,
+    // NotFound = 4,
+    private static TestStatusType MapToStatusType(string status)
     {
-        var links = autotest.Links?.Select(l =>
+        switch (status)
+        {
+            case "Passed": return TestStatusType.Succeeded;
+            case "Failed": return TestStatusType.Failed;
+            case "Skipped": return TestStatusType.Incomplete;
+            case "Blocked": return TestStatusType.Incomplete;
+            case "InProgress": return TestStatusType.InProgress;
+            default: return TestStatusType.Incomplete;
+        }
+    }
+
+    public static AutoTestResultsForTestRunModel ConvertResultToModel(AutoTestResult result, string? configurationId,
+        bool forceInProgressStatus = false)
+    {
+        var links = result.Links?.Select(l =>
             new LinkPostModel(
                 l.Title!,
                 l.Url!,
                 l.Description!,
-                Enum.TryParse<LinkType>(l.Type?.ToString(), true, out var result) ? result : null)
+                Enum.TryParse<LinkType>(l.Type?.ToString(), true, out var res) ? res : LinkType.Related)
         ).ToList();
 
         return new AutoTestResultsForTestRunModel(
-            autoTestExternalId: autotest.ExternalId ?? string.Empty)
+            autoTestExternalId: result.ExternalId ?? string.Empty)
         {
-            StatusCode = autotest.Outcome?.ToString() ?? string.Empty,
+            StatusType = forceInProgressStatus
+                ? TestStatusType.InProgress
+                : MapToStatusType(result.Outcome?.ToString() ?? string.Empty),
             ConfigurationId = new Guid(configurationId ?? string.Empty),
             Links = links ?? [],
-            Message = autotest.Message ?? string.Empty,
-            Traces = autotest.Traces ?? string.Empty,
-            StartedOn = autotest.StartedOn,
-            CompletedOn = autotest.CompletedOn,
-            Duration = autotest.Duration,
-            Attachments = autotest.Attachments?.Select(a => new AttachmentPutModel(a)).ToList() ?? [],
-            Parameters = autotest.Parameters ?? [],
-            StepResults = ConvertResultStepToModel(autotest.StepResults),
-            SetupResults = ConvertResultStepToModel(autotest.SetupResults),
-            TeardownResults = ConvertResultStepToModel(autotest.TeardownResults)
+            Message = result.Message ?? string.Empty,
+            Traces = result.Traces ?? string.Empty,
+            StartedOn = result.StartedOn,
+            CompletedOn = result.CompletedOn,
+            Duration = result.Duration,
+            Attachments = result.Attachments?.Select(a => new AttachmentPutModel(a)).ToList() ?? [],
+            Parameters = result.Parameters ?? [],
+            StepResults = ConvertResultStepToModel(result.StepResults),
+            SetupResults = ConvertResultStepToModel(result.SetupResults),
+            TeardownResults = ConvertResultStepToModel(result.TeardownResults)
         };
     }
 
@@ -128,7 +153,7 @@ public static class Converter
         {
             TestRunIds = [new Guid(testRunId)],
             ConfigurationIds = [new Guid(configurationId)],
-            StatusCodes = ["InProgress"]
+            StatusTypes = [TestStatusApiType.InProgress]
         };
     }
 

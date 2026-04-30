@@ -21,7 +21,14 @@ public class TmsMessageBus : IMessageBus
     {
         switch (message)
         {
+            case ITestAssemblyStarting:
+                TmsXunitHelper.OnRunStarted();
+                break;
+            case ITestAssemblyFinished:
+                TmsXunitHelper.OnRunFinished();
+                break;
             case ITestCaseStarting testCaseStarting:
+                TmsXunitHelper.OnTestCaseStarted();
                 TmsXunitHelper.StartTestContainer(testCaseStarting);
                 break;
             case ITestClassConstructionFinished testClassConstructionFinished:

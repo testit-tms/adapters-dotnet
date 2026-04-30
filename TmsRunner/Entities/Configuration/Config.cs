@@ -17,5 +17,6 @@ public sealed record Config
     public string? TmsLabelsOfTestsToRun { get; init; }
     public string? TmsIgnoreParameters { get; init; }
     public string? TmsRerunTestsCount { get; init; }
+    public string? TmsSyncStoragePort { get; init; }
     public bool IsDebug { get; init; }
 }

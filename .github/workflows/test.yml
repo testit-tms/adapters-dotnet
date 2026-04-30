@@ -43,29 +43,29 @@ jobs:
       TEST_ROOT: dotnet-examples/${{ matrix.project_name }}/${{ matrix.project_name }}
     steps:
       - name: Checkout adapters-dotnet
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
       - name: Checkout api-validator-dotnet
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: testit-tms/api-validator-dotnet
           token: ${{ env.GITHUB_PAT }}
           path: api-validator-dotnet
       - name: Checkout dotnet-examples
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
         with:
           repository: testit-tms/dotnet-examples
           path: dotnet-examples
       - name: Setup dotnet
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: ${{ matrix.dotnet_version }}
       - name: Setup python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       - name: Setup environment
         run: |
-          dotnet remove ${{ env.TEST_ROOT }}/${{ matrix.project_name }}.csproj package TestIT.Adapter.${{ matrix.package_name }}
+          dotnet remove ${{ env.TEST_ROOT }}/${{ matrix.project_name }}.csproj package TestIT.Adapter.${{ matrix.package_name }} || true
           dotnet add ${{ env.TEST_ROOT }}/${{ matrix.project_name }}.csproj reference Tms.Adapter.Core/Tms.Adapter.Core.csproj
           dotnet add ${{ env.TEST_ROOT }}/${{ matrix.project_name }}.csproj reference ${{ env.ADAPTER_PACKAGE }}
           dotnet build --configuration Release --property WarningLevel=0 dotnet-examples/${{ matrix.project_name }}
@@ -77,7 +77,43 @@ jobs:
           echo "TMS_TEST_RUN_ID=$(<${{ env.TEMP_FILE }})" >> $GITHUB_ENV
       - name: Test
         run: |
-          dotnet test --configuration Release --collect:"XPlat Code Coverage" --no-build dotnet-examples/${{ matrix.project_name }} || exit 0
+          export SYNC_STORAGE_VERSION=$(grep -o 'SyncStorageVersion = "[^"]*"' Tms.Adapter.Core/SyncStorage/SyncStorageRunner.cs | cut -d'"' -f2)
+          
+          mkdir -p .caches
+          wget -O .caches/syncstorage-linux-amd64 \
+          "https://github.com/testit-tms/sync-storage-public/releases/download/${SYNC_STORAGE_VERSION}/syncstorage-${SYNC_STORAGE_VERSION}-linux_amd64"
+          chmod +x .caches/syncstorage-linux-amd64
+          nohup .caches/syncstorage-linux-amd64 --testRunId ${{ env.TMS_TEST_RUN_ID }} --port 49152 \
+          --baseURL ${{ env.TMS_URL }} --privateToken ${{ env.TMS_PRIVATE_TOKEN }}  > service.log 2>&1 & 
+          
+          sleep 1
+          
+          curl -v http://127.0.0.1:49152/health || true
+
+
+          dotnet test --configuration Release --collect:"XPlat Code Coverage" --no-build dotnet-examples/${{ matrix.project_name }} || true
+
+          sleep 1
+
+          curl -v http://127.0.0.1:49152/wait-completion?testRunId=${{ env.TMS_TEST_RUN_ID }} --max-time 100 || true
+          
+          cat service.log
+
       - name: Validate
         run: |
+          dotnet test --configuration Debug --no-build --logger:"console;verbosity=detailed" api-validator-dotnet
+
+
+      - name: Test Adapter Mode 2
+        run: |
+
+          export TMS_ADAPTER_MODE=2
+
+          dotnet test --configuration Release --collect:"XPlat Code Coverage" --no-build dotnet-examples/${{ matrix.project_name }} || true
+
+          curl -v http://127.0.0.1:49152/wait-completion --max-time 100 || true
+
+      - name: Validate Again
+        run: |
+          export TMS_TEST_RUN_ID=skip
           dotnet test --configuration Debug --no-build --logger:"console;verbosity=detailed" api-validator-dotnet

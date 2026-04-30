@@ -18,6 +18,7 @@ public static class Configurator
     private const string TmsCertValidation = "TMS_CERT_VALIDATION";
     private const string ConfigFile = "TMS_CONFIG_FILE";
     private const string TmsIgnoreParameters = "TMS_IGNORE_PARAMETERS";
+    private const string TmsSyncStoragePort = "TMS_SYNC_STORAGE_PORT";
 
     public static TmsSettings GetConfig()
     {
@@ -116,6 +117,12 @@ public static class Configurator
                 out var ignoreParams) && ignoreParams)
         {
             settings.IgnoreParameters = true;
+        }
+
+        var syncStoragePort = Environment.GetEnvironmentVariable(TmsSyncStoragePort);
+        if (!string.IsNullOrWhiteSpace(syncStoragePort) && int.TryParse(syncStoragePort, out var portValue))
+        {
+            settings.SyncStoragePort = portValue;
         }
     }
 

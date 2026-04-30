@@ -1,3 +1,4 @@
+using SyncStorage.ApiClient.Model;
 using TestIT.ApiClient.Model;
 using Tms.Adapter.Core.Models;
 using Link = Tms.Adapter.Core.Models.Link;
@@ -49,6 +50,23 @@ public static class Converter
             ExternalKey = result.ExternalKey!,
         };
     }
+    
+    // Undefined,
+    // Failed,
+    // Passed,
+    // Skipped,
+    private static TestStatusType MapToStatusType(string status)
+    {
+        switch (status)
+        {
+            case "Passed": return TestStatusType.Succeeded;
+            case "Failed": return TestStatusType.Failed;
+            case "Skipped": return TestStatusType.Incomplete;
+            case "Blocked": return TestStatusType.Incomplete;
+            case "InProgress": return TestStatusType.InProgress;
+            default: return TestStatusType.Incomplete;
+        }
+    }
 
     public static AutoTestResultsForTestRunModel ConvertResultToModel(TestContainer result, ClassContainer container,
         string configurationId)
@@ -56,7 +74,7 @@ public static class Converter
         return new AutoTestResultsForTestRunModel(
             autoTestExternalId: result.ExternalId!)
         {
-            StatusCode = result.Status.ToString(),
+            StatusType = MapToStatusType(result.Status.ToString()),
             ConfigurationId = new Guid(configurationId),
             Links = ConvertLinksToLinkPostModels(result.ResultLinks),
             Message = result.Message!,
@@ -117,7 +135,7 @@ public static class Converter
                 Description = l.Description!,
                 Type = l.Type != null
                     ? Enum.Parse<LinkType>(l.Type.ToString())
-                    : null
+                    : LinkType.Related
             }
         ).ToList();
     }
@@ -131,7 +149,7 @@ public static class Converter
                 Description = l.Description!,
                 Type = l.Type != null
                     ? Enum.Parse<LinkType>(l.Type.ToString())
-                    : null
+                    : LinkType.Related
             }
         ).ToList();
     }
@@ -145,7 +163,7 @@ public static class Converter
                 Description = l.Description!,
                 Type = l.Type != null
                     ? Enum.Parse<LinkType>(l.Type.ToString())
-                    : null
+                    : LinkType.Related
             }
         ).ToList();
     }
@@ -173,5 +191,47 @@ public static class Converter
                 s.DisplayName!,
                 s.Description!,
                 ConvertStepsToStepApiModel(s.Steps))).ToList();
+    }
+
+    /// <summary>
+    /// Sync Storage cut: <paramref name="statusCode"/> is the adapter outcome as string (Passed/Failed/...);
+    /// <see cref="TestResultCutApiModel.StatusType"/> is the TMS API status name (Succeeded/Failed/...) from <see cref="MapToStatusType"/>.
+    /// </summary>
+    public static TestResultCutApiModel ToTestResultCutApiModel(TestContainer result, string projectId)
+    {
+        if (string.IsNullOrWhiteSpace(projectId))
+            throw new ArgumentException("projectId is required.", nameof(projectId));
+
+        var statusCode = result.Status == Status.Undefined ? nameof(Status.Passed) : result.Status.ToString();
+        DateTime? startedOn = result.Start > 0
+            ? DateTimeOffset.FromUnixTimeMilliseconds(result.Start).AddSeconds(-1).UtcDateTime
+            : null;
+
+        return new TestResultCutApiModel(
+            projectId: projectId,
+            autoTestExternalId: result.ExternalId ?? string.Empty,
+            statusCode: statusCode,
+            statusType: MapToStatusType(statusCode).ToString(),
+            startedOn: startedOn);
+    }
+
+    /// <summary>
+    /// Same mapping for runners (e.g. vstest) that already have outcome as string.
+    /// </summary>
+    public static TestResultCutApiModel ToTestResultCutApiModel(
+        string autoTestExternalId,
+        string statusCode,
+        DateTime? startedOn,
+        string projectId)
+    {
+        if (string.IsNullOrWhiteSpace(projectId))
+            throw new ArgumentException("projectId is required.", nameof(projectId));
+
+        return new TestResultCutApiModel(
+            projectId: projectId,
+            autoTestExternalId: autoTestExternalId,
+            statusCode: statusCode,
+            statusType: MapToStatusType(statusCode).ToString(),
+            startedOn: startedOn);
     }
 }

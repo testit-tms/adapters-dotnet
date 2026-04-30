@@ -209,6 +209,26 @@ public class HtmlEscapeUtilsTests
     #region EscapeHtmlInObject Tests
 
     [TestMethod]
+    public void EscapeHtmlInObject_WithExternalIds_DoesNotEscapeAngleBrackets()
+    {
+        // Arrange
+        var model = new TestModelWithExternalIds
+        {
+            ExternalId = "<test>",
+            AutoTestExternalId = "<test>",
+            Name = "Name<script>"
+        };
+
+        // Act
+        var result = HtmlEscapeUtils.EscapeHtmlInObject(model);
+
+        // Assert
+        Assert.AreEqual("<test>", result.ExternalId);
+        Assert.AreEqual("<test>", result.AutoTestExternalId);
+        Assert.AreEqual("Name&lt;script&gt;", result.Name);
+    }
+
+    [TestMethod]
     public void EscapeHtmlInObject_NullObject_ReturnsNull()
     {
         // Act
@@ -702,6 +722,13 @@ public class HtmlEscapeUtilsTests
     {
         public string? Name { get; set; }
         public TestStatus Status { get; set; }
+    }
+
+    public class TestModelWithExternalIds
+    {
+        public string? ExternalId { get; set; }
+        public string? AutoTestExternalId { get; set; }
+        public string? Name { get; set; }
     }
 
     public enum TestStatus

@@ -17,6 +17,7 @@ public sealed class EnvConfigurationProvider : ConfigurationProvider
     private const string EnvTmsCertValidation = "TMS_CERT_VALIDATION";
     private const string EnvTmsIgnoreParameters = "TMS_IGNORE_PARAMETERS";
     private const string EnvTmsRerunTestsCount = "TMS_ADAPTER_AUTOTESTS_RERUN_COUNT";
+    private const string EnvTmsSyncStoragePort = "TMS_SYNC_STORAGE_PORT";
 
     public override void Load()
     {
@@ -35,6 +36,7 @@ public sealed class EnvConfigurationProvider : ConfigurationProvider
             { "CertValidation", Environment.GetEnvironmentVariable(EnvTmsCertValidation) },
             { "IgnoreParameters", Environment.GetEnvironmentVariable(EnvTmsIgnoreParameters) },
             { "RerunTestsCount", Environment.GetEnvironmentVariable(EnvTmsRerunTestsCount) },
+            { "SyncStoragePort", Environment.GetEnvironmentVariable(EnvTmsSyncStoragePort) },
         };
 
         Data = data

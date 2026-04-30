@@ -20,7 +20,8 @@ namespace TmsRunner.Services;
 
 public sealed partial class ProcessorService(ILogger<ProcessorService> logger,
                                      TmsManager apiClient,
-                                     TmsSettings tmsSettings)
+                                     TmsSettings tmsSettings,
+                                     SyncStorageSession syncStorageSession)
 {
     private async Task<List<StepModel>> GetStepsWithAttachmentsAsync(string? traceJson, List<Guid> attachmentIds)
     {
@@ -229,6 +230,22 @@ public sealed partial class ProcessorService(ILogger<ProcessorService> logger,
             testCaseSteps, attachmentIds, parameters, tmsSettings.IgnoreParameters);
 
         HtmlEscapeUtils.EscapeHtmlInObject(autoTestResultRequestBody);
+
+        if (syncStorageSession.Runner is { IsRunning: true, IsMaster: true } runner && !runner.IsAlreadyInProgress
+            && !string.IsNullOrWhiteSpace(tmsSettings.ProjectId))
+        {
+            var cut = Tms.Adapter.Core.Client.Converter.ToTestResultCutApiModel(
+                autoTest.ExternalId ?? string.Empty,
+                testResult.Outcome.ToString(),
+                testResult.StartTime.UtcDateTime,
+                tmsSettings.ProjectId);
+
+            if (await runner.SendInProgressTestResultAsync(cut).ConfigureAwait(false))
+            {
+                await apiClient.SubmitResultToTestRunAsync(tmsSettings.TestRunId, autoTestResultRequestBody, true)
+                    .ConfigureAwait(false);
+            }
+        }
 
         await apiClient.SubmitResultToTestRunAsync(tmsSettings.TestRunId, autoTestResultRequestBody)
             .ConfigureAwait(false);

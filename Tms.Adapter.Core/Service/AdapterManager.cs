@@ -4,6 +4,7 @@ using System.Globalization;
 using Tms.Adapter.Core.Client;
 using Tms.Adapter.Core.Models;
 using Tms.Adapter.Core.Storage;
+using Tms.Adapter.Core.SyncStorage;
 using Tms.Adapter.Core.Utils;
 using LoggerFactory = Tms.Adapter.Core.Logger.LoggerFactory;
 
@@ -11,6 +12,9 @@ namespace Tms.Adapter.Core.Service;
 
 public sealed class AdapterManager : IDisposable
 {
+    private const string InProgressLiteral = "InProgress";
+    private const string DisableNetworkEnvVar = "TMS_DISABLE_NETWORK";
+
     public static Func<string> CurrentTestIdGetter { get; } =
         () => Environment.CurrentManagedThreadId.ToString(CultureInfo.InvariantCulture);
 
@@ -18,10 +22,13 @@ public sealed class AdapterManager : IDisposable
     private static AdapterManager? _instance;
     private readonly ResultStorage _storage;
     private readonly Writer.Writer _writer;
-    private readonly TmsClient _client;
+    private readonly ITmsClient _client;
     private readonly ILogger<AdapterManager> _logger;
     private readonly ConcurrentDictionary<string, string> _messageByTestId = new();
     private readonly ConcurrentDictionary<string, List<Link>> _linksByTestId = new();
+    private readonly object _writeLock = new();
+
+    private SyncStorageRunner? _syncStorageRunner;
 
     public static AdapterManager Instance
     {
@@ -47,9 +54,70 @@ public sealed class AdapterManager : IDisposable
         var config = Configurator.Configurator.GetConfig();
         var logger = LoggerFactory.GetLogger(config.IsDebug);
         _logger = logger.CreateLogger<AdapterManager>();
-        _client = new TmsClient(logger.CreateLogger<TmsClient>(), config);
+        _client = IsNetworkDisabled()
+            ? new NoopTmsClient()
+            : new TmsClient(logger.CreateLogger<TmsClient>(), config);
         _storage = new ResultStorage();
         _writer = new Writer.Writer(logger.CreateLogger<Writer.Writer>(), _client, config);
+
+        // Initialize Sync Storage
+        if (!IsNetworkDisabled())
+        {
+            InitializeSyncStorage(config, logger);
+        }
+    }
+
+    private static bool IsNetworkDisabled()
+    {
+        return string.Equals(Environment.GetEnvironmentVariable(DisableNetworkEnvVar), "true",
+            StringComparison.OrdinalIgnoreCase);
+    }
+
+    private void InitializeSyncStorage(Configurator.TmsSettings config, ILoggerFactory loggerFactory)
+    {
+        try
+        {
+            var testRunId = config.TestRunId;
+
+            // If no test run ID, create one (needed for sync storage registration)
+            if (string.IsNullOrEmpty(testRunId))
+            {
+                _client.CreateTestRun().Wait();
+                testRunId = config.TestRunId;
+            }
+
+            if (string.IsNullOrEmpty(testRunId))
+            {
+                _logger.LogWarning("Cannot initialize SyncStorage: no test run ID");
+                return;
+            }
+
+            _syncStorageRunner = new SyncStorageRunner(
+                testRunId: testRunId,
+                port: config.SyncStoragePort,
+                baseUrl: config.Url,
+                privateToken: config.PrivateToken,
+                logger: loggerFactory.CreateLogger<SyncStorageRunner>());
+
+            var started = _syncStorageRunner.StartAsync().GetAwaiter().GetResult();
+
+            if (started)
+            {
+                _logger.LogInformation("SyncStorage initialized successfully");
+            }
+            else
+            {
+                _logger.LogWarning("Failed to start SyncStorage, continuing without it");
+                _syncStorageRunner.Dispose();
+                _syncStorageRunner = null;
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed to initialize SyncStorage");
+            _syncStorageRunner?.Dispose();
+            _syncStorageRunner = null;
+        }
     }
 
     public AdapterManager StartTestContainer(ClassContainer container)
@@ -74,6 +142,9 @@ public sealed class AdapterManager : IDisposable
     {
         _logger.LogDebug("Updating class container with id: {ID}", uuid);
 
+        // SpecFlow (and some runners) can reference a "root" container id (e.g. feature hash)
+        // that wasn't explicitly started. Ensure it exists to avoid KeyNotFoundException.
+        _storage.Put(uuid, new ClassContainer { Id = uuid });
         update.Invoke(_storage.Get<ClassContainer>(uuid));
         return this;
     }
@@ -195,7 +266,7 @@ public sealed class AdapterManager : IDisposable
     public AdapterManager StopTestCase(string uuid)
     {
         var testResult = _storage.Get<TestContainer>(uuid);
-        
+
         _messageByTestId.TryRemove(CurrentTestIdGetter(), out var message);
 
         if (!string.IsNullOrEmpty(message) && testResult.Status != Status.Failed)
@@ -205,7 +276,7 @@ public sealed class AdapterManager : IDisposable
 
         _linksByTestId.TryRemove(CurrentTestIdGetter(), out var links);
 
-        if (links != null && links.Count > 0 )
+        if (links != null && links.Count > 0)
         {
             lock (links)
             {
@@ -224,9 +295,84 @@ public sealed class AdapterManager : IDisposable
 
     public AdapterManager WriteTestCase(string uuid, string containerId)
     {
-        _writer.Write(_storage.Remove<TestContainer>(uuid),
-            _storage.Remove<ClassContainer>(containerId)).Wait();
-        return this;
+        lock (_writeLock)
+        {
+            var testContainer = _storage.Remove<TestContainer>(uuid);
+            var classContainer = _storage.Remove<ClassContainer>(containerId);
+
+            if (testContainer == null || classContainer == null)
+            {
+                _logger.LogDebug("Skip write: test or container not found (testId={TestId}, containerId={ContainerId})",
+                    uuid, containerId);
+                return this;
+            }
+
+            // Serialize writes so the in-progress master result is always flushed first.
+            // This prevents parallel test threads from writing other results ahead of it.
+            if (IsSyncStorageActive() && IsMasterAndNoInProgress())
+            {
+                if (TrySendToSyncStorageAndWriteInProgress(testContainer, classContainer))
+                {
+                    return this;
+                }
+                // Fall through to normal write on failure
+            }
+
+            _writer.Write(testContainer, classContainer).Wait();
+            return this;
+        }
+    }
+
+    /// <summary>
+    /// Attempt to send test result to Sync Storage as in-progress, then write to TMS with InProgress status.
+    /// </summary>
+    private bool TrySendToSyncStorageAndWriteInProgress(TestContainer testContainer, ClassContainer classContainer)
+    {
+        try
+        {
+            var cfg = Tms.Adapter.Core.Configurator.Configurator.GetConfig();
+            if (string.IsNullOrWhiteSpace(cfg.ProjectId))
+            {
+                _logger.LogWarning("Sync Storage in-progress skipped: ProjectId is not configured.");
+                return false;
+            }
+
+            var cutModel = Converter.ToTestResultCutApiModel(testContainer, cfg.ProjectId);
+
+            _logger.LogDebug(
+                "Sending to SyncStorage: ExternalId={ExternalId}, Status={Status}",
+                cutModel.AutoTestExternalId, cutModel.StatusCode);
+
+            var success = _syncStorageRunner!.SendInProgressTestResultAsync(cutModel)
+                .GetAwaiter().GetResult();
+
+            if (!success)
+            {
+                return false;
+            }
+
+            // Write to TMS with InProgress status
+            var originalStatus = testContainer.Status;
+            testContainer.Status = Status.InProgress;
+
+            try
+            {
+                _writer.Write(testContainer, classContainer).Wait();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Failed to write InProgress test to TMS, falling back");
+                testContainer.Status = originalStatus;
+                _syncStorageRunner!.SetIsAlreadyInProgress(false);
+                return false;
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "SyncStorage handling failed, falling back to normal write");
+            return false;
+        }
     }
 
     public AdapterManager StartStep(StepResult result)
@@ -322,6 +468,53 @@ public sealed class AdapterManager : IDisposable
         await _client.CompleteTestRun().ConfigureAwait(false);
     }
 
+    /// <summary>
+    /// Notify Sync Storage that test running has started (sets worker status to in_progress).
+    /// Call at the beginning of a test run.
+    /// </summary>
+    public void OnRunningStarted()
+    {
+        SetWorkerStatus("in_progress");
+    }
+
+    /// <summary>
+    /// Notify Sync Storage that the current block has completed (sets worker status to completed).
+    /// Call at the end of a test session/block.
+    /// </summary>
+    public void OnBlockCompleted()
+    {
+        SetWorkerStatus("completed");
+    }
+
+    private void SetWorkerStatus(string status)
+    {
+        if (!IsSyncStorageActive())
+        {
+            return;
+        }
+
+        _logger.LogInformation("Setting worker status to {Status}", status);
+
+        try
+        {
+            _syncStorageRunner!.SetWorkerStatusAsync(status).GetAwaiter().GetResult();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to set worker status to {Status}", status);
+        }
+    }
+
+    private bool IsSyncStorageActive()
+    {
+        return _syncStorageRunner != null && _syncStorageRunner.IsRunning;
+    }
+
+    private bool IsMasterAndNoInProgress()
+    {
+        return _syncStorageRunner!.IsMaster && !_syncStorageRunner.IsAlreadyInProgress;
+    }
+
     public static void ClearInstance()
     {
         _instance = null;
@@ -329,6 +522,10 @@ public sealed class AdapterManager : IDisposable
 
     public void Dispose()
     {
-        _client.Dispose();
+        _syncStorageRunner?.Dispose();
+        if (_client is IDisposable disposable)
+        {
+            disposable.Dispose();
+        }
     }
 }
