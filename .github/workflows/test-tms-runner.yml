@@ -89,7 +89,6 @@ jobs:
       - name: Setup environment
         run: |
           set -euo pipefail
-          # Явный путь без env.TEST_ROOT: при пустом сегменте dotnet remove без .csproj ищет проект только в текущей директории (корень репозитория).
           PROJECT_PATH="${{ github.workspace }}/dotnet-examples/${{ matrix.project_name }}/${{ matrix.project_name }}/${{ matrix.project_name }}.csproj"
           echo "PWD=$(pwd)"
           echo "GITHUB_WORKSPACE=${GITHUB_WORKSPACE:-}"
@@ -97,8 +96,18 @@ jobs:
           echo "EXPECTED_TEST_ROOT_REL=dotnet-examples/${{ matrix.project_name }}/${{ matrix.project_name }}"
           test -n "${PROJECT_PATH}" || { echo "::error::PROJECT_PATH is empty"; exit 1; }
           test -f "${PROJECT_PATH}" || { echo "::error::PROJECT file missing: ${PROJECT_PATH}"; ls -la "dotnet-examples/${{ matrix.project_name }}" 2>/dev/null || ls -la dotnet-examples || true; exit 1; }
-          dotnet remove "$PROJECT_PATH" package TestIT.Adapter
-          dotnet add "$PROJECT_PATH" reference Tms.Adapter/Tms.Adapter.csproj
+          # На образе может быть активен SDK 10+: «dotnet package remove PKG» без --project ищет .csproj в cwd —
+          # тот же текст ошибки про корень adapters-dotnet. Явный --project + fallback для SDK 8/9.
+          if dotnet package remove -h >/dev/null 2>&1; then
+            dotnet package remove TestIT.Adapter --project "$PROJECT_PATH" || true
+          else
+            dotnet remove "$PROJECT_PATH" package TestIT.Adapter || true
+          fi
+          if dotnet reference add -h >/dev/null 2>&1; then
+            dotnet reference add Tms.Adapter/Tms.Adapter.csproj --project "$PROJECT_PATH"
+          else
+            dotnet add "$PROJECT_PATH" reference Tms.Adapter/Tms.Adapter.csproj
+          fi
           dotnet build --configuration Release --property WarningLevel=0 dotnet-examples/${{ matrix.project_name }}
           dotnet build --configuration Release --property WarningLevel=0 TmsRunner
           dotnet build --configuration Debug --property WarningLevel=0 api-validator-dotnet
