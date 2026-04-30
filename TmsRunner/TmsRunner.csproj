@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
 	  <Version>2.0.1</Version>
@@ -11,7 +11,7 @@
     <Copyright>Copyright (c) 2019 - 2024 Test IT</Copyright>
     <RepositoryUrl>https://github.com/testit-tms/adapters-dotnet</RepositoryUrl>
     <PackageProjectUrl>https://testit.software</PackageProjectUrl>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFrameworks>$(TargetFrameworksForApp)</TargetFrameworks>
     <PublishSingleFile>true</PublishSingleFile>
     <SelfContained>true</SelfContained>
     <RuntimeIdentifiers>win-x64;linux-x64;osx-x64</RuntimeIdentifiers>
