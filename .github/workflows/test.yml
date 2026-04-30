@@ -95,21 +95,14 @@ jobs:
 
           sleep 1
 
-          curl -fsS "http://127.0.0.1:49152/wait-completion?testRunId=${{ env.TMS_TEST_RUN_ID }}" --max-time 100 || true
-          # Для XUnit тестов sync-storage уже «completed», а API TMS ещё догоняет Outcome=InProgress для части результатов.
-          sleep 15
+          curl -v http://127.0.0.1:49152/wait-completion?testRunId=${{ env.TMS_TEST_RUN_ID }} --max-time 100 || true
+          
           cat service.log
 
       - name: Validate
         run: |
-          for attempt in 1 2 3 4 5; do
-            if dotnet test --configuration Debug --no-build --logger:"console;verbosity=detailed" api-validator-dotnet; then
-              exit 0
-            fi
-            echo "::warning::Validate: попытка $attempt/5 — часто TMS ещё InProgress; пауза 15 с..."
-            sleep 15
-          done
-          exit 1
+          dotnet test --configuration Debug --no-build --logger:"console;verbosity=detailed" api-validator-dotnet
+
 
       - name: Test Adapter Mode 2
         run: |
@@ -118,17 +111,9 @@ jobs:
 
           dotnet test --configuration Release --collect:"XPlat Code Coverage" --no-build dotnet-examples/${{ matrix.project_name }} || true
 
-          curl -fsS "http://127.0.0.1:49152/wait-completion?testRunId=${{ env.TMS_TEST_RUN_ID }}" --max-time 100 || true
-          sleep 20
+          curl -v http://127.0.0.1:49152/wait-completion?testRunId=${{ env.TMS_TEST_RUN_ID }} --max-time 100 || true
 
       - name: Validate Again
         run: |
           export TMS_TEST_RUN_ID=skip
-          for attempt in 1 2 3 4 5; do
-            if dotnet test --configuration Debug --no-build --logger:"console;verbosity=detailed" api-validator-dotnet; then
-              exit 0
-            fi
-            echo "::warning::Validate Again: попытка $attempt/5 — пауза 15 с..."
-            sleep 15
-          done
-          exit 1
+          dotnet test --configuration Debug --no-build --logger:"console;verbosity=detailed" api-validator-dotnet
