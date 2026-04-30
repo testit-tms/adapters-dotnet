@@ -324,7 +324,7 @@ public sealed class AdapterManager : IDisposable
     }
 
     /// <summary>
-    /// Attempt to send test result to Sync Storage as in-progress, then write to TMS with InProgress status.
+    /// Sends in-progress preview to Sync Storage (master slot), publishes InProgress to TMS, then the final outcome.
     /// </summary>
     private bool TrySendToSyncStorageAndWriteInProgress(TestContainer testContainer, ClassContainer classContainer)
     {
@@ -351,21 +351,25 @@ public sealed class AdapterManager : IDisposable
                 return false;
             }
 
-            // Write to TMS with InProgress status
             var originalStatus = testContainer.Status;
             testContainer.Status = Status.InProgress;
 
             try
             {
                 _writer.Write(testContainer, classContainer).Wait();
+                testContainer.Status = originalStatus;
+                _writer.Write(testContainer, classContainer).Wait();
                 return true;
             }
             catch (Exception ex)
             {
-                _logger.LogWarning(ex, "Failed to write InProgress test to TMS, falling back");
+                _logger.LogWarning(ex, "Failed to write SyncStorage-backed test results to TMS, falling back");
                 testContainer.Status = originalStatus;
-                _syncStorageRunner!.SetIsAlreadyInProgress(false);
                 return false;
+            }
+            finally
+            {
+                _syncStorageRunner!.SetIsAlreadyInProgress(false);
             }
         }
         catch (Exception ex)
