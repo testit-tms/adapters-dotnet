@@ -63,7 +63,7 @@ jobs:
       TMS_RUNNER: TmsRunner/bin/Release/${{ matrix.dotnet_framework }}/linux-x64/TmsRunner
       TMS_TEST_RUN_NAME: ${{ matrix.project_name }} TestRun
       TEST_ROOT: dotnet-examples/${{ matrix.project_name }}/${{ matrix.project_name }}
-      TEST_DLL: ${{ github.workspace }}/dotnet-examples/${{ matrix.project_name }}/${{ matrix.project_name }}/bin/Release/net8.0/${{ matrix.project_name }}.dll
+      TEST_DLL: ${{ github.workspace }}/dotnet-examples/${{ matrix.project_name }}/${{ matrix.project_name }}/bin/Release/${{ matrix.dotnet_framework }}/${{ matrix.project_name }}.dll
     steps:
       - name: Checkout adapters-dotnet
         uses: actions/checkout@v5
@@ -88,7 +88,15 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
       - name: Setup environment
         run: |
-          PROJECT_PATH="${{ github.workspace }}/${{ env.TEST_ROOT }}/${{ matrix.project_name }}.csproj"
+          set -euo pipefail
+          # Явный путь без env.TEST_ROOT: при пустом сегменте dotnet remove без .csproj ищет проект только в текущей директории (корень репозитория).
+          PROJECT_PATH="${{ github.workspace }}/dotnet-examples/${{ matrix.project_name }}/${{ matrix.project_name }}/${{ matrix.project_name }}.csproj"
+          echo "PWD=$(pwd)"
+          echo "GITHUB_WORKSPACE=${GITHUB_WORKSPACE:-}"
+          echo "PROJECT_PATH=${PROJECT_PATH}"
+          echo "EXPECTED_TEST_ROOT_REL=dotnet-examples/${{ matrix.project_name }}/${{ matrix.project_name }}"
+          test -n "${PROJECT_PATH}" || { echo "::error::PROJECT_PATH is empty"; exit 1; }
+          test -f "${PROJECT_PATH}" || { echo "::error::PROJECT file missing: ${PROJECT_PATH}"; ls -la "dotnet-examples/${{ matrix.project_name }}" 2>/dev/null || ls -la dotnet-examples || true; exit 1; }
           dotnet remove "$PROJECT_PATH" package TestIT.Adapter
           dotnet add "$PROJECT_PATH" reference Tms.Adapter/Tms.Adapter.csproj
           dotnet build --configuration Release --property WarningLevel=0 dotnet-examples/${{ matrix.project_name }}
