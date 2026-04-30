@@ -112,7 +112,12 @@ jobs:
           dotnet build --configuration Release --property WarningLevel=0 TmsRunner
           dotnet build --configuration Debug --property WarningLevel=0 api-validator-dotnet
           pip install testit-cli
-          echo "VSTEST_CONSOLE=$(find /usr/share/dotnet/sdk -type f -name "vstest.console.dll" 2>/dev/null | head -n 1)" >> $GITHUB_ENV
+          DOTNET_EXE="$(command -v dotnet)"
+          DOTNET_HOME="$(dirname "$DOTNET_EXE")"
+          SDK_VER="$(dotnet --version)"
+          VSTEST_PATH="$DOTNET_HOME/sdk/$SDK_VER/vstest.console.dll"
+          test -f "$VSTEST_PATH" || { echo "::error::vstest.console.dll не найден: $VSTEST_PATH (dotnet $SDK_VER из $DOTNET_EXE)"; exit 1; }
+          echo "VSTEST_CONSOLE=$VSTEST_PATH" >> $GITHUB_ENV
       - name: Create TestRun
         run: |
           testit testrun create --token ${{ env.TMS_PRIVATE_TOKEN }} --output ${{ env.TEMP_FILE }}
@@ -130,14 +135,16 @@ jobs:
           
           sleep 1
           
-          curl -v http://127.0.0.1:49152/health || true
+          curl -fsS http://127.0.0.1:49152/health || { echo "::error::sync-storage health не ответил"; cat service.log; exit 1; }
 
           ${{ env.TMS_RUNNER }} --runner "${{ env.VSTEST_CONSOLE }}" --testassembly "${{ env.TEST_DLL }}" || true
+          echo '::notice::Если код vstest≠0 см. предыдущий вывод; при «No master» в service.log главная причина — не регистрируется процесс синхронизации (часто неверный vstest.console.dll).'
 
           sleep 1
 
-          curl -v http://127.0.0.1:49152/wait-completion?testRunId=${{ env.TMS_TEST_RUN_ID }} || true
-          
+          curl -fsS --max-time 720 "http://127.0.0.1:49152/wait-completion?testRunId=${{ env.TMS_TEST_RUN_ID }}" \
+            || { echo "::notice::wait-completion без успешного HTTP (timeout/Empty reply — см. service.log)."; cat service.log; exit 1; }
+
           cat service.log
 
       - name: Validate
