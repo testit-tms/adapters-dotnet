@@ -305,6 +305,10 @@ public sealed class SyncStorageRunner : IDisposable
                 }
             }
         }
+        catch (InvalidOperationException)
+        {
+            _logger.LogInformation("SyncStorage process has already finished");
+        }
         catch (Exception ex)
         {
             _logger.LogWarning(ex, "Error reading SyncStorage output");
