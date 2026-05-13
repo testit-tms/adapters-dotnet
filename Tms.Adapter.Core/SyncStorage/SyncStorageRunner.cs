@@ -12,7 +12,7 @@ namespace Tms.Adapter.Core.SyncStorage;
 /// </summary>
 public sealed class SyncStorageRunner : IDisposable
 {
-    private const string SyncStorageVersion = "v0.3.0";
+    private const string SyncStorageVersion = "v0.3.2";
 
     private const string SyncStorageRepoUrl =
         "https://github.com/testit-tms/sync-storage-public/releases/download/";
@@ -285,11 +285,11 @@ public sealed class SyncStorageRunner : IDisposable
 
         _syncStorageProcess = Process.Start(psi);
 
-        if (_syncStorageProcess != null)
-        {
-            // Read output in background
-            Task.Run(() => ReadProcessOutput(_syncStorageProcess));
-        }
+        // if (_syncStorageProcess != null)
+        // {
+        //     // Read output in background
+        //     Task.Run(() => ReadProcessOutput(_syncStorageProcess));
+        // }
     }
 
     private async Task ReadProcessOutput(Process process)
@@ -301,13 +301,13 @@ public sealed class SyncStorageRunner : IDisposable
                 var line = await process.StandardOutput.ReadLineAsync().ConfigureAwait(false);
                 if (line != null)
                 {
-                    _logger.LogInformation("SyncStorage: {Line}", line);
+                    _logger.LogDebug("SyncStorage: {Line}", line);
                 }
             }
         }
         catch (InvalidOperationException)
         {
-            _logger.LogInformation("SyncStorage process has already finished");
+            _logger.LogDebug("SyncStorage process has already finished");
         }
         catch (Exception ex)
         {
