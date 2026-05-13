@@ -80,16 +80,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        include:
-          - os: win-x64
-            artifact_name: TmsRunner.exe
-            asset_name: TmsRunner-win-x64-${{ github.event.release.tag_name }}.exe
-          - os: linux-x64
-            artifact_name: TmsRunner
-            asset_name: TmsRunner-linux-x64-${{ github.event.release.tag_name }}
-          - os: osx-x64
-            artifact_name: TmsRunner
-            asset_name: TmsRunner-osx-x64-${{ github.event.release.tag_name }}
+        os: [win-x64, linux-x64, osx-x64]
+        tfm: [net8.0, net9.0, net10.0]
     needs: [ publish ]
     steps:
       - name: Checkout
@@ -100,7 +92,10 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: 8.0.x
+          dotnet-version: |
+            8.0.x
+            9.0.x
+            10.0.x
 
       - name: Restore dependencies
         run: dotnet restore ${{ env.RUNNER_DIR }}
@@ -108,18 +103,18 @@ jobs:
       - name: Publish project
         run: |
           dotnet publish \
+          -f ${{ matrix.tfm }} \
           -r ${{ matrix.os }} \
           --configuration Release \
           --self-contained true \
           --output ./publish \
-          --no-restore ${{ env.RUNNER_DIR }} 
+          --no-restore ${{ env.RUNNER_DIR }}
 
       - name: Upload binaries to release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: publish/${{ matrix.artifact_name }}
-          asset_name: ${{ matrix.asset_name }}
+          file: publish/${{ matrix.os == 'win-x64' && 'TmsRunner.exe' || 'TmsRunner' }}
+          asset_name: TmsRunner-${{ matrix.os }}-${{ matrix.tfm }}-${{ github.event.release.tag_name }}${{ matrix.os == 'win-x64' && '.exe' || '' }}
           tag: ${{ github.ref }}
           overwrite: true
-    
