@@ -6,6 +6,7 @@ using Tms.Adapter.Attributes;
 using Tms.Adapter.Utils;
 using TmsRunner.Entities.Configuration;
 using TmsRunner.Extensions;
+using TmsRunner.Utils;
 
 namespace TmsRunner.Services;
 
@@ -19,8 +20,7 @@ public sealed partial class FilterService(ILogger<FilterService> logger)
                                           IReadOnlyCollection<TestCase> testCases)
     {
         var testCasesToRun = new List<TestCase>();
-        // note: breaking tests if changing to .Load
-        var assembly = Assembly.LoadFrom(assemblyPath ?? string.Empty);
+        var assembly = TestAssemblyLoadContext.LoadTestAssembly(assemblyPath ?? string.Empty);
         var allTestMethods = new List<MethodInfo>(assembly.GetExportedTypes()
             .SelectMany(type => type.GetMethods()));
 
@@ -75,7 +75,7 @@ public sealed partial class FilterService(ILogger<FilterService> logger)
     {
         var labelsToRun = config.TmsLabelsOfTestsToRun?.Split(',').Select(x => x.Trim()).ToList();
         var testCasesToRun = new List<TestCase>();
-        var assembly = Assembly.LoadFrom(config.TestAssemblyPath ?? string.Empty);
+        var assembly = TestAssemblyLoadContext.LoadTestAssembly(config.TestAssemblyPath ?? string.Empty);
         var allTestMethods = new List<MethodInfo>(assembly.GetExportedTypes().SelectMany(type => type.GetMethods()));
 
         foreach (var testCase in testCases)

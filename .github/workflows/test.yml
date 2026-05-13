@@ -10,7 +10,6 @@ on:
       - "!**.csproj"
   workflow_dispatch:
 env:
-  DOTNET_VERSION: 8
   GITHUB_PAT: ${{ secrets.SERVICE_ACCOUNT_TOKEN }}
   PYTHON_VERSION: 3.12
   TEMP_FILE: tmp/output.txt
@@ -21,11 +20,12 @@ env:
   TMS_URL: ${{ secrets.TESTIT_URL }}
 jobs:
   test:
-    name: ${{ matrix.project_name }}
+    name: ${{ matrix.project_name }} (.NET ${{ matrix.dotnet_version }})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
+        dotnet_version: ['8.0.x', '9.0.x', '10.0.x']
         include:
           - configuration_id: SPECFLOW_CONFIGURATION_ID
             package_name: SpecFlowPlugin
@@ -58,7 +58,7 @@ jobs:
       - name: Setup dotnet
         uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: ${{ env.DOTNET_VERSION }}
+          dotnet-version: ${{ matrix.dotnet_version }}
       - name: Setup python
         uses: actions/setup-python@v6
         with:
@@ -111,7 +111,7 @@ jobs:
 
           dotnet test --configuration Release --collect:"XPlat Code Coverage" --no-build dotnet-examples/${{ matrix.project_name }} || true
 
-          curl -v http://127.0.0.1:49152/wait-completion --max-time 100 || true
+          curl -v http://127.0.0.1:49152/wait-completion?testRunId=${{ env.TMS_TEST_RUN_ID }} --max-time 100 || true
 
       - name: Validate Again
         run: |

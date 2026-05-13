@@ -12,6 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
+        dotnet_version: ['8.0.x', '9.0.x', '10.0.x']
         project: [
           Tms.Adapter,
           Tms.Adapter.Core,
@@ -27,7 +28,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: 8.0.x
+          dotnet-version: ${{ matrix.dotnet_version }}
 
       - name: Restore dependencies
         run: dotnet restore ./${{ matrix.project }}
@@ -46,7 +47,7 @@ jobs:
       - name: Save artifacts
         uses: actions/upload-artifact@v6
         with:
-          name: NuGet-package-${{ matrix.project }}
+          name: NuGet-package-${{ matrix.project }}-${{ matrix.dotnet_version }}
           path: ${{ env.NUGET_DIR }}/*.nupkg
   
   pre-publish:
