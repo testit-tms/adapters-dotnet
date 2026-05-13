@@ -307,9 +307,15 @@ public sealed class AdapterManager : IDisposable
                 return this;
             }
 
+            // Serialize writes so the in-progress master result is always flushed first.
+            // This prevents parallel test threads from writing other results ahead of it.
             if (IsSyncStorageActive() && IsMasterAndNoInProgress())
             {
-                TryNotifySyncStorageInProgress(testContainer);
+                if (TrySendToSyncStorageAndWriteInProgress(testContainer, classContainer))
+                {
+                    return this;
+                }
+                // Fall through to normal write on failure
             }
 
             _writer.Write(testContainer, classContainer).Wait();
@@ -317,15 +323,18 @@ public sealed class AdapterManager : IDisposable
         }
     }
 
-    private void TryNotifySyncStorageInProgress(TestContainer testContainer)
+    /// <summary>
+    /// Attempt to send test result to Sync Storage as in-progress, then write to TMS with InProgress status.
+    /// </summary>
+    private bool TrySendToSyncStorageAndWriteInProgress(TestContainer testContainer, ClassContainer classContainer)
     {
         try
         {
-            var cfg = Configurator.Configurator.GetConfig();
+            var cfg = Tms.Adapter.Core.Configurator.Configurator.GetConfig();
             if (string.IsNullOrWhiteSpace(cfg.ProjectId))
             {
                 _logger.LogWarning("Sync Storage in-progress skipped: ProjectId is not configured.");
-                return;
+                return false;
             }
 
             var cutModel = Converter.ToTestResultCutApiModel(testContainer, cfg.ProjectId);
@@ -334,15 +343,35 @@ public sealed class AdapterManager : IDisposable
                 "Sending to SyncStorage: ExternalId={ExternalId}, Status={Status}",
                 cutModel.AutoTestExternalId, cutModel.StatusCode);
 
-            _syncStorageRunner!.SendInProgressTestResultAsync(cutModel).GetAwaiter().GetResult();
+            var success = _syncStorageRunner!.SendInProgressTestResultAsync(cutModel)
+                .GetAwaiter().GetResult();
+
+            if (!success)
+            {
+                return false;
+            }
+
+            // Write to TMS with InProgress status
+            var originalStatus = testContainer.Status;
+            testContainer.Status = Status.InProgress;
+
+            try
+            {
+                _writer.Write(testContainer, classContainer).Wait();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Failed to write InProgress test to TMS, falling back");
+                testContainer.Status = originalStatus;
+                _syncStorageRunner!.SetIsAlreadyInProgress(false);
+                return false;
+            }
         }
         catch (Exception ex)
         {
-            _logger.LogWarning(ex, "SyncStorage in-progress notify failed");
-        }
-        finally
-        {
-            _syncStorageRunner?.SetIsAlreadyInProgress(false);
+            _logger.LogWarning(ex, "SyncStorage handling failed, falling back to normal write");
+            return false;
         }
     }
 
