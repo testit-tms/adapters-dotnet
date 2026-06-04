@@ -26,13 +26,14 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        dotnet_version: ['10.0.x']
         include:
-          - configuration_id: SPECFLOW_CONFIGURATION_ID
+          - dotnet_version: 10.0.x
+            configuration_id: SPECFLOW_CONFIGURATION_ID
             package_name: SpecFlowPlugin
             project_id: SPECFLOW_PROJECT_ID
             project_name: SpecFlowTests
-          - configuration_id: XUNIT_CONFIGURATION_ID
+          - dotnet_version: 10.0.x
+            configuration_id: XUNIT_CONFIGURATION_ID
             package_name: XUnit
             project_id: XUNIT_PROJECT_ID
             project_name: XUnitTests
