@@ -87,7 +87,7 @@ public sealed class AdapterConfig
     [Option("tmsSyncStoragePort", Required = false, HelpText = "Sync Storage local port (default 49152).")]
     public string? TmsSyncStoragePort { get; init; }
 
-    [Option("tmsImportRealtime", Required = false, HelpText = "Import autotests in real time (default false).")]
+    [Option("tmsImportRealtime", Required = false, HelpText = "Import autotests in real time (default true).")]
     public string? TmsImportRealtime { get; init; }
 
     public Config ToInternalConfig()

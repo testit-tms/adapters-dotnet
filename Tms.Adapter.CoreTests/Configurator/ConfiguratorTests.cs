@@ -27,22 +27,22 @@ public class ConfiguratorTests
     }
 
     [TestMethod]
-    public void GetConfig_ImportRealtimeDefault_IsFalse()
+    public void GetConfig_ImportRealtimeDefault_IsTrue()
     {
         Environment.SetEnvironmentVariable("TMS_IMPORT_REALTIME", null);
 
         var actual = Core.Configurator.Configurator.GetConfig();
 
-        Assert.IsFalse(actual.ImportRealtime);
+        Assert.IsTrue(actual.ImportRealtime);
     }
 
     [TestMethod]
-    public void GetConfig_ImportRealtimeEnvTrue_IsTrue()
+    public void GetConfig_ImportRealtimeEnvFalse_IsFalse()
     {
-        Environment.SetEnvironmentVariable("TMS_IMPORT_REALTIME", "true");
+        Environment.SetEnvironmentVariable("TMS_IMPORT_REALTIME", "false");
 
         var actual = Core.Configurator.Configurator.GetConfig();
 
-        Assert.IsTrue(actual.ImportRealtime);
+        Assert.IsFalse(actual.ImportRealtime);
     }
 }

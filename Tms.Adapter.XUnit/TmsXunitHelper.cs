@@ -9,6 +9,7 @@ namespace Tms.Adapter.XUnit;
 public static class TmsXunitHelper
 {
     private static int _initialized;
+    private static int _runStarted;
 
     /// <summary>
     /// Ensure SyncStorage worker status is set on first test and cleanup is registered.
@@ -24,9 +25,24 @@ public static class TmsXunitHelper
         }
     }
 
+    /// <summary>
+    /// xUnit sends assembly lifecycle messages to IMessageSink, not the per-test-case IMessageBus.
+    /// Start the worker on the first test when assembly hooks are unavailable.
+    /// </summary>
+    private static void EnsureRunStarted()
+    {
+        EnsureInitialized();
+
+        if (Interlocked.CompareExchange(ref _runStarted, 1, 0) == 0)
+        {
+            AdapterManager.Instance.OnRunningStarted();
+        }
+    }
+
     public static void OnRunStarted()
     {
         EnsureInitialized();
+        Interlocked.Exchange(ref _runStarted, 1);
         AdapterManager.Instance.OnRunningStarted();
     }
 
@@ -38,12 +54,12 @@ public static class TmsXunitHelper
 
     public static void OnTestCaseStarted()
     {
-        EnsureInitialized();
+        EnsureRunStarted();
     }
 
     public static void StartTestContainer(ITestCaseStarting testCaseStarting)
     {
-        EnsureInitialized();
+        EnsureRunStarted();
 
         if (testCaseStarting.TestCase is not ITmsAccessor testResults)
         {
@@ -125,6 +141,9 @@ public static class TmsXunitHelper
         AdapterManager.Instance.StopTestCase(testResults.TestResult!.Id);
         AdapterManager.Instance.StopTestContainer(testResults.ClassContainer!.Id);
         AdapterManager.Instance.WriteTestCase(testResults.TestResult.Id, testResults.ClassContainer.Id);
+
+        // importRealtime=false buffers results; ITestAssemblyFinished is not delivered to TmsMessageBus.
+        AdapterManager.Instance.FlushBufferedTestCases();
     }
 
     private static void StartTestContainer(ITmsAccessor testResult)

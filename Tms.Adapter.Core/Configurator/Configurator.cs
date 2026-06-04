@@ -1,6 +1,7 @@
 using System.Configuration;
 
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Tms.Adapter.Core.Configurator;
 
@@ -34,11 +35,17 @@ public static class Configurator
 
         if (File.Exists(defaultJsonConfigPath))
         {
-            var fileConfig = JsonConvert.DeserializeObject<TmsSettings>(File.ReadAllText(defaultJsonConfigPath));
+            var json = File.ReadAllText(defaultJsonConfigPath);
+            var fileConfig = JsonConvert.DeserializeObject<TmsSettings>(json);
 
             if (fileConfig != null)
             {
                 config = fileConfig;
+
+                if (JObject.Parse(json)["importRealtime"] == null)
+                {
+                    config.ImportRealtime = true;
+                }
             }
         }
         else 

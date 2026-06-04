@@ -11,8 +11,8 @@ Planning notes (not maintained as a spec): [importRealtime_plan.md](./importReal
 
 | `importRealtime` | Default | Behavior |
 |------------------|---------|----------|
-| `false` | yes | Buffer results during the run; publish to the test run at the end (bulk flush). |
-| `true` | no | Publish each result to the test run as soon as the test finishes. |
+| `true` | yes | Publish each result to the test run as soon as the test finishes (legacy behavior). |
+| `false` | no | Buffer results during the run; publish to the test run at the end (bulk flush). |
 
 **Always (both modes):**
 
@@ -26,8 +26,8 @@ Planning notes (not maintained as a spec): [importRealtime_plan.md](./importReal
 
 | Source | Key | Type | Default |
 |--------|-----|------|---------|
-| `Tms.config.json` | `importRealtime` | `bool` | `false` |
-| Environment | `TMS_IMPORT_REALTIME` | `true` / `false` | unset → `false` |
+| `Tms.config.json` | `importRealtime` | `bool` | `true` |
+| Environment | `TMS_IMPORT_REALTIME` | `true` / `false` | unset → `true` |
 | TmsRunner CLI | `--tmsImportRealtime` | string | optional |
 
 ### Code locations
@@ -44,7 +44,7 @@ Planning notes (not maintained as a spec): [importRealtime_plan.md](./importReal
   "projectId": "...",
   "configurationId": "...",
   "testRunId": "...",
-  "importRealtime": false,
+  "importRealtime": true,
   "syncStoragePort": 49152
 }
 ```
@@ -95,7 +95,9 @@ flowchart TD
 | `FlushBufferedTestCases()` | Public; sequential `Writer.Write` for each buffered pair; no-op if realtime |
 | `OnBlockCompleted()` | Calls `FlushBufferedTestCases()` then `SetWorkerStatus("completed")` |
 
-**Lifecycle:** XUnit `TmsXunitHelper.OnRunFinished` and SpecFlow `TmsBindings.AfterTestRun` call `OnBlockCompleted()` (flush is inside it).
+**Lifecycle:** SpecFlow `TmsBindings.AfterTestRun` calls `OnBlockCompleted()` (flush inside).
+
+**XUnit caveat:** `ITestAssemblyFinished` is not delivered to per-test `TmsMessageBus` (only `IMessageBus` is wrapped). With `importRealtime=false`, buffered results are flushed in `TmsXunitHelper.FinishTestCase` after each test; `ProcessExit` still calls `OnBlockCompleted` for worker `completed`.
 
 **Bulk publish:** sequential `Writer.Write` per buffered test (no `create_multiple` / bulk TMS API in this release).
 
