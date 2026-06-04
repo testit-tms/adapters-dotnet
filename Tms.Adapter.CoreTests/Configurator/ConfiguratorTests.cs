@@ -25,4 +25,24 @@ public class ConfiguratorTests
         Assert.IsInstanceOfType<TmsSettings>(actual);
         Assert.IsNotNull(actual);
     }
+
+    [TestMethod]
+    public void GetConfig_ImportRealtimeDefault_IsFalse()
+    {
+        Environment.SetEnvironmentVariable("TMS_IMPORT_REALTIME", null);
+
+        var actual = Core.Configurator.Configurator.GetConfig();
+
+        Assert.IsFalse(actual.ImportRealtime);
+    }
+
+    [TestMethod]
+    public void GetConfig_ImportRealtimeEnvTrue_IsTrue()
+    {
+        Environment.SetEnvironmentVariable("TMS_IMPORT_REALTIME", "true");
+
+        var actual = Core.Configurator.Configurator.GetConfig();
+
+        Assert.IsTrue(actual.ImportRealtime);
+    }
 }

@@ -27,7 +27,8 @@ The repository contains adapters for .NET test frameworks that integrate automat
 
 - New logic with a fix for test results loading
 - Added sync-storage subprocess usage for worker synchronization on port **49152** by defailt.
-- importRealtime=false is a default mode (previously true)
+- importRealtime=false is the default mode (previously true): results are buffered and published to the test run at the end; Sync Storage still runs for worker sync and the first InProgress result
+- importRealtime=true publishes each test result to the test run as soon as it is ready; Sync Storage behavior is unchanged
 
 ### How to run 2.0+ locally?
 

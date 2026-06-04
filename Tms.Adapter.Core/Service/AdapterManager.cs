@@ -27,6 +27,8 @@ public sealed class AdapterManager : IDisposable
     private readonly ConcurrentDictionary<string, string> _messageByTestId = new();
     private readonly ConcurrentDictionary<string, List<Link>> _linksByTestId = new();
     private readonly object _writeLock = new();
+    private readonly bool _importRealtime;
+    private readonly List<(TestContainer Test, ClassContainer Container)> _bufferedTestCases = [];
 
     private SyncStorageRunner? _syncStorageRunner;
 
@@ -59,6 +61,7 @@ public sealed class AdapterManager : IDisposable
             : new TmsClient(logger.CreateLogger<TmsClient>(), config);
         _storage = new ResultStorage();
         _writer = new Writer.Writer(logger.CreateLogger<Writer.Writer>(), _client, config);
+        _importRealtime = config.ImportRealtime;
 
         // Initialize Sync Storage
         if (!IsNetworkDisabled())
@@ -318,9 +321,41 @@ public sealed class AdapterManager : IDisposable
                 // Fall through to normal write on failure
             }
 
-            _writer.Write(testContainer, classContainer).Wait();
+            if (_importRealtime)
+            {
+                _writer.Write(testContainer, classContainer).Wait();
+            }
+            else
+            {
+                _bufferedTestCases.Add((testContainer, classContainer));
+                _logger.LogDebug("Buffered test result for bulk import: {ExternalId}", testContainer.ExternalId);
+            }
+
             return this;
         }
+    }
+
+    /// <summary>
+    /// Publish buffered test results (importRealtime=false). No-op when realtime import is enabled.
+    /// </summary>
+    public AdapterManager FlushBufferedTestCases()
+    {
+        if (_importRealtime)
+        {
+            return this;
+        }
+
+        lock (_writeLock)
+        {
+            foreach (var (test, container) in _bufferedTestCases)
+            {
+                _writer.Write(test, container).Wait();
+            }
+
+            _bufferedTestCases.Clear();
+        }
+
+        return this;
     }
 
     /// <summary>
@@ -483,6 +518,7 @@ public sealed class AdapterManager : IDisposable
     /// </summary>
     public void OnBlockCompleted()
     {
+        FlushBufferedTestCases();
         SetWorkerStatus("completed");
     }
 

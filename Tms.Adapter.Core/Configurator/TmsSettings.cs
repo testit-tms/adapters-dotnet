@@ -20,5 +20,6 @@ public class TmsSettings
     public bool CertValidation { get; set; }
     public bool IgnoreParameters { get; set; }
     public bool IsDebug { get; set; }
+    public bool ImportRealtime { get; set; }
     public int SyncStoragePort { get; set; } = 49152;
 }

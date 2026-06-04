@@ -43,6 +43,8 @@ dotnet package add TestIt.Adapter
 | Mode of automatic updation links to test cases (**It's optional**). Default value - false. The adapter supports following modes:<br/>true - in this mode, the adapter will update links to test cases<br/>false - in this mode, the adapter will not update link to test cases                                                                                                         | automaticUpdationLinksToTestCases | TMS_AUTOMATIC_UPDATION_LINKS_TO_TEST_CASES | tmsAutomaticUpdationLinksToTestCases |
 | List of labels for filtering tests (**Optional**). It will only work with adapter mode 2.                                                                                                                                                                                                                                                                                              | -                                 | -                                          | tmsLabelsOfTestsToRun                |
 | Number of times to rerun failed tests (**It's optional**). Default value - 0.                                                                                                                                                                                                                                                                                                          | rerunTestsCount                   | TMS_ADAPTER_AUTOTESTS_RERUN_COUNT          | tmsRerunTestsCount                   |
+| Mode of import type selection when launching autotests (**It's optional**). Default value - false. true — create/update each autotest in real time; false — buffer results and publish to the test run at the end (first result is still sent as InProgress via Sync Storage)                                                                                                          | importRealtime                    | TMS_IMPORT_REALTIME                        | tmsImportRealtime                    |
+| Sync Storage local port (**It's optional**, 49152 by default)                                                                                                                                                                                                                                                                                                                        | syncStoragePort                   | TMS_SYNC_STORAGE_PORT                      | tmsSyncStoragePort                   |
 | Path to the configuration file (**including extension**) If it is not provided, it is used default file (**It's optional**)                                                                                                                                                                                                                                                            | -                                 | TMS_CONFIG_FILE                            | tmsConfigFile                        |
 | The content of the "RunSettings" file with the test run settings in the xml extension (**It's optional**)                                                                                                                                                                                                                                                                              | -                                 | -                                          | tmsRunSettings                       |
 
@@ -64,7 +66,9 @@ Create **Tms.config.json** file in the project directory:
   "certValidation": CERT_VALIDATION,
   "ignoreParameters": IGNORE_PARAMETERS,
   "certValidation": CERT_VALIDATION,
-  "rerunTestsCount": RERUN_TESTS_COUNT
+  "rerunTestsCount": RERUN_TESTS_COUNT,
+  "importRealtime": false,
+  "syncStoragePort": 49152
 }
 ```
 

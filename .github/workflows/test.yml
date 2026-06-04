@@ -18,6 +18,7 @@ env:
   TMS_OVERWRITE_EXPECTED: false
   TMS_PRIVATE_TOKEN: ${{ secrets.TESTIT_PRIVATE_TOKEN }}
   TMS_URL: ${{ secrets.TESTIT_URL }}
+  TMS_IMPORT_REALTIME: true
 jobs:
   test:
     name: ${{ matrix.project_name }} (.NET ${{ matrix.dotnet_version }})

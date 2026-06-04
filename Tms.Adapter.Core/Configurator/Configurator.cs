@@ -19,6 +19,7 @@ public static class Configurator
     private const string ConfigFile = "TMS_CONFIG_FILE";
     private const string TmsIgnoreParameters = "TMS_IGNORE_PARAMETERS";
     private const string TmsSyncStoragePort = "TMS_SYNC_STORAGE_PORT";
+    private const string TmsImportRealtime = "TMS_IMPORT_REALTIME";
 
     public static TmsSettings GetConfig()
     {
@@ -123,6 +124,11 @@ public static class Configurator
         if (!string.IsNullOrWhiteSpace(syncStoragePort) && int.TryParse(syncStoragePort, out var portValue))
         {
             settings.SyncStoragePort = portValue;
+        }
+
+        if (bool.TryParse(Environment.GetEnvironmentVariable(TmsImportRealtime), out var importRealtime))
+        {
+            settings.ImportRealtime = importRealtime;
         }
     }
 

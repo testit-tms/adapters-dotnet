@@ -18,6 +18,7 @@ public sealed class EnvConfigurationProvider : ConfigurationProvider
     private const string EnvTmsIgnoreParameters = "TMS_IGNORE_PARAMETERS";
     private const string EnvTmsRerunTestsCount = "TMS_ADAPTER_AUTOTESTS_RERUN_COUNT";
     private const string EnvTmsSyncStoragePort = "TMS_SYNC_STORAGE_PORT";
+    private const string EnvTmsImportRealtime = "TMS_IMPORT_REALTIME";
 
     public override void Load()
     {
@@ -37,6 +38,7 @@ public sealed class EnvConfigurationProvider : ConfigurationProvider
             { "IgnoreParameters", Environment.GetEnvironmentVariable(EnvTmsIgnoreParameters) },
             { "RerunTestsCount", Environment.GetEnvironmentVariable(EnvTmsRerunTestsCount) },
             { "SyncStoragePort", Environment.GetEnvironmentVariable(EnvTmsSyncStoragePort) },
+            { "ImportRealtime", Environment.GetEnvironmentVariable(EnvTmsImportRealtime) },
         };
 
         Data = data
