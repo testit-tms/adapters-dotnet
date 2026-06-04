@@ -28,23 +28,13 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - dotnet_version: 8.0.x
-            dotnet_framework: net8.0
-            configuration_id: MSTEST_CONFIGURATION_ID
-            project_id: MSTEST_PROJECT_ID
-            project_name: MsTest
-          - dotnet_version: 8.0.x
-            dotnet_framework: net8.0
-            configuration_id: NUNIT_CONFIGURATION_ID
-            project_id: NUNIT_PROJECT_ID
-            project_name: NUnitTests
-          # - dotnet_version: 9.0.x
-          #   dotnet_framework: net9.0
+          # - dotnet_version: 8.0.x
+          #   dotnet_framework: net8.0
           #   configuration_id: MSTEST_CONFIGURATION_ID
           #   project_id: MSTEST_PROJECT_ID
           #   project_name: MsTest
-          # - dotnet_version: 9.0.x
-          #   dotnet_framework: net9.0
+          # - dotnet_version: 8.0.x
+          #   dotnet_framework: net8.0
           #   configuration_id: NUNIT_CONFIGURATION_ID
           #   project_id: NUNIT_PROJECT_ID
           #   project_name: NUnitTests

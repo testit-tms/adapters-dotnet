@@ -25,6 +25,7 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
     private readonly int MAX_TRIES = 10;
     private readonly int WAITING_TIME = 200;
     private readonly int TESTS_LIMIT = 100;
+    private readonly HashSet<string> _absentWorkItemIds = new(StringComparer.Ordinal);
 
     public async Task<TestRunV2ApiResult?> CreateTestRunAsync()
     {
@@ -202,6 +203,11 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
     {
         foreach (var workItemId in workItemIds)
         {
+            if (string.IsNullOrEmpty(workItemId) || _absentWorkItemIds.Contains(workItemId))
+            {
+                continue;
+            }
+
             logger.LogDebug(
                 "Linking autotest {AutotestId} to workitem {WorkitemId}",
                 autotestId,
@@ -211,19 +217,28 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
             {
                 try
                 {
-                    await autoTestsApi.LinkAutoTestToWorkItemAsync(autotestId, new WorkItemIdApiModel(workItemId ?? string.Empty)).ConfigureAwait(false);
+                    await autoTestsApi.LinkAutoTestToWorkItemAsync(autotestId, new WorkItemIdApiModel(workItemId)).ConfigureAwait(false);
                     logger.LogDebug(
                         "Link autotest {AutotestId} to workitem {WorkitemId} is successfully",
-                    autotestId,
-                    workItemId);
+                        autotestId,
+                        workItemId);
 
-                    return;
+                    break;
+                }
+                catch (ApiException e) when (IsMissingWorkItem(e))
+                {
+                    _absentWorkItemIds.Add(workItemId);
+                    logger.LogWarning(
+                        "Skip linking autotest {AutotestId} to work item {WorkItemId}: work item does not exist",
+                        autotestId,
+                        workItemId);
+                    break;
                 }
                 catch (ApiException e)
                 {
                     logger.LogError(
-                        e, 
-                        "Cannot link autotest {AutotestId} to work item {WorkItemId}", 
+                        e,
+                        "Cannot link autotest {AutotestId} to work item {WorkItemId}",
                         autotestId,
                         workItemId);
 
@@ -231,8 +246,11 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
                 }
             }
         }
-
     }
+
+    private static bool IsMissingWorkItem(ApiException ex) =>
+        ex.ErrorCode == 404
+        || ex.Message.Contains("NotFoundException", StringComparison.OrdinalIgnoreCase);
 
     public async Task DeleteAutoTestLinkFromWorkItemAsync(string autotestId, string workItemId)
     {
