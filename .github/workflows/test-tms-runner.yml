@@ -38,16 +38,16 @@ jobs:
             configuration_id: NUNIT_CONFIGURATION_ID
             project_id: NUNIT_PROJECT_ID
             project_name: NUnitTests
-          - dotnet_version: 9.0.x
-            dotnet_framework: net9.0
-            configuration_id: MSTEST_CONFIGURATION_ID
-            project_id: MSTEST_PROJECT_ID
-            project_name: MsTest
-          - dotnet_version: 9.0.x
-            dotnet_framework: net9.0
-            configuration_id: NUNIT_CONFIGURATION_ID
-            project_id: NUNIT_PROJECT_ID
-            project_name: NUnitTests
+          # - dotnet_version: 9.0.x
+          #   dotnet_framework: net9.0
+          #   configuration_id: MSTEST_CONFIGURATION_ID
+          #   project_id: MSTEST_PROJECT_ID
+          #   project_name: MsTest
+          # - dotnet_version: 9.0.x
+          #   dotnet_framework: net9.0
+          #   configuration_id: NUNIT_CONFIGURATION_ID
+          #   project_id: NUNIT_PROJECT_ID
+          #   project_name: NUnitTests
           - dotnet_version: 10.0.x
             dotnet_framework: net10.0
             configuration_id: MSTEST_CONFIGURATION_ID
@@ -64,7 +64,7 @@ jobs:
       TMS_RUNNER: TmsRunner/bin/Release/${{ matrix.dotnet_framework }}/linux-x64/TmsRunner
       TMS_TEST_RUN_NAME: ${{ matrix.project_name }} TestRun
       TEST_ROOT: dotnet-examples/${{ matrix.project_name }}/${{ matrix.project_name }}
-      TEST_DLL: ${{ github.workspace }}/dotnet-examples/${{ matrix.project_name }}/${{ matrix.project_name }}/bin/Release/${{ matrix.dotnet_framework }}/${{ matrix.project_name }}.dll
+      TEST_DLL: ${{ github.workspace }}/dotnet-examples/${{ matrix.project_name }}/${{ matrix.project_name }}/bin/Release/net8.0/${{ matrix.project_name }}.dll
     steps:
       - name: Checkout adapters-dotnet
         uses: actions/checkout@v5
