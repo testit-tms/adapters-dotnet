@@ -48,6 +48,7 @@ Also you need to add following lines to `specflow.json`:
 | Mode of import type selection when launching autotests (**It's optional**). Default value - true. true — publish each result when ready; false — buffer and publish at end of the run (first result is still InProgress via Sync Storage)                                                                       | importRealtime                    | TMS_IMPORT_REALTIME                        |
 | Sync Storage local port (**It's optional**, 49152 by default)                                                                                                                                                                                                                                                       | syncStoragePort                   | TMS_SYNC_STORAGE_PORT                      |
 
+
 #### File
 
 Create **Tms.config.json** file in the project directory:
