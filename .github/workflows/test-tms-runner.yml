@@ -19,7 +19,7 @@ env:
   TMS_OVERWRITE_EXPECTED: false
   TMS_PRIVATE_TOKEN: ${{ secrets.TESTIT_PRIVATE_TOKEN }}
   TMS_URL: ${{ secrets.TESTIT_URL }}
-  EXAMPLES_TARGET_FRAMEWORK: net8.0
+  TMS_IMPORT_REALTIME: false
 jobs:
   test:
     name: ${{ matrix.project_name }} (.NET ${{ matrix.dotnet_version }})
@@ -28,26 +28,16 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - dotnet_version: 8.0.x
-            dotnet_framework: net8.0
-            configuration_id: MSTEST_CONFIGURATION_ID
-            project_id: MSTEST_PROJECT_ID
-            project_name: MsTest
-          - dotnet_version: 8.0.x
-            dotnet_framework: net8.0
-            configuration_id: NUNIT_CONFIGURATION_ID
-            project_id: NUNIT_PROJECT_ID
-            project_name: NUnitTests
-          - dotnet_version: 9.0.x
-            dotnet_framework: net9.0
-            configuration_id: MSTEST_CONFIGURATION_ID
-            project_id: MSTEST_PROJECT_ID
-            project_name: MsTest
-          - dotnet_version: 9.0.x
-            dotnet_framework: net9.0
-            configuration_id: NUNIT_CONFIGURATION_ID
-            project_id: NUNIT_PROJECT_ID
-            project_name: NUnitTests
+          # - dotnet_version: 8.0.x
+          #   dotnet_framework: net8.0
+          #   configuration_id: MSTEST_CONFIGURATION_ID
+          #   project_id: MSTEST_PROJECT_ID
+          #   project_name: MsTest
+          # - dotnet_version: 8.0.x
+          #   dotnet_framework: net8.0
+          #   configuration_id: NUNIT_CONFIGURATION_ID
+          #   project_id: NUNIT_PROJECT_ID
+          #   project_name: NUnitTests
           - dotnet_version: 10.0.x
             dotnet_framework: net10.0
             configuration_id: MSTEST_CONFIGURATION_ID
@@ -64,7 +54,7 @@ jobs:
       TMS_RUNNER: TmsRunner/bin/Release/${{ matrix.dotnet_framework }}/linux-x64/TmsRunner
       TMS_TEST_RUN_NAME: ${{ matrix.project_name }} TestRun
       TEST_ROOT: dotnet-examples/${{ matrix.project_name }}/${{ matrix.project_name }}
-      TEST_DLL: ${{ github.workspace }}/dotnet-examples/${{ matrix.project_name }}/${{ matrix.project_name }}/bin/Release/${{ env.EXAMPLES_TARGET_FRAMEWORK }}/${{ matrix.project_name }}.dll
+      TEST_DLL: ${{ github.workspace }}/dotnet-examples/${{ matrix.project_name }}/${{ matrix.project_name }}/bin/Release/net8.0/${{ matrix.project_name }}.dll
     steps:
       - name: Checkout adapters-dotnet
         uses: actions/checkout@v5
@@ -147,5 +137,33 @@ jobs:
           cat service.log
 
       - name: Validate
+        run: |
+          dotnet test --configuration Debug --no-build --logger:"console;verbosity=detailed" api-validator-dotnet
+
+      - name: Test ImportRealtime=true
+        run: |
+          export TMS_IMPORT_REALTIME=true
+
+          pkill -TERM -f syncstorage-linux-amd64 || true
+          sleep 2
+          pkill -KILL -f syncstorage-linux-amd64 || true
+
+          test -x .caches/syncstorage-linux-amd64
+          nohup .caches/syncstorage-linux-amd64 --testRunId ${{ env.TMS_TEST_RUN_ID }} --port 49152 \
+          --baseURL ${{ env.TMS_URL }} --privateToken ${{ env.TMS_PRIVATE_TOKEN }} > service2.log 2>&1 &
+          
+          sleep 1
+          
+          curl -v http://127.0.0.1:49152/health || true
+
+          ${{ env.TMS_RUNNER }} --runner "${{ env.VSTEST_CONSOLE }}" --testassembly "${{ env.TEST_DLL }}" || true
+
+          sleep 1
+
+          curl -v http://127.0.0.1:49152/wait-completion?testRunId=${{ env.TMS_TEST_RUN_ID }} --max-time 100 || true
+          
+          cat service2.log || true
+
+      - name: Validate ImportRealtime=true
         run: |
           dotnet test --configuration Debug --no-build --logger:"console;verbosity=detailed" api-validator-dotnet

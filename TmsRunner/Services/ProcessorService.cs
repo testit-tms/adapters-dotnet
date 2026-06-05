@@ -23,6 +23,7 @@ public sealed partial class ProcessorService(ILogger<ProcessorService> logger,
                                      TmsSettings tmsSettings,
                                      SyncStorageSession syncStorageSession)
 {
+    private readonly List<TestResult> _bufferedTestResults = [];
     private async Task<List<StepModel>> GetStepsWithAttachmentsAsync(string? traceJson, List<Guid> attachmentIds)
     {
         var messages = LogParser.GetMessages(traceJson ?? string.Empty);
@@ -175,6 +176,45 @@ public sealed partial class ProcessorService(ILogger<ProcessorService> logger,
 
     public async Task ProcessAutoTestAsync(TestResult testResult)
     {
+        if (tmsSettings.ImportRealtime)
+        {
+            await PublishAutoTestAsync(testResult, allowInProgress: true).ConfigureAwait(false);
+            return;
+        }
+
+        if (await TryPublishInProgressAsync(testResult).ConfigureAwait(false))
+        {
+            return;
+        }
+
+        _bufferedTestResults.Add(testResult);
+        logger.LogDebug("Buffered test result for bulk import: {Name}", testResult.DisplayName);
+    }
+
+    public async Task FlushBufferedTestResultsAsync()
+    {
+        if (tmsSettings.ImportRealtime)
+        {
+            return;
+        }
+
+        foreach (var testResult in _bufferedTestResults)
+        {
+            await PublishAutoTestAsync(testResult, allowInProgress: false).ConfigureAwait(false);
+        }
+
+        _bufferedTestResults.Clear();
+    }
+
+    private async Task<bool> TryPublishInProgressAsync(TestResult testResult)
+    {
+        if (syncStorageSession.Runner is not { IsRunning: true, IsMaster: true } runner
+            || runner.IsAlreadyInProgress
+            || string.IsNullOrWhiteSpace(tmsSettings.ProjectId))
+        {
+            return false;
+        }
+
         var traceJson = GetTraceJson(testResult);
         var parameters = LogParser.GetParameters(traceJson);
         var autoTest = LogParser.GetAutoTest(testResult, parameters);
@@ -198,6 +238,75 @@ public sealed partial class ProcessorService(ILogger<ProcessorService> logger,
             .Select(AutoTestStep.ConvertFromStep)
             .ToList();
 
+        var existAutotestResult = await apiClient.GetAutotestByExternalIdAsync(autoTest.ExternalId).ConfigureAwait(false);
+        if (existAutotestResult == null)
+        {
+            HtmlEscapeUtils.EscapeHtmlInObject(autoTest);
+            existAutotestResult = await apiClient.CreateAutotestAsync(autoTest).ConfigureAwait(false);
+        }
+        else
+        {
+            autoTest.IsFlaky = existAutotestResult.IsFlaky;
+            HtmlEscapeUtils.EscapeHtmlInObject(autoTest);
+            await apiClient.UpdateAutotestAsync(autoTest).ConfigureAwait(false);
+        }
+
+        if (autoTest.WorkItemIds.Count > 0)
+        {
+            await UpdateTestLinkToWorkItems(existAutotestResult.Id.ToString(), autoTest.WorkItemIds).ConfigureAwait(false);
+        }
+
+        if (!string.IsNullOrEmpty(testResult.ErrorMessage))
+        {
+            autoTest.Message += Environment.NewLine + testResult.ErrorMessage;
+        }
+
+        var autoTestResultRequestBody = GetAutoTestResultsForTestRunModel(autoTest, testResult, traceJson,
+            testCaseSteps, attachmentIds, parameters, tmsSettings.IgnoreParameters);
+
+        HtmlEscapeUtils.EscapeHtmlInObject(autoTestResultRequestBody);
+
+        var cut = Tms.Adapter.Core.Client.Converter.ToTestResultCutApiModel(
+            autoTest.ExternalId ?? string.Empty,
+            testResult.Outcome.ToString(),
+            testResult.StartTime.UtcDateTime,
+            tmsSettings.ProjectId);
+
+        if (!await runner.SendInProgressTestResultAsync(cut).ConfigureAwait(false))
+        {
+            return false;
+        }
+
+        await apiClient.SubmitResultToTestRunAsync(tmsSettings.TestRunId, autoTestResultRequestBody, true)
+            .ConfigureAwait(false);
+
+        return true;
+    }
+
+    private async Task PublishAutoTestAsync(TestResult testResult, bool allowInProgress)
+    {
+        var traceJson = GetTraceJson(testResult);
+        var parameters = LogParser.GetParameters(traceJson);
+        var autoTest = LogParser.GetAutoTest(testResult, parameters);
+        autoTest.Message = LogParser.GetMessage(traceJson);
+
+        var attachmentIds = new List<Guid>();
+        var testCaseSteps = await GetStepsWithAttachmentsAsync(traceJson, attachmentIds).ConfigureAwait(false);
+
+        autoTest.Setup = testCaseSteps
+            .Where(x => x.CallerMethodType == CallerMethodType.Setup)
+            .Select(AutoTestStep.ConvertFromStep)
+            .ToList();
+
+        autoTest.Steps = testCaseSteps
+            .Where(x => x.CallerMethodType == CallerMethodType.TestMethod || x.CallerMethodType == null)
+            .Select(AutoTestStep.ConvertFromStep)
+            .ToList();
+
+        autoTest.Teardown = testCaseSteps
+            .Where(x => x.CallerMethodType == CallerMethodType.Teardown)
+            .Select(AutoTestStep.ConvertFromStep)
+            .ToList();
 
         var existAutotestResult = await apiClient.GetAutotestByExternalIdAsync(autoTest.ExternalId).ConfigureAwait(false);
         if (existAutotestResult == null)
@@ -231,7 +340,8 @@ public sealed partial class ProcessorService(ILogger<ProcessorService> logger,
 
         HtmlEscapeUtils.EscapeHtmlInObject(autoTestResultRequestBody);
 
-        if (syncStorageSession.Runner is { IsRunning: true, IsMaster: true } runner && !runner.IsAlreadyInProgress
+        if (allowInProgress
+            && syncStorageSession.Runner is { IsRunning: true, IsMaster: true } runner && !runner.IsAlreadyInProgress
             && !string.IsNullOrWhiteSpace(tmsSettings.ProjectId))
         {
             var cut = Tms.Adapter.Core.Client.Converter.ToTestResultCutApiModel(
@@ -244,6 +354,7 @@ public sealed partial class ProcessorService(ILogger<ProcessorService> logger,
             {
                 await apiClient.SubmitResultToTestRunAsync(tmsSettings.TestRunId, autoTestResultRequestBody, true)
                     .ConfigureAwait(false);
+                return;
             }
         }
 

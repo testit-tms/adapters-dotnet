@@ -34,6 +34,8 @@ dotnet package add TestIT.Adapter.Core
 | Mode of automatic creation test cases (**It's optional**). Default value - false. The adapter supports following modes:<br/>true - in this mode, the adapter will create a test case linked to the created autotest (not to the updated autotest)<br/>false - in this mode, the adapter will not create a test case | automaticCreationTestCases        | TMS_AUTOMATIC_CREATION_TEST_CASES          |
 | Mode of automatic updation links to test cases (**It's optional**). Default value - false. The adapter supports following modes:<br/>true - in this mode, the adapter will update links to test cases<br/>false - in this mode, the adapter will not update link to test cases                                      | automaticUpdationLinksToTestCases | TMS_AUTOMATIC_UPDATION_LINKS_TO_TEST_CASES |
 | Enable debug logs (**It's optional**). Default value - false                                                                                                                                                                                                                                                        | isDebug                           | -                                          |
+| Mode of import type selection when launching autotests (**It's optional**). Default value - true. true — publish each result when ready; false — buffer and publish at end of the run (first result is still InProgress via Sync Storage)                                                                       | importRealtime                    | TMS_IMPORT_REALTIME                        |
+| Sync Storage local port (**It's optional**, 49152 by default)                                                                                                                                                                                                                                                       | syncStoragePort                   | TMS_SYNC_STORAGE_PORT                      |
 
 #### File
 
@@ -49,9 +51,15 @@ Create **Tms.config.json** file in the project directory:
   "automaticCreationTestCases": false,
   "automaticUpdationLinksToTestCases": false,
   "certValidation": true,
-  "isDebug": true
+  "isDebug": true,
+  "importRealtime": true,
+  "syncStoragePort": 49152
 }
 ```
+
+### importRealtime and xUnit
+
+With `importRealtime=false`, the first test is sent as **InProgress**; other tests are buffered and flushed after each test completes (`FinishTestCase`). With the default `importRealtime=true`, each result is published when the test finishes. SpecFlow/NUnit runners flush buffered results at the end of the run via `OnBlockCompleted`.
 
 ### How to run
 

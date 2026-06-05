@@ -14,6 +14,7 @@ public class App(ILogger<App> logger,
                  TmsSettings tmsSettings,
                  FilterService filterService,
                  RunService runService,
+                 ProcessorService processorService,
                  ITestRunContextService testRunContext,
                  SyncStorageSession syncStorageSession)
 {
@@ -92,6 +93,7 @@ public class App(ILogger<App> logger,
         }
         finally
         {
+            await processorService.FlushBufferedTestResultsAsync().ConfigureAwait(false);
             await syncStorageSession.ShutdownAsync().ConfigureAwait(false);
         }
 

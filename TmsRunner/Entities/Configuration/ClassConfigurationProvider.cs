@@ -23,6 +23,7 @@ public sealed class ClassConfigurationProvider(Config config) : ConfigurationPro
             { "CertValidation", config.TmsCertValidation },
             { "RerunTestsCount", config.TmsRerunTestsCount },
             { "SyncStoragePort", config.TmsSyncStoragePort },
+            { "ImportRealtime", config.TmsImportRealtime },
             { "IsDebug", config.IsDebug.ToString() }
         };
 

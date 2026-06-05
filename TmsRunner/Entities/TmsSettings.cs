@@ -23,6 +23,8 @@ public sealed record TmsSettings
     public bool IgnoreParameters { get; set; }
     public int? RerunTestsCount { get; set; }
 
+    public bool ImportRealtime { get; set; } = true;
+
     /// <summary>Local Sync Storage HTTP port (default 49152).</summary>
     public int SyncStoragePort { get; set; } = 49152;
 }

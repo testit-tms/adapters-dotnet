@@ -167,7 +167,7 @@ public static class Program
                     .AddTransient<App>()
                     .AddTransient<TmsManager>()
                     .AddTransient<FilterService>()
-                    .AddTransient<ProcessorService>()
+                    .AddSingleton<ProcessorService>()
                     .AddTransient<EventWaitHandle>(_ => new AutoResetEvent(false))
                     .AddTransient<DiscoveryEventHandler>()
                     .AddTransient<RunEventHandler>()
