@@ -147,9 +147,9 @@ jobs:
 
           curl -v http://127.0.0.1:49152/wait-completion?testRunId=${{ env.TMS_TEST_RUN_ID }} --max-time 100 || true
           ls dotnet-examples/${{ matrix.project_name }}
-          ls dotnet-examples/${{ matrix.project_name }}/build
-          ls dotnet-examples/${{ matrix.project_name }}/build/.caches
-          cat dotnet-examples/${{ matrix.project_name }}/build/.caches/shutdown.log || true
+          ls dotnet-examples/${{ matrix.project_name }}/${{ matrix.project_name }}/build
+          ls dotnet-examples/${{ matrix.project_name }}/${{ matrix.project_name }}/build/.caches
+          cat dotnet-examples/${{ matrix.project_name }}/${{ matrix.project_name }}/build/.caches/shutdown.log || true
 
       - name: Validate Again
         run: |
