@@ -144,7 +144,7 @@ jobs:
           dotnet test --configuration Release --collect:"XPlat Code Coverage" --no-build --verbosity diag --logger:"console;verbosity=detailed" dotnet-examples/${{ matrix.project_name }} || true
 
           curl -v http://127.0.0.1:49152/wait-completion?testRunId=${{ env.TMS_TEST_RUN_ID }} --max-time 100 || true
-          cat .caches/shutdown.log || true
+          cat build/.caches/shutdown.log || true
 
       - name: Validate Again
         run: |
