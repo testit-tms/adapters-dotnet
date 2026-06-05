@@ -3,11 +3,6 @@ run-name: "#${{ github.run_number }} test by ${{ github.triggering_actor }}"
 on:
   pull_request:
     paths:
-      - "Tms.Adapter.Core/**"
-      - "Tms.Adapter.SpecFlowPlugin/**"
-      - "Tms.Adapter.XUnit/**"
-      - ".github/**/test.yml"
-      - "!**.csproj"
   workflow_dispatch:
 env:
   GITHUB_PAT: ${{ secrets.SERVICE_ACCOUNT_TOKEN }}
