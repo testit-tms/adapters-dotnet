@@ -141,7 +141,9 @@ jobs:
 
           export TMS_ADAPTER_MODE=2
 
-          dotnet test --configuration Release --collect:"XPlat Code Coverage" --no-build --verbosity diag --logger:"console;verbosity=detailed" dotnet-examples/${{ matrix.project_name }} || true
+          # --verbosity diag --logger:"console;verbosity=detailed" 
+          dotnet test --configuration Release --collect:"XPlat Code Coverage" --no-build dotnet-examples/${{ matrix.project_name }} || true
+
 
           curl -v http://127.0.0.1:49152/wait-completion?testRunId=${{ env.TMS_TEST_RUN_ID }} --max-time 100 || true
           cat dotnet-examples/${{ matrix.project_name }}/build/.caches/shutdown.log || true
