@@ -3,12 +3,6 @@ run-name: "#${{ github.run_number }} test tms-runner by ${{ github.triggering_ac
 on:
   pull_request:
     paths:
-      - "Tms.Adapter/**"
-      - "Tms.Adapter.Core/**"
-      - "Tms.Adapter.XUnit/**"
-      - "TmsRunner/**"
-      - ".github/**/test-tms-runner.yml"
-      - "!**.csproj"
   workflow_dispatch:
 env:
   GITHUB_PAT: ${{ secrets.SERVICE_ACCOUNT_TOKEN }}
