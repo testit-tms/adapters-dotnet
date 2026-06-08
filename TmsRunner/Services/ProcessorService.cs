@@ -39,7 +39,7 @@ public sealed partial class ProcessorService(ILogger<ProcessorService> logger,
             {
                 case MessageType.TmsStep:
                     {
-                        var step = JsonConvert.DeserializeObject<StepModel>(message.Value ?? string.Empty);
+                        var step = TryDeserialize<StepModel>(message.Value);
                         if (step == null)
                         {
                             logger.LogWarning("Can not deserialize step: {Step}", message.Value);
@@ -91,7 +91,7 @@ public sealed partial class ProcessorService(ILogger<ProcessorService> logger,
                     }
                 case MessageType.TmsStepResult:
                     {
-                        var stepResult = JsonConvert.DeserializeObject<StepResult>(message.Value ?? string.Empty);
+                        var stepResult = TryDeserialize<StepResult>(message.Value);
 
                         if (stepResult == null)
                         {
@@ -105,7 +105,7 @@ public sealed partial class ProcessorService(ILogger<ProcessorService> logger,
                     }
                 case MessageType.TmsStepAttachmentAsText:
                     {
-                        var attachment = JsonConvert.DeserializeObject<File>(message.Value ?? string.Empty);
+                        var attachment = TryDeserialize<File>(message.Value);
                         if (attachment == null)
                         {
                             logger.LogWarning("Can not deserialize attachment: {Attachment}", message.Value ?? string.Empty);
@@ -128,7 +128,7 @@ public sealed partial class ProcessorService(ILogger<ProcessorService> logger,
                     }
                 case MessageType.TmsStepAttachment:
                     {
-                        var file = JsonConvert.DeserializeObject<File>(message.Value ?? string.Empty);
+                        var file = TryDeserialize<File>(message.Value);
                         if (file == null)
                         {
                             logger.LogWarning("Can not deserialize attachment file: {File}", message.Value ?? string.Empty);
@@ -182,10 +182,7 @@ public sealed partial class ProcessorService(ILogger<ProcessorService> logger,
             return;
         }
 
-        if (await TryPublishInProgressAsync(testResult).ConfigureAwait(false))
-        {
-            return;
-        }
+        await TryPublishInProgressAsync(testResult).ConfigureAwait(false);
 
         _bufferedTestResults.Add(testResult);
         logger.LogDebug("Buffered test result for bulk import: {Name}", testResult.DisplayName);
@@ -206,13 +203,13 @@ public sealed partial class ProcessorService(ILogger<ProcessorService> logger,
         _bufferedTestResults.Clear();
     }
 
-    private async Task<bool> TryPublishInProgressAsync(TestResult testResult)
+    private async Task TryPublishInProgressAsync(TestResult testResult)
     {
         if (syncStorageSession.Runner is not { IsRunning: true, IsMaster: true } runner
             || runner.IsAlreadyInProgress
             || string.IsNullOrWhiteSpace(tmsSettings.ProjectId))
         {
-            return false;
+            return;
         }
 
         var traceJson = GetTraceJson(testResult);
@@ -274,13 +271,11 @@ public sealed partial class ProcessorService(ILogger<ProcessorService> logger,
 
         if (!await runner.SendInProgressTestResultAsync(cut).ConfigureAwait(false))
         {
-            return false;
+            return;
         }
 
         await apiClient.SubmitResultToTestRunAsync(tmsSettings.TestRunId, autoTestResultRequestBody, true)
             .ConfigureAwait(false);
-
-        return true;
     }
 
     private async Task PublishAutoTestAsync(TestResult testResult, bool allowInProgress)
@@ -354,7 +349,6 @@ public sealed partial class ProcessorService(ILogger<ProcessorService> logger,
             {
                 await apiClient.SubmitResultToTestRunAsync(tmsSettings.TestRunId, autoTestResultRequestBody, true)
                     .ConfigureAwait(false);
-                return;
             }
         }
 
@@ -432,6 +426,24 @@ public sealed partial class ProcessorService(ILogger<ProcessorService> logger,
         var traceJson = string.Join("\n", debugTraceMessages);
 
         return traceJson;
+    }
+
+    private T? TryDeserialize<T>(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return default;
+        }
+
+        try
+        {
+            return JsonConvert.DeserializeObject<T>(value);
+        }
+        catch (JsonException ex)
+        {
+            logger.LogWarning(ex, "Can not deserialize {Type}: {Value}", typeof(T).Name, value);
+            return default;
+        }
     }
 
     private static StepModel? MapStep(Dictionary<Guid, StepModel> stepsDictionary, StepResult stepResult)

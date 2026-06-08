@@ -147,4 +147,18 @@ public class LogParserTests
         // Assert
         Assert.IsNull(actual);
     }
+
+    [TestMethod]
+    public void GetMessagesIgnoresStdoutWithNumericPrefix()
+    {
+        var trace =
+            "2: Req: interception-job-1.1 | GET - https://test.com\n" +
+            MessageType.TmsStepMessage + ": adapter message\n";
+
+        var messages = LogParser.GetMessages(trace);
+
+        Assert.AreEqual(1, messages.Count);
+        Assert.AreEqual(MessageType.TmsStepMessage, messages[0].Type);
+        Assert.AreEqual("adapter message", messages[0].Value);
+    }
 }

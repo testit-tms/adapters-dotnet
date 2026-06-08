@@ -234,4 +234,39 @@ public static class Converter
             statusType: MapToStatusType(statusCode).ToString(),
             startedOn: startedOn);
     }
+
+    public static TestResultUpdateV2Request ConvertResultToUpdateModel(AutoTestResultsForTestRunModel model) =>
+        new()
+        {
+            StatusType = model.StatusType,
+            StatusCode = model.StatusCode,
+            Message = model.Message,
+            Trace = model.Traces,
+            Duration = model.Duration,
+            Links = model.Links?.Select(l => new TestIT.ApiClient.Model.Link(
+                id: null,
+                title: l.Title ?? string.Empty,
+                url: l.Url ?? string.Empty,
+                description: l.Description ?? string.Empty,
+                type: l.Type,
+                hasInfo: l.HasInfo)).ToList(),
+            Attachments = model.Attachments?.Select(a => new AttachmentUpdateRequest(a.Id)).ToList(),
+            SetupResults = ConvertExecStepsToUpdate(model.SetupResults),
+            TeardownResults = ConvertExecStepsToUpdate(model.TeardownResults),
+        };
+
+    private static List<AutoTestStepResultUpdateRequest>? ConvertExecStepsToUpdate(
+        List<AttachmentPutModelAutoTestStepResultsModel>? steps) =>
+        steps?.Select(s => new AutoTestStepResultUpdateRequest
+        {
+            Title = s.Title,
+            Description = s.Description,
+            StartedOn = s.StartedOn,
+            CompletedOn = s.CompletedOn,
+            Duration = s.Duration,
+            Outcome = s.Outcome,
+            Parameters = s.Parameters,
+            Attachments = s.Attachments?.Select(a => new AttachmentUpdateRequest(a.Id)).ToList(),
+            StepResults = ConvertExecStepsToUpdate(s.StepResults),
+        }).ToList();
 }

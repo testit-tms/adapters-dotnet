@@ -9,6 +9,7 @@ using TmsRunner.Entities;
 using TmsRunner.Entities.AutoTest;
 using TmsRunner.Services;
 using TmsRunner.Utils;
+using CoreConverter = Tms.Adapter.Core.Client.Converter;
 using AutoTest = TmsRunner.Entities.AutoTest.AutoTest;
 
 namespace TmsRunner.Managers;
@@ -95,18 +96,51 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
 
         var testRunId = new Guid(id ?? string.Empty);
         var model = Converter.ConvertResultToModel(result, settings.ConfigurationId, forceInProgressStatus);
+        Utils.HtmlEscapeUtils.EscapeHtmlInObject(model);
 
-        if (settings is not { AdapterMode: 0, IgnoreParameters: true })
+        if (forceInProgressStatus)
         {
-            await testRunsApi.SetAutoTestResultsForTestRunAsync(testRunId, [model])
-                .ConfigureAwait(false);
-            logger.LogDebug("Submit test result to test run {Id} completed successfully", id);
-            
+            await testRunsApi.SetAutoTestResultsForTestRunAsync(testRunId, [model]).ConfigureAwait(false);
+            logger.LogDebug("Submitted InProgress test result to test run {Id}", id);
             return;
         }
 
-        var currentTestRun = testRunContext.GetCurrentTestRun();
-        var matchingResults = currentTestRun?.TestResults?
+        if (settings is { AdapterMode: 0, IgnoreParameters: true })
+        {
+            await SubmitWithParameterMatchingAsync(model, result, testRunId).ConfigureAwait(false);
+            return;
+        }
+
+        await SubmitWithUpdateOrPostAsync(model, result.ExternalId, testRunId).ConfigureAwait(false);
+    }
+
+    private async Task SubmitWithUpdateOrPostAsync(
+        AutoTestResultsForTestRunModel model,
+        string? externalId,
+        Guid testRunId)
+    {
+        var existing = await FindTestResultByExternalIdAsync(externalId).ConfigureAwait(false);
+
+        if (existing != null && !ShouldSendFinalResult(model, existing))
+        {
+            var update = CoreConverter.ConvertResultToUpdateModel(model);
+            Utils.HtmlEscapeUtils.EscapeHtmlInObject(update);
+            await testResultsApi.ApiV2TestResultsIdPutAsync(existing.Id, update).ConfigureAwait(false);
+            logger.LogDebug("Updated test result {TestResultId} for {ExternalId}", existing.Id, externalId);
+            return;
+        }
+
+        await testRunsApi.SetAutoTestResultsForTestRunAsync(testRunId, [model]).ConfigureAwait(false);
+        logger.LogDebug("Submitted test result to test run {TestRunId} for {ExternalId}", testRunId, externalId);
+    }
+
+    [PerformanceSensitive]
+    private async Task SubmitWithParameterMatchingAsync(
+        AutoTestResultsForTestRunModel model,
+        AutoTestResult result,
+        Guid testRunId)
+    {
+        var matchingResults = testRunContext.GetCurrentTestRun()?.TestResults?
             .Where(x => x.AutoTest.ExternalId == result.ExternalId)
             .ToList();
 
@@ -115,25 +149,51 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
             throw new InvalidOperationException($"No matching autotest found for ExternalId: {result.ExternalId}");
         }
 
-        await SetAutoTestResultsForTestRunAsync(model, matchingResults, testRunId).ConfigureAwait(false);
-    }
-    
-    [PerformanceSensitive]
-    private async Task SetAutoTestResultsForTestRunAsync(AutoTestResultsForTestRunModel model, List<TestResultV2GetModel>? matchingResults, Guid testRunId)
-    {
-        if (matchingResults == null)
-        {
-            return;
-        }
-        foreach (var matchingResult in matchingResults)
+        foreach (var matchingResult in matchingResults!)
         {
             model.Parameters = matchingResult.Parameters;
-            await testRunsApi.SetAutoTestResultsForTestRunAsync(testRunId, [model])
-                .ConfigureAwait(false);
-            logger.LogDebug("Submitted result for test point with parameters: {@Parameters}",
-                matchingResult.Parameters);
+
+            if (IsInProgress(matchingResult) && model.StatusType != TestStatusType.InProgress)
+            {
+                await testRunsApi.SetAutoTestResultsForTestRunAsync(testRunId, [model]).ConfigureAwait(false);
+                logger.LogDebug("Submitted final result for test point with parameters: {@Parameters}", matchingResult.Parameters);
+                continue;
+            }
+
+            var update = CoreConverter.ConvertResultToUpdateModel(model);
+            Utils.HtmlEscapeUtils.EscapeHtmlInObject(update);
+            await testResultsApi.ApiV2TestResultsIdPutAsync(matchingResult.Id, update).ConfigureAwait(false);
+            logger.LogDebug("Updated test result {TestResultId} with parameters: {@Parameters}", matchingResult.Id, matchingResult.Parameters);
         }
     }
+
+    private async Task<TestResultShortResponse?> FindTestResultByExternalIdAsync(string? externalId)
+    {
+        if (string.IsNullOrWhiteSpace(externalId) || string.IsNullOrWhiteSpace(settings.TestRunId))
+        {
+            return null;
+        }
+
+        var filter = new TestResultsFilterApiModel
+        {
+            TestRunIds = [new Guid(settings.TestRunId)],
+            ConfigurationIds = settings.ConfigurationId == null ? null : [new Guid(settings.ConfigurationId)],
+        };
+
+        var results = await testResultsApi.ApiV2TestResultsSearchPostAsync(0, TESTS_LIMIT, null!, null!, null!, filter)
+            .ConfigureAwait(false);
+
+        return results.FirstOrDefault(r => r.AutotestExternalId == externalId);
+    }
+
+    private static bool ShouldSendFinalResult(AutoTestResultsForTestRunModel model, TestResultShortResponse existing) =>
+        IsInProgress(existing) && model.StatusType != TestStatusType.InProgress;
+
+    private static bool IsInProgress(TestResultShortResponse result) =>
+        result.Status?.Type == TestStatusApiType.InProgress;
+
+    private static bool IsInProgress(TestResultV2GetModel result) =>
+        string.Equals(result.Outcome, "InProgress", StringComparison.OrdinalIgnoreCase);
 
     public async Task<AttachmentModel> UploadAttachmentAsync(string fileName, Stream content)
     {
