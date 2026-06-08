@@ -150,6 +150,12 @@ public static partial class LogParser
                 }
                 var typeStr = match.Groups[1].Value;
                 var valueStr = match.Groups[2].Value;
+                // Adapter lines always use enum names (TmsStepMessage, ...). Reject "2: foo" stdout noise.
+                if (!typeStr.StartsWith("Tms", StringComparison.OrdinalIgnoreCase))
+                {
+                    return null;
+                }
+
                 if (Enum.TryParse(typeStr, true, out MessageType type))
                 {
                     return new MessageMetadata
