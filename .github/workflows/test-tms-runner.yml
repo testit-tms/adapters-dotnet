@@ -134,6 +134,11 @@ jobs:
         run: |
           dotnet test --configuration Debug --no-build --logger:"console;verbosity=detailed" api-validator-dotnet
 
+      - name: Create TestRun
+        run: |
+          testit testrun create --token ${{ env.TMS_PRIVATE_TOKEN }} --output ${{ env.TEMP_FILE }}
+          echo "TMS_TEST_RUN_ID=$(<${{ env.TEMP_FILE }})" >> $GITHUB_ENV
+
       - name: Test ImportRealtime=true
         run: |
           export TMS_IMPORT_REALTIME=true

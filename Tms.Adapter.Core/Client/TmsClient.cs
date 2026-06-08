@@ -15,6 +15,7 @@ public sealed class TmsClient : ITmsClient, IDisposable
     private readonly ILogger<TmsClient> _logger;
     private readonly TmsSettings _settings;
     private readonly TestRunsApi _testRuns;
+    private readonly TestResultsApi _testResults;
     private readonly AttachmentsApi _attachments;
     private readonly AutoTestsApi _autoTests;
     private readonly int MAX_TRIES = 10;
@@ -38,6 +39,7 @@ public sealed class TmsClient : ITmsClient, IDisposable
         }
 
         _testRuns = new TestRunsApi(new HttpClient(httpClientHandler), cfg);
+        _testResults = new TestResultsApi(new HttpClient(httpClientHandler), cfg);
         _attachments = new AttachmentsApi(new HttpClient(httpClientHandler), cfg);
         _autoTests = new AutoTestsApi(new HttpClient(httpClientHandler), cfg);
     }
@@ -251,15 +253,51 @@ public sealed class TmsClient : ITmsClient, IDisposable
         _logger.LogDebug("Submitting test result {@Result} to test run {Id}", result, _settings.TestRunId);
 
         var model = Converter.ConvertResultToModel(result, container, _settings.ConfigurationId);
-        
-        // Escape HTML in the model before sending to API
         HtmlEscapeUtils.EscapeHtmlInObject(model);
-        
-        await _testRuns.SetAutoTestResultsForTestRunAsync(new Guid(_settings.TestRunId),
-            [model]).ConfigureAwait(false);
 
-        _logger.LogDebug("Submit test result to test run {Id} is successfully", _settings.TestRunId);
+        var testRunId = new Guid(_settings.TestRunId);
+
+        if (model.StatusType == TestStatusType.InProgress)
+        {
+            await _testRuns.SetAutoTestResultsForTestRunAsync(testRunId, [model]).ConfigureAwait(false);
+            _logger.LogDebug("Submitted InProgress test result to test run {Id} for {ExternalId}", _settings.TestRunId, result.ExternalId);
+            return;
+        }
+
+        var existing = await FindTestResultByExternalIdAsync(result.ExternalId!).ConfigureAwait(false);
+
+        if (existing != null && !ShouldSendFinalResult(model, existing))
+        {
+            var update = Converter.ConvertResultToUpdateModel(model);
+            HtmlEscapeUtils.EscapeHtmlInObject(update);
+            await _testResults.ApiV2TestResultsIdPutAsync(existing.Id, update).ConfigureAwait(false);
+            _logger.LogDebug("Updated existing test result {TestResultId} for {ExternalId}", existing.Id, result.ExternalId);
+            return;
+        }
+
+        await _testRuns.SetAutoTestResultsForTestRunAsync(testRunId, [model]).ConfigureAwait(false);
+        _logger.LogDebug("Submitted test result to test run {Id} for {ExternalId}", _settings.TestRunId, result.ExternalId);
     }
+
+    private async Task<TestResultShortResponse?> FindTestResultByExternalIdAsync(string externalId)
+    {
+        var filter = new TestResultsFilterApiModel
+        {
+            TestRunIds = [new Guid(_settings.TestRunId)],
+            ConfigurationIds = [new Guid(_settings.ConfigurationId)],
+        };
+
+        var results = await _testResults.ApiV2TestResultsSearchPostAsync(0, 100, null!, null!, null!, filter)
+            .ConfigureAwait(false);
+
+        return results.FirstOrDefault(r => r.AutotestExternalId == externalId);
+    }
+
+    private static bool ShouldSendFinalResult(AutoTestResultsForTestRunModel model, TestResultShortResponse existing) =>
+        IsInProgress(existing) && model.StatusType != TestStatusType.InProgress;
+
+    private static bool IsInProgress(TestResultShortResponse result) =>
+        result.Status?.Type == TestStatusApiType.InProgress;
 
     public async Task<string> UploadAttachment(string fileName, Stream content)
     {
@@ -412,6 +450,7 @@ public sealed class TmsClient : ITmsClient, IDisposable
         }
         _autoTests.Dispose();
         _testRuns.Dispose();
+        _testResults.Dispose();
         _attachments.Dispose();
     }
 }

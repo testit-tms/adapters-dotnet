@@ -182,10 +182,7 @@ public sealed partial class ProcessorService(ILogger<ProcessorService> logger,
             return;
         }
 
-        if (await TryPublishInProgressAsync(testResult).ConfigureAwait(false))
-        {
-            return;
-        }
+        await TryPublishInProgressAsync(testResult).ConfigureAwait(false);
 
         _bufferedTestResults.Add(testResult);
         logger.LogDebug("Buffered test result for bulk import: {Name}", testResult.DisplayName);
@@ -206,13 +203,13 @@ public sealed partial class ProcessorService(ILogger<ProcessorService> logger,
         _bufferedTestResults.Clear();
     }
 
-    private async Task<bool> TryPublishInProgressAsync(TestResult testResult)
+    private async Task TryPublishInProgressAsync(TestResult testResult)
     {
         if (syncStorageSession.Runner is not { IsRunning: true, IsMaster: true } runner
             || runner.IsAlreadyInProgress
             || string.IsNullOrWhiteSpace(tmsSettings.ProjectId))
         {
-            return false;
+            return;
         }
 
         var traceJson = GetTraceJson(testResult);
@@ -274,13 +271,11 @@ public sealed partial class ProcessorService(ILogger<ProcessorService> logger,
 
         if (!await runner.SendInProgressTestResultAsync(cut).ConfigureAwait(false))
         {
-            return false;
+            return;
         }
 
         await apiClient.SubmitResultToTestRunAsync(tmsSettings.TestRunId, autoTestResultRequestBody, true)
             .ConfigureAwait(false);
-
-        return true;
     }
 
     private async Task PublishAutoTestAsync(TestResult testResult, bool allowInProgress)
@@ -354,7 +349,6 @@ public sealed partial class ProcessorService(ILogger<ProcessorService> logger,
             {
                 await apiClient.SubmitResultToTestRunAsync(tmsSettings.TestRunId, autoTestResultRequestBody, true)
                     .ConfigureAwait(false);
-                return;
             }
         }
 
