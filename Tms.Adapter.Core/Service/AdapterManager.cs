@@ -29,6 +29,7 @@ public sealed class AdapterManager : IDisposable
     private readonly object _writeLock = new();
     private readonly bool _importRealtime;
     private readonly List<(TestContainer Test, ClassContainer Container)> _bufferedTestCases = [];
+    private bool _firstTestInProgressHandled;
 
     private SyncStorageRunner? _syncStorageRunner;
 
@@ -310,9 +311,10 @@ public sealed class AdapterManager : IDisposable
                 return this;
             }
 
-            if (IsSyncStorageActive() && IsMasterAndNoInProgress())
+            if (IsSyncStorageActive() && _syncStorageRunner!.IsMaster && !_firstTestInProgressHandled
+                && TrySendToSyncStorageAndWriteInProgress(testContainer, classContainer))
             {
-                TrySendToSyncStorageAndWriteInProgress(testContainer, classContainer);
+                _firstTestInProgressHandled = true;
             }
 
             if (_importRealtime)
@@ -356,15 +358,14 @@ public sealed class AdapterManager : IDisposable
     /// Sync Storage in-progress slot + adapter POST with InProgress status.
     /// Final status is sent later via sendTestResults; enrichment of existing result uses PUT.
     /// </summary>
-    private void TrySendToSyncStorageAndWriteInProgress(TestContainer testContainer, ClassContainer classContainer)
+    private bool TrySendToSyncStorageAndWriteInProgress(TestContainer testContainer, ClassContainer classContainer)
     {
         try
         {
             var cfg = Tms.Adapter.Core.Configurator.Configurator.GetConfig();
             if (string.IsNullOrWhiteSpace(cfg.ProjectId))
             {
-                _logger.LogWarning("Sync Storage in-progress skipped: ProjectId is not configured.");
-                return;
+                return false;
             }
 
             var cutModel = Converter.ToTestResultCutApiModel(testContainer, cfg.ProjectId);
@@ -375,7 +376,7 @@ public sealed class AdapterManager : IDisposable
 
             if (!_syncStorageRunner!.SendInProgressTestResultAsync(cutModel).GetAwaiter().GetResult())
             {
-                return;
+                return false;
             }
 
             var originalStatus = testContainer.Status;
@@ -387,17 +388,21 @@ public sealed class AdapterManager : IDisposable
             }
             catch (Exception ex)
             {
-                _logger.LogWarning(ex, "Failed to write InProgress test to TMS, falling back");
+                _logger.LogWarning(ex, "Failed to write InProgress test to TMS, falling back to normal write");
                 _syncStorageRunner.SetIsAlreadyInProgress(false);
+                return false;
             }
             finally
             {
                 testContainer.Status = originalStatus;
             }
+
+            return true;
         }
         catch (Exception ex)
         {
             _logger.LogWarning(ex, "SyncStorage handling failed, falling back to normal write");
+            return false;
         }
     }
 
@@ -535,11 +540,6 @@ public sealed class AdapterManager : IDisposable
     private bool IsSyncStorageActive()
     {
         return _syncStorageRunner != null && _syncStorageRunner.IsRunning;
-    }
-
-    private bool IsMasterAndNoInProgress()
-    {
-        return _syncStorageRunner!.IsMaster && !_syncStorageRunner.IsAlreadyInProgress;
     }
 
     public static void ClearInstance()

@@ -24,6 +24,7 @@ public sealed partial class ProcessorService(ILogger<ProcessorService> logger,
                                      SyncStorageSession syncStorageSession)
 {
     private readonly List<TestResult> _bufferedTestResults = [];
+    private int _firstTestInProgressHandled;
     private async Task<List<StepModel>> GetStepsWithAttachmentsAsync(string? traceJson, List<Guid> attachmentIds)
     {
         var messages = LogParser.GetMessages(traceJson ?? string.Empty);
@@ -182,7 +183,7 @@ public sealed partial class ProcessorService(ILogger<ProcessorService> logger,
             return;
         }
 
-        await TryPublishInProgressAsync(testResult).ConfigureAwait(false);
+        await TryPublishFirstTestInProgressAsync(testResult).ConfigureAwait(false);
 
         _bufferedTestResults.Add(testResult);
         logger.LogDebug("Buffered test result for bulk import: {Name}", testResult.DisplayName);
@@ -203,15 +204,55 @@ public sealed partial class ProcessorService(ILogger<ProcessorService> logger,
         _bufferedTestResults.Clear();
     }
 
-    private async Task TryPublishInProgressAsync(TestResult testResult)
+    private async Task<bool> TryPublishFirstTestInProgressAsync(
+        TestResult testResult,
+        AutoTestResult? autoTestResultRequestBody = null)
     {
         if (syncStorageSession.Runner is not { IsRunning: true, IsMaster: true } runner
-            || runner.IsAlreadyInProgress
             || string.IsNullOrWhiteSpace(tmsSettings.ProjectId))
         {
-            return;
+            return false;
         }
 
+        if (Interlocked.CompareExchange(ref _firstTestInProgressHandled, 1, 0) != 0)
+        {
+            return false;
+        }
+
+        autoTestResultRequestBody ??= await BuildAutoTestResultRequestBodyAsync(testResult).ConfigureAwait(false);
+
+        var cut = Tms.Adapter.Core.Client.Converter.ToTestResultCutApiModel(
+            autoTestResultRequestBody.ExternalId ?? string.Empty,
+            testResult.Outcome.ToString(),
+            testResult.StartTime.UtcDateTime,
+            tmsSettings.ProjectId);
+
+        if (!await runner.SendInProgressTestResultAsync(cut).ConfigureAwait(false))
+        {
+            Interlocked.Exchange(ref _firstTestInProgressHandled, 0);
+            return false;
+        }
+
+        await apiClient.SubmitResultToTestRunAsync(tmsSettings.TestRunId, autoTestResultRequestBody, true)
+            .ConfigureAwait(false);
+        return true;
+    }
+
+    private async Task PublishAutoTestAsync(TestResult testResult, bool allowInProgress)
+    {
+        var autoTestResultRequestBody = await BuildAutoTestResultRequestBodyAsync(testResult).ConfigureAwait(false);
+
+        if (allowInProgress)
+        {
+            await TryPublishFirstTestInProgressAsync(testResult, autoTestResultRequestBody).ConfigureAwait(false);
+        }
+
+        await apiClient.SubmitResultToTestRunAsync(tmsSettings.TestRunId, autoTestResultRequestBody)
+            .ConfigureAwait(false);
+    }
+
+    private async Task<AutoTestResult> BuildAutoTestResultRequestBodyAsync(TestResult testResult)
+    {
         var traceJson = GetTraceJson(testResult);
         var parameters = LogParser.GetParameters(traceJson);
         var autoTest = LogParser.GetAutoTest(testResult, parameters);
@@ -262,98 +303,7 @@ public sealed partial class ProcessorService(ILogger<ProcessorService> logger,
             testCaseSteps, attachmentIds, parameters, tmsSettings.IgnoreParameters);
 
         HtmlEscapeUtils.EscapeHtmlInObject(autoTestResultRequestBody);
-
-        var cut = Tms.Adapter.Core.Client.Converter.ToTestResultCutApiModel(
-            autoTest.ExternalId ?? string.Empty,
-            testResult.Outcome.ToString(),
-            testResult.StartTime.UtcDateTime,
-            tmsSettings.ProjectId);
-
-        if (!await runner.SendInProgressTestResultAsync(cut).ConfigureAwait(false))
-        {
-            return;
-        }
-
-        await apiClient.SubmitResultToTestRunAsync(tmsSettings.TestRunId, autoTestResultRequestBody, true)
-            .ConfigureAwait(false);
-    }
-
-    private async Task PublishAutoTestAsync(TestResult testResult, bool allowInProgress)
-    {
-        var traceJson = GetTraceJson(testResult);
-        var parameters = LogParser.GetParameters(traceJson);
-        var autoTest = LogParser.GetAutoTest(testResult, parameters);
-        autoTest.Message = LogParser.GetMessage(traceJson);
-
-        var attachmentIds = new List<Guid>();
-        var testCaseSteps = await GetStepsWithAttachmentsAsync(traceJson, attachmentIds).ConfigureAwait(false);
-
-        autoTest.Setup = testCaseSteps
-            .Where(x => x.CallerMethodType == CallerMethodType.Setup)
-            .Select(AutoTestStep.ConvertFromStep)
-            .ToList();
-
-        autoTest.Steps = testCaseSteps
-            .Where(x => x.CallerMethodType == CallerMethodType.TestMethod || x.CallerMethodType == null)
-            .Select(AutoTestStep.ConvertFromStep)
-            .ToList();
-
-        autoTest.Teardown = testCaseSteps
-            .Where(x => x.CallerMethodType == CallerMethodType.Teardown)
-            .Select(AutoTestStep.ConvertFromStep)
-            .ToList();
-
-        var existAutotestResult = await apiClient.GetAutotestByExternalIdAsync(autoTest.ExternalId).ConfigureAwait(false);
-        if (existAutotestResult == null)
-        {
-            HtmlEscapeUtils.EscapeHtmlInObject(autoTest);
-
-            var existAutoTestApiResult = await apiClient.CreateAutotestAsync(autoTest).ConfigureAwait(false);
-            existAutotestResult = existAutoTestApiResult;
-        }
-        else
-        {
-            autoTest.IsFlaky = existAutotestResult.IsFlaky;
-
-            HtmlEscapeUtils.EscapeHtmlInObject(autoTest);
-
-            await apiClient.UpdateAutotestAsync(autoTest).ConfigureAwait(false);
-        }
-
-        if (autoTest.WorkItemIds.Count > 0)
-        {
-            await UpdateTestLinkToWorkItems(existAutotestResult.Id.ToString(), autoTest.WorkItemIds).ConfigureAwait(false);
-        }
-
-        if (!string.IsNullOrEmpty(testResult.ErrorMessage))
-        {
-            autoTest.Message += Environment.NewLine + testResult.ErrorMessage;
-        }
-
-        var autoTestResultRequestBody = GetAutoTestResultsForTestRunModel(autoTest, testResult, traceJson,
-            testCaseSteps, attachmentIds, parameters, tmsSettings.IgnoreParameters);
-
-        HtmlEscapeUtils.EscapeHtmlInObject(autoTestResultRequestBody);
-
-        if (allowInProgress
-            && syncStorageSession.Runner is { IsRunning: true, IsMaster: true } runner && !runner.IsAlreadyInProgress
-            && !string.IsNullOrWhiteSpace(tmsSettings.ProjectId))
-        {
-            var cut = Tms.Adapter.Core.Client.Converter.ToTestResultCutApiModel(
-                autoTest.ExternalId ?? string.Empty,
-                testResult.Outcome.ToString(),
-                testResult.StartTime.UtcDateTime,
-                tmsSettings.ProjectId);
-
-            if (await runner.SendInProgressTestResultAsync(cut).ConfigureAwait(false))
-            {
-                await apiClient.SubmitResultToTestRunAsync(tmsSettings.TestRunId, autoTestResultRequestBody, true)
-                    .ConfigureAwait(false);
-            }
-        }
-
-        await apiClient.SubmitResultToTestRunAsync(tmsSettings.TestRunId, autoTestResultRequestBody)
-            .ConfigureAwait(false);
+        return autoTestResultRequestBody;
     }
 
     private async Task UpdateTestLinkToWorkItems(string autoTestId, List<string?> workItemIds)
