@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Moq;
-using TestIT.ApiClient.Client;
+using TestIT.AdaptersApi.Client;
 using Tms.Adapter.Core.Client;
 using Tms.Adapter.Core.Configurator;
 using Tms.Adapter.Core.Models;

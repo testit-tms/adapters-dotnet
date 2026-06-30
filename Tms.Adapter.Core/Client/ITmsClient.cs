@@ -1,4 +1,4 @@
-using TestIT.ApiClient.Model;
+using TestIT.AdaptersApi.Model;
 using Tms.Adapter.Core.Models;
 using Link = Tms.Adapter.Core.Models.Link;
 

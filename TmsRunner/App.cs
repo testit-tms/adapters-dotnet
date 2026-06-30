@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
-using TestIT.ApiClient.Model;
+using TestIT.AdaptersApi.Model;
 using TmsRunner.Entities;
 using TmsRunner.Entities.Configuration;
 using TmsRunner.Managers;
@@ -29,7 +29,7 @@ public class App(ILogger<App> logger,
 
         runService.InitialiseRunner();
         var testCases = runService.DiscoverTests();
-        TestRunV2ApiResult? testRun = null;
+        TestRunApiResult? testRun = null;
         logger.LogInformation("Discovered Tests Count: {Count}", testCases.Count);
 
         if (testCases.Count == 0)
@@ -53,6 +53,7 @@ public class App(ILogger<App> logger,
 
                 testCases = filterService.FilterTestCases(adapterConfig.TestAssemblyPath, testCaseForRun, testCases);
                 testRunContext.SetCurrentTestRun(testRun!);
+                testRunContext.SetTestResults(await tmsManager.LoadTestRunTestResultsAsync().ConfigureAwait(false));
                 break;
             }
             case 1:

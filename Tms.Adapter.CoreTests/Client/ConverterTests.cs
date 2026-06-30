@@ -1,8 +1,8 @@
-﻿using TestIT.ApiClient.Model;
+﻿using TestIT.AdaptersApi.Model;
 using Tms.Adapter.Core.Client;
 using Tms.Adapter.Core.Models;
 using static System.String;
-using ApiLinkType = TestIT.ApiClient.Model.LinkType;
+using ApiLinkType = TestIT.AdaptersApi.Model.LinkType;
 using CoreLink = Tms.Adapter.Core.Models.Link;
 
 namespace Tms.Adapter.CoreTests.Client;

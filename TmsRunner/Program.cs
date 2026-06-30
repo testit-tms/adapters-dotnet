@@ -12,7 +12,7 @@ using Serilog.Events;
 using Serilog.Expressions;
 using Serilog.Settings.Configuration;
 using System.Net;
-using TestIT.ApiClient.Api;
+using TestIT.AdaptersApi.Api;
 using Tms.Adapter.Utils;
 using TmsRunner.Entities;
 using TmsRunner.Entities.Configuration;
@@ -128,7 +128,7 @@ public static class Program
                     {
                         var tmsSettings = provider.GetRequiredService<TmsSettings>();
 
-                        return new TestIT.ApiClient.Client.Configuration
+                        return new TestIT.AdaptersApi.Client.Configuration
                         {
                             BasePath = tmsSettings.Url ?? string.Empty,
                             ApiKeyPrefix = new Dictionary<string, string> { { "Authorization", "PrivateToken" } },
@@ -141,27 +141,27 @@ public static class Program
                     })
                     .AddTransient<IAttachmentsApiAsync, AttachmentsApi>(provider => new AttachmentsApi(
                         provider.GetRequiredService<IHttpClientFactory>().CreateClient(nameof(HttpClientNames.Default)),
-                        provider.GetRequiredService<TestIT.ApiClient.Client.Configuration>(),
+                        provider.GetRequiredService<TestIT.AdaptersApi.Client.Configuration>(),
                         provider.GetRequiredService<HttpClientHandler>()
                     ))
                     .AddTransient<ITestRunsApiAsync, TestRunsApi>(provider => new TestRunsApi(
                         provider.GetRequiredService<IHttpClientFactory>().CreateClient(nameof(HttpClientNames.Default)),
-                        provider.GetRequiredService<TestIT.ApiClient.Client.Configuration>(),
+                        provider.GetRequiredService<TestIT.AdaptersApi.Client.Configuration>(),
                         provider.GetRequiredService<HttpClientHandler>()
                     ))
                     .AddTransient<ITestResultsApiAsync, TestResultsApi>(provider => new TestResultsApi(
                         provider.GetRequiredService<IHttpClientFactory>().CreateClient(nameof(HttpClientNames.Default)),
-                        provider.GetRequiredService<TestIT.ApiClient.Client.Configuration>(),
+                        provider.GetRequiredService<TestIT.AdaptersApi.Client.Configuration>(),
                         provider.GetRequiredService<HttpClientHandler>()
                     ))
                     .AddTransient<IAutoTestsApiAsync, AutoTestsApi>(provider => new AutoTestsApi(
                         provider.GetRequiredService<IHttpClientFactory>().CreateClient(nameof(HttpClientNames.Default)),
-                        provider.GetRequiredService<TestIT.ApiClient.Client.Configuration>(),
+                        provider.GetRequiredService<TestIT.AdaptersApi.Client.Configuration>(),
                         provider.GetRequiredService<HttpClientHandler>()
                     ))
                     .AddTransient<IProjectsApiAsync, ProjectsApi>(provider => new ProjectsApi(
                         provider.GetRequiredService<IHttpClientFactory>().CreateClient(nameof(HttpClientNames.Default)),
-                        provider.GetRequiredService<TestIT.ApiClient.Client.Configuration>(),
+                        provider.GetRequiredService<TestIT.AdaptersApi.Client.Configuration>(),
                         provider.GetRequiredService<HttpClientHandler>()
                     ))
                     .AddTransient<App>()

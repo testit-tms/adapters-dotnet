@@ -1,18 +1,23 @@
-using TestIT.ApiClient.Model;
+using TestIT.AdaptersApi.Model;
 
 namespace TmsRunner.Services.Implementations;
 
 internal sealed class TestRunContextService : ITestRunContextService
 {
-    private TestRunV2ApiResult? _currentTestRun;
+    private TestRunApiResult? _currentTestRun;
+    private IReadOnlyList<TestResultResponse> _testResults = [];
 
-    public void SetCurrentTestRun(TestRunV2ApiResult testRun)
+    public void SetCurrentTestRun(TestRunApiResult testRun)
     {
         _currentTestRun = testRun;
     }
 
-    public TestRunV2ApiResult? GetCurrentTestRun()
+    public TestRunApiResult? GetCurrentTestRun() => _currentTestRun;
+
+    public void SetTestResults(IReadOnlyList<TestResultResponse> testResults)
     {
-        return _currentTestRun;
+        _testResults = testResults;
     }
-} 
+
+    public IReadOnlyList<TestResultResponse> GetTestResults() => _testResults;
+}
