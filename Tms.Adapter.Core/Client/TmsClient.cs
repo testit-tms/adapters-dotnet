@@ -27,21 +27,16 @@ public sealed class TmsClient : ITmsClient, IDisposable
         _logger = logger;
         _settings = settings;
 
-        var cfg = new Configuration { BasePath = settings.Url };
-        cfg.AddApiKeyPrefix("Authorization", "PrivateToken");
-        cfg.AddApiKey("Authorization", settings.PrivateToken);
+        var cfg = AdaptersApiConfiguration.Create(settings, out var httpClient);
 
-        var httpClientHandler = new HttpClientHandler();
-
-        if (!_settings.CertValidation)
-        {
-            httpClientHandler.ServerCertificateCustomValidationCallback = (_, _, _, _) => true;
-        }
-
-        _testRuns = new TestRunsApi(new HttpClient(httpClientHandler), cfg);
-        _testResults = new TestResultsApi(new HttpClient(httpClientHandler), cfg);
-        _attachments = new AttachmentsApi(new HttpClient(httpClientHandler), cfg);
-        _autoTests = new AutoTestsApi(new HttpClient(httpClientHandler), cfg);
+        _testRuns = new TestRunsApi(httpClient, cfg);
+        _testResults = new TestResultsApi(httpClient, cfg);
+        _attachments = new AttachmentsApi(httpClient, cfg);
+        _autoTests = new AutoTestsApi(httpClient, cfg);
+        AdaptersApiConfiguration.ApplyExceptionFactory(_testRuns);
+        AdaptersApiConfiguration.ApplyExceptionFactory(_testResults);
+        AdaptersApiConfiguration.ApplyExceptionFactory(_attachments);
+        AdaptersApiConfiguration.ApplyExceptionFactory(_autoTests);
     }
 
     public async Task<bool> IsAutotestExist(string externalId)

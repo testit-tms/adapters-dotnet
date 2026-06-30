@@ -14,6 +14,7 @@ env:
   TMS_PRIVATE_TOKEN: ${{ secrets.TESTIT_PRIVATE_TOKEN }}
   TMS_URL: ${{ secrets.TESTIT_URL }}
   TMS_IMPORT_REALTIME: false
+  TMS_TRACE_HTTP: true
 jobs:
   test:
     name: ${{ matrix.project_name }} (.NET ${{ matrix.dotnet_version }})
@@ -72,6 +73,36 @@ jobs:
         run: |
           testit testrun create --token ${{ env.TMS_PRIVATE_TOKEN }} --output ${{ env.TEMP_FILE }}
           echo "TMS_TEST_RUN_ID=$(<${{ env.TEMP_FILE }})" >> $GITHUB_ENV
+      - name: Probe Adapters API URLs
+        run: |
+          BASE="${TMS_URL%/}"
+          BASE="${BASE%/api/adapters}"
+          BASE="${BASE%/api/v2}"
+          BASE="${BASE%/api}"
+          echo "TMS_URL env: ${TMS_URL}"
+          echo "Normalized BasePath: ${BASE}"
+          echo "GET ${BASE}/api/adapters/testRuns/${TMS_TEST_RUN_ID}"
+          curl -sS -D /tmp/tms-headers.txt -o /tmp/tms-body.txt -w "HTTP %{http_code}\n" \
+            -H "Authorization: PrivateToken ${TMS_PRIVATE_TOKEN}" \
+            -H "Accept: application/json" \
+            "${BASE}/api/adapters/testRuns/${TMS_TEST_RUN_ID}" || true
+          echo "--- response headers ---"
+          head -20 /tmp/tms-headers.txt || true
+          echo "--- response body (first 500 bytes) ---"
+          head -c 500 /tmp/tms-body.txt || true
+          echo
+          echo "POST ${BASE}/api/adapters/attachments"
+          curl -sS -D /tmp/tms-att-headers.txt -o /tmp/tms-att-body.txt -w "HTTP %{http_code}\n" \
+            -X POST \
+            -H "Authorization: PrivateToken ${TMS_PRIVATE_TOKEN}" \
+            -H "Accept: application/json" \
+            -F "file=@/etc/hosts;filename=probe.txt" \
+            "${BASE}/api/adapters/attachments" || true
+          echo "--- attachment response headers ---"
+          head -20 /tmp/tms-att-headers.txt || true
+          echo "--- attachment response body (first 500 bytes) ---"
+          head -c 500 /tmp/tms-att-body.txt || true
+          echo
       - name: Test
         run: |
           export SYNC_STORAGE_VERSION=$(grep -o 'SyncStorageVersion = "[^"]*"' Tms.Adapter.Core/SyncStorage/SyncStorageRunner.cs | cut -d'"' -f2)
