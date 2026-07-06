@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFrameworks>$(TargetFrameworksForApp)</TargetFrameworks>
@@ -34,7 +34,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Tms.Adapter.Core\Tms.Adapter.Core.csproj"/>
-        <PackageReference Include="TestIt.ApiClient" Version="5.5.5" />
+        <PackageReference Include="TestIt.ApiClient" Version="5.6.0-TMS-5.8" />
     </ItemGroup>
 
     <ItemGroup>
