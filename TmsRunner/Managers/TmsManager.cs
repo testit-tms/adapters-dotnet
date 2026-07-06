@@ -349,7 +349,7 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
         return await autoTestsApi.GetWorkItemsLinkedToAutoTestAsync(autotestId);
     }
 
-    public async Task<ProjectModel> GetProjectByIdAsync()
+    public async Task<DetailedProjectApiResult> GetProjectByIdAsync()
     {
         return await projectsApi.GetProjectByIdAsync(settings.ProjectId!).ConfigureAwait(false);
     }

@@ -243,8 +243,7 @@ public static class Converter
             Message = model.Message,
             Trace = model.Traces,
             Duration = model.Duration,
-            Links = model.Links?.Select(l => new TestIT.ApiClient.Model.Link(
-                id: null,
+            Links = model.Links?.Select(l => new TestIT.ApiClient.Model.CreateLinkApiModel(
                 title: l.Title ?? string.Empty,
                 url: l.Url ?? string.Empty,
                 description: l.Description ?? string.Empty,
