@@ -5,7 +5,6 @@ using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Newtonsoft.Json;
 
 using System.Text;
-using System.Text.RegularExpressions;
 using Tms.Adapter.Models;
 using TmsRunner.Entities;
 using TmsRunner.Entities.AutoTest;
@@ -29,10 +28,7 @@ public sealed partial class ProcessorService(ILogger<ProcessorService> logger,
     {
         var messages = LogParser.GetMessages(traceJson ?? string.Empty);
 
-        var testCaseStepsHierarchical = new List<StepModel>();
-        var stepsTable = new Dictionary<Guid, StepModel>();
-        StepModel? parentStep = null;
-        var nestingLevel = 1;
+        var stepTree = new StepTreeBuilder();
 
         foreach (var message in messages)
         {
@@ -47,45 +43,9 @@ public sealed partial class ProcessorService(ILogger<ProcessorService> logger,
                             break;
                         }
 
-                        if (!stepsTable.TryAdd(step.Guid, step))
+                        if (!stepTree.AddStep(step))
                         {
                             logger.LogWarning("Duplicate step Guid ignored: {Guid}", step.Guid);
-                            break;
-                        }
-
-                        if ((step.CallerMethodType != null && parentStep == null) ||
-                            (step.CurrentMethodType != null && parentStep == null))
-                        {
-                            step.NestingLevel = nestingLevel = 1;
-                            testCaseStepsHierarchical.Add(step);
-                            parentStep = step;
-                            nestingLevel++;
-                        }
-                        else
-                        {
-                            var calledMethod = GetCalledMethod(step.CallerMethod);
-
-                            while (parentStep != null && calledMethod != null && parentStep.CurrentMethod != calledMethod)
-                            {
-                                parentStep = parentStep.ParentStep;
-                                nestingLevel--;
-                            }
-
-                            if (parentStep == null)
-                            {
-                                step.NestingLevel = nestingLevel = 1;
-                                testCaseStepsHierarchical.Add(step);
-                                parentStep = step;
-                                nestingLevel++;
-                            }
-                            else
-                            {
-                                step.ParentStep = parentStep;
-                                step.NestingLevel = nestingLevel;
-                                parentStep.Steps.Add(step);
-                                parentStep = step;
-                                nestingLevel++;
-                            }
                         }
 
                         break;
@@ -100,7 +60,10 @@ public sealed partial class ProcessorService(ILogger<ProcessorService> logger,
                             break;
                         }
 
-                        parentStep = MapStep(stepsTable, stepResult);
+                        if (!stepTree.ApplyResult(stepResult))
+                        {
+                            logger.LogWarning("Step result references unknown step: {Guid}", stepResult.Guid);
+                        }
 
                         break;
                     }
@@ -116,9 +79,10 @@ public sealed partial class ProcessorService(ILogger<ProcessorService> logger,
                         var createdAttachment =
                             await apiClient.UploadAttachmentAsync(Path.GetFileName(attachment.Name), ms).ConfigureAwait(false);
 
-                        if (parentStep is not null)
+                        var attachmentStep = stepTree.GetAttachmentStep(attachment.StepGuid);
+                        if (attachmentStep is not null)
                         {
-                            parentStep.Attachments.Add(createdAttachment.Id);
+                            attachmentStep.Attachments.Add(createdAttachment.Id);
                         }
                         else
                         {
@@ -141,9 +105,10 @@ public sealed partial class ProcessorService(ILogger<ProcessorService> logger,
                             await using var fs = new FileStream(file.PathToFile, FileMode.Open, FileAccess.Read);
                             var attachment = await apiClient.UploadAttachmentAsync(Path.GetFileName(file.PathToFile), fs).ConfigureAwait(false);
 
-                            if (parentStep is not null)
+                            var attachmentStep = stepTree.GetAttachmentStep(file.StepGuid);
+                            if (attachmentStep is not null)
                             {
-                                parentStep.Attachments.Add(attachment.Id);
+                                attachmentStep.Attachments.Add(attachment.Id);
                             }
                             else
                             {
@@ -159,20 +124,7 @@ public sealed partial class ProcessorService(ILogger<ProcessorService> logger,
             }
         }
 
-        return testCaseStepsHierarchical;
-    }
-
-    private static string? GetCalledMethod(string? calledMethod)
-    {
-        if (calledMethod == null || !calledMethod.Contains('<'))
-        {
-            return calledMethod;
-        }
-
-        var regex = CalledMethodRegex();
-        var match = regex.Match(calledMethod);
-
-        return match.Success ? match.Groups[1].Value : calledMethod;
+        return stepTree.Build();
     }
 
     public async Task ProcessAutoTestAsync(TestResult testResult)
@@ -262,17 +214,17 @@ public sealed partial class ProcessorService(ILogger<ProcessorService> logger,
         var testCaseSteps = await GetStepsWithAttachmentsAsync(traceJson, attachmentIds).ConfigureAwait(false);
 
         autoTest.Setup = testCaseSteps
-            .Where(x => x.CallerMethodType == CallerMethodType.Setup)
+            .Where(x => GetStepPhase(x) == CallerMethodType.Setup)
             .Select(AutoTestStep.ConvertFromStep)
             .ToList();
 
         autoTest.Steps = testCaseSteps
-            .Where(x => x.CallerMethodType == CallerMethodType.TestMethod || x.CallerMethodType == null)
+            .Where(x => GetStepPhase(x) == CallerMethodType.TestMethod || GetStepPhase(x) == null)
             .Select(AutoTestStep.ConvertFromStep)
             .ToList();
 
         autoTest.Teardown = testCaseSteps
-            .Where(x => x.CallerMethodType == CallerMethodType.Teardown)
+            .Where(x => GetStepPhase(x) == CallerMethodType.Teardown)
             .Select(AutoTestStep.ConvertFromStep)
             .ToList();
 
@@ -335,17 +287,17 @@ public sealed partial class ProcessorService(ILogger<ProcessorService> logger,
     {
         var stepResults =
             testCaseSteps
-                .Where(x => x.CallerMethodType == CallerMethodType.TestMethod || x.CallerMethodType == null)
+                .Where(x => GetStepPhase(x) == CallerMethodType.TestMethod || GetStepPhase(x) == null)
                 .Select(AutoTestStepResult.ConvertFromStep).ToList();
 
         var setupResults =
             testCaseSteps
-                .Where(x => x.CallerMethodType == CallerMethodType.Setup)
+                .Where(x => GetStepPhase(x) == CallerMethodType.Setup)
                 .Select(AutoTestStepResult.ConvertFromStep).ToList();
 
         var teardownResults =
             testCaseSteps
-                .Where(x => x.CallerMethodType == CallerMethodType.Teardown)
+                .Where(x => GetStepPhase(x) == CallerMethodType.Teardown)
                 .Select(AutoTestStepResult.ConvertFromStep).ToList();
 
 
@@ -396,21 +348,5 @@ public sealed partial class ProcessorService(ILogger<ProcessorService> logger,
         }
     }
 
-    private static StepModel? MapStep(Dictionary<Guid, StepModel> stepsDictionary, StepResult stepResult)
-    {
-        if (!stepsDictionary.TryGetValue(stepResult.Guid, out var stepToUpdate))
-        {
-            return null;
-        }
-
-        stepToUpdate.CompletedOn = stepResult.CompletedOn;
-        stepToUpdate.Duration = stepResult.Duration;
-        stepToUpdate.Result = stepResult.Result;
-        stepToUpdate.Outcome = stepResult.Outcome;
-
-        return stepToUpdate.ParentStep;
-    }
-
-    [GeneratedRegex(@"(?<=\<)(.*)(?=\>)")]
-    private static partial Regex CalledMethodRegex();
+    private static CallerMethodType? GetStepPhase(StepModel step) => step.Phase ?? step.CallerMethodType;
 }

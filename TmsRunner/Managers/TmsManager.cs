@@ -259,53 +259,90 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
         logger.LogDebug("Update autotest {@Autotest} is successfully", model);
     }
 
-    public async Task LinkAutoTestToWorkItemAsync(string autotestId, IEnumerable<string?> workItemIds)
+    public async Task LinkAutoTestToWorkItemAsync(
+        string autotestId,
+        IEnumerable<string?> workItemIds)
     {
+        var exceptions = new List<Exception>();
+
         foreach (var workItemId in workItemIds)
         {
-            if (string.IsNullOrEmpty(workItemId) || _absentWorkItemIds.Contains(workItemId))
+            if (string.IsNullOrEmpty(workItemId) ||
+                _absentWorkItemIds.Contains(workItemId))
             {
                 continue;
             }
 
-            logger.LogDebug(
-                "Linking autotest {AutotestId} to workitem {WorkitemId}",
-                autotestId,
-                workItemId);
+            var exception = await TryLinkAutoTestToWorkItemAsync(
+                    autotestId,
+                    workItemId)
+                .ConfigureAwait(false);
 
-            for (var attempts = 0; attempts < MAX_TRIES; attempts++)
+            if (exception is not null)
             {
-                try
-                {
-                    await autoTestsApi.LinkAutoTestToWorkItemAsync(autotestId, new WorkItemIdApiModel(workItemId)).ConfigureAwait(false);
-                    logger.LogDebug(
-                        "Link autotest {AutotestId} to workitem {WorkitemId} is successfully",
-                        autotestId,
-                        workItemId);
-
-                    break;
-                }
-                catch (ApiException e) when (IsMissingWorkItem(e))
-                {
-                    _absentWorkItemIds.Add(workItemId);
-                    logger.LogWarning(
-                        "Skip linking autotest {AutotestId} to work item {WorkItemId}: work item does not exist",
-                        autotestId,
-                        workItemId);
-                    break;
-                }
-                catch (ApiException e)
-                {
-                    logger.LogError(
-                        e,
-                        "Cannot link autotest {AutotestId} to work item {WorkItemId}",
-                        autotestId,
-                        workItemId);
-
-                    Thread.Sleep(WAITING_TIME);
-                }
+                exceptions.Add(exception);
             }
         }
+
+        if (exceptions.Count > 0)
+        {
+            throw new AggregateException(
+                $"Failed to link autotest {autotestId} to one or more work items.",
+                exceptions);
+        }
+    }
+
+    private async Task<ApiException?> TryLinkAutoTestToWorkItemAsync(
+        string autotestId,
+        string workItemId)
+    {
+        for (var attempt = 1; attempt <= MAX_TRIES; attempt++)
+        {
+            try
+            {
+                await autoTestsApi.LinkAutoTestToWorkItemAsync(
+                        autotestId,
+                        new WorkItemIdApiModel(workItemId))
+                    .ConfigureAwait(false);
+
+                logger.LogDebug(
+                    "Linked autotest {AutotestId} to work item {WorkItemId}",
+                    autotestId,
+                    workItemId);
+
+                return null;
+            }
+            catch (ApiException e) when (IsMissingWorkItem(e))
+            {
+                _absentWorkItemIds.Add(workItemId);
+
+                logger.LogWarning(
+                    "Skipping link between autotest {AutotestId} and work item {WorkItemId}: work item does not exist",
+                    autotestId,
+                    workItemId);
+
+                return null;
+            }
+            catch (ApiException e)
+            {
+                logger.LogError(
+                    e,
+                    "Cannot link autotest {AutotestId} to work item {WorkItemId}; attempt {Attempt} of {MaxTries}",
+                    autotestId,
+                    workItemId,
+                    attempt,
+                    MAX_TRIES);
+
+                if (attempt == MAX_TRIES)
+                {
+                    return e;
+                }
+
+                await Task.Delay(WAITING_TIME).ConfigureAwait(false);
+            }
+        }
+
+        return null;
     }
 
     private static bool IsMissingWorkItem(ApiException ex) =>
