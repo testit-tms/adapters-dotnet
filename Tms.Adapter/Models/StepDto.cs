@@ -2,6 +2,8 @@ namespace Tms.Adapter.Models;
 
 public class StepDto
 {
+    public const int CurrentProtocolVersion = 2;
+
 #pragma warning disable CA1720
     public Guid Guid { get; set; }
 #pragma warning restore CA1720
@@ -14,4 +16,7 @@ public class StepDto
     public Dictionary<string, string>? Args { get; set; }
     public CallerMethodType? CallerMethodType { get; set; }
     public CallerMethodType? CurrentMethodType { get; set; }
+    public int ProtocolVersion { get; set; }
+    public Guid? ParentGuid { get; set; }
+    public CallerMethodType? Phase { get; set; }
 }

@@ -21,7 +21,9 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
 
-    <ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Fody" Version="6.6.4" />
+		<PackageReference Include="MethodBoundaryAspect.Fody" Version="2.0.148" />
 		<PackageReference Include="coverlet.collector" Version="6.0.2" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0"/>
         <PackageReference Include="MSTest.TestAdapter" Version="3.2.2">
