@@ -123,6 +123,8 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
 
         if (existing != null && !ShouldSendFinalResult(model, existing))
         {
+            model.Duration = GetAccumulatedDuration(existing.Duration, model.Duration);
+
             var update = CoreConverter.ConvertResultToUpdateModel(model);
             Utils.HtmlEscapeUtils.EscapeHtmlInObject(update);
             await testResultsApi.ApiV2TestResultsIdPutAsync(existing.Id, update).ConfigureAwait(false);
@@ -132,6 +134,16 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
 
         await testRunsApi.SetAutoTestResultsForTestRunAsync(testRunId, [model]).ConfigureAwait(false);
         logger.LogDebug("Submitted test result to test run {TestRunId} for {ExternalId}", testRunId, externalId);
+    }
+
+    private static long? GetAccumulatedDuration(long? submittedDuration, long? currentDuration)
+    {
+        if (submittedDuration is null || currentDuration is null)
+        {
+            return currentDuration;
+        }
+
+        return checked(submittedDuration.Value + Math.Max(currentDuration.Value, 1));
     }
 
     [PerformanceSensitive]
