@@ -1,8 +1,8 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Moq;
-using TestIT.ApiClient.Api;
-using TestIT.ApiClient.Model;
+using TestIT.AdaptersApi.Api;
+using TestIT.AdaptersApi.Model;
 using TmsRunner.Entities;
 using TmsRunner.Entities.AutoTest;
 using TmsRunner.Managers;
@@ -20,7 +20,6 @@ public class TmsManagerTests
     private const long RetryAttemptDuration = 26_539;
     private const long ExpectedAccumulatedDuration = InitialAttemptDuration + RetryAttemptDuration;
     private const long ExpectedDurationAfterZeroLengthRetry = InitialAttemptDuration + 1;
-    private const long AutotestGlobalId = 1;
     private const int NoCompletedReruns = 0;
     private const string ConfigurationName = "configuration";
     private const string FailedStatusCode = "FAILED";
@@ -108,10 +107,10 @@ public class TmsManagerTests
         Duration = duration
     };
 
-    private static List<TestResultUpdateV2Request> GetUpdates(Mock<ITestResultsApiAsync> testResultsApi) =>
+    private static List<TestResultUpdateRequest> GetUpdates(Mock<ITestResultsApiAsync> testResultsApi) =>
         testResultsApi.Invocations
-            .Where(x => x.Method.Name == nameof(ITestResultsApiAsync.ApiV2TestResultsIdPutAsync))
-            .Select(x => (TestResultUpdateV2Request)x.Arguments[1])
+            .Where(x => x.Method.Name == nameof(ITestResultsApiAsync.AdaptersTestResultsIdPutAsync))
+            .Select(x => (TestResultUpdateRequest)x.Arguments[1])
             .ToList();
 
     private static TestResultShortResponse CreateExistingResult(TestStatusApiType statusType)
@@ -122,32 +121,19 @@ public class TmsManagerTests
         var statusCode = statusType == TestStatusApiType.InProgress
             ? InProgressStatusCode
             : FailedStatusCode;
-        var now = DateTime.UtcNow;
 
         return new TestResultShortResponse(
             id: ExistingResultId,
             name: ExternalId,
-            autotestGlobalId: AutotestGlobalId,
             autotestExternalId: ExternalId,
             autoTestTags: [],
             testRunId: TestRunId,
             configurationId: ConfigurationId,
             configurationName: ConfigurationName,
             outcome: statusName,
-            status: new TestStatusApiResult(
-                StatusId,
-                statusName,
-                statusType,
-                true,
-                statusCode,
-                string.Empty),
+            status: new TestStatusApiResult(StatusId, statusType, statusCode),
             resultReasons: [],
             comment: string.Empty,
-            date: now,
-            createdDate: now,
-            modifiedDate: null,
-            startedOn: null,
-            completedOn: null,
             duration: InitialAttemptDuration,
             links: [],
             attachments: [],

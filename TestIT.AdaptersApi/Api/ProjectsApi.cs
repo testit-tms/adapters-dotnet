@@ -28,16 +28,16 @@ namespace TestIT.AdaptersApi.Api
     {
         #region Synchronous Operations
         /// <summary>
-        /// 
+        /// Add global attributes to project
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <param name="requestBody"> (optional)</param>
         /// <returns></returns>
-        void ApiAdaptersProjectsIdAttributesGlobalPost(Guid id, List<Guid> requestBody = default);
+        void AdaptersProjectsIdAttributesGlobalPost(Guid id, List<Guid> requestBody = default);
 
         /// <summary>
-        /// 
+        /// Add global attributes to project
         /// </summary>
         /// <remarks>
         /// 
@@ -46,17 +46,17 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="id"></param>
         /// <param name="requestBody"> (optional)</param>
         /// <returns>ApiResponse of Object(void)</returns>
-        ApiResponse<Object> ApiAdaptersProjectsIdAttributesGlobalPostWithHttpInfo(Guid id, List<Guid> requestBody = default);
+        ApiResponse<Object> AdaptersProjectsIdAttributesGlobalPostWithHttpInfo(Guid id, List<Guid> requestBody = default);
         /// <summary>
-        /// 
+        /// Get project by ID
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <returns>DetailedProjectApiResult</returns>
-        DetailedProjectApiResult ApiAdaptersProjectsIdGet(Guid id);
+        DetailedProjectApiResult AdaptersProjectsIdGet(Guid id);
 
         /// <summary>
-        /// 
+        /// Get project by ID
         /// </summary>
         /// <remarks>
         /// 
@@ -64,17 +64,17 @@ namespace TestIT.AdaptersApi.Api
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <returns>ApiResponse of DetailedProjectApiResult</returns>
-        ApiResponse<DetailedProjectApiResult> ApiAdaptersProjectsIdGetWithHttpInfo(Guid id);
+        ApiResponse<DetailedProjectApiResult> AdaptersProjectsIdGetWithHttpInfo(Guid id);
         /// <summary>
-        /// 
+        /// Create project
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="createProjectApiModel"> (optional)</param>
         /// <returns>ProjectApiResult</returns>
-        ProjectApiResult ApiAdaptersProjectsPost(CreateProjectApiModel createProjectApiModel = default);
+        ProjectApiResult AdaptersProjectsPost(CreateProjectApiModel createProjectApiModel = default);
 
         /// <summary>
-        /// 
+        /// Create project
         /// </summary>
         /// <remarks>
         /// 
@@ -82,9 +82,9 @@ namespace TestIT.AdaptersApi.Api
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="createProjectApiModel"> (optional)</param>
         /// <returns>ApiResponse of ProjectApiResult</returns>
-        ApiResponse<ProjectApiResult> ApiAdaptersProjectsPostWithHttpInfo(CreateProjectApiModel createProjectApiModel = default);
+        ApiResponse<ProjectApiResult> AdaptersProjectsPostWithHttpInfo(CreateProjectApiModel createProjectApiModel = default);
         /// <summary>
-        /// 
+        /// Search for projects
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="skip">Amount of items to be skipped (offset) (optional)</param>
@@ -94,10 +94,10 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="searchValue">Value for searching (optional)</param>
         /// <param name="projectsFilterModel"> (optional)</param>
         /// <returns>List&lt;ProjectApiResult&gt;</returns>
-        List<ProjectApiResult> ApiAdaptersProjectsSearchPost(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ProjectsFilterModel projectsFilterModel = default);
+        List<ProjectApiResult> AdaptersProjectsSearchPost(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ProjectsFilterModel projectsFilterModel = default);
 
         /// <summary>
-        /// 
+        /// Search for projects
         /// </summary>
         /// <remarks>
         /// 
@@ -110,7 +110,7 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="searchValue">Value for searching (optional)</param>
         /// <param name="projectsFilterModel"> (optional)</param>
         /// <returns>ApiResponse of List&lt;ProjectApiResult&gt;</returns>
-        ApiResponse<List<ProjectApiResult>> ApiAdaptersProjectsSearchPostWithHttpInfo(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ProjectsFilterModel projectsFilterModel = default);
+        ApiResponse<List<ProjectApiResult>> AdaptersProjectsSearchPostWithHttpInfo(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ProjectsFilterModel projectsFilterModel = default);
         #endregion Synchronous Operations
     }
 
@@ -121,7 +121,7 @@ namespace TestIT.AdaptersApi.Api
     {
         #region Asynchronous Operations
         /// <summary>
-        /// 
+        /// Add global attributes to project
         /// </summary>
         /// <remarks>
         /// 
@@ -131,10 +131,10 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="requestBody"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of void</returns>
-        System.Threading.Tasks.Task ApiAdaptersProjectsIdAttributesGlobalPostAsync(Guid id, List<Guid> requestBody = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task AdaptersProjectsIdAttributesGlobalPostAsync(Guid id, List<Guid> requestBody = default, System.Threading.CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// 
+        /// Add global attributes to project
         /// </summary>
         /// <remarks>
         /// 
@@ -144,9 +144,9 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="requestBody"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse</returns>
-        System.Threading.Tasks.Task<ApiResponse<Object>> ApiAdaptersProjectsIdAttributesGlobalPostWithHttpInfoAsync(Guid id, List<Guid> requestBody = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<ApiResponse<Object>> AdaptersProjectsIdAttributesGlobalPostWithHttpInfoAsync(Guid id, List<Guid> requestBody = default, System.Threading.CancellationToken cancellationToken = default);
         /// <summary>
-        /// 
+        /// Get project by ID
         /// </summary>
         /// <remarks>
         /// 
@@ -155,10 +155,10 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="id"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of DetailedProjectApiResult</returns>
-        System.Threading.Tasks.Task<DetailedProjectApiResult> ApiAdaptersProjectsIdGetAsync(Guid id, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<DetailedProjectApiResult> AdaptersProjectsIdGetAsync(Guid id, System.Threading.CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// 
+        /// Get project by ID
         /// </summary>
         /// <remarks>
         /// 
@@ -167,9 +167,9 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="id"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (DetailedProjectApiResult)</returns>
-        System.Threading.Tasks.Task<ApiResponse<DetailedProjectApiResult>> ApiAdaptersProjectsIdGetWithHttpInfoAsync(Guid id, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<ApiResponse<DetailedProjectApiResult>> AdaptersProjectsIdGetWithHttpInfoAsync(Guid id, System.Threading.CancellationToken cancellationToken = default);
         /// <summary>
-        /// 
+        /// Create project
         /// </summary>
         /// <remarks>
         /// 
@@ -178,10 +178,10 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="createProjectApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ProjectApiResult</returns>
-        System.Threading.Tasks.Task<ProjectApiResult> ApiAdaptersProjectsPostAsync(CreateProjectApiModel createProjectApiModel = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<ProjectApiResult> AdaptersProjectsPostAsync(CreateProjectApiModel createProjectApiModel = default, System.Threading.CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// 
+        /// Create project
         /// </summary>
         /// <remarks>
         /// 
@@ -190,9 +190,9 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="createProjectApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (ProjectApiResult)</returns>
-        System.Threading.Tasks.Task<ApiResponse<ProjectApiResult>> ApiAdaptersProjectsPostWithHttpInfoAsync(CreateProjectApiModel createProjectApiModel = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<ApiResponse<ProjectApiResult>> AdaptersProjectsPostWithHttpInfoAsync(CreateProjectApiModel createProjectApiModel = default, System.Threading.CancellationToken cancellationToken = default);
         /// <summary>
-        /// 
+        /// Search for projects
         /// </summary>
         /// <remarks>
         /// 
@@ -206,10 +206,10 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="projectsFilterModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;ProjectApiResult&gt;</returns>
-        System.Threading.Tasks.Task<List<ProjectApiResult>> ApiAdaptersProjectsSearchPostAsync(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ProjectsFilterModel projectsFilterModel = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<List<ProjectApiResult>> AdaptersProjectsSearchPostAsync(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ProjectsFilterModel projectsFilterModel = default, System.Threading.CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// 
+        /// Search for projects
         /// </summary>
         /// <remarks>
         /// 
@@ -223,7 +223,7 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="projectsFilterModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;ProjectApiResult&gt;)</returns>
-        System.Threading.Tasks.Task<ApiResponse<List<ProjectApiResult>>> ApiAdaptersProjectsSearchPostWithHttpInfoAsync(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ProjectsFilterModel projectsFilterModel = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<ApiResponse<List<ProjectApiResult>>> AdaptersProjectsSearchPostWithHttpInfoAsync(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ProjectsFilterModel projectsFilterModel = default, System.Threading.CancellationToken cancellationToken = default);
         #endregion Asynchronous Operations
     }
 
@@ -438,25 +438,25 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Add global attributes to project 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <param name="requestBody"> (optional)</param>
         /// <returns></returns>
-        public void ApiAdaptersProjectsIdAttributesGlobalPost(Guid id, List<Guid> requestBody = default)
+        public void AdaptersProjectsIdAttributesGlobalPost(Guid id, List<Guid> requestBody = default)
         {
-            ApiAdaptersProjectsIdAttributesGlobalPostWithHttpInfo(id, requestBody);
+            AdaptersProjectsIdAttributesGlobalPostWithHttpInfo(id, requestBody);
         }
 
         /// <summary>
-        ///  
+        /// Add global attributes to project 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <param name="requestBody"> (optional)</param>
         /// <returns>ApiResponse of Object(void)</returns>
-        public TestIT.AdaptersApi.Client.ApiResponse<Object> ApiAdaptersProjectsIdAttributesGlobalPostWithHttpInfo(Guid id, List<Guid> requestBody = default)
+        public TestIT.AdaptersApi.Client.ApiResponse<Object> AdaptersProjectsIdAttributesGlobalPostWithHttpInfo(Guid id, List<Guid> requestBody = default)
         {
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
 
@@ -491,11 +491,11 @@ namespace TestIT.AdaptersApi.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Post<Object>("/api/adapters/projects/{id}/attributes/global", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Post<Object>("/adapters/projects/{id}/attributes/global", localVarRequestOptions, this.Configuration);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersProjectsIdAttributesGlobalPost", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersProjectsIdAttributesGlobalPost", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -503,27 +503,27 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Add global attributes to project 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <param name="requestBody"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of void</returns>
-        public async System.Threading.Tasks.Task ApiAdaptersProjectsIdAttributesGlobalPostAsync(Guid id, List<Guid> requestBody = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task AdaptersProjectsIdAttributesGlobalPostAsync(Guid id, List<Guid> requestBody = default, System.Threading.CancellationToken cancellationToken = default)
         {
-            await ApiAdaptersProjectsIdAttributesGlobalPostWithHttpInfoAsync(id, requestBody, cancellationToken).ConfigureAwait(false);
+            await AdaptersProjectsIdAttributesGlobalPostWithHttpInfoAsync(id, requestBody, cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
-        ///  
+        /// Add global attributes to project 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <param name="requestBody"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse</returns>
-        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<Object>> ApiAdaptersProjectsIdAttributesGlobalPostWithHttpInfoAsync(Guid id, List<Guid> requestBody = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<Object>> AdaptersProjectsIdAttributesGlobalPostWithHttpInfoAsync(Guid id, List<Guid> requestBody = default, System.Threading.CancellationToken cancellationToken = default)
         {
 
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
@@ -561,11 +561,11 @@ namespace TestIT.AdaptersApi.Api
 
             // make the HTTP request
 
-            var localVarResponse = await this.AsynchronousClient.PostAsync<Object>("/api/adapters/projects/{id}/attributes/global", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.PostAsync<Object>("/adapters/projects/{id}/attributes/global", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersProjectsIdAttributesGlobalPost", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersProjectsIdAttributesGlobalPost", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -573,24 +573,24 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Get project by ID 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <returns>DetailedProjectApiResult</returns>
-        public DetailedProjectApiResult ApiAdaptersProjectsIdGet(Guid id)
+        public DetailedProjectApiResult AdaptersProjectsIdGet(Guid id)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<DetailedProjectApiResult> localVarResponse = ApiAdaptersProjectsIdGetWithHttpInfo(id);
+            TestIT.AdaptersApi.Client.ApiResponse<DetailedProjectApiResult> localVarResponse = AdaptersProjectsIdGetWithHttpInfo(id);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        ///  
+        /// Get project by ID 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <returns>ApiResponse of DetailedProjectApiResult</returns>
-        public TestIT.AdaptersApi.Client.ApiResponse<DetailedProjectApiResult> ApiAdaptersProjectsIdGetWithHttpInfo(Guid id)
+        public TestIT.AdaptersApi.Client.ApiResponse<DetailedProjectApiResult> AdaptersProjectsIdGetWithHttpInfo(Guid id)
         {
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
 
@@ -623,11 +623,11 @@ namespace TestIT.AdaptersApi.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Get<DetailedProjectApiResult>("/api/adapters/projects/{id}", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Get<DetailedProjectApiResult>("/adapters/projects/{id}", localVarRequestOptions, this.Configuration);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersProjectsIdGet", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersProjectsIdGet", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -635,26 +635,26 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Get project by ID 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of DetailedProjectApiResult</returns>
-        public async System.Threading.Tasks.Task<DetailedProjectApiResult> ApiAdaptersProjectsIdGetAsync(Guid id, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<DetailedProjectApiResult> AdaptersProjectsIdGetAsync(Guid id, System.Threading.CancellationToken cancellationToken = default)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<DetailedProjectApiResult> localVarResponse = await ApiAdaptersProjectsIdGetWithHttpInfoAsync(id, cancellationToken).ConfigureAwait(false);
+            TestIT.AdaptersApi.Client.ApiResponse<DetailedProjectApiResult> localVarResponse = await AdaptersProjectsIdGetWithHttpInfoAsync(id, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        ///  
+        /// Get project by ID 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (DetailedProjectApiResult)</returns>
-        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<DetailedProjectApiResult>> ApiAdaptersProjectsIdGetWithHttpInfoAsync(Guid id, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<DetailedProjectApiResult>> AdaptersProjectsIdGetWithHttpInfoAsync(Guid id, System.Threading.CancellationToken cancellationToken = default)
         {
 
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
@@ -690,11 +690,11 @@ namespace TestIT.AdaptersApi.Api
 
             // make the HTTP request
 
-            var localVarResponse = await this.AsynchronousClient.GetAsync<DetailedProjectApiResult>("/api/adapters/projects/{id}", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.GetAsync<DetailedProjectApiResult>("/adapters/projects/{id}", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersProjectsIdGet", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersProjectsIdGet", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -702,24 +702,24 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Create project 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="createProjectApiModel"> (optional)</param>
         /// <returns>ProjectApiResult</returns>
-        public ProjectApiResult ApiAdaptersProjectsPost(CreateProjectApiModel createProjectApiModel = default)
+        public ProjectApiResult AdaptersProjectsPost(CreateProjectApiModel createProjectApiModel = default)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<ProjectApiResult> localVarResponse = ApiAdaptersProjectsPostWithHttpInfo(createProjectApiModel);
+            TestIT.AdaptersApi.Client.ApiResponse<ProjectApiResult> localVarResponse = AdaptersProjectsPostWithHttpInfo(createProjectApiModel);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        ///  
+        /// Create project 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="createProjectApiModel"> (optional)</param>
         /// <returns>ApiResponse of ProjectApiResult</returns>
-        public TestIT.AdaptersApi.Client.ApiResponse<ProjectApiResult> ApiAdaptersProjectsPostWithHttpInfo(CreateProjectApiModel createProjectApiModel = default)
+        public TestIT.AdaptersApi.Client.ApiResponse<ProjectApiResult> AdaptersProjectsPostWithHttpInfo(CreateProjectApiModel createProjectApiModel = default)
         {
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
 
@@ -753,11 +753,11 @@ namespace TestIT.AdaptersApi.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Post<ProjectApiResult>("/api/adapters/projects", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Post<ProjectApiResult>("/adapters/projects", localVarRequestOptions, this.Configuration);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersProjectsPost", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersProjectsPost", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -765,26 +765,26 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Create project 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="createProjectApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ProjectApiResult</returns>
-        public async System.Threading.Tasks.Task<ProjectApiResult> ApiAdaptersProjectsPostAsync(CreateProjectApiModel createProjectApiModel = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<ProjectApiResult> AdaptersProjectsPostAsync(CreateProjectApiModel createProjectApiModel = default, System.Threading.CancellationToken cancellationToken = default)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<ProjectApiResult> localVarResponse = await ApiAdaptersProjectsPostWithHttpInfoAsync(createProjectApiModel, cancellationToken).ConfigureAwait(false);
+            TestIT.AdaptersApi.Client.ApiResponse<ProjectApiResult> localVarResponse = await AdaptersProjectsPostWithHttpInfoAsync(createProjectApiModel, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        ///  
+        /// Create project 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="createProjectApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (ProjectApiResult)</returns>
-        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<ProjectApiResult>> ApiAdaptersProjectsPostWithHttpInfoAsync(CreateProjectApiModel createProjectApiModel = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<ProjectApiResult>> AdaptersProjectsPostWithHttpInfoAsync(CreateProjectApiModel createProjectApiModel = default, System.Threading.CancellationToken cancellationToken = default)
         {
 
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
@@ -821,11 +821,11 @@ namespace TestIT.AdaptersApi.Api
 
             // make the HTTP request
 
-            var localVarResponse = await this.AsynchronousClient.PostAsync<ProjectApiResult>("/api/adapters/projects", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.PostAsync<ProjectApiResult>("/adapters/projects", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersProjectsPost", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersProjectsPost", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -833,7 +833,7 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Search for projects 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="skip">Amount of items to be skipped (offset) (optional)</param>
@@ -843,14 +843,14 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="searchValue">Value for searching (optional)</param>
         /// <param name="projectsFilterModel"> (optional)</param>
         /// <returns>List&lt;ProjectApiResult&gt;</returns>
-        public List<ProjectApiResult> ApiAdaptersProjectsSearchPost(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ProjectsFilterModel projectsFilterModel = default)
+        public List<ProjectApiResult> AdaptersProjectsSearchPost(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ProjectsFilterModel projectsFilterModel = default)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<List<ProjectApiResult>> localVarResponse = ApiAdaptersProjectsSearchPostWithHttpInfo(skip, take, orderBy, searchField, searchValue, projectsFilterModel);
+            TestIT.AdaptersApi.Client.ApiResponse<List<ProjectApiResult>> localVarResponse = AdaptersProjectsSearchPostWithHttpInfo(skip, take, orderBy, searchField, searchValue, projectsFilterModel);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        ///  
+        /// Search for projects 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="skip">Amount of items to be skipped (offset) (optional)</param>
@@ -860,7 +860,7 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="searchValue">Value for searching (optional)</param>
         /// <param name="projectsFilterModel"> (optional)</param>
         /// <returns>ApiResponse of List&lt;ProjectApiResult&gt;</returns>
-        public TestIT.AdaptersApi.Client.ApiResponse<List<ProjectApiResult>> ApiAdaptersProjectsSearchPostWithHttpInfo(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ProjectsFilterModel projectsFilterModel = default)
+        public TestIT.AdaptersApi.Client.ApiResponse<List<ProjectApiResult>> AdaptersProjectsSearchPostWithHttpInfo(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ProjectsFilterModel projectsFilterModel = default)
         {
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
 
@@ -914,11 +914,11 @@ namespace TestIT.AdaptersApi.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Post<List<ProjectApiResult>>("/api/adapters/projects/search", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Post<List<ProjectApiResult>>("/adapters/projects/search", localVarRequestOptions, this.Configuration);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersProjectsSearchPost", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersProjectsSearchPost", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -926,7 +926,7 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Search for projects 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="skip">Amount of items to be skipped (offset) (optional)</param>
@@ -937,14 +937,14 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="projectsFilterModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;ProjectApiResult&gt;</returns>
-        public async System.Threading.Tasks.Task<List<ProjectApiResult>> ApiAdaptersProjectsSearchPostAsync(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ProjectsFilterModel projectsFilterModel = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<List<ProjectApiResult>> AdaptersProjectsSearchPostAsync(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ProjectsFilterModel projectsFilterModel = default, System.Threading.CancellationToken cancellationToken = default)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<List<ProjectApiResult>> localVarResponse = await ApiAdaptersProjectsSearchPostWithHttpInfoAsync(skip, take, orderBy, searchField, searchValue, projectsFilterModel, cancellationToken).ConfigureAwait(false);
+            TestIT.AdaptersApi.Client.ApiResponse<List<ProjectApiResult>> localVarResponse = await AdaptersProjectsSearchPostWithHttpInfoAsync(skip, take, orderBy, searchField, searchValue, projectsFilterModel, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        ///  
+        /// Search for projects 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="skip">Amount of items to be skipped (offset) (optional)</param>
@@ -955,7 +955,7 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="projectsFilterModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;ProjectApiResult&gt;)</returns>
-        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<List<ProjectApiResult>>> ApiAdaptersProjectsSearchPostWithHttpInfoAsync(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ProjectsFilterModel projectsFilterModel = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<List<ProjectApiResult>>> AdaptersProjectsSearchPostWithHttpInfoAsync(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ProjectsFilterModel projectsFilterModel = default, System.Threading.CancellationToken cancellationToken = default)
         {
 
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
@@ -1012,11 +1012,11 @@ namespace TestIT.AdaptersApi.Api
 
             // make the HTTP request
 
-            var localVarResponse = await this.AsynchronousClient.PostAsync<List<ProjectApiResult>>("/api/adapters/projects/search", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.PostAsync<List<ProjectApiResult>>("/adapters/projects/search", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersProjectsSearchPost", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersProjectsSearchPost", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 

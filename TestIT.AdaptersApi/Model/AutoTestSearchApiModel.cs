@@ -35,8 +35,8 @@ namespace TestIT.AdaptersApi.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="AutoTestSearchApiModel" /> class.
         /// </summary>
-        /// <param name="filter">filter.</param>
-        /// <param name="includes">includes.</param>
+        /// <param name="filter">Object containing different filters to adjust search.</param>
+        /// <param name="includes">Object specifying data to be included.</param>
         public AutoTestSearchApiModel(AutoTestFilterApiModel filter = default, AutoTestSearchIncludeApiModel includes = default)
         {
             this.Filter = filter;
@@ -44,14 +44,16 @@ namespace TestIT.AdaptersApi.Model
         }
 
         /// <summary>
-        /// Gets or Sets Filter
+        /// Object containing different filters to adjust search
         /// </summary>
+        /// <value>Object containing different filters to adjust search</value>
         [DataMember(Name = "filter", EmitDefaultValue = true)]
         public AutoTestFilterApiModel Filter { get; set; }
 
         /// <summary>
-        /// Gets or Sets Includes
+        /// Object specifying data to be included
         /// </summary>
+        /// <value>Object specifying data to be included</value>
         [DataMember(Name = "includes", EmitDefaultValue = true)]
         public AutoTestSearchIncludeApiModel Includes { get; set; }
 

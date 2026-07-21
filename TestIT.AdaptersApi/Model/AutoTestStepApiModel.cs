@@ -40,9 +40,9 @@ namespace TestIT.AdaptersApi.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="AutoTestStepApiModel" /> class.
         /// </summary>
-        /// <param name="title">title (required).</param>
-        /// <param name="description">description.</param>
-        /// <param name="steps">steps.</param>
+        /// <param name="title">Step name. (required).</param>
+        /// <param name="description">Detailed step description. It appears when the step is unfolded..</param>
+        /// <param name="steps">Includes a nested step inside another step. The maximum nesting level is 15..</param>
         public AutoTestStepApiModel(string title = default, string description = default, List<AutoTestStepApiModel> steps = default)
         {
             // to ensure "title" is required (not null)
@@ -56,20 +56,28 @@ namespace TestIT.AdaptersApi.Model
         }
 
         /// <summary>
-        /// Gets or Sets Title
+        /// Step name.
         /// </summary>
+        /// <value>Step name.</value>
         [DataMember(Name = "title", IsRequired = true, EmitDefaultValue = true)]
         public string Title { get; set; }
 
         /// <summary>
-        /// Gets or Sets Description
+        /// Detailed step description. It appears when the step is unfolded.
         /// </summary>
+        /// <value>Detailed step description. It appears when the step is unfolded.</value>
         [DataMember(Name = "description", EmitDefaultValue = true)]
         public string Description { get; set; }
 
         /// <summary>
-        /// Gets or Sets Steps
+        /// Includes a nested step inside another step. The maximum nesting level is 15.
         /// </summary>
+        /// <value>Includes a nested step inside another step. The maximum nesting level is 15.</value>
+        /*
+        <example>
+            [{ &quot;title&quot;: &quot;string&quot;, &quot;description&quot;: &quot;string&quot;, &quot;steps&quot;: [{ &quot;title&quot;: &quot;string&quot;, &quot;description&quot;: &quot;string&quot;, }], }]
+            </example>
+        */
         [DataMember(Name = "steps", EmitDefaultValue = true)]
         public List<AutoTestStepApiModel> Steps { get; set; }
 

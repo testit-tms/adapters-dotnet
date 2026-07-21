@@ -33,7 +33,7 @@ namespace TestIT.AdaptersApi.Api
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <returns>WorkflowApiResult</returns>
-        WorkflowApiResult ApiAdaptersWorkflowsIdGet(Guid id);
+        WorkflowApiResult AdaptersWorkflowsIdGet(Guid id);
 
         /// <summary>
         /// 
@@ -44,7 +44,7 @@ namespace TestIT.AdaptersApi.Api
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <returns>ApiResponse of WorkflowApiResult</returns>
-        ApiResponse<WorkflowApiResult> ApiAdaptersWorkflowsIdGetWithHttpInfo(Guid id);
+        ApiResponse<WorkflowApiResult> AdaptersWorkflowsIdGetWithHttpInfo(Guid id);
         #endregion Synchronous Operations
     }
 
@@ -64,7 +64,7 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="id"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of WorkflowApiResult</returns>
-        System.Threading.Tasks.Task<WorkflowApiResult> ApiAdaptersWorkflowsIdGetAsync(Guid id, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<WorkflowApiResult> AdaptersWorkflowsIdGetAsync(Guid id, System.Threading.CancellationToken cancellationToken = default);
 
         /// <summary>
         /// 
@@ -76,7 +76,7 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="id"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (WorkflowApiResult)</returns>
-        System.Threading.Tasks.Task<ApiResponse<WorkflowApiResult>> ApiAdaptersWorkflowsIdGetWithHttpInfoAsync(Guid id, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<ApiResponse<WorkflowApiResult>> AdaptersWorkflowsIdGetWithHttpInfoAsync(Guid id, System.Threading.CancellationToken cancellationToken = default);
         #endregion Asynchronous Operations
     }
 
@@ -296,9 +296,9 @@ namespace TestIT.AdaptersApi.Api
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <returns>WorkflowApiResult</returns>
-        public WorkflowApiResult ApiAdaptersWorkflowsIdGet(Guid id)
+        public WorkflowApiResult AdaptersWorkflowsIdGet(Guid id)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<WorkflowApiResult> localVarResponse = ApiAdaptersWorkflowsIdGetWithHttpInfo(id);
+            TestIT.AdaptersApi.Client.ApiResponse<WorkflowApiResult> localVarResponse = AdaptersWorkflowsIdGetWithHttpInfo(id);
             return localVarResponse.Data;
         }
 
@@ -308,7 +308,7 @@ namespace TestIT.AdaptersApi.Api
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <returns>ApiResponse of WorkflowApiResult</returns>
-        public TestIT.AdaptersApi.Client.ApiResponse<WorkflowApiResult> ApiAdaptersWorkflowsIdGetWithHttpInfo(Guid id)
+        public TestIT.AdaptersApi.Client.ApiResponse<WorkflowApiResult> AdaptersWorkflowsIdGetWithHttpInfo(Guid id)
         {
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
 
@@ -341,11 +341,11 @@ namespace TestIT.AdaptersApi.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Get<WorkflowApiResult>("/api/adapters/workflows/{id}", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Get<WorkflowApiResult>("/adapters/workflows/{id}", localVarRequestOptions, this.Configuration);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersWorkflowsIdGet", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersWorkflowsIdGet", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -359,9 +359,9 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="id"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of WorkflowApiResult</returns>
-        public async System.Threading.Tasks.Task<WorkflowApiResult> ApiAdaptersWorkflowsIdGetAsync(Guid id, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<WorkflowApiResult> AdaptersWorkflowsIdGetAsync(Guid id, System.Threading.CancellationToken cancellationToken = default)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<WorkflowApiResult> localVarResponse = await ApiAdaptersWorkflowsIdGetWithHttpInfoAsync(id, cancellationToken).ConfigureAwait(false);
+            TestIT.AdaptersApi.Client.ApiResponse<WorkflowApiResult> localVarResponse = await AdaptersWorkflowsIdGetWithHttpInfoAsync(id, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
@@ -372,7 +372,7 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="id"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (WorkflowApiResult)</returns>
-        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<WorkflowApiResult>> ApiAdaptersWorkflowsIdGetWithHttpInfoAsync(Guid id, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<WorkflowApiResult>> AdaptersWorkflowsIdGetWithHttpInfoAsync(Guid id, System.Threading.CancellationToken cancellationToken = default)
         {
 
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
@@ -408,11 +408,11 @@ namespace TestIT.AdaptersApi.Api
 
             // make the HTTP request
 
-            var localVarResponse = await this.AsynchronousClient.GetAsync<WorkflowApiResult>("/api/adapters/workflows/{id}", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.GetAsync<WorkflowApiResult>("/adapters/workflows/{id}", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersWorkflowsIdGet", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersWorkflowsIdGet", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 

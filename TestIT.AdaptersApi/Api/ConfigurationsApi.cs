@@ -28,7 +28,7 @@ namespace TestIT.AdaptersApi.Api
     {
         #region Synchronous Operations
         /// <summary>
-        /// 
+        /// Search for configurations
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="skip">Amount of items to be skipped (offset) (optional)</param>
@@ -38,10 +38,10 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="searchValue">Value for searching (optional)</param>
         /// <param name="configurationFilterModel"> (optional)</param>
         /// <returns>List&lt;ConfigurationModel&gt;</returns>
-        List<ConfigurationModel> ApiAdaptersConfigurationsSearchPost(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ConfigurationFilterModel configurationFilterModel = default);
+        List<ConfigurationModel> AdaptersConfigurationsSearchPost(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ConfigurationFilterModel configurationFilterModel = default);
 
         /// <summary>
-        /// 
+        /// Search for configurations
         /// </summary>
         /// <remarks>
         /// 
@@ -54,7 +54,7 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="searchValue">Value for searching (optional)</param>
         /// <param name="configurationFilterModel"> (optional)</param>
         /// <returns>ApiResponse of List&lt;ConfigurationModel&gt;</returns>
-        ApiResponse<List<ConfigurationModel>> ApiAdaptersConfigurationsSearchPostWithHttpInfo(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ConfigurationFilterModel configurationFilterModel = default);
+        ApiResponse<List<ConfigurationModel>> AdaptersConfigurationsSearchPostWithHttpInfo(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ConfigurationFilterModel configurationFilterModel = default);
         #endregion Synchronous Operations
     }
 
@@ -65,7 +65,7 @@ namespace TestIT.AdaptersApi.Api
     {
         #region Asynchronous Operations
         /// <summary>
-        /// 
+        /// Search for configurations
         /// </summary>
         /// <remarks>
         /// 
@@ -79,10 +79,10 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="configurationFilterModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;ConfigurationModel&gt;</returns>
-        System.Threading.Tasks.Task<List<ConfigurationModel>> ApiAdaptersConfigurationsSearchPostAsync(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ConfigurationFilterModel configurationFilterModel = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<List<ConfigurationModel>> AdaptersConfigurationsSearchPostAsync(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ConfigurationFilterModel configurationFilterModel = default, System.Threading.CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// 
+        /// Search for configurations
         /// </summary>
         /// <remarks>
         /// 
@@ -96,7 +96,7 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="configurationFilterModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;ConfigurationModel&gt;)</returns>
-        System.Threading.Tasks.Task<ApiResponse<List<ConfigurationModel>>> ApiAdaptersConfigurationsSearchPostWithHttpInfoAsync(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ConfigurationFilterModel configurationFilterModel = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<ApiResponse<List<ConfigurationModel>>> AdaptersConfigurationsSearchPostWithHttpInfoAsync(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ConfigurationFilterModel configurationFilterModel = default, System.Threading.CancellationToken cancellationToken = default);
         #endregion Asynchronous Operations
     }
 
@@ -311,7 +311,7 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Search for configurations 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="skip">Amount of items to be skipped (offset) (optional)</param>
@@ -321,14 +321,14 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="searchValue">Value for searching (optional)</param>
         /// <param name="configurationFilterModel"> (optional)</param>
         /// <returns>List&lt;ConfigurationModel&gt;</returns>
-        public List<ConfigurationModel> ApiAdaptersConfigurationsSearchPost(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ConfigurationFilterModel configurationFilterModel = default)
+        public List<ConfigurationModel> AdaptersConfigurationsSearchPost(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ConfigurationFilterModel configurationFilterModel = default)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<List<ConfigurationModel>> localVarResponse = ApiAdaptersConfigurationsSearchPostWithHttpInfo(skip, take, orderBy, searchField, searchValue, configurationFilterModel);
+            TestIT.AdaptersApi.Client.ApiResponse<List<ConfigurationModel>> localVarResponse = AdaptersConfigurationsSearchPostWithHttpInfo(skip, take, orderBy, searchField, searchValue, configurationFilterModel);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        ///  
+        /// Search for configurations 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="skip">Amount of items to be skipped (offset) (optional)</param>
@@ -338,7 +338,7 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="searchValue">Value for searching (optional)</param>
         /// <param name="configurationFilterModel"> (optional)</param>
         /// <returns>ApiResponse of List&lt;ConfigurationModel&gt;</returns>
-        public TestIT.AdaptersApi.Client.ApiResponse<List<ConfigurationModel>> ApiAdaptersConfigurationsSearchPostWithHttpInfo(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ConfigurationFilterModel configurationFilterModel = default)
+        public TestIT.AdaptersApi.Client.ApiResponse<List<ConfigurationModel>> AdaptersConfigurationsSearchPostWithHttpInfo(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ConfigurationFilterModel configurationFilterModel = default)
         {
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
 
@@ -392,11 +392,11 @@ namespace TestIT.AdaptersApi.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Post<List<ConfigurationModel>>("/api/adapters/configurations/search", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Post<List<ConfigurationModel>>("/adapters/configurations/search", localVarRequestOptions, this.Configuration);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersConfigurationsSearchPost", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersConfigurationsSearchPost", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -404,7 +404,7 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Search for configurations 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="skip">Amount of items to be skipped (offset) (optional)</param>
@@ -415,14 +415,14 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="configurationFilterModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;ConfigurationModel&gt;</returns>
-        public async System.Threading.Tasks.Task<List<ConfigurationModel>> ApiAdaptersConfigurationsSearchPostAsync(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ConfigurationFilterModel configurationFilterModel = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<List<ConfigurationModel>> AdaptersConfigurationsSearchPostAsync(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ConfigurationFilterModel configurationFilterModel = default, System.Threading.CancellationToken cancellationToken = default)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<List<ConfigurationModel>> localVarResponse = await ApiAdaptersConfigurationsSearchPostWithHttpInfoAsync(skip, take, orderBy, searchField, searchValue, configurationFilterModel, cancellationToken).ConfigureAwait(false);
+            TestIT.AdaptersApi.Client.ApiResponse<List<ConfigurationModel>> localVarResponse = await AdaptersConfigurationsSearchPostWithHttpInfoAsync(skip, take, orderBy, searchField, searchValue, configurationFilterModel, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        ///  
+        /// Search for configurations 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="skip">Amount of items to be skipped (offset) (optional)</param>
@@ -433,7 +433,7 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="configurationFilterModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;ConfigurationModel&gt;)</returns>
-        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<List<ConfigurationModel>>> ApiAdaptersConfigurationsSearchPostWithHttpInfoAsync(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ConfigurationFilterModel configurationFilterModel = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<List<ConfigurationModel>>> AdaptersConfigurationsSearchPostWithHttpInfoAsync(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ConfigurationFilterModel configurationFilterModel = default, System.Threading.CancellationToken cancellationToken = default)
         {
 
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
@@ -490,11 +490,11 @@ namespace TestIT.AdaptersApi.Api
 
             // make the HTTP request
 
-            var localVarResponse = await this.AsynchronousClient.PostAsync<List<ConfigurationModel>>("/api/adapters/configurations/search", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.PostAsync<List<ConfigurationModel>>("/adapters/configurations/search", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersConfigurationsSearchPost", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersConfigurationsSearchPost", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 

@@ -40,7 +40,7 @@ namespace TestIT.AdaptersApi.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="WorkItemIdApiModel" /> class.
         /// </summary>
-        /// <param name="id">Internal (UUID) or global (integer) identifier (required).</param>
+        /// <param name="id">Work Item ID or Global ID (required).</param>
         public WorkItemIdApiModel(string id = default)
         {
             // to ensure "id" is required (not null)
@@ -52,9 +52,9 @@ namespace TestIT.AdaptersApi.Model
         }
 
         /// <summary>
-        /// Internal (UUID) or global (integer) identifier
+        /// Work Item ID or Global ID
         /// </summary>
-        /// <value>Internal (UUID) or global (integer) identifier</value>
+        /// <value>Work Item ID or Global ID</value>
         [DataMember(Name = "id", IsRequired = true, EmitDefaultValue = true)]
         public string Id { get; set; }
 

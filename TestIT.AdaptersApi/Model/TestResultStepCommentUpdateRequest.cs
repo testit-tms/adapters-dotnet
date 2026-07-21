@@ -40,7 +40,7 @@ namespace TestIT.AdaptersApi.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="TestResultStepCommentUpdateRequest" /> class.
         /// </summary>
-        /// <param name="id">id (required).</param>
+        /// <param name="id">Entity unique identifier (required).</param>
         /// <param name="text">text (required).</param>
         /// <param name="stepId">stepId (required).</param>
         /// <param name="parentStepId">parentStepId.</param>
@@ -65,8 +65,9 @@ namespace TestIT.AdaptersApi.Model
         }
 
         /// <summary>
-        /// Gets or Sets Id
+        /// Entity unique identifier
         /// </summary>
+        /// <value>Entity unique identifier</value>
         [DataMember(Name = "id", IsRequired = true, EmitDefaultValue = true)]
         public Guid Id { get; set; }
 

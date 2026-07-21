@@ -35,9 +35,9 @@ namespace TestIT.AdaptersApi.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="AutoTestSearchIncludeApiModel" /> class.
         /// </summary>
-        /// <param name="includeSteps">includeSteps.</param>
-        /// <param name="includeLinks">includeLinks.</param>
-        /// <param name="includeLabels">includeLabels.</param>
+        /// <param name="includeSteps">If autotest steps will be included.</param>
+        /// <param name="includeLinks">If autotest links will be included.</param>
+        /// <param name="includeLabels">If autotest labels will be included.</param>
         public AutoTestSearchIncludeApiModel(bool? includeSteps = default, bool? includeLinks = default, bool? includeLabels = default)
         {
             this.IncludeSteps = includeSteps;
@@ -46,20 +46,23 @@ namespace TestIT.AdaptersApi.Model
         }
 
         /// <summary>
-        /// Gets or Sets IncludeSteps
+        /// If autotest steps will be included
         /// </summary>
+        /// <value>If autotest steps will be included</value>
         [DataMember(Name = "includeSteps", EmitDefaultValue = true)]
         public bool? IncludeSteps { get; set; }
 
         /// <summary>
-        /// Gets or Sets IncludeLinks
+        /// If autotest links will be included
         /// </summary>
+        /// <value>If autotest links will be included</value>
         [DataMember(Name = "includeLinks", EmitDefaultValue = true)]
         public bool? IncludeLinks { get; set; }
 
         /// <summary>
-        /// Gets or Sets IncludeLabels
+        /// If autotest labels will be included
         /// </summary>
+        /// <value>If autotest labels will be included</value>
         [DataMember(Name = "includeLabels", EmitDefaultValue = true)]
         public bool? IncludeLabels { get; set; }
 

@@ -40,13 +40,13 @@ namespace TestIT.AdaptersApi.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="UpdateEmptyTestRunApiModel" /> class.
         /// </summary>
-        /// <param name="id">id (required).</param>
-        /// <param name="name">name (required).</param>
-        /// <param name="description">description.</param>
-        /// <param name="launchSource">launchSource.</param>
-        /// <param name="attachments">attachments.</param>
-        /// <param name="links">links.</param>
-        /// <param name="tags">tags.</param>
+        /// <param name="id">Test run unique identifier (required).</param>
+        /// <param name="name">Test run name (required).</param>
+        /// <param name="description">Test run description.</param>
+        /// <param name="launchSource">Test run launch source                Once launch source is specified it cannot be updated.</param>
+        /// <param name="attachments">Collection of attachments related to the test run.</param>
+        /// <param name="links">Collection of links related to the test run.</param>
+        /// <param name="tags">Collection of tags to assign to the test run.</param>
         public UpdateEmptyTestRunApiModel(Guid id = default, string name = default, string description = default, string launchSource = default, List<AssignAttachmentApiModel> attachments = default, List<UpdateLinkApiModel> links = default, List<string> tags = default)
         {
             this.Id = id;
@@ -64,44 +64,51 @@ namespace TestIT.AdaptersApi.Model
         }
 
         /// <summary>
-        /// Gets or Sets Id
+        /// Test run unique identifier
         /// </summary>
+        /// <value>Test run unique identifier</value>
         [DataMember(Name = "id", IsRequired = true, EmitDefaultValue = true)]
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Gets or Sets Name
+        /// Test run name
         /// </summary>
+        /// <value>Test run name</value>
         [DataMember(Name = "name", IsRequired = true, EmitDefaultValue = true)]
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or Sets Description
+        /// Test run description
         /// </summary>
+        /// <value>Test run description</value>
         [DataMember(Name = "description", EmitDefaultValue = true)]
         public string Description { get; set; }
 
         /// <summary>
-        /// Gets or Sets LaunchSource
+        /// Test run launch source                Once launch source is specified it cannot be updated
         /// </summary>
+        /// <value>Test run launch source                Once launch source is specified it cannot be updated</value>
         [DataMember(Name = "launchSource", EmitDefaultValue = true)]
         public string LaunchSource { get; set; }
 
         /// <summary>
-        /// Gets or Sets Attachments
+        /// Collection of attachments related to the test run
         /// </summary>
+        /// <value>Collection of attachments related to the test run</value>
         [DataMember(Name = "attachments", EmitDefaultValue = true)]
         public List<AssignAttachmentApiModel> Attachments { get; set; }
 
         /// <summary>
-        /// Gets or Sets Links
+        /// Collection of links related to the test run
         /// </summary>
+        /// <value>Collection of links related to the test run</value>
         [DataMember(Name = "links", EmitDefaultValue = true)]
         public List<UpdateLinkApiModel> Links { get; set; }
 
         /// <summary>
-        /// Gets or Sets Tags
+        /// Collection of tags to assign to the test run
         /// </summary>
+        /// <value>Collection of tags to assign to the test run</value>
         [DataMember(Name = "tags", EmitDefaultValue = true)]
         public List<string> Tags { get; set; }
 

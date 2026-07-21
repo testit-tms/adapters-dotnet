@@ -41,7 +41,7 @@ namespace TestIT.AdaptersApi.Model
         /// Initializes a new instance of the <see cref="AssignIterationApiModel" /> class.
         /// </summary>
         /// <param name="parameters">parameters (required).</param>
-        /// <param name="id">id (required).</param>
+        /// <param name="id">Iteration identifier, must be empty for new or changed iteration (required).</param>
         public AssignIterationApiModel(List<ParameterIterationModel> parameters = default, Guid id = default)
         {
             // to ensure "parameters" is required (not null)
@@ -60,8 +60,9 @@ namespace TestIT.AdaptersApi.Model
         public List<ParameterIterationModel> Parameters { get; set; }
 
         /// <summary>
-        /// Gets or Sets Id
+        /// Iteration identifier, must be empty for new or changed iteration
         /// </summary>
+        /// <value>Iteration identifier, must be empty for new or changed iteration</value>
         [DataMember(Name = "id", IsRequired = true, EmitDefaultValue = true)]
         public Guid Id { get; set; }
 

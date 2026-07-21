@@ -40,10 +40,10 @@ namespace TestIT.AdaptersApi.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="CreateProjectApiModel" /> class.
         /// </summary>
-        /// <param name="name">name (required).</param>
-        /// <param name="description">description.</param>
-        /// <param name="isFavorite">isFavorite.</param>
-        /// <param name="workflowId">workflowId.</param>
+        /// <param name="name">Name of the project (required).</param>
+        /// <param name="description">Description of the project.</param>
+        /// <param name="isFavorite">Indicates if the project is marked as favorite.</param>
+        /// <param name="workflowId">Identifier of the workflow project should use.</param>
         public CreateProjectApiModel(string name = default, string description = default, bool? isFavorite = default, Guid? workflowId = default)
         {
             // to ensure "name" is required (not null)
@@ -58,26 +58,30 @@ namespace TestIT.AdaptersApi.Model
         }
 
         /// <summary>
-        /// Gets or Sets Name
+        /// Name of the project
         /// </summary>
+        /// <value>Name of the project</value>
         [DataMember(Name = "name", IsRequired = true, EmitDefaultValue = true)]
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or Sets Description
+        /// Description of the project
         /// </summary>
+        /// <value>Description of the project</value>
         [DataMember(Name = "description", EmitDefaultValue = true)]
         public string Description { get; set; }
 
         /// <summary>
-        /// Gets or Sets IsFavorite
+        /// Indicates if the project is marked as favorite
         /// </summary>
+        /// <value>Indicates if the project is marked as favorite</value>
         [DataMember(Name = "isFavorite", EmitDefaultValue = true)]
         public bool? IsFavorite { get; set; }
 
         /// <summary>
-        /// Gets or Sets WorkflowId
+        /// Identifier of the workflow project should use
         /// </summary>
+        /// <value>Identifier of the workflow project should use</value>
         [DataMember(Name = "workflowId", EmitDefaultValue = true)]
         public Guid? WorkflowId { get; set; }
 

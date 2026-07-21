@@ -40,8 +40,8 @@ namespace TestIT.AdaptersApi.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="LabelApiModel" /> class.
         /// </summary>
-        /// <param name="name">name (required).</param>
-        /// <param name="globalId">globalId (required).</param>
+        /// <param name="name">Name of the label (required).</param>
+        /// <param name="globalId">Global ID of the label (required).</param>
         public LabelApiModel(string name = default, long globalId = default)
         {
             // to ensure "name" is required (not null)
@@ -54,14 +54,16 @@ namespace TestIT.AdaptersApi.Model
         }
 
         /// <summary>
-        /// Gets or Sets Name
+        /// Name of the label
         /// </summary>
+        /// <value>Name of the label</value>
         [DataMember(Name = "name", IsRequired = true, EmitDefaultValue = true)]
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or Sets GlobalId
+        /// Global ID of the label
         /// </summary>
+        /// <value>Global ID of the label</value>
         [DataMember(Name = "globalId", IsRequired = true, EmitDefaultValue = true)]
         public long GlobalId { get; set; }
 

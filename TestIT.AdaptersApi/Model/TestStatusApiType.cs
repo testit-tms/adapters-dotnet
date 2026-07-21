@@ -27,8 +27,9 @@ using OpenAPIDateConverter = TestIT.AdaptersApi.Client.OpenAPIDateConverter;
 namespace TestIT.AdaptersApi.Model
 {
     /// <summary>
-    /// Defines TestStatusApiType
+    /// Collection of possible status types
     /// </summary>
+    /// <value>Collection of possible status types</value>
     [JsonConverter(typeof(StringEnumConverter))]
     public enum TestStatusApiType
     {

@@ -40,11 +40,11 @@ namespace TestIT.AdaptersApi.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="AttachmentApiResult" /> class.
         /// </summary>
-        /// <param name="id">id (required).</param>
-        /// <param name="fileId">fileId (required).</param>
-        /// <param name="type">type (required).</param>
-        /// <param name="size">size (required).</param>
-        /// <param name="name">name (required).</param>
+        /// <param name="id">Unique ID of the attachment (required).</param>
+        /// <param name="fileId">Unique ID of the attachment file (required).</param>
+        /// <param name="type">MIME type of the attachment (required).</param>
+        /// <param name="size">Size in bytes of the attachment file (required).</param>
+        /// <param name="name">Name of the attachment file (required).</param>
         public AttachmentApiResult(Guid id = default, string fileId = default, string type = default, float size = default, string name = default)
         {
             this.Id = id;
@@ -70,32 +70,37 @@ namespace TestIT.AdaptersApi.Model
         }
 
         /// <summary>
-        /// Gets or Sets Id
+        /// Unique ID of the attachment
         /// </summary>
+        /// <value>Unique ID of the attachment</value>
         [DataMember(Name = "id", IsRequired = true, EmitDefaultValue = true)]
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Gets or Sets FileId
+        /// Unique ID of the attachment file
         /// </summary>
+        /// <value>Unique ID of the attachment file</value>
         [DataMember(Name = "fileId", IsRequired = true, EmitDefaultValue = true)]
         public string FileId { get; set; }
 
         /// <summary>
-        /// Gets or Sets Type
+        /// MIME type of the attachment
         /// </summary>
+        /// <value>MIME type of the attachment</value>
         [DataMember(Name = "type", IsRequired = true, EmitDefaultValue = true)]
         public string Type { get; set; }
 
         /// <summary>
-        /// Gets or Sets Size
+        /// Size in bytes of the attachment file
         /// </summary>
+        /// <value>Size in bytes of the attachment file</value>
         [DataMember(Name = "size", IsRequired = true, EmitDefaultValue = true)]
         public float Size { get; set; }
 
         /// <summary>
-        /// Gets or Sets Name
+        /// Name of the attachment file
         /// </summary>
+        /// <value>Name of the attachment file</value>
         [DataMember(Name = "name", IsRequired = true, EmitDefaultValue = true)]
         public string Name { get; set; }
 

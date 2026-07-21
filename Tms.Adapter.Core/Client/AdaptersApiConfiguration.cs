@@ -22,7 +22,7 @@ public static class AdaptersApiConfiguration
         if (IsTraceEnabled())
         {
             Console.WriteLine($"[TMS] Adapters API BasePath={basePath}");
-            Console.WriteLine($"[TMS] Example GET {basePath}/api/adapters/testRuns/{{id}}");
+            Console.WriteLine($"[TMS] Example GET {basePath}/adapters/testRuns/{{id}}");
         }
 
         return cfg;
@@ -41,19 +41,22 @@ public static class AdaptersApiConfiguration
     }
 
     /// <summary>
-    /// OpenAPI paths are /api/adapters/...; BasePath must be TMS host root only.
+    /// OpenAPI paths are /adapters/...; BasePath is TMS host root only.
     /// </summary>
     public static string NormalizeBaseUrl(string? tmsUrl)
     {
         var url = (tmsUrl ?? string.Empty).TrimEnd('/');
+        // Longer suffixes first so "/api/adapters" is not partially stripped as "/adapters"
         if (url.EndsWith("/api/adapters", StringComparison.OrdinalIgnoreCase))
-            url = url[..^13];
+            url = url[..^"/api/adapters".Length];
+        else if (url.EndsWith("/adapters", StringComparison.OrdinalIgnoreCase))
+            url = url[..^"/adapters".Length];
         else if (url.EndsWith("/api/v2", StringComparison.OrdinalIgnoreCase))
-            url = url[..^7];
+            url = url[..^"/api/v2".Length];
         else if (url.EndsWith("/api", StringComparison.OrdinalIgnoreCase))
-            url = url[..^4];
+            url = url[..^"/api".Length];
 
-        return url;
+        return url.TrimEnd('/');
     }
 
     public static bool IsTraceEnabled() =>

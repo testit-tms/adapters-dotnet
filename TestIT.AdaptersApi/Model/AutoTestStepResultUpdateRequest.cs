@@ -34,23 +34,24 @@ namespace TestIT.AdaptersApi.Model
     {
 
         /// <summary>
-        /// Gets or Sets Outcome
+        /// Specifies the result of the autotest execution.
         /// </summary>
+        /// <value>Specifies the result of the autotest execution.</value>
         [DataMember(Name = "outcome", EmitDefaultValue = true)]
         public AvailableTestResultOutcome? Outcome { get; set; }
         /// <summary>
         /// Initializes a new instance of the <see cref="AutoTestStepResultUpdateRequest" /> class.
         /// </summary>
-        /// <param name="title">title.</param>
-        /// <param name="description">description.</param>
-        /// <param name="info">info.</param>
-        /// <param name="startedOn">startedOn.</param>
-        /// <param name="completedOn">completedOn.</param>
-        /// <param name="duration">duration.</param>
-        /// <param name="outcome">outcome.</param>
-        /// <param name="stepResults">stepResults.</param>
-        /// <param name="attachments">attachments.</param>
-        /// <param name="parameters">parameters.</param>
+        /// <param name="title">The name of the step..</param>
+        /// <param name="description">Description of the step result..</param>
+        /// <param name="info">Extended description of the step result..</param>
+        /// <param name="startedOn">Step start date..</param>
+        /// <param name="completedOn">Step end date..</param>
+        /// <param name="duration">Expected or actual duration of the test run execution in milliseconds..</param>
+        /// <param name="outcome">Specifies the result of the autotest execution..</param>
+        /// <param name="stepResults">Nested step results. The maximum nesting level is 15..</param>
+        /// <param name="attachments">/// &lt;summary&gt;  Specifies an attachment GUID. Multiple values can be sent.  &lt;/summary&gt;.</param>
+        /// <param name="parameters">\&quot;&lt;b&gt;parameter&lt;/b&gt;\&quot;: \&quot;&lt;b&gt;value&lt;/b&gt;\&quot; pair with arbitrary custom parameters. Multiple parameters can be sent..</param>
         public AutoTestStepResultUpdateRequest(string title = default, string description = default, string info = default, DateTime? startedOn = default, DateTime? completedOn = default, long? duration = default, AvailableTestResultOutcome? outcome = default, List<AutoTestStepResultUpdateRequest> stepResults = default, List<AttachmentUpdateRequest> attachments = default, Dictionary<string, string> parameters = default)
         {
             this.Title = title;
@@ -66,56 +67,65 @@ namespace TestIT.AdaptersApi.Model
         }
 
         /// <summary>
-        /// Gets or Sets Title
+        /// The name of the step.
         /// </summary>
+        /// <value>The name of the step.</value>
         [DataMember(Name = "title", EmitDefaultValue = true)]
         public string Title { get; set; }
 
         /// <summary>
-        /// Gets or Sets Description
+        /// Description of the step result.
         /// </summary>
+        /// <value>Description of the step result.</value>
         [DataMember(Name = "description", EmitDefaultValue = true)]
         public string Description { get; set; }
 
         /// <summary>
-        /// Gets or Sets Info
+        /// Extended description of the step result.
         /// </summary>
+        /// <value>Extended description of the step result.</value>
         [DataMember(Name = "info", EmitDefaultValue = true)]
         public string Info { get; set; }
 
         /// <summary>
-        /// Gets or Sets StartedOn
+        /// Step start date.
         /// </summary>
+        /// <value>Step start date.</value>
         [DataMember(Name = "startedOn", EmitDefaultValue = true)]
         public DateTime? StartedOn { get; set; }
 
         /// <summary>
-        /// Gets or Sets CompletedOn
+        /// Step end date.
         /// </summary>
+        /// <value>Step end date.</value>
         [DataMember(Name = "completedOn", EmitDefaultValue = true)]
         public DateTime? CompletedOn { get; set; }
 
         /// <summary>
-        /// Gets or Sets Duration
+        /// Expected or actual duration of the test run execution in milliseconds.
         /// </summary>
+        /// <value>Expected or actual duration of the test run execution in milliseconds.</value>
         [DataMember(Name = "duration", EmitDefaultValue = true)]
         public long? Duration { get; set; }
 
         /// <summary>
-        /// Gets or Sets StepResults
+        /// Nested step results. The maximum nesting level is 15.
         /// </summary>
+        /// <value>Nested step results. The maximum nesting level is 15.</value>
         [DataMember(Name = "stepResults", EmitDefaultValue = true)]
         public List<AutoTestStepResultUpdateRequest> StepResults { get; set; }
 
         /// <summary>
-        /// Gets or Sets Attachments
+        /// /// &lt;summary&gt;  Specifies an attachment GUID. Multiple values can be sent.  &lt;/summary&gt;
         /// </summary>
+        /// <value>/// &lt;summary&gt;  Specifies an attachment GUID. Multiple values can be sent.  &lt;/summary&gt;</value>
         [DataMember(Name = "attachments", EmitDefaultValue = true)]
         public List<AttachmentUpdateRequest> Attachments { get; set; }
 
         /// <summary>
-        /// Gets or Sets Parameters
+        /// \&quot;&lt;b&gt;parameter&lt;/b&gt;\&quot;: \&quot;&lt;b&gt;value&lt;/b&gt;\&quot; pair with arbitrary custom parameters. Multiple parameters can be sent.
         /// </summary>
+        /// <value>\&quot;&lt;b&gt;parameter&lt;/b&gt;\&quot;: \&quot;&lt;b&gt;value&lt;/b&gt;\&quot; pair with arbitrary custom parameters. Multiple parameters can be sent.</value>
         [DataMember(Name = "parameters", EmitDefaultValue = true)]
         public Dictionary<string, string> Parameters { get; set; }
 

@@ -34,8 +34,9 @@ namespace TestIT.AdaptersApi.Model
     {
 
         /// <summary>
-        /// Gets or Sets Type
+        /// Specifies the type of the link.
         /// </summary>
+        /// <value>Specifies the type of the link.</value>
         [DataMember(Name = "type", IsRequired = true, EmitDefaultValue = true)]
         public LinkType Type { get; set; }
         /// <summary>
@@ -46,10 +47,10 @@ namespace TestIT.AdaptersApi.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="LinkCreateApiModel" /> class.
         /// </summary>
-        /// <param name="title">title.</param>
-        /// <param name="url">url (required).</param>
-        /// <param name="description">description.</param>
-        /// <param name="type">type (required).</param>
+        /// <param name="title">Link name..</param>
+        /// <param name="url">Address can be specified without protocol, but necessarily with the domain. (required).</param>
+        /// <param name="description">Link description..</param>
+        /// <param name="type">Specifies the type of the link. (required).</param>
         public LinkCreateApiModel(string title = default, string url = default, string description = default, LinkType type = default)
         {
             // to ensure "url" is required (not null)
@@ -64,20 +65,23 @@ namespace TestIT.AdaptersApi.Model
         }
 
         /// <summary>
-        /// Gets or Sets Title
+        /// Link name.
         /// </summary>
+        /// <value>Link name.</value>
         [DataMember(Name = "title", EmitDefaultValue = true)]
         public string Title { get; set; }
 
         /// <summary>
-        /// Gets or Sets Url
+        /// Address can be specified without protocol, but necessarily with the domain.
         /// </summary>
+        /// <value>Address can be specified without protocol, but necessarily with the domain.</value>
         [DataMember(Name = "url", IsRequired = true, EmitDefaultValue = true)]
         public string Url { get; set; }
 
         /// <summary>
-        /// Gets or Sets Description
+        /// Link description.
         /// </summary>
+        /// <value>Link description.</value>
         [DataMember(Name = "description", EmitDefaultValue = true)]
         public string Description { get; set; }
 

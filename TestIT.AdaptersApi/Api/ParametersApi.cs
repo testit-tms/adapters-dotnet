@@ -28,15 +28,15 @@ namespace TestIT.AdaptersApi.Api
     {
         #region Synchronous Operations
         /// <summary>
-        /// 
+        /// Get parameter by ID
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <returns>ParameterApiResult</returns>
-        ParameterApiResult ApiAdaptersParametersIdGet(Guid id);
+        ParameterApiResult AdaptersParametersIdGet(Guid id);
 
         /// <summary>
-        /// 
+        /// Get parameter by ID
         /// </summary>
         /// <remarks>
         /// 
@@ -44,17 +44,17 @@ namespace TestIT.AdaptersApi.Api
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <returns>ApiResponse of ParameterApiResult</returns>
-        ApiResponse<ParameterApiResult> ApiAdaptersParametersIdGetWithHttpInfo(Guid id);
+        ApiResponse<ParameterApiResult> AdaptersParametersIdGetWithHttpInfo(Guid id);
         /// <summary>
-        /// 
+        /// Create parameter
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="createParameterApiModel"> (optional)</param>
         /// <returns>ParameterApiResult</returns>
-        ParameterApiResult ApiAdaptersParametersPost(CreateParameterApiModel createParameterApiModel = default);
+        ParameterApiResult AdaptersParametersPost(CreateParameterApiModel createParameterApiModel = default);
 
         /// <summary>
-        /// 
+        /// Create parameter
         /// </summary>
         /// <remarks>
         /// 
@@ -62,9 +62,9 @@ namespace TestIT.AdaptersApi.Api
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="createParameterApiModel"> (optional)</param>
         /// <returns>ApiResponse of ParameterApiResult</returns>
-        ApiResponse<ParameterApiResult> ApiAdaptersParametersPostWithHttpInfo(CreateParameterApiModel createParameterApiModel = default);
+        ApiResponse<ParameterApiResult> AdaptersParametersPostWithHttpInfo(CreateParameterApiModel createParameterApiModel = default);
         /// <summary>
-        /// 
+        /// Search for parameters
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="skip">Amount of items to be skipped (offset) (optional)</param>
@@ -74,10 +74,10 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="searchValue">Value for searching (optional)</param>
         /// <param name="parametersFilterApiModel"> (optional)</param>
         /// <returns>List&lt;ParameterApiResult&gt;</returns>
-        List<ParameterApiResult> ApiAdaptersParametersSearchPost(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ParametersFilterApiModel parametersFilterApiModel = default);
+        List<ParameterApiResult> AdaptersParametersSearchPost(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ParametersFilterApiModel parametersFilterApiModel = default);
 
         /// <summary>
-        /// 
+        /// Search for parameters
         /// </summary>
         /// <remarks>
         /// 
@@ -90,7 +90,7 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="searchValue">Value for searching (optional)</param>
         /// <param name="parametersFilterApiModel"> (optional)</param>
         /// <returns>ApiResponse of List&lt;ParameterApiResult&gt;</returns>
-        ApiResponse<List<ParameterApiResult>> ApiAdaptersParametersSearchPostWithHttpInfo(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ParametersFilterApiModel parametersFilterApiModel = default);
+        ApiResponse<List<ParameterApiResult>> AdaptersParametersSearchPostWithHttpInfo(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ParametersFilterApiModel parametersFilterApiModel = default);
         #endregion Synchronous Operations
     }
 
@@ -101,7 +101,7 @@ namespace TestIT.AdaptersApi.Api
     {
         #region Asynchronous Operations
         /// <summary>
-        /// 
+        /// Get parameter by ID
         /// </summary>
         /// <remarks>
         /// 
@@ -110,10 +110,10 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="id"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ParameterApiResult</returns>
-        System.Threading.Tasks.Task<ParameterApiResult> ApiAdaptersParametersIdGetAsync(Guid id, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<ParameterApiResult> AdaptersParametersIdGetAsync(Guid id, System.Threading.CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// 
+        /// Get parameter by ID
         /// </summary>
         /// <remarks>
         /// 
@@ -122,9 +122,9 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="id"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (ParameterApiResult)</returns>
-        System.Threading.Tasks.Task<ApiResponse<ParameterApiResult>> ApiAdaptersParametersIdGetWithHttpInfoAsync(Guid id, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<ApiResponse<ParameterApiResult>> AdaptersParametersIdGetWithHttpInfoAsync(Guid id, System.Threading.CancellationToken cancellationToken = default);
         /// <summary>
-        /// 
+        /// Create parameter
         /// </summary>
         /// <remarks>
         /// 
@@ -133,10 +133,10 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="createParameterApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ParameterApiResult</returns>
-        System.Threading.Tasks.Task<ParameterApiResult> ApiAdaptersParametersPostAsync(CreateParameterApiModel createParameterApiModel = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<ParameterApiResult> AdaptersParametersPostAsync(CreateParameterApiModel createParameterApiModel = default, System.Threading.CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// 
+        /// Create parameter
         /// </summary>
         /// <remarks>
         /// 
@@ -145,9 +145,9 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="createParameterApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (ParameterApiResult)</returns>
-        System.Threading.Tasks.Task<ApiResponse<ParameterApiResult>> ApiAdaptersParametersPostWithHttpInfoAsync(CreateParameterApiModel createParameterApiModel = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<ApiResponse<ParameterApiResult>> AdaptersParametersPostWithHttpInfoAsync(CreateParameterApiModel createParameterApiModel = default, System.Threading.CancellationToken cancellationToken = default);
         /// <summary>
-        /// 
+        /// Search for parameters
         /// </summary>
         /// <remarks>
         /// 
@@ -161,10 +161,10 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="parametersFilterApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;ParameterApiResult&gt;</returns>
-        System.Threading.Tasks.Task<List<ParameterApiResult>> ApiAdaptersParametersSearchPostAsync(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ParametersFilterApiModel parametersFilterApiModel = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<List<ParameterApiResult>> AdaptersParametersSearchPostAsync(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ParametersFilterApiModel parametersFilterApiModel = default, System.Threading.CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// 
+        /// Search for parameters
         /// </summary>
         /// <remarks>
         /// 
@@ -178,7 +178,7 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="parametersFilterApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;ParameterApiResult&gt;)</returns>
-        System.Threading.Tasks.Task<ApiResponse<List<ParameterApiResult>>> ApiAdaptersParametersSearchPostWithHttpInfoAsync(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ParametersFilterApiModel parametersFilterApiModel = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<ApiResponse<List<ParameterApiResult>>> AdaptersParametersSearchPostWithHttpInfoAsync(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ParametersFilterApiModel parametersFilterApiModel = default, System.Threading.CancellationToken cancellationToken = default);
         #endregion Asynchronous Operations
     }
 
@@ -393,24 +393,24 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Get parameter by ID 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <returns>ParameterApiResult</returns>
-        public ParameterApiResult ApiAdaptersParametersIdGet(Guid id)
+        public ParameterApiResult AdaptersParametersIdGet(Guid id)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<ParameterApiResult> localVarResponse = ApiAdaptersParametersIdGetWithHttpInfo(id);
+            TestIT.AdaptersApi.Client.ApiResponse<ParameterApiResult> localVarResponse = AdaptersParametersIdGetWithHttpInfo(id);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        ///  
+        /// Get parameter by ID 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <returns>ApiResponse of ParameterApiResult</returns>
-        public TestIT.AdaptersApi.Client.ApiResponse<ParameterApiResult> ApiAdaptersParametersIdGetWithHttpInfo(Guid id)
+        public TestIT.AdaptersApi.Client.ApiResponse<ParameterApiResult> AdaptersParametersIdGetWithHttpInfo(Guid id)
         {
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
 
@@ -443,11 +443,11 @@ namespace TestIT.AdaptersApi.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Get<ParameterApiResult>("/api/adapters/parameters/{id}", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Get<ParameterApiResult>("/adapters/parameters/{id}", localVarRequestOptions, this.Configuration);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersParametersIdGet", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersParametersIdGet", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -455,26 +455,26 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Get parameter by ID 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ParameterApiResult</returns>
-        public async System.Threading.Tasks.Task<ParameterApiResult> ApiAdaptersParametersIdGetAsync(Guid id, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<ParameterApiResult> AdaptersParametersIdGetAsync(Guid id, System.Threading.CancellationToken cancellationToken = default)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<ParameterApiResult> localVarResponse = await ApiAdaptersParametersIdGetWithHttpInfoAsync(id, cancellationToken).ConfigureAwait(false);
+            TestIT.AdaptersApi.Client.ApiResponse<ParameterApiResult> localVarResponse = await AdaptersParametersIdGetWithHttpInfoAsync(id, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        ///  
+        /// Get parameter by ID 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (ParameterApiResult)</returns>
-        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<ParameterApiResult>> ApiAdaptersParametersIdGetWithHttpInfoAsync(Guid id, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<ParameterApiResult>> AdaptersParametersIdGetWithHttpInfoAsync(Guid id, System.Threading.CancellationToken cancellationToken = default)
         {
 
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
@@ -510,11 +510,11 @@ namespace TestIT.AdaptersApi.Api
 
             // make the HTTP request
 
-            var localVarResponse = await this.AsynchronousClient.GetAsync<ParameterApiResult>("/api/adapters/parameters/{id}", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.GetAsync<ParameterApiResult>("/adapters/parameters/{id}", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersParametersIdGet", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersParametersIdGet", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -522,24 +522,24 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Create parameter 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="createParameterApiModel"> (optional)</param>
         /// <returns>ParameterApiResult</returns>
-        public ParameterApiResult ApiAdaptersParametersPost(CreateParameterApiModel createParameterApiModel = default)
+        public ParameterApiResult AdaptersParametersPost(CreateParameterApiModel createParameterApiModel = default)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<ParameterApiResult> localVarResponse = ApiAdaptersParametersPostWithHttpInfo(createParameterApiModel);
+            TestIT.AdaptersApi.Client.ApiResponse<ParameterApiResult> localVarResponse = AdaptersParametersPostWithHttpInfo(createParameterApiModel);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        ///  
+        /// Create parameter 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="createParameterApiModel"> (optional)</param>
         /// <returns>ApiResponse of ParameterApiResult</returns>
-        public TestIT.AdaptersApi.Client.ApiResponse<ParameterApiResult> ApiAdaptersParametersPostWithHttpInfo(CreateParameterApiModel createParameterApiModel = default)
+        public TestIT.AdaptersApi.Client.ApiResponse<ParameterApiResult> AdaptersParametersPostWithHttpInfo(CreateParameterApiModel createParameterApiModel = default)
         {
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
 
@@ -573,11 +573,11 @@ namespace TestIT.AdaptersApi.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Post<ParameterApiResult>("/api/adapters/parameters", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Post<ParameterApiResult>("/adapters/parameters", localVarRequestOptions, this.Configuration);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersParametersPost", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersParametersPost", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -585,26 +585,26 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Create parameter 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="createParameterApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ParameterApiResult</returns>
-        public async System.Threading.Tasks.Task<ParameterApiResult> ApiAdaptersParametersPostAsync(CreateParameterApiModel createParameterApiModel = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<ParameterApiResult> AdaptersParametersPostAsync(CreateParameterApiModel createParameterApiModel = default, System.Threading.CancellationToken cancellationToken = default)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<ParameterApiResult> localVarResponse = await ApiAdaptersParametersPostWithHttpInfoAsync(createParameterApiModel, cancellationToken).ConfigureAwait(false);
+            TestIT.AdaptersApi.Client.ApiResponse<ParameterApiResult> localVarResponse = await AdaptersParametersPostWithHttpInfoAsync(createParameterApiModel, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        ///  
+        /// Create parameter 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="createParameterApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (ParameterApiResult)</returns>
-        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<ParameterApiResult>> ApiAdaptersParametersPostWithHttpInfoAsync(CreateParameterApiModel createParameterApiModel = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<ParameterApiResult>> AdaptersParametersPostWithHttpInfoAsync(CreateParameterApiModel createParameterApiModel = default, System.Threading.CancellationToken cancellationToken = default)
         {
 
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
@@ -641,11 +641,11 @@ namespace TestIT.AdaptersApi.Api
 
             // make the HTTP request
 
-            var localVarResponse = await this.AsynchronousClient.PostAsync<ParameterApiResult>("/api/adapters/parameters", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.PostAsync<ParameterApiResult>("/adapters/parameters", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersParametersPost", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersParametersPost", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -653,7 +653,7 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Search for parameters 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="skip">Amount of items to be skipped (offset) (optional)</param>
@@ -663,14 +663,14 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="searchValue">Value for searching (optional)</param>
         /// <param name="parametersFilterApiModel"> (optional)</param>
         /// <returns>List&lt;ParameterApiResult&gt;</returns>
-        public List<ParameterApiResult> ApiAdaptersParametersSearchPost(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ParametersFilterApiModel parametersFilterApiModel = default)
+        public List<ParameterApiResult> AdaptersParametersSearchPost(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ParametersFilterApiModel parametersFilterApiModel = default)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<List<ParameterApiResult>> localVarResponse = ApiAdaptersParametersSearchPostWithHttpInfo(skip, take, orderBy, searchField, searchValue, parametersFilterApiModel);
+            TestIT.AdaptersApi.Client.ApiResponse<List<ParameterApiResult>> localVarResponse = AdaptersParametersSearchPostWithHttpInfo(skip, take, orderBy, searchField, searchValue, parametersFilterApiModel);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        ///  
+        /// Search for parameters 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="skip">Amount of items to be skipped (offset) (optional)</param>
@@ -680,7 +680,7 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="searchValue">Value for searching (optional)</param>
         /// <param name="parametersFilterApiModel"> (optional)</param>
         /// <returns>ApiResponse of List&lt;ParameterApiResult&gt;</returns>
-        public TestIT.AdaptersApi.Client.ApiResponse<List<ParameterApiResult>> ApiAdaptersParametersSearchPostWithHttpInfo(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ParametersFilterApiModel parametersFilterApiModel = default)
+        public TestIT.AdaptersApi.Client.ApiResponse<List<ParameterApiResult>> AdaptersParametersSearchPostWithHttpInfo(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ParametersFilterApiModel parametersFilterApiModel = default)
         {
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
 
@@ -734,11 +734,11 @@ namespace TestIT.AdaptersApi.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Post<List<ParameterApiResult>>("/api/adapters/parameters/search", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Post<List<ParameterApiResult>>("/adapters/parameters/search", localVarRequestOptions, this.Configuration);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersParametersSearchPost", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersParametersSearchPost", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -746,7 +746,7 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Search for parameters 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="skip">Amount of items to be skipped (offset) (optional)</param>
@@ -757,14 +757,14 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="parametersFilterApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;ParameterApiResult&gt;</returns>
-        public async System.Threading.Tasks.Task<List<ParameterApiResult>> ApiAdaptersParametersSearchPostAsync(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ParametersFilterApiModel parametersFilterApiModel = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<List<ParameterApiResult>> AdaptersParametersSearchPostAsync(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ParametersFilterApiModel parametersFilterApiModel = default, System.Threading.CancellationToken cancellationToken = default)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<List<ParameterApiResult>> localVarResponse = await ApiAdaptersParametersSearchPostWithHttpInfoAsync(skip, take, orderBy, searchField, searchValue, parametersFilterApiModel, cancellationToken).ConfigureAwait(false);
+            TestIT.AdaptersApi.Client.ApiResponse<List<ParameterApiResult>> localVarResponse = await AdaptersParametersSearchPostWithHttpInfoAsync(skip, take, orderBy, searchField, searchValue, parametersFilterApiModel, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        ///  
+        /// Search for parameters 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="skip">Amount of items to be skipped (offset) (optional)</param>
@@ -775,7 +775,7 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="parametersFilterApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;ParameterApiResult&gt;)</returns>
-        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<List<ParameterApiResult>>> ApiAdaptersParametersSearchPostWithHttpInfoAsync(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ParametersFilterApiModel parametersFilterApiModel = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<List<ParameterApiResult>>> AdaptersParametersSearchPostWithHttpInfoAsync(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ParametersFilterApiModel parametersFilterApiModel = default, System.Threading.CancellationToken cancellationToken = default)
         {
 
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
@@ -832,11 +832,11 @@ namespace TestIT.AdaptersApi.Api
 
             // make the HTTP request
 
-            var localVarResponse = await this.AsynchronousClient.PostAsync<List<ParameterApiResult>>("/api/adapters/parameters/search", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.PostAsync<List<ParameterApiResult>>("/adapters/parameters/search", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersParametersSearchPost", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersParametersSearchPost", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 

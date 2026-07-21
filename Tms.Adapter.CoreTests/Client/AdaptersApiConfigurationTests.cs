@@ -6,12 +6,26 @@ namespace Tms.Adapter.CoreTests.Client;
 public class AdaptersApiConfigurationTests
 {
     [TestMethod]
+    public void NormalizeBaseUrl_KeepsHostRoot()
+    {
+        Assert.AreEqual("https://tms.example.com",
+            AdaptersApiConfiguration.NormalizeBaseUrl("https://tms.example.com"));
+    }
+
+    [TestMethod]
+    public void NormalizeBaseUrl_StripsAdaptersSuffix()
+    {
+        Assert.AreEqual("https://tms.example.com",
+            AdaptersApiConfiguration.NormalizeBaseUrl("https://tms.example.com/adapters"));
+    }
+
+    [TestMethod]
     public void NormalizeBaseUrl_StripsApiSuffixes()
     {
         Assert.AreEqual("https://tms.example.com",
             AdaptersApiConfiguration.NormalizeBaseUrl("https://tms.example.com/api/adapters"));
         Assert.AreEqual("https://tms.example.com",
-            AdaptersApiConfiguration.NormalizeBaseUrl("https://tms.example.com/api/v2"));
+            AdaptersApiConfiguration.NormalizeBaseUrl("https://tms.example.com/api/v2/"));
         Assert.AreEqual("https://tms.example.com",
             AdaptersApiConfiguration.NormalizeBaseUrl("https://tms.example.com/api"));
     }

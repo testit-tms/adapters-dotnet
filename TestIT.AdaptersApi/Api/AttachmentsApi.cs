@@ -33,7 +33,7 @@ namespace TestIT.AdaptersApi.Api
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="files"> (optional)</param>
         /// <returns>List&lt;AttachmentModel&gt;</returns>
-        List<AttachmentModel> ApiAdaptersAttachmentsBulkPost(List<FileParameter> files = default);
+        List<AttachmentModel> AdaptersAttachmentsBulkPost(List<FileParameter> files = default);
 
         /// <summary>
         /// 
@@ -44,9 +44,9 @@ namespace TestIT.AdaptersApi.Api
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="files"> (optional)</param>
         /// <returns>ApiResponse of List&lt;AttachmentModel&gt;</returns>
-        ApiResponse<List<AttachmentModel>> ApiAdaptersAttachmentsBulkPostWithHttpInfo(List<FileParameter> files = default);
+        ApiResponse<List<AttachmentModel>> AdaptersAttachmentsBulkPostWithHttpInfo(List<FileParameter> files = default);
         /// <summary>
-        /// 
+        /// Download attachment file
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
@@ -56,10 +56,10 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="backgroundColor">Color of the background if the &#x60;resizeType&#x60; is &#x60;AddBackgroundStripes&#x60; (optional)</param>
         /// <param name="preview">If image must be converted to a preview (lower quality, no animation) (optional)</param>
         /// <returns></returns>
-        void ApiAdaptersAttachmentsIdGet(Guid id, int? width = default, int? height = default, ImageResizeType? resizeType = default, string backgroundColor = default, bool? preview = default);
+        void AdaptersAttachmentsIdGet(Guid id, int? width = default, int? height = default, ImageResizeType? resizeType = default, string backgroundColor = default, bool? preview = default);
 
         /// <summary>
-        /// 
+        /// Download attachment file
         /// </summary>
         /// <remarks>
         /// 
@@ -72,25 +72,28 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="backgroundColor">Color of the background if the &#x60;resizeType&#x60; is &#x60;AddBackgroundStripes&#x60; (optional)</param>
         /// <param name="preview">If image must be converted to a preview (lower quality, no animation) (optional)</param>
         /// <returns>ApiResponse of Object(void)</returns>
-        ApiResponse<Object> ApiAdaptersAttachmentsIdGetWithHttpInfo(Guid id, int? width = default, int? height = default, ImageResizeType? resizeType = default, string backgroundColor = default, bool? preview = default);
+        ApiResponse<Object> AdaptersAttachmentsIdGetWithHttpInfo(Guid id, int? width = default, int? height = default, ImageResizeType? resizeType = default, string backgroundColor = default, bool? preview = default);
         /// <summary>
-        /// 
+        /// Upload new attachment file
         /// </summary>
+        /// <remarks>
+        /// File size is restricted to 1 GB (1 073 741 824 bytes)
+        /// </remarks>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="file"> (optional)</param>
         /// <returns>AttachmentModel</returns>
-        AttachmentModel ApiAdaptersAttachmentsPost(FileParameter file = default);
+        AttachmentModel AdaptersAttachmentsPost(FileParameter file = default);
 
         /// <summary>
-        /// 
+        /// Upload new attachment file
         /// </summary>
         /// <remarks>
-        /// 
+        /// File size is restricted to 1 GB (1 073 741 824 bytes)
         /// </remarks>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="file"> (optional)</param>
         /// <returns>ApiResponse of AttachmentModel</returns>
-        ApiResponse<AttachmentModel> ApiAdaptersAttachmentsPostWithHttpInfo(FileParameter file = default);
+        ApiResponse<AttachmentModel> AdaptersAttachmentsPostWithHttpInfo(FileParameter file = default);
         #endregion Synchronous Operations
     }
 
@@ -110,7 +113,7 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="files"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;AttachmentModel&gt;</returns>
-        System.Threading.Tasks.Task<List<AttachmentModel>> ApiAdaptersAttachmentsBulkPostAsync(List<FileParameter> files = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<List<AttachmentModel>> AdaptersAttachmentsBulkPostAsync(List<FileParameter> files = default, System.Threading.CancellationToken cancellationToken = default);
 
         /// <summary>
         /// 
@@ -122,9 +125,9 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="files"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;AttachmentModel&gt;)</returns>
-        System.Threading.Tasks.Task<ApiResponse<List<AttachmentModel>>> ApiAdaptersAttachmentsBulkPostWithHttpInfoAsync(List<FileParameter> files = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<ApiResponse<List<AttachmentModel>>> AdaptersAttachmentsBulkPostWithHttpInfoAsync(List<FileParameter> files = default, System.Threading.CancellationToken cancellationToken = default);
         /// <summary>
-        /// 
+        /// Download attachment file
         /// </summary>
         /// <remarks>
         /// 
@@ -138,10 +141,10 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="preview">If image must be converted to a preview (lower quality, no animation) (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of void</returns>
-        System.Threading.Tasks.Task ApiAdaptersAttachmentsIdGetAsync(Guid id, int? width = default, int? height = default, ImageResizeType? resizeType = default, string backgroundColor = default, bool? preview = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task AdaptersAttachmentsIdGetAsync(Guid id, int? width = default, int? height = default, ImageResizeType? resizeType = default, string backgroundColor = default, bool? preview = default, System.Threading.CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// 
+        /// Download attachment file
         /// </summary>
         /// <remarks>
         /// 
@@ -155,30 +158,30 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="preview">If image must be converted to a preview (lower quality, no animation) (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse</returns>
-        System.Threading.Tasks.Task<ApiResponse<Object>> ApiAdaptersAttachmentsIdGetWithHttpInfoAsync(Guid id, int? width = default, int? height = default, ImageResizeType? resizeType = default, string backgroundColor = default, bool? preview = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<ApiResponse<Object>> AdaptersAttachmentsIdGetWithHttpInfoAsync(Guid id, int? width = default, int? height = default, ImageResizeType? resizeType = default, string backgroundColor = default, bool? preview = default, System.Threading.CancellationToken cancellationToken = default);
         /// <summary>
-        /// 
+        /// Upload new attachment file
         /// </summary>
         /// <remarks>
-        /// 
+        /// File size is restricted to 1 GB (1 073 741 824 bytes)
         /// </remarks>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="file"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of AttachmentModel</returns>
-        System.Threading.Tasks.Task<AttachmentModel> ApiAdaptersAttachmentsPostAsync(FileParameter file = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<AttachmentModel> AdaptersAttachmentsPostAsync(FileParameter file = default, System.Threading.CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// 
+        /// Upload new attachment file
         /// </summary>
         /// <remarks>
-        /// 
+        /// File size is restricted to 1 GB (1 073 741 824 bytes)
         /// </remarks>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="file"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (AttachmentModel)</returns>
-        System.Threading.Tasks.Task<ApiResponse<AttachmentModel>> ApiAdaptersAttachmentsPostWithHttpInfoAsync(FileParameter file = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<ApiResponse<AttachmentModel>> AdaptersAttachmentsPostWithHttpInfoAsync(FileParameter file = default, System.Threading.CancellationToken cancellationToken = default);
         #endregion Asynchronous Operations
     }
 
@@ -398,9 +401,9 @@ namespace TestIT.AdaptersApi.Api
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="files"> (optional)</param>
         /// <returns>List&lt;AttachmentModel&gt;</returns>
-        public List<AttachmentModel> ApiAdaptersAttachmentsBulkPost(List<FileParameter> files = default)
+        public List<AttachmentModel> AdaptersAttachmentsBulkPost(List<FileParameter> files = default)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<List<AttachmentModel>> localVarResponse = ApiAdaptersAttachmentsBulkPostWithHttpInfo(files);
+            TestIT.AdaptersApi.Client.ApiResponse<List<AttachmentModel>> localVarResponse = AdaptersAttachmentsBulkPostWithHttpInfo(files);
             return localVarResponse.Data;
         }
 
@@ -410,7 +413,7 @@ namespace TestIT.AdaptersApi.Api
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="files"> (optional)</param>
         /// <returns>ApiResponse of List&lt;AttachmentModel&gt;</returns>
-        public TestIT.AdaptersApi.Client.ApiResponse<List<AttachmentModel>> ApiAdaptersAttachmentsBulkPostWithHttpInfo(List<FileParameter> files = default)
+        public TestIT.AdaptersApi.Client.ApiResponse<List<AttachmentModel>> AdaptersAttachmentsBulkPostWithHttpInfo(List<FileParameter> files = default)
         {
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
 
@@ -447,11 +450,11 @@ namespace TestIT.AdaptersApi.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Post<List<AttachmentModel>>("/api/adapters/attachments/bulk", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Post<List<AttachmentModel>>("/adapters/attachments/bulk", localVarRequestOptions, this.Configuration);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersAttachmentsBulkPost", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersAttachmentsBulkPost", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -465,9 +468,9 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="files"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;AttachmentModel&gt;</returns>
-        public async System.Threading.Tasks.Task<List<AttachmentModel>> ApiAdaptersAttachmentsBulkPostAsync(List<FileParameter> files = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<List<AttachmentModel>> AdaptersAttachmentsBulkPostAsync(List<FileParameter> files = default, System.Threading.CancellationToken cancellationToken = default)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<List<AttachmentModel>> localVarResponse = await ApiAdaptersAttachmentsBulkPostWithHttpInfoAsync(files, cancellationToken).ConfigureAwait(false);
+            TestIT.AdaptersApi.Client.ApiResponse<List<AttachmentModel>> localVarResponse = await AdaptersAttachmentsBulkPostWithHttpInfoAsync(files, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
@@ -478,7 +481,7 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="files"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;AttachmentModel&gt;)</returns>
-        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<List<AttachmentModel>>> ApiAdaptersAttachmentsBulkPostWithHttpInfoAsync(List<FileParameter> files = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<List<AttachmentModel>>> AdaptersAttachmentsBulkPostWithHttpInfoAsync(List<FileParameter> files = default, System.Threading.CancellationToken cancellationToken = default)
         {
 
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
@@ -518,11 +521,11 @@ namespace TestIT.AdaptersApi.Api
 
             // make the HTTP request
 
-            var localVarResponse = await this.AsynchronousClient.PostAsync<List<AttachmentModel>>("/api/adapters/attachments/bulk", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.PostAsync<List<AttachmentModel>>("/adapters/attachments/bulk", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersAttachmentsBulkPost", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersAttachmentsBulkPost", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -530,7 +533,7 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Download attachment file 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
@@ -540,13 +543,13 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="backgroundColor">Color of the background if the &#x60;resizeType&#x60; is &#x60;AddBackgroundStripes&#x60; (optional)</param>
         /// <param name="preview">If image must be converted to a preview (lower quality, no animation) (optional)</param>
         /// <returns></returns>
-        public void ApiAdaptersAttachmentsIdGet(Guid id, int? width = default, int? height = default, ImageResizeType? resizeType = default, string backgroundColor = default, bool? preview = default)
+        public void AdaptersAttachmentsIdGet(Guid id, int? width = default, int? height = default, ImageResizeType? resizeType = default, string backgroundColor = default, bool? preview = default)
         {
-            ApiAdaptersAttachmentsIdGetWithHttpInfo(id, width, height, resizeType, backgroundColor, preview);
+            AdaptersAttachmentsIdGetWithHttpInfo(id, width, height, resizeType, backgroundColor, preview);
         }
 
         /// <summary>
-        ///  
+        /// Download attachment file 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
@@ -556,7 +559,7 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="backgroundColor">Color of the background if the &#x60;resizeType&#x60; is &#x60;AddBackgroundStripes&#x60; (optional)</param>
         /// <param name="preview">If image must be converted to a preview (lower quality, no animation) (optional)</param>
         /// <returns>ApiResponse of Object(void)</returns>
-        public TestIT.AdaptersApi.Client.ApiResponse<Object> ApiAdaptersAttachmentsIdGetWithHttpInfo(Guid id, int? width = default, int? height = default, ImageResizeType? resizeType = default, string backgroundColor = default, bool? preview = default)
+        public TestIT.AdaptersApi.Client.ApiResponse<Object> AdaptersAttachmentsIdGetWithHttpInfo(Guid id, int? width = default, int? height = default, ImageResizeType? resizeType = default, string backgroundColor = default, bool? preview = default)
         {
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
 
@@ -609,11 +612,11 @@ namespace TestIT.AdaptersApi.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Get<Object>("/api/adapters/attachments/{id}", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Get<Object>("/adapters/attachments/{id}", localVarRequestOptions, this.Configuration);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersAttachmentsIdGet", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersAttachmentsIdGet", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -621,7 +624,7 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Download attachment file 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
@@ -632,13 +635,13 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="preview">If image must be converted to a preview (lower quality, no animation) (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of void</returns>
-        public async System.Threading.Tasks.Task ApiAdaptersAttachmentsIdGetAsync(Guid id, int? width = default, int? height = default, ImageResizeType? resizeType = default, string backgroundColor = default, bool? preview = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task AdaptersAttachmentsIdGetAsync(Guid id, int? width = default, int? height = default, ImageResizeType? resizeType = default, string backgroundColor = default, bool? preview = default, System.Threading.CancellationToken cancellationToken = default)
         {
-            await ApiAdaptersAttachmentsIdGetWithHttpInfoAsync(id, width, height, resizeType, backgroundColor, preview, cancellationToken).ConfigureAwait(false);
+            await AdaptersAttachmentsIdGetWithHttpInfoAsync(id, width, height, resizeType, backgroundColor, preview, cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
-        ///  
+        /// Download attachment file 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
@@ -649,7 +652,7 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="preview">If image must be converted to a preview (lower quality, no animation) (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse</returns>
-        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<Object>> ApiAdaptersAttachmentsIdGetWithHttpInfoAsync(Guid id, int? width = default, int? height = default, ImageResizeType? resizeType = default, string backgroundColor = default, bool? preview = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<Object>> AdaptersAttachmentsIdGetWithHttpInfoAsync(Guid id, int? width = default, int? height = default, ImageResizeType? resizeType = default, string backgroundColor = default, bool? preview = default, System.Threading.CancellationToken cancellationToken = default)
         {
 
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
@@ -705,11 +708,11 @@ namespace TestIT.AdaptersApi.Api
 
             // make the HTTP request
 
-            var localVarResponse = await this.AsynchronousClient.GetAsync<Object>("/api/adapters/attachments/{id}", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.GetAsync<Object>("/adapters/attachments/{id}", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersAttachmentsIdGet", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersAttachmentsIdGet", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -717,24 +720,24 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Upload new attachment file File size is restricted to 1 GB (1 073 741 824 bytes)
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="file"> (optional)</param>
         /// <returns>AttachmentModel</returns>
-        public AttachmentModel ApiAdaptersAttachmentsPost(FileParameter file = default)
+        public AttachmentModel AdaptersAttachmentsPost(FileParameter file = default)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<AttachmentModel> localVarResponse = ApiAdaptersAttachmentsPostWithHttpInfo(file);
+            TestIT.AdaptersApi.Client.ApiResponse<AttachmentModel> localVarResponse = AdaptersAttachmentsPostWithHttpInfo(file);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        ///  
+        /// Upload new attachment file File size is restricted to 1 GB (1 073 741 824 bytes)
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="file"> (optional)</param>
         /// <returns>ApiResponse of AttachmentModel</returns>
-        public TestIT.AdaptersApi.Client.ApiResponse<AttachmentModel> ApiAdaptersAttachmentsPostWithHttpInfo(FileParameter file = default)
+        public TestIT.AdaptersApi.Client.ApiResponse<AttachmentModel> AdaptersAttachmentsPostWithHttpInfo(FileParameter file = default)
         {
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
 
@@ -771,11 +774,11 @@ namespace TestIT.AdaptersApi.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Post<AttachmentModel>("/api/adapters/attachments", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Post<AttachmentModel>("/adapters/attachments", localVarRequestOptions, this.Configuration);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersAttachmentsPost", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersAttachmentsPost", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -783,26 +786,26 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Upload new attachment file File size is restricted to 1 GB (1 073 741 824 bytes)
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="file"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of AttachmentModel</returns>
-        public async System.Threading.Tasks.Task<AttachmentModel> ApiAdaptersAttachmentsPostAsync(FileParameter file = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<AttachmentModel> AdaptersAttachmentsPostAsync(FileParameter file = default, System.Threading.CancellationToken cancellationToken = default)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<AttachmentModel> localVarResponse = await ApiAdaptersAttachmentsPostWithHttpInfoAsync(file, cancellationToken).ConfigureAwait(false);
+            TestIT.AdaptersApi.Client.ApiResponse<AttachmentModel> localVarResponse = await AdaptersAttachmentsPostWithHttpInfoAsync(file, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        ///  
+        /// Upload new attachment file File size is restricted to 1 GB (1 073 741 824 bytes)
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="file"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (AttachmentModel)</returns>
-        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<AttachmentModel>> ApiAdaptersAttachmentsPostWithHttpInfoAsync(FileParameter file = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<AttachmentModel>> AdaptersAttachmentsPostWithHttpInfoAsync(FileParameter file = default, System.Threading.CancellationToken cancellationToken = default)
         {
 
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
@@ -842,11 +845,11 @@ namespace TestIT.AdaptersApi.Api
 
             // make the HTTP request
 
-            var localVarResponse = await this.AsynchronousClient.PostAsync<AttachmentModel>("/api/adapters/attachments", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.PostAsync<AttachmentModel>("/adapters/attachments", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersAttachmentsPost", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersAttachmentsPost", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 

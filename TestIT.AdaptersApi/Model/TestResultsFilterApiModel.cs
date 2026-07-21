@@ -35,18 +35,18 @@ namespace TestIT.AdaptersApi.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="TestResultsFilterApiModel" /> class.
         /// </summary>
-        /// <param name="configurationIds">configurationIds.</param>
-        /// <param name="outcomes">outcomes.</param>
-        /// <param name="statusCodes">statusCodes.</param>
-        /// <param name="statusTypes">statusTypes.</param>
-        /// <param name="varNamespace">varNamespace.</param>
-        /// <param name="className">className.</param>
-        /// <param name="autoTestGlobalIds">autoTestGlobalIds.</param>
-        /// <param name="autoTestTags">autoTestTags.</param>
-        /// <param name="excludeAutoTestTags">excludeAutoTestTags.</param>
-        /// <param name="name">name.</param>
-        /// <param name="duration">duration.</param>
-        /// <param name="testRunIds">testRunIds.</param>
+        /// <param name="configurationIds">Specifies a test result configuration IDs to search for.</param>
+        /// <param name="outcomes">Specifies a test result outcomes to search for.</param>
+        /// <param name="statusCodes">Specifies a test result status codes to search for.</param>
+        /// <param name="statusTypes">Specifies a test result status types to search for.</param>
+        /// <param name="varNamespace">Specifies a test result namespace to search for.</param>
+        /// <param name="className">Specifies a test result class name to search for.</param>
+        /// <param name="autoTestGlobalIds">Specifies an autotest global IDs to search results for.</param>
+        /// <param name="autoTestTags">Specifies autotest tags to include in the search..</param>
+        /// <param name="excludeAutoTestTags">Specifies autotest tags to exclude from the search..</param>
+        /// <param name="name">Specifies an autotest name to search results for.</param>
+        /// <param name="duration">Specifies a test result duration range to search for.</param>
+        /// <param name="testRunIds">Specifies a test result test run IDs to search for.</param>
         public TestResultsFilterApiModel(List<Guid> configurationIds = default, List<TestResultOutcome> outcomes = default, List<string> statusCodes = default, List<TestStatusApiType> statusTypes = default, string varNamespace = default, string className = default, List<long> autoTestGlobalIds = default, List<string> autoTestTags = default, List<string> excludeAutoTestTags = default, string name = default, Int64RangeSelectorModel duration = default, List<Guid> testRunIds = default)
         {
             this.ConfigurationIds = configurationIds;
@@ -64,75 +64,87 @@ namespace TestIT.AdaptersApi.Model
         }
 
         /// <summary>
-        /// Gets or Sets ConfigurationIds
+        /// Specifies a test result configuration IDs to search for
         /// </summary>
+        /// <value>Specifies a test result configuration IDs to search for</value>
         [DataMember(Name = "configurationIds", EmitDefaultValue = true)]
         public List<Guid> ConfigurationIds { get; set; }
 
         /// <summary>
-        /// Gets or Sets Outcomes
+        /// Specifies a test result outcomes to search for
         /// </summary>
+        /// <value>Specifies a test result outcomes to search for</value>
         [DataMember(Name = "outcomes", EmitDefaultValue = true)]
         [Obsolete]
         public List<TestResultOutcome> Outcomes { get; set; }
 
         /// <summary>
-        /// Gets or Sets StatusCodes
+        /// Specifies a test result status codes to search for
         /// </summary>
+        /// <value>Specifies a test result status codes to search for</value>
         [DataMember(Name = "statusCodes", EmitDefaultValue = true)]
         public List<string> StatusCodes { get; set; }
 
         /// <summary>
-        /// Gets or Sets StatusTypes
+        /// Specifies a test result status types to search for
         /// </summary>
+        /// <value>Specifies a test result status types to search for</value>
         [DataMember(Name = "statusTypes", EmitDefaultValue = true)]
         public List<TestStatusApiType> StatusTypes { get; set; }
 
         /// <summary>
-        /// Gets or Sets Namespace
+        /// Specifies a test result namespace to search for
         /// </summary>
+        /// <value>Specifies a test result namespace to search for</value>
         [DataMember(Name = "namespace", EmitDefaultValue = true)]
         public string Namespace { get; set; }
 
         /// <summary>
-        /// Gets or Sets ClassName
+        /// Specifies a test result class name to search for
         /// </summary>
+        /// <value>Specifies a test result class name to search for</value>
         [DataMember(Name = "className", EmitDefaultValue = true)]
         public string ClassName { get; set; }
 
         /// <summary>
-        /// Gets or Sets AutoTestGlobalIds
+        /// Specifies an autotest global IDs to search results for
         /// </summary>
+        /// <value>Specifies an autotest global IDs to search results for</value>
         [DataMember(Name = "autoTestGlobalIds", EmitDefaultValue = true)]
         public List<long> AutoTestGlobalIds { get; set; }
 
         /// <summary>
-        /// Gets or Sets AutoTestTags
+        /// Specifies autotest tags to include in the search.
         /// </summary>
+        /// <value>Specifies autotest tags to include in the search.</value>
         [DataMember(Name = "autoTestTags", EmitDefaultValue = true)]
         public List<string> AutoTestTags { get; set; }
 
         /// <summary>
-        /// Gets or Sets ExcludeAutoTestTags
+        /// Specifies autotest tags to exclude from the search.
         /// </summary>
+        /// <value>Specifies autotest tags to exclude from the search.</value>
         [DataMember(Name = "excludeAutoTestTags", EmitDefaultValue = true)]
         public List<string> ExcludeAutoTestTags { get; set; }
 
         /// <summary>
-        /// Gets or Sets Name
+        /// Specifies an autotest name to search results for
         /// </summary>
+        /// <value>Specifies an autotest name to search results for</value>
         [DataMember(Name = "name", EmitDefaultValue = true)]
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or Sets Duration
+        /// Specifies a test result duration range to search for
         /// </summary>
+        /// <value>Specifies a test result duration range to search for</value>
         [DataMember(Name = "duration", EmitDefaultValue = true)]
         public Int64RangeSelectorModel Duration { get; set; }
 
         /// <summary>
-        /// Gets or Sets TestRunIds
+        /// Specifies a test result test run IDs to search for
         /// </summary>
+        /// <value>Specifies a test result test run IDs to search for</value>
         [DataMember(Name = "testRunIds", EmitDefaultValue = true)]
         public List<Guid> TestRunIds { get; set; }
 

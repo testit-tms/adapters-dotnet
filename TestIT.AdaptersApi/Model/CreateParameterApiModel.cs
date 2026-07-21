@@ -40,9 +40,9 @@ namespace TestIT.AdaptersApi.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="CreateParameterApiModel" /> class.
         /// </summary>
-        /// <param name="name">name (required).</param>
-        /// <param name="value">value (required).</param>
-        /// <param name="projectIds">projectIds.</param>
+        /// <param name="name">Key of the parameter (required).</param>
+        /// <param name="value">Value of the parameter (required).</param>
+        /// <param name="projectIds">List of projects where parameter should be available.</param>
         public CreateParameterApiModel(string name = default, string value = default, List<Guid> projectIds = default)
         {
             // to ensure "name" is required (not null)
@@ -61,20 +61,23 @@ namespace TestIT.AdaptersApi.Model
         }
 
         /// <summary>
-        /// Gets or Sets Name
+        /// Key of the parameter
         /// </summary>
+        /// <value>Key of the parameter</value>
         [DataMember(Name = "name", IsRequired = true, EmitDefaultValue = true)]
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or Sets Value
+        /// Value of the parameter
         /// </summary>
+        /// <value>Value of the parameter</value>
         [DataMember(Name = "value", IsRequired = true, EmitDefaultValue = true)]
         public string Value { get; set; }
 
         /// <summary>
-        /// Gets or Sets ProjectIds
+        /// List of projects where parameter should be available
         /// </summary>
+        /// <value>List of projects where parameter should be available</value>
         [DataMember(Name = "projectIds", EmitDefaultValue = true)]
         public List<Guid> ProjectIds { get; set; }
 

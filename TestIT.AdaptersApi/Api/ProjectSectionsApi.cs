@@ -28,7 +28,7 @@ namespace TestIT.AdaptersApi.Api
     {
         #region Synchronous Operations
         /// <summary>
-        /// 
+        /// Get project sections
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="projectId"></param>
@@ -38,10 +38,10 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="searchField">Property name for searching (optional)</param>
         /// <param name="searchValue">Value for searching (optional)</param>
         /// <returns>List&lt;SectionModel&gt;</returns>
-        List<SectionModel> ApiAdaptersProjectsProjectIdSectionsGet(Guid projectId, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default);
+        List<SectionModel> AdaptersProjectsProjectIdSectionsGet(Guid projectId, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default);
 
         /// <summary>
-        /// 
+        /// Get project sections
         /// </summary>
         /// <remarks>
         /// 
@@ -54,7 +54,7 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="searchField">Property name for searching (optional)</param>
         /// <param name="searchValue">Value for searching (optional)</param>
         /// <returns>ApiResponse of List&lt;SectionModel&gt;</returns>
-        ApiResponse<List<SectionModel>> ApiAdaptersProjectsProjectIdSectionsGetWithHttpInfo(Guid projectId, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default);
+        ApiResponse<List<SectionModel>> AdaptersProjectsProjectIdSectionsGetWithHttpInfo(Guid projectId, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default);
         #endregion Synchronous Operations
     }
 
@@ -65,7 +65,7 @@ namespace TestIT.AdaptersApi.Api
     {
         #region Asynchronous Operations
         /// <summary>
-        /// 
+        /// Get project sections
         /// </summary>
         /// <remarks>
         /// 
@@ -79,10 +79,10 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="searchValue">Value for searching (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;SectionModel&gt;</returns>
-        System.Threading.Tasks.Task<List<SectionModel>> ApiAdaptersProjectsProjectIdSectionsGetAsync(Guid projectId, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<List<SectionModel>> AdaptersProjectsProjectIdSectionsGetAsync(Guid projectId, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, System.Threading.CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// 
+        /// Get project sections
         /// </summary>
         /// <remarks>
         /// 
@@ -96,7 +96,7 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="searchValue">Value for searching (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;SectionModel&gt;)</returns>
-        System.Threading.Tasks.Task<ApiResponse<List<SectionModel>>> ApiAdaptersProjectsProjectIdSectionsGetWithHttpInfoAsync(Guid projectId, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<ApiResponse<List<SectionModel>>> AdaptersProjectsProjectIdSectionsGetWithHttpInfoAsync(Guid projectId, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, System.Threading.CancellationToken cancellationToken = default);
         #endregion Asynchronous Operations
     }
 
@@ -311,7 +311,7 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Get project sections 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="projectId"></param>
@@ -321,14 +321,14 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="searchField">Property name for searching (optional)</param>
         /// <param name="searchValue">Value for searching (optional)</param>
         /// <returns>List&lt;SectionModel&gt;</returns>
-        public List<SectionModel> ApiAdaptersProjectsProjectIdSectionsGet(Guid projectId, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default)
+        public List<SectionModel> AdaptersProjectsProjectIdSectionsGet(Guid projectId, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<List<SectionModel>> localVarResponse = ApiAdaptersProjectsProjectIdSectionsGetWithHttpInfo(projectId, skip, take, orderBy, searchField, searchValue);
+            TestIT.AdaptersApi.Client.ApiResponse<List<SectionModel>> localVarResponse = AdaptersProjectsProjectIdSectionsGetWithHttpInfo(projectId, skip, take, orderBy, searchField, searchValue);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        ///  
+        /// Get project sections 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="projectId"></param>
@@ -338,7 +338,7 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="searchField">Property name for searching (optional)</param>
         /// <param name="searchValue">Value for searching (optional)</param>
         /// <returns>ApiResponse of List&lt;SectionModel&gt;</returns>
-        public TestIT.AdaptersApi.Client.ApiResponse<List<SectionModel>> ApiAdaptersProjectsProjectIdSectionsGetWithHttpInfo(Guid projectId, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default)
+        public TestIT.AdaptersApi.Client.ApiResponse<List<SectionModel>> AdaptersProjectsProjectIdSectionsGetWithHttpInfo(Guid projectId, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default)
         {
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
 
@@ -391,11 +391,11 @@ namespace TestIT.AdaptersApi.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Get<List<SectionModel>>("/api/adapters/projects/{projectId}/sections", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Get<List<SectionModel>>("/adapters/projects/{projectId}/sections", localVarRequestOptions, this.Configuration);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersProjectsProjectIdSectionsGet", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersProjectsProjectIdSectionsGet", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -403,7 +403,7 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Get project sections 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="projectId"></param>
@@ -414,14 +414,14 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="searchValue">Value for searching (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;SectionModel&gt;</returns>
-        public async System.Threading.Tasks.Task<List<SectionModel>> ApiAdaptersProjectsProjectIdSectionsGetAsync(Guid projectId, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<List<SectionModel>> AdaptersProjectsProjectIdSectionsGetAsync(Guid projectId, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, System.Threading.CancellationToken cancellationToken = default)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<List<SectionModel>> localVarResponse = await ApiAdaptersProjectsProjectIdSectionsGetWithHttpInfoAsync(projectId, skip, take, orderBy, searchField, searchValue, cancellationToken).ConfigureAwait(false);
+            TestIT.AdaptersApi.Client.ApiResponse<List<SectionModel>> localVarResponse = await AdaptersProjectsProjectIdSectionsGetWithHttpInfoAsync(projectId, skip, take, orderBy, searchField, searchValue, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        ///  
+        /// Get project sections 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="projectId"></param>
@@ -432,7 +432,7 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="searchValue">Value for searching (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;SectionModel&gt;)</returns>
-        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<List<SectionModel>>> ApiAdaptersProjectsProjectIdSectionsGetWithHttpInfoAsync(Guid projectId, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<List<SectionModel>>> AdaptersProjectsProjectIdSectionsGetWithHttpInfoAsync(Guid projectId, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, System.Threading.CancellationToken cancellationToken = default)
         {
 
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
@@ -488,11 +488,11 @@ namespace TestIT.AdaptersApi.Api
 
             // make the HTTP request
 
-            var localVarResponse = await this.AsynchronousClient.GetAsync<List<SectionModel>>("/api/adapters/projects/{projectId}/sections", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.GetAsync<List<SectionModel>>("/adapters/projects/{projectId}/sections", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersProjectsProjectIdSectionsGet", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersProjectsProjectIdSectionsGet", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 

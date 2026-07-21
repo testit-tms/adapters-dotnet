@@ -40,15 +40,15 @@ namespace TestIT.AdaptersApi.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="DetailedProjectApiResult" /> class.
         /// </summary>
-        /// <param name="attributesScheme">attributesScheme.</param>
-        /// <param name="workflow">workflow (required).</param>
-        /// <param name="id">id (required).</param>
-        /// <param name="description">description.</param>
-        /// <param name="name">name (required).</param>
-        /// <param name="isFavorite">isFavorite (required).</param>
-        /// <param name="isDeleted">isDeleted (required).</param>
-        /// <param name="globalId">globalId (required).</param>
-        /// <param name="workflowId">workflowId (required).</param>
+        /// <param name="attributesScheme">Collection of the project attributes.</param>
+        /// <param name="workflow">ID of the workflow used in project (required).</param>
+        /// <param name="id">Unique ID of the project (required).</param>
+        /// <param name="description">Description of the project.</param>
+        /// <param name="name">Name of the project (required).</param>
+        /// <param name="isFavorite">Indicates if the project is marked as favorite (required).</param>
+        /// <param name="isDeleted">Indicates if the project is deleted (required).</param>
+        /// <param name="globalId">Global ID of the project (required).</param>
+        /// <param name="workflowId">ID of the workflow used in project (required).</param>
         public DetailedProjectApiResult(List<CustomAttributeApiResult> attributesScheme = default, WorkflowApiResult workflow = default, Guid id = default, string description = default, string name = default, bool isFavorite = default, bool isDeleted = default, long globalId = default, Guid workflowId = default)
         {
             // to ensure "workflow" is required (not null)
@@ -73,56 +73,65 @@ namespace TestIT.AdaptersApi.Model
         }
 
         /// <summary>
-        /// Gets or Sets AttributesScheme
+        /// Collection of the project attributes
         /// </summary>
+        /// <value>Collection of the project attributes</value>
         [DataMember(Name = "attributesScheme", EmitDefaultValue = true)]
         public List<CustomAttributeApiResult> AttributesScheme { get; set; }
 
         /// <summary>
-        /// Gets or Sets Workflow
+        /// ID of the workflow used in project
         /// </summary>
+        /// <value>ID of the workflow used in project</value>
         [DataMember(Name = "workflow", IsRequired = true, EmitDefaultValue = true)]
         public WorkflowApiResult Workflow { get; set; }
 
         /// <summary>
-        /// Gets or Sets Id
+        /// Unique ID of the project
         /// </summary>
+        /// <value>Unique ID of the project</value>
         [DataMember(Name = "id", IsRequired = true, EmitDefaultValue = true)]
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Gets or Sets Description
+        /// Description of the project
         /// </summary>
+        /// <value>Description of the project</value>
         [DataMember(Name = "description", EmitDefaultValue = true)]
         public string Description { get; set; }
 
         /// <summary>
-        /// Gets or Sets Name
+        /// Name of the project
         /// </summary>
+        /// <value>Name of the project</value>
         [DataMember(Name = "name", IsRequired = true, EmitDefaultValue = true)]
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or Sets IsFavorite
+        /// Indicates if the project is marked as favorite
         /// </summary>
+        /// <value>Indicates if the project is marked as favorite</value>
         [DataMember(Name = "isFavorite", IsRequired = true, EmitDefaultValue = true)]
         public bool IsFavorite { get; set; }
 
         /// <summary>
-        /// Gets or Sets IsDeleted
+        /// Indicates if the project is deleted
         /// </summary>
+        /// <value>Indicates if the project is deleted</value>
         [DataMember(Name = "isDeleted", IsRequired = true, EmitDefaultValue = true)]
         public bool IsDeleted { get; set; }
 
         /// <summary>
-        /// Gets or Sets GlobalId
+        /// Global ID of the project
         /// </summary>
+        /// <value>Global ID of the project</value>
         [DataMember(Name = "globalId", IsRequired = true, EmitDefaultValue = true)]
         public long GlobalId { get; set; }
 
         /// <summary>
-        /// Gets or Sets WorkflowId
+        /// ID of the workflow used in project
         /// </summary>
+        /// <value>ID of the workflow used in project</value>
         [DataMember(Name = "workflowId", IsRequired = true, EmitDefaultValue = true)]
         public Guid WorkflowId { get; set; }
 

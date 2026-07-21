@@ -34,20 +34,23 @@ namespace TestIT.AdaptersApi.Model
     {
 
         /// <summary>
-        /// Gets or Sets State
+        /// The current state of Work Item
         /// </summary>
+        /// <value>The current state of Work Item</value>
         [DataMember(Name = "state", IsRequired = true, EmitDefaultValue = true)]
         public WorkItemStates State { get; set; }
 
         /// <summary>
-        /// Gets or Sets Priority
+        /// Work Item priority level
         /// </summary>
+        /// <value>Work Item priority level</value>
         [DataMember(Name = "priority", IsRequired = true, EmitDefaultValue = true)]
         public WorkItemPriorityModel Priority { get; set; }
 
         /// <summary>
-        /// Gets or Sets SourceType
+        /// Work Item priority level
         /// </summary>
+        /// <value>Work Item priority level</value>
         [DataMember(Name = "sourceType", IsRequired = true, EmitDefaultValue = true)]
         public WorkItemSourceTypeModel SourceType { get; set; }
         /// <summary>
@@ -58,23 +61,23 @@ namespace TestIT.AdaptersApi.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="WorkItemShortApiResult" /> class.
         /// </summary>
-        /// <param name="id">id (required).</param>
-        /// <param name="name">name (required).</param>
-        /// <param name="entityTypeName">entityTypeName (required).</param>
-        /// <param name="projectId">projectId (required).</param>
-        /// <param name="sectionId">sectionId (required).</param>
-        /// <param name="sectionName">sectionName (required).</param>
-        /// <param name="isAutomated">isAutomated (required).</param>
-        /// <param name="globalId">globalId (required).</param>
-        /// <param name="duration">duration (required).</param>
-        /// <param name="attributes">attributes.</param>
-        /// <param name="state">state (required).</param>
-        /// <param name="priority">priority (required).</param>
-        /// <param name="sourceType">sourceType (required).</param>
-        /// <param name="isDeleted">isDeleted (required).</param>
-        /// <param name="tagNames">tagNames.</param>
-        /// <param name="iterations">iterations (required).</param>
-        /// <param name="links">links (required).</param>
+        /// <param name="id">Work Item internal unique identifier (required).</param>
+        /// <param name="name">Work Item name (required).</param>
+        /// <param name="entityTypeName">Work Item type. Possible values: CheckLists, SharedSteps, TestCases (required).</param>
+        /// <param name="projectId">Project unique identifier (required).</param>
+        /// <param name="sectionId">Identifier of Section where Work Item is located (required).</param>
+        /// <param name="sectionName">Section name of Work Item (required).</param>
+        /// <param name="isAutomated">Boolean flag determining whether Work Item is automated (required).</param>
+        /// <param name="globalId">Work Item global identifier (required).</param>
+        /// <param name="duration">Work Item duration (required).</param>
+        /// <param name="attributes">Work Item attributes.</param>
+        /// <param name="state">The current state of Work Item (required).</param>
+        /// <param name="priority">Work Item priority level (required).</param>
+        /// <param name="sourceType">Work Item priority level (required).</param>
+        /// <param name="isDeleted">Flag determining whether Work Item is deleted (required).</param>
+        /// <param name="tagNames">Array of tag names of Work Item.</param>
+        /// <param name="iterations">Set of iterations related to Work Item (required).</param>
+        /// <param name="links">Set of links related to Work Item (required).</param>
         public WorkItemShortApiResult(Guid id = default, string name = default, string entityTypeName = default, Guid projectId = default, Guid sectionId = default, string sectionName = default, bool isAutomated = default, long globalId = default, long duration = default, Dictionary<string, Object> attributes = default, WorkItemStates state = default, WorkItemPriorityModel priority = default, WorkItemSourceTypeModel sourceType = default, bool isDeleted = default, List<string> tagNames = default, List<IterationApiResult> iterations = default, List<LinkShortApiResult> links = default)
         {
             this.Id = id;
@@ -122,86 +125,109 @@ namespace TestIT.AdaptersApi.Model
         }
 
         /// <summary>
-        /// Gets or Sets Id
+        /// Work Item internal unique identifier
         /// </summary>
+        /// <value>Work Item internal unique identifier</value>
         [DataMember(Name = "id", IsRequired = true, EmitDefaultValue = true)]
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Gets or Sets Name
+        /// Work Item name
         /// </summary>
+        /// <value>Work Item name</value>
+        /*
+        <example>Performance test</example>
+        */
         [DataMember(Name = "name", IsRequired = true, EmitDefaultValue = true)]
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or Sets EntityTypeName
+        /// Work Item type. Possible values: CheckLists, SharedSteps, TestCases
         /// </summary>
+        /// <value>Work Item type. Possible values: CheckLists, SharedSteps, TestCases</value>
+        /*
+        <example>TestCases</example>
+        */
         [DataMember(Name = "entityTypeName", IsRequired = true, EmitDefaultValue = true)]
         public string EntityTypeName { get; set; }
 
         /// <summary>
-        /// Gets or Sets ProjectId
+        /// Project unique identifier
         /// </summary>
+        /// <value>Project unique identifier</value>
         [DataMember(Name = "projectId", IsRequired = true, EmitDefaultValue = true)]
         public Guid ProjectId { get; set; }
 
         /// <summary>
-        /// Gets or Sets SectionId
+        /// Identifier of Section where Work Item is located
         /// </summary>
+        /// <value>Identifier of Section where Work Item is located</value>
         [DataMember(Name = "sectionId", IsRequired = true, EmitDefaultValue = true)]
         public Guid SectionId { get; set; }
 
         /// <summary>
-        /// Gets or Sets SectionName
+        /// Section name of Work Item
         /// </summary>
+        /// <value>Section name of Work Item</value>
+        /*
+        <example>Performance tests section</example>
+        */
         [DataMember(Name = "sectionName", IsRequired = true, EmitDefaultValue = true)]
         public string SectionName { get; set; }
 
         /// <summary>
-        /// Gets or Sets IsAutomated
+        /// Boolean flag determining whether Work Item is automated
         /// </summary>
+        /// <value>Boolean flag determining whether Work Item is automated</value>
         [DataMember(Name = "isAutomated", IsRequired = true, EmitDefaultValue = true)]
         public bool IsAutomated { get; set; }
 
         /// <summary>
-        /// Gets or Sets GlobalId
+        /// Work Item global identifier
         /// </summary>
+        /// <value>Work Item global identifier</value>
         [DataMember(Name = "globalId", IsRequired = true, EmitDefaultValue = true)]
         public long GlobalId { get; set; }
 
         /// <summary>
-        /// Gets or Sets Duration
+        /// Work Item duration
         /// </summary>
+        /// <value>Work Item duration</value>
         [DataMember(Name = "duration", IsRequired = true, EmitDefaultValue = true)]
         public long Duration { get; set; }
 
         /// <summary>
-        /// Gets or Sets Attributes
+        /// Work Item attributes
         /// </summary>
+        /// <value>Work Item attributes</value>
         [DataMember(Name = "attributes", EmitDefaultValue = true)]
         public Dictionary<string, Object> Attributes { get; set; }
 
         /// <summary>
-        /// Gets or Sets IsDeleted
+        /// Flag determining whether Work Item is deleted
         /// </summary>
+        /// <value>Flag determining whether Work Item is deleted</value>
         [DataMember(Name = "isDeleted", IsRequired = true, EmitDefaultValue = true)]
         public bool IsDeleted { get; set; }
 
         /// <summary>
-        /// Gets or Sets TagNames
+        /// Array of tag names of Work Item
         /// </summary>
+        /// <value>Array of tag names of Work Item</value>
         [DataMember(Name = "tagNames", EmitDefaultValue = true)]
         public List<string> TagNames { get; set; }
 
         /// <summary>
-        /// Gets or Sets Iterations
+        /// Set of iterations related to Work Item
         /// </summary>
+        /// <value>Set of iterations related to Work Item</value>
         [DataMember(Name = "iterations", IsRequired = true, EmitDefaultValue = true)]
         public List<IterationApiResult> Iterations { get; set; }
 
         /// <summary>
-        /// Gets or Sets Links
+        /// Set of links related to Work Item
         /// </summary>
+        /// <value>Set of links related to Work Item</value>
         [DataMember(Name = "links", IsRequired = true, EmitDefaultValue = true)]
         public List<LinkShortApiResult> Links { get; set; }
 

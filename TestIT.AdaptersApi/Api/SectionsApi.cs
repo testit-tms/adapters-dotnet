@@ -28,16 +28,16 @@ namespace TestIT.AdaptersApi.Api
     {
         #region Synchronous Operations
         /// <summary>
-        /// 
+        /// Get section
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <param name="isDeleted"> (optional)</param>
         /// <returns>SectionWithStepsModel</returns>
-        SectionWithStepsModel ApiAdaptersSectionsIdGet(Guid id, DeletionState? isDeleted = default);
+        SectionWithStepsModel AdaptersSectionsIdGet(Guid id, DeletionState? isDeleted = default);
 
         /// <summary>
-        /// 
+        /// Get section
         /// </summary>
         /// <remarks>
         /// 
@@ -46,17 +46,17 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="id"></param>
         /// <param name="isDeleted"> (optional)</param>
         /// <returns>ApiResponse of SectionWithStepsModel</returns>
-        ApiResponse<SectionWithStepsModel> ApiAdaptersSectionsIdGetWithHttpInfo(Guid id, DeletionState? isDeleted = default);
+        ApiResponse<SectionWithStepsModel> AdaptersSectionsIdGetWithHttpInfo(Guid id, DeletionState? isDeleted = default);
         /// <summary>
-        /// 
+        /// Create section
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="sectionPostModel"> (optional)</param>
         /// <returns>SectionWithStepsModel</returns>
-        SectionWithStepsModel ApiAdaptersSectionsPost(SectionPostModel sectionPostModel = default);
+        SectionWithStepsModel AdaptersSectionsPost(SectionPostModel sectionPostModel = default);
 
         /// <summary>
-        /// 
+        /// Create section
         /// </summary>
         /// <remarks>
         /// 
@@ -64,7 +64,7 @@ namespace TestIT.AdaptersApi.Api
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="sectionPostModel"> (optional)</param>
         /// <returns>ApiResponse of SectionWithStepsModel</returns>
-        ApiResponse<SectionWithStepsModel> ApiAdaptersSectionsPostWithHttpInfo(SectionPostModel sectionPostModel = default);
+        ApiResponse<SectionWithStepsModel> AdaptersSectionsPostWithHttpInfo(SectionPostModel sectionPostModel = default);
         #endregion Synchronous Operations
     }
 
@@ -75,7 +75,7 @@ namespace TestIT.AdaptersApi.Api
     {
         #region Asynchronous Operations
         /// <summary>
-        /// 
+        /// Get section
         /// </summary>
         /// <remarks>
         /// 
@@ -85,10 +85,10 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="isDeleted"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of SectionWithStepsModel</returns>
-        System.Threading.Tasks.Task<SectionWithStepsModel> ApiAdaptersSectionsIdGetAsync(Guid id, DeletionState? isDeleted = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<SectionWithStepsModel> AdaptersSectionsIdGetAsync(Guid id, DeletionState? isDeleted = default, System.Threading.CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// 
+        /// Get section
         /// </summary>
         /// <remarks>
         /// 
@@ -98,9 +98,9 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="isDeleted"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (SectionWithStepsModel)</returns>
-        System.Threading.Tasks.Task<ApiResponse<SectionWithStepsModel>> ApiAdaptersSectionsIdGetWithHttpInfoAsync(Guid id, DeletionState? isDeleted = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<ApiResponse<SectionWithStepsModel>> AdaptersSectionsIdGetWithHttpInfoAsync(Guid id, DeletionState? isDeleted = default, System.Threading.CancellationToken cancellationToken = default);
         /// <summary>
-        /// 
+        /// Create section
         /// </summary>
         /// <remarks>
         /// 
@@ -109,10 +109,10 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="sectionPostModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of SectionWithStepsModel</returns>
-        System.Threading.Tasks.Task<SectionWithStepsModel> ApiAdaptersSectionsPostAsync(SectionPostModel sectionPostModel = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<SectionWithStepsModel> AdaptersSectionsPostAsync(SectionPostModel sectionPostModel = default, System.Threading.CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// 
+        /// Create section
         /// </summary>
         /// <remarks>
         /// 
@@ -121,7 +121,7 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="sectionPostModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (SectionWithStepsModel)</returns>
-        System.Threading.Tasks.Task<ApiResponse<SectionWithStepsModel>> ApiAdaptersSectionsPostWithHttpInfoAsync(SectionPostModel sectionPostModel = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<ApiResponse<SectionWithStepsModel>> AdaptersSectionsPostWithHttpInfoAsync(SectionPostModel sectionPostModel = default, System.Threading.CancellationToken cancellationToken = default);
         #endregion Asynchronous Operations
     }
 
@@ -336,26 +336,26 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Get section 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <param name="isDeleted"> (optional)</param>
         /// <returns>SectionWithStepsModel</returns>
-        public SectionWithStepsModel ApiAdaptersSectionsIdGet(Guid id, DeletionState? isDeleted = default)
+        public SectionWithStepsModel AdaptersSectionsIdGet(Guid id, DeletionState? isDeleted = default)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<SectionWithStepsModel> localVarResponse = ApiAdaptersSectionsIdGetWithHttpInfo(id, isDeleted);
+            TestIT.AdaptersApi.Client.ApiResponse<SectionWithStepsModel> localVarResponse = AdaptersSectionsIdGetWithHttpInfo(id, isDeleted);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        ///  
+        /// Get section 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <param name="isDeleted"> (optional)</param>
         /// <returns>ApiResponse of SectionWithStepsModel</returns>
-        public TestIT.AdaptersApi.Client.ApiResponse<SectionWithStepsModel> ApiAdaptersSectionsIdGetWithHttpInfo(Guid id, DeletionState? isDeleted = default)
+        public TestIT.AdaptersApi.Client.ApiResponse<SectionWithStepsModel> AdaptersSectionsIdGetWithHttpInfo(Guid id, DeletionState? isDeleted = default)
         {
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
 
@@ -392,11 +392,11 @@ namespace TestIT.AdaptersApi.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Get<SectionWithStepsModel>("/api/adapters/sections/{id}", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Get<SectionWithStepsModel>("/adapters/sections/{id}", localVarRequestOptions, this.Configuration);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersSectionsIdGet", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersSectionsIdGet", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -404,28 +404,28 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Get section 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <param name="isDeleted"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of SectionWithStepsModel</returns>
-        public async System.Threading.Tasks.Task<SectionWithStepsModel> ApiAdaptersSectionsIdGetAsync(Guid id, DeletionState? isDeleted = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<SectionWithStepsModel> AdaptersSectionsIdGetAsync(Guid id, DeletionState? isDeleted = default, System.Threading.CancellationToken cancellationToken = default)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<SectionWithStepsModel> localVarResponse = await ApiAdaptersSectionsIdGetWithHttpInfoAsync(id, isDeleted, cancellationToken).ConfigureAwait(false);
+            TestIT.AdaptersApi.Client.ApiResponse<SectionWithStepsModel> localVarResponse = await AdaptersSectionsIdGetWithHttpInfoAsync(id, isDeleted, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        ///  
+        /// Get section 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <param name="isDeleted"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (SectionWithStepsModel)</returns>
-        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<SectionWithStepsModel>> ApiAdaptersSectionsIdGetWithHttpInfoAsync(Guid id, DeletionState? isDeleted = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<SectionWithStepsModel>> AdaptersSectionsIdGetWithHttpInfoAsync(Guid id, DeletionState? isDeleted = default, System.Threading.CancellationToken cancellationToken = default)
         {
 
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
@@ -465,11 +465,11 @@ namespace TestIT.AdaptersApi.Api
 
             // make the HTTP request
 
-            var localVarResponse = await this.AsynchronousClient.GetAsync<SectionWithStepsModel>("/api/adapters/sections/{id}", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.GetAsync<SectionWithStepsModel>("/adapters/sections/{id}", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersSectionsIdGet", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersSectionsIdGet", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -477,24 +477,24 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Create section 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="sectionPostModel"> (optional)</param>
         /// <returns>SectionWithStepsModel</returns>
-        public SectionWithStepsModel ApiAdaptersSectionsPost(SectionPostModel sectionPostModel = default)
+        public SectionWithStepsModel AdaptersSectionsPost(SectionPostModel sectionPostModel = default)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<SectionWithStepsModel> localVarResponse = ApiAdaptersSectionsPostWithHttpInfo(sectionPostModel);
+            TestIT.AdaptersApi.Client.ApiResponse<SectionWithStepsModel> localVarResponse = AdaptersSectionsPostWithHttpInfo(sectionPostModel);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        ///  
+        /// Create section 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="sectionPostModel"> (optional)</param>
         /// <returns>ApiResponse of SectionWithStepsModel</returns>
-        public TestIT.AdaptersApi.Client.ApiResponse<SectionWithStepsModel> ApiAdaptersSectionsPostWithHttpInfo(SectionPostModel sectionPostModel = default)
+        public TestIT.AdaptersApi.Client.ApiResponse<SectionWithStepsModel> AdaptersSectionsPostWithHttpInfo(SectionPostModel sectionPostModel = default)
         {
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
 
@@ -528,11 +528,11 @@ namespace TestIT.AdaptersApi.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Post<SectionWithStepsModel>("/api/adapters/sections", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Post<SectionWithStepsModel>("/adapters/sections", localVarRequestOptions, this.Configuration);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersSectionsPost", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersSectionsPost", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -540,26 +540,26 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Create section 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="sectionPostModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of SectionWithStepsModel</returns>
-        public async System.Threading.Tasks.Task<SectionWithStepsModel> ApiAdaptersSectionsPostAsync(SectionPostModel sectionPostModel = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<SectionWithStepsModel> AdaptersSectionsPostAsync(SectionPostModel sectionPostModel = default, System.Threading.CancellationToken cancellationToken = default)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<SectionWithStepsModel> localVarResponse = await ApiAdaptersSectionsPostWithHttpInfoAsync(sectionPostModel, cancellationToken).ConfigureAwait(false);
+            TestIT.AdaptersApi.Client.ApiResponse<SectionWithStepsModel> localVarResponse = await AdaptersSectionsPostWithHttpInfoAsync(sectionPostModel, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        ///  
+        /// Create section 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="sectionPostModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (SectionWithStepsModel)</returns>
-        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<SectionWithStepsModel>> ApiAdaptersSectionsPostWithHttpInfoAsync(SectionPostModel sectionPostModel = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<SectionWithStepsModel>> AdaptersSectionsPostWithHttpInfoAsync(SectionPostModel sectionPostModel = default, System.Threading.CancellationToken cancellationToken = default)
         {
 
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
@@ -596,11 +596,11 @@ namespace TestIT.AdaptersApi.Api
 
             // make the HTTP request
 
-            var localVarResponse = await this.AsynchronousClient.PostAsync<SectionWithStepsModel>("/api/adapters/sections", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.PostAsync<SectionWithStepsModel>("/adapters/sections", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersSectionsPost", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersSectionsPost", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 

@@ -34,8 +34,9 @@ namespace TestIT.AdaptersApi.Model
     {
 
         /// <summary>
-        /// Gets or Sets StateName
+        /// Test run state
         /// </summary>
+        /// <value>Test run state</value>
         [DataMember(Name = "stateName", IsRequired = true, EmitDefaultValue = true)]
         [Obsolete]
         public TestRunState StateName { get; set; }
@@ -47,13 +48,13 @@ namespace TestIT.AdaptersApi.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="TestRunApiResult" /> class.
         /// </summary>
-        /// <param name="id">id (required).</param>
-        /// <param name="name">name (required).</param>
-        /// <param name="stateName">stateName (required).</param>
-        /// <param name="status">status (required).</param>
-        /// <param name="attachments">attachments (required).</param>
-        /// <param name="links">links (required).</param>
-        /// <param name="tags">tags (required).</param>
+        /// <param name="id">Test run unique identifier (required).</param>
+        /// <param name="name">Test run name (required).</param>
+        /// <param name="stateName">Test run state (required).</param>
+        /// <param name="status">Test run status (required).</param>
+        /// <param name="attachments">Collection of attachments related to the test run (required).</param>
+        /// <param name="links">Collection of links related to the test run (required).</param>
+        /// <param name="tags">Collection of tags associated with the test run (required).</param>
         public TestRunApiResult(Guid id = default, string name = default, TestRunState stateName = default, TestStatusApiResult status = default, List<AttachmentApiResult> attachments = default, List<LinkApiResult> links = default, List<string> tags = default)
         {
             this.Id = id;
@@ -91,38 +92,44 @@ namespace TestIT.AdaptersApi.Model
         }
 
         /// <summary>
-        /// Gets or Sets Id
+        /// Test run unique identifier
         /// </summary>
+        /// <value>Test run unique identifier</value>
         [DataMember(Name = "id", IsRequired = true, EmitDefaultValue = true)]
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Gets or Sets Name
+        /// Test run name
         /// </summary>
+        /// <value>Test run name</value>
         [DataMember(Name = "name", IsRequired = true, EmitDefaultValue = true)]
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or Sets Status
+        /// Test run status
         /// </summary>
+        /// <value>Test run status</value>
         [DataMember(Name = "status", IsRequired = true, EmitDefaultValue = true)]
         public TestStatusApiResult Status { get; set; }
 
         /// <summary>
-        /// Gets or Sets Attachments
+        /// Collection of attachments related to the test run
         /// </summary>
+        /// <value>Collection of attachments related to the test run</value>
         [DataMember(Name = "attachments", IsRequired = true, EmitDefaultValue = true)]
         public List<AttachmentApiResult> Attachments { get; set; }
 
         /// <summary>
-        /// Gets or Sets Links
+        /// Collection of links related to the test run
         /// </summary>
+        /// <value>Collection of links related to the test run</value>
         [DataMember(Name = "links", IsRequired = true, EmitDefaultValue = true)]
         public List<LinkApiResult> Links { get; set; }
 
         /// <summary>
-        /// Gets or Sets Tags
+        /// Collection of tags associated with the test run
         /// </summary>
+        /// <value>Collection of tags associated with the test run</value>
         [DataMember(Name = "tags", IsRequired = true, EmitDefaultValue = true)]
         public List<string> Tags { get; set; }
 

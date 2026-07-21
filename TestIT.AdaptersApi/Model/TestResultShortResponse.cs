@@ -40,21 +40,21 @@ namespace TestIT.AdaptersApi.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="TestResultShortResponse" /> class.
         /// </summary>
-        /// <param name="id">id (required).</param>
-        /// <param name="name">name (required).</param>
-        /// <param name="autotestExternalId">autotestExternalId.</param>
-        /// <param name="autoTestTags">autoTestTags (required).</param>
-        /// <param name="testRunId">testRunId (required).</param>
-        /// <param name="configurationId">configurationId (required).</param>
-        /// <param name="configurationName">configurationName (required).</param>
-        /// <param name="outcome">outcome.</param>
+        /// <param name="id">Unique ID of the test result (required).</param>
+        /// <param name="name">Name of autotest represented by the test result (required).</param>
+        /// <param name="autotestExternalId">External ID of autotest represented by the test result.</param>
+        /// <param name="autoTestTags">Tags of the autotest represented by the test result (required).</param>
+        /// <param name="testRunId">Unique ID of test run where the test result is located (required).</param>
+        /// <param name="configurationId">Unique ID of configuration which the test result uses (required).</param>
+        /// <param name="configurationName">Name of configuration which the test result uses (required).</param>
+        /// <param name="outcome">Outcome of the test result.</param>
         /// <param name="status">status (required).</param>
-        /// <param name="resultReasons">resultReasons (required).</param>
-        /// <param name="comment">comment.</param>
-        /// <param name="duration">duration.</param>
-        /// <param name="links">links (required).</param>
-        /// <param name="attachments">attachments (required).</param>
-        /// <param name="rerunCompletedCount">rerunCompletedCount (required).</param>
+        /// <param name="resultReasons">Collection of result reasons which the test result have (required).</param>
+        /// <param name="comment">Comment to the test result.</param>
+        /// <param name="duration">Time which it took to run the test.</param>
+        /// <param name="links">Collection of links attached to the test result (required).</param>
+        /// <param name="attachments">Collection of files attached to the test result (required).</param>
+        /// <param name="rerunCompletedCount">Run count (required).</param>
         public TestResultShortResponse(Guid id = default, string name = default, string autotestExternalId = default, List<string> autoTestTags = default, Guid testRunId = default, Guid configurationId = default, string configurationName = default, string outcome = default, TestStatusApiResult status = default, List<AutoTestResultReasonShort> resultReasons = default, string comment = default, long? duration = default, List<TestResultLinkApiResult> links = default, List<AttachmentApiResult> attachments = default, int rerunCompletedCount = default)
         {
             this.Id = id;
@@ -110,50 +110,58 @@ namespace TestIT.AdaptersApi.Model
         }
 
         /// <summary>
-        /// Gets or Sets Id
+        /// Unique ID of the test result
         /// </summary>
+        /// <value>Unique ID of the test result</value>
         [DataMember(Name = "id", IsRequired = true, EmitDefaultValue = true)]
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Gets or Sets Name
+        /// Name of autotest represented by the test result
         /// </summary>
+        /// <value>Name of autotest represented by the test result</value>
         [DataMember(Name = "name", IsRequired = true, EmitDefaultValue = true)]
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or Sets AutotestExternalId
+        /// External ID of autotest represented by the test result
         /// </summary>
+        /// <value>External ID of autotest represented by the test result</value>
         [DataMember(Name = "autotestExternalId", EmitDefaultValue = true)]
         public string AutotestExternalId { get; set; }
 
         /// <summary>
-        /// Gets or Sets AutoTestTags
+        /// Tags of the autotest represented by the test result
         /// </summary>
+        /// <value>Tags of the autotest represented by the test result</value>
         [DataMember(Name = "autoTestTags", IsRequired = true, EmitDefaultValue = true)]
         public List<string> AutoTestTags { get; set; }
 
         /// <summary>
-        /// Gets or Sets TestRunId
+        /// Unique ID of test run where the test result is located
         /// </summary>
+        /// <value>Unique ID of test run where the test result is located</value>
         [DataMember(Name = "testRunId", IsRequired = true, EmitDefaultValue = true)]
         public Guid TestRunId { get; set; }
 
         /// <summary>
-        /// Gets or Sets ConfigurationId
+        /// Unique ID of configuration which the test result uses
         /// </summary>
+        /// <value>Unique ID of configuration which the test result uses</value>
         [DataMember(Name = "configurationId", IsRequired = true, EmitDefaultValue = true)]
         public Guid ConfigurationId { get; set; }
 
         /// <summary>
-        /// Gets or Sets ConfigurationName
+        /// Name of configuration which the test result uses
         /// </summary>
+        /// <value>Name of configuration which the test result uses</value>
         [DataMember(Name = "configurationName", IsRequired = true, EmitDefaultValue = true)]
         public string ConfigurationName { get; set; }
 
         /// <summary>
-        /// Gets or Sets Outcome
+        /// Outcome of the test result
         /// </summary>
+        /// <value>Outcome of the test result</value>
         [DataMember(Name = "outcome", EmitDefaultValue = true)]
         [Obsolete]
         public string Outcome { get; set; }
@@ -165,38 +173,44 @@ namespace TestIT.AdaptersApi.Model
         public TestStatusApiResult Status { get; set; }
 
         /// <summary>
-        /// Gets or Sets ResultReasons
+        /// Collection of result reasons which the test result have
         /// </summary>
+        /// <value>Collection of result reasons which the test result have</value>
         [DataMember(Name = "resultReasons", IsRequired = true, EmitDefaultValue = true)]
         public List<AutoTestResultReasonShort> ResultReasons { get; set; }
 
         /// <summary>
-        /// Gets or Sets Comment
+        /// Comment to the test result
         /// </summary>
+        /// <value>Comment to the test result</value>
         [DataMember(Name = "comment", EmitDefaultValue = true)]
         public string Comment { get; set; }
 
         /// <summary>
-        /// Gets or Sets Duration
+        /// Time which it took to run the test
         /// </summary>
+        /// <value>Time which it took to run the test</value>
         [DataMember(Name = "duration", EmitDefaultValue = true)]
         public long? Duration { get; set; }
 
         /// <summary>
-        /// Gets or Sets Links
+        /// Collection of links attached to the test result
         /// </summary>
+        /// <value>Collection of links attached to the test result</value>
         [DataMember(Name = "links", IsRequired = true, EmitDefaultValue = true)]
         public List<TestResultLinkApiResult> Links { get; set; }
 
         /// <summary>
-        /// Gets or Sets Attachments
+        /// Collection of files attached to the test result
         /// </summary>
+        /// <value>Collection of files attached to the test result</value>
         [DataMember(Name = "attachments", IsRequired = true, EmitDefaultValue = true)]
         public List<AttachmentApiResult> Attachments { get; set; }
 
         /// <summary>
-        /// Gets or Sets RerunCompletedCount
+        /// Run count
         /// </summary>
+        /// <value>Run count</value>
         [DataMember(Name = "rerunCompletedCount", IsRequired = true, EmitDefaultValue = true)]
         public int RerunCompletedCount { get; set; }
 

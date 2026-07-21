@@ -40,15 +40,16 @@ namespace TestIT.AdaptersApi.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="AttachmentUpdateRequest" /> class.
         /// </summary>
-        /// <param name="id">id (required).</param>
+        /// <param name="id">Unique ID of the attachment (required).</param>
         public AttachmentUpdateRequest(Guid id = default)
         {
             this.Id = id;
         }
 
         /// <summary>
-        /// Gets or Sets Id
+        /// Unique ID of the attachment
         /// </summary>
+        /// <value>Unique ID of the attachment</value>
         [DataMember(Name = "id", IsRequired = true, EmitDefaultValue = true)]
         public Guid Id { get; set; }
 

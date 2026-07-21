@@ -28,16 +28,16 @@ namespace TestIT.AdaptersApi.Api
     {
         #region Synchronous Operations
         /// <summary>
-        /// 
+        /// Edit attribute of the project
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="projectId"></param>
         /// <param name="customAttributePutModel"> (optional)</param>
         /// <returns></returns>
-        void ApiAdaptersProjectsProjectIdAttributesPut(Guid projectId, CustomAttributePutModel customAttributePutModel = default);
+        void AdaptersProjectsProjectIdAttributesPut(Guid projectId, CustomAttributePutModel customAttributePutModel = default);
 
         /// <summary>
-        /// 
+        /// Edit attribute of the project
         /// </summary>
         /// <remarks>
         /// 
@@ -46,9 +46,9 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="projectId"></param>
         /// <param name="customAttributePutModel"> (optional)</param>
         /// <returns>ApiResponse of Object(void)</returns>
-        ApiResponse<Object> ApiAdaptersProjectsProjectIdAttributesPutWithHttpInfo(Guid projectId, CustomAttributePutModel customAttributePutModel = default);
+        ApiResponse<Object> AdaptersProjectsProjectIdAttributesPutWithHttpInfo(Guid projectId, CustomAttributePutModel customAttributePutModel = default);
         /// <summary>
-        /// 
+        /// Search for attributes used in the project
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="projectId"></param>
@@ -59,10 +59,10 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="searchValue">Value for searching (optional)</param>
         /// <param name="projectAttributesFilterModel"> (optional)</param>
         /// <returns>List&lt;CustomAttributeGetModel&gt;</returns>
-        List<CustomAttributeGetModel> ApiAdaptersProjectsProjectIdAttributesSearchPost(Guid projectId, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ProjectAttributesFilterModel projectAttributesFilterModel = default);
+        List<CustomAttributeGetModel> AdaptersProjectsProjectIdAttributesSearchPost(Guid projectId, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ProjectAttributesFilterModel projectAttributesFilterModel = default);
 
         /// <summary>
-        /// 
+        /// Search for attributes used in the project
         /// </summary>
         /// <remarks>
         /// 
@@ -76,7 +76,7 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="searchValue">Value for searching (optional)</param>
         /// <param name="projectAttributesFilterModel"> (optional)</param>
         /// <returns>ApiResponse of List&lt;CustomAttributeGetModel&gt;</returns>
-        ApiResponse<List<CustomAttributeGetModel>> ApiAdaptersProjectsProjectIdAttributesSearchPostWithHttpInfo(Guid projectId, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ProjectAttributesFilterModel projectAttributesFilterModel = default);
+        ApiResponse<List<CustomAttributeGetModel>> AdaptersProjectsProjectIdAttributesSearchPostWithHttpInfo(Guid projectId, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ProjectAttributesFilterModel projectAttributesFilterModel = default);
         #endregion Synchronous Operations
     }
 
@@ -87,7 +87,7 @@ namespace TestIT.AdaptersApi.Api
     {
         #region Asynchronous Operations
         /// <summary>
-        /// 
+        /// Edit attribute of the project
         /// </summary>
         /// <remarks>
         /// 
@@ -97,10 +97,10 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="customAttributePutModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of void</returns>
-        System.Threading.Tasks.Task ApiAdaptersProjectsProjectIdAttributesPutAsync(Guid projectId, CustomAttributePutModel customAttributePutModel = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task AdaptersProjectsProjectIdAttributesPutAsync(Guid projectId, CustomAttributePutModel customAttributePutModel = default, System.Threading.CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// 
+        /// Edit attribute of the project
         /// </summary>
         /// <remarks>
         /// 
@@ -110,9 +110,9 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="customAttributePutModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse</returns>
-        System.Threading.Tasks.Task<ApiResponse<Object>> ApiAdaptersProjectsProjectIdAttributesPutWithHttpInfoAsync(Guid projectId, CustomAttributePutModel customAttributePutModel = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<ApiResponse<Object>> AdaptersProjectsProjectIdAttributesPutWithHttpInfoAsync(Guid projectId, CustomAttributePutModel customAttributePutModel = default, System.Threading.CancellationToken cancellationToken = default);
         /// <summary>
-        /// 
+        /// Search for attributes used in the project
         /// </summary>
         /// <remarks>
         /// 
@@ -127,10 +127,10 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="projectAttributesFilterModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;CustomAttributeGetModel&gt;</returns>
-        System.Threading.Tasks.Task<List<CustomAttributeGetModel>> ApiAdaptersProjectsProjectIdAttributesSearchPostAsync(Guid projectId, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ProjectAttributesFilterModel projectAttributesFilterModel = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<List<CustomAttributeGetModel>> AdaptersProjectsProjectIdAttributesSearchPostAsync(Guid projectId, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ProjectAttributesFilterModel projectAttributesFilterModel = default, System.Threading.CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// 
+        /// Search for attributes used in the project
         /// </summary>
         /// <remarks>
         /// 
@@ -145,7 +145,7 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="projectAttributesFilterModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;CustomAttributeGetModel&gt;)</returns>
-        System.Threading.Tasks.Task<ApiResponse<List<CustomAttributeGetModel>>> ApiAdaptersProjectsProjectIdAttributesSearchPostWithHttpInfoAsync(Guid projectId, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ProjectAttributesFilterModel projectAttributesFilterModel = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<ApiResponse<List<CustomAttributeGetModel>>> AdaptersProjectsProjectIdAttributesSearchPostWithHttpInfoAsync(Guid projectId, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ProjectAttributesFilterModel projectAttributesFilterModel = default, System.Threading.CancellationToken cancellationToken = default);
         #endregion Asynchronous Operations
     }
 
@@ -360,25 +360,25 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Edit attribute of the project 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="projectId"></param>
         /// <param name="customAttributePutModel"> (optional)</param>
         /// <returns></returns>
-        public void ApiAdaptersProjectsProjectIdAttributesPut(Guid projectId, CustomAttributePutModel customAttributePutModel = default)
+        public void AdaptersProjectsProjectIdAttributesPut(Guid projectId, CustomAttributePutModel customAttributePutModel = default)
         {
-            ApiAdaptersProjectsProjectIdAttributesPutWithHttpInfo(projectId, customAttributePutModel);
+            AdaptersProjectsProjectIdAttributesPutWithHttpInfo(projectId, customAttributePutModel);
         }
 
         /// <summary>
-        ///  
+        /// Edit attribute of the project 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="projectId"></param>
         /// <param name="customAttributePutModel"> (optional)</param>
         /// <returns>ApiResponse of Object(void)</returns>
-        public TestIT.AdaptersApi.Client.ApiResponse<Object> ApiAdaptersProjectsProjectIdAttributesPutWithHttpInfo(Guid projectId, CustomAttributePutModel customAttributePutModel = default)
+        public TestIT.AdaptersApi.Client.ApiResponse<Object> AdaptersProjectsProjectIdAttributesPutWithHttpInfo(Guid projectId, CustomAttributePutModel customAttributePutModel = default)
         {
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
 
@@ -413,11 +413,11 @@ namespace TestIT.AdaptersApi.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Put<Object>("/api/adapters/projects/{projectId}/attributes", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Put<Object>("/adapters/projects/{projectId}/attributes", localVarRequestOptions, this.Configuration);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersProjectsProjectIdAttributesPut", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersProjectsProjectIdAttributesPut", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -425,27 +425,27 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Edit attribute of the project 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="projectId"></param>
         /// <param name="customAttributePutModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of void</returns>
-        public async System.Threading.Tasks.Task ApiAdaptersProjectsProjectIdAttributesPutAsync(Guid projectId, CustomAttributePutModel customAttributePutModel = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task AdaptersProjectsProjectIdAttributesPutAsync(Guid projectId, CustomAttributePutModel customAttributePutModel = default, System.Threading.CancellationToken cancellationToken = default)
         {
-            await ApiAdaptersProjectsProjectIdAttributesPutWithHttpInfoAsync(projectId, customAttributePutModel, cancellationToken).ConfigureAwait(false);
+            await AdaptersProjectsProjectIdAttributesPutWithHttpInfoAsync(projectId, customAttributePutModel, cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
-        ///  
+        /// Edit attribute of the project 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="projectId"></param>
         /// <param name="customAttributePutModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse</returns>
-        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<Object>> ApiAdaptersProjectsProjectIdAttributesPutWithHttpInfoAsync(Guid projectId, CustomAttributePutModel customAttributePutModel = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<Object>> AdaptersProjectsProjectIdAttributesPutWithHttpInfoAsync(Guid projectId, CustomAttributePutModel customAttributePutModel = default, System.Threading.CancellationToken cancellationToken = default)
         {
 
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
@@ -483,11 +483,11 @@ namespace TestIT.AdaptersApi.Api
 
             // make the HTTP request
 
-            var localVarResponse = await this.AsynchronousClient.PutAsync<Object>("/api/adapters/projects/{projectId}/attributes", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.PutAsync<Object>("/adapters/projects/{projectId}/attributes", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersProjectsProjectIdAttributesPut", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersProjectsProjectIdAttributesPut", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -495,7 +495,7 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Search for attributes used in the project 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="projectId"></param>
@@ -506,14 +506,14 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="searchValue">Value for searching (optional)</param>
         /// <param name="projectAttributesFilterModel"> (optional)</param>
         /// <returns>List&lt;CustomAttributeGetModel&gt;</returns>
-        public List<CustomAttributeGetModel> ApiAdaptersProjectsProjectIdAttributesSearchPost(Guid projectId, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ProjectAttributesFilterModel projectAttributesFilterModel = default)
+        public List<CustomAttributeGetModel> AdaptersProjectsProjectIdAttributesSearchPost(Guid projectId, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ProjectAttributesFilterModel projectAttributesFilterModel = default)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<List<CustomAttributeGetModel>> localVarResponse = ApiAdaptersProjectsProjectIdAttributesSearchPostWithHttpInfo(projectId, skip, take, orderBy, searchField, searchValue, projectAttributesFilterModel);
+            TestIT.AdaptersApi.Client.ApiResponse<List<CustomAttributeGetModel>> localVarResponse = AdaptersProjectsProjectIdAttributesSearchPostWithHttpInfo(projectId, skip, take, orderBy, searchField, searchValue, projectAttributesFilterModel);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        ///  
+        /// Search for attributes used in the project 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="projectId"></param>
@@ -524,7 +524,7 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="searchValue">Value for searching (optional)</param>
         /// <param name="projectAttributesFilterModel"> (optional)</param>
         /// <returns>ApiResponse of List&lt;CustomAttributeGetModel&gt;</returns>
-        public TestIT.AdaptersApi.Client.ApiResponse<List<CustomAttributeGetModel>> ApiAdaptersProjectsProjectIdAttributesSearchPostWithHttpInfo(Guid projectId, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ProjectAttributesFilterModel projectAttributesFilterModel = default)
+        public TestIT.AdaptersApi.Client.ApiResponse<List<CustomAttributeGetModel>> AdaptersProjectsProjectIdAttributesSearchPostWithHttpInfo(Guid projectId, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ProjectAttributesFilterModel projectAttributesFilterModel = default)
         {
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
 
@@ -579,11 +579,11 @@ namespace TestIT.AdaptersApi.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Post<List<CustomAttributeGetModel>>("/api/adapters/projects/{projectId}/attributes/search", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Post<List<CustomAttributeGetModel>>("/adapters/projects/{projectId}/attributes/search", localVarRequestOptions, this.Configuration);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersProjectsProjectIdAttributesSearchPost", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersProjectsProjectIdAttributesSearchPost", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -591,7 +591,7 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Search for attributes used in the project 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="projectId"></param>
@@ -603,14 +603,14 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="projectAttributesFilterModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;CustomAttributeGetModel&gt;</returns>
-        public async System.Threading.Tasks.Task<List<CustomAttributeGetModel>> ApiAdaptersProjectsProjectIdAttributesSearchPostAsync(Guid projectId, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ProjectAttributesFilterModel projectAttributesFilterModel = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<List<CustomAttributeGetModel>> AdaptersProjectsProjectIdAttributesSearchPostAsync(Guid projectId, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ProjectAttributesFilterModel projectAttributesFilterModel = default, System.Threading.CancellationToken cancellationToken = default)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<List<CustomAttributeGetModel>> localVarResponse = await ApiAdaptersProjectsProjectIdAttributesSearchPostWithHttpInfoAsync(projectId, skip, take, orderBy, searchField, searchValue, projectAttributesFilterModel, cancellationToken).ConfigureAwait(false);
+            TestIT.AdaptersApi.Client.ApiResponse<List<CustomAttributeGetModel>> localVarResponse = await AdaptersProjectsProjectIdAttributesSearchPostWithHttpInfoAsync(projectId, skip, take, orderBy, searchField, searchValue, projectAttributesFilterModel, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        ///  
+        /// Search for attributes used in the project 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="projectId"></param>
@@ -622,7 +622,7 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="projectAttributesFilterModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;CustomAttributeGetModel&gt;)</returns>
-        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<List<CustomAttributeGetModel>>> ApiAdaptersProjectsProjectIdAttributesSearchPostWithHttpInfoAsync(Guid projectId, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ProjectAttributesFilterModel projectAttributesFilterModel = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<List<CustomAttributeGetModel>>> AdaptersProjectsProjectIdAttributesSearchPostWithHttpInfoAsync(Guid projectId, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ProjectAttributesFilterModel projectAttributesFilterModel = default, System.Threading.CancellationToken cancellationToken = default)
         {
 
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
@@ -680,11 +680,11 @@ namespace TestIT.AdaptersApi.Api
 
             // make the HTTP request
 
-            var localVarResponse = await this.AsynchronousClient.PostAsync<List<CustomAttributeGetModel>>("/api/adapters/projects/{projectId}/attributes/search", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.PostAsync<List<CustomAttributeGetModel>>("/adapters/projects/{projectId}/attributes/search", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersProjectsProjectIdAttributesSearchPost", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersProjectsProjectIdAttributesSearchPost", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 

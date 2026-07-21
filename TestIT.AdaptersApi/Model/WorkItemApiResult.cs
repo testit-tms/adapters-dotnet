@@ -34,20 +34,23 @@ namespace TestIT.AdaptersApi.Model
     {
 
         /// <summary>
-        /// Gets or Sets EntityTypeName
+        /// Type of entity associated with this work item
         /// </summary>
+        /// <value>Type of entity associated with this work item</value>
         [DataMember(Name = "entityTypeName", IsRequired = true, EmitDefaultValue = true)]
         public WorkItemEntityTypeApiModel EntityTypeName { get; set; }
 
         /// <summary>
-        /// Gets or Sets State
+        /// State of the work item
         /// </summary>
+        /// <value>State of the work item</value>
         [DataMember(Name = "state", IsRequired = true, EmitDefaultValue = true)]
         public WorkItemStateApiModel State { get; set; }
 
         /// <summary>
-        /// Gets or Sets Priority
+        /// Priority level of the work item
         /// </summary>
+        /// <value>Priority level of the work item</value>
         [DataMember(Name = "priority", IsRequired = true, EmitDefaultValue = true)]
         public WorkItemPriorityApiModel Priority { get; set; }
         /// <summary>
@@ -58,30 +61,30 @@ namespace TestIT.AdaptersApi.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="WorkItemApiResult" /> class.
         /// </summary>
-        /// <param name="id">id (required).</param>
-        /// <param name="globalId">globalId (required).</param>
-        /// <param name="projectId">projectId (required).</param>
-        /// <param name="sectionId">sectionId (required).</param>
-        /// <param name="name">name (required).</param>
-        /// <param name="description">description.</param>
-        /// <param name="entityTypeName">entityTypeName (required).</param>
-        /// <param name="duration">duration (required).</param>
-        /// <param name="state">state (required).</param>
-        /// <param name="priority">priority (required).</param>
+        /// <param name="id">Unique identifier of the work item (required).</param>
+        /// <param name="globalId">Global identifier of the work item (required).</param>
+        /// <param name="projectId">Unique identifier of the project (required).</param>
+        /// <param name="sectionId">Unique identifier of the section within a project (required).</param>
+        /// <param name="name">Name of the work item (required).</param>
+        /// <param name="description">Description of the work item.</param>
+        /// <param name="entityTypeName">Type of entity associated with this work item (required).</param>
+        /// <param name="duration">Duration of the work item in milliseconds (required).</param>
+        /// <param name="state">State of the work item (required).</param>
+        /// <param name="priority">Priority level of the work item (required).</param>
         /// <param name="isAutomated">isAutomated (required).</param>
-        /// <param name="attributes">attributes (required).</param>
-        /// <param name="tags">tags (required).</param>
-        /// <param name="sectionPreconditionSteps">sectionPreconditionSteps (required).</param>
-        /// <param name="sectionPostconditionSteps">sectionPostconditionSteps (required).</param>
-        /// <param name="preconditionSteps">preconditionSteps (required).</param>
-        /// <param name="steps">steps (required).</param>
-        /// <param name="postconditionSteps">postconditionSteps (required).</param>
-        /// <param name="iterations">iterations (required).</param>
-        /// <param name="autoTests">autoTests (required).</param>
-        /// <param name="attachments">attachments (required).</param>
-        /// <param name="links">links (required).</param>
-        /// <param name="parameters">parameters (required).</param>
-        /// <param name="isDeleted">isDeleted (required).</param>
+        /// <param name="attributes">Set of custom attributes associated with the work item (required).</param>
+        /// <param name="tags">Set of tags applied to the work item (required).</param>
+        /// <param name="sectionPreconditionSteps">Set of section precondition steps that need to be executed before starting the work item steps (required).</param>
+        /// <param name="sectionPostconditionSteps">Set of section postcondition steps that need to be executed after completing the work item steps (required).</param>
+        /// <param name="preconditionSteps">Set of precondition steps that need to be executed before starting the main steps (required).</param>
+        /// <param name="steps">Main steps or actions defined for the work item (required).</param>
+        /// <param name="postconditionSteps">Set of postcondition steps that are executed after completing the main steps (required).</param>
+        /// <param name="iterations">Associated iterations linked to the work item (required).</param>
+        /// <param name="autoTests">Automated tests associated with the work item (required).</param>
+        /// <param name="attachments">Files attached to the work item (required).</param>
+        /// <param name="links">Set of links related to the work item (required).</param>
+        /// <param name="parameters">Set of parameters related to the work item (required).</param>
+        /// <param name="isDeleted">Indicates whether the work item is marked as deleted (required).</param>
         public WorkItemApiResult(Guid id = default, long globalId = default, Guid projectId = default, Guid sectionId = default, string name = default, string description = default, WorkItemEntityTypeApiModel entityTypeName = default, int duration = default, WorkItemStateApiModel state = default, WorkItemPriorityApiModel priority = default, bool isAutomated = default, Dictionary<string, Object> attributes = default, List<TagModel> tags = default, List<StepModel> sectionPreconditionSteps = default, List<StepModel> sectionPostconditionSteps = default, List<StepModel> preconditionSteps = default, List<StepModel> steps = default, List<StepModel> postconditionSteps = default, List<IterationModel> iterations = default, List<AutoTestModel> autoTests = default, List<AttachmentModel> attachments = default, List<LinkModel> links = default, List<WorkItemParameterKeyApiResult> parameters = default, bool isDeleted = default)
         {
             this.Id = id;
@@ -176,44 +179,51 @@ namespace TestIT.AdaptersApi.Model
         }
 
         /// <summary>
-        /// Gets or Sets Id
+        /// Unique identifier of the work item
         /// </summary>
+        /// <value>Unique identifier of the work item</value>
         [DataMember(Name = "id", IsRequired = true, EmitDefaultValue = true)]
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Gets or Sets GlobalId
+        /// Global identifier of the work item
         /// </summary>
+        /// <value>Global identifier of the work item</value>
         [DataMember(Name = "globalId", IsRequired = true, EmitDefaultValue = true)]
         public long GlobalId { get; set; }
 
         /// <summary>
-        /// Gets or Sets ProjectId
+        /// Unique identifier of the project
         /// </summary>
+        /// <value>Unique identifier of the project</value>
         [DataMember(Name = "projectId", IsRequired = true, EmitDefaultValue = true)]
         public Guid ProjectId { get; set; }
 
         /// <summary>
-        /// Gets or Sets SectionId
+        /// Unique identifier of the section within a project
         /// </summary>
+        /// <value>Unique identifier of the section within a project</value>
         [DataMember(Name = "sectionId", IsRequired = true, EmitDefaultValue = true)]
         public Guid SectionId { get; set; }
 
         /// <summary>
-        /// Gets or Sets Name
+        /// Name of the work item
         /// </summary>
+        /// <value>Name of the work item</value>
         [DataMember(Name = "name", IsRequired = true, EmitDefaultValue = true)]
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or Sets Description
+        /// Description of the work item
         /// </summary>
+        /// <value>Description of the work item</value>
         [DataMember(Name = "description", EmitDefaultValue = true)]
         public string Description { get; set; }
 
         /// <summary>
-        /// Gets or Sets Duration
+        /// Duration of the work item in milliseconds
         /// </summary>
+        /// <value>Duration of the work item in milliseconds</value>
         [DataMember(Name = "duration", IsRequired = true, EmitDefaultValue = true)]
         public int Duration { get; set; }
 
@@ -224,80 +234,93 @@ namespace TestIT.AdaptersApi.Model
         public bool IsAutomated { get; set; }
 
         /// <summary>
-        /// Gets or Sets Attributes
+        /// Set of custom attributes associated with the work item
         /// </summary>
+        /// <value>Set of custom attributes associated with the work item</value>
         [DataMember(Name = "attributes", IsRequired = true, EmitDefaultValue = true)]
         public Dictionary<string, Object> Attributes { get; set; }
 
         /// <summary>
-        /// Gets or Sets Tags
+        /// Set of tags applied to the work item
         /// </summary>
+        /// <value>Set of tags applied to the work item</value>
         [DataMember(Name = "tags", IsRequired = true, EmitDefaultValue = true)]
         public List<TagModel> Tags { get; set; }
 
         /// <summary>
-        /// Gets or Sets SectionPreconditionSteps
+        /// Set of section precondition steps that need to be executed before starting the work item steps
         /// </summary>
+        /// <value>Set of section precondition steps that need to be executed before starting the work item steps</value>
         [DataMember(Name = "sectionPreconditionSteps", IsRequired = true, EmitDefaultValue = true)]
         public List<StepModel> SectionPreconditionSteps { get; set; }
 
         /// <summary>
-        /// Gets or Sets SectionPostconditionSteps
+        /// Set of section postcondition steps that need to be executed after completing the work item steps
         /// </summary>
+        /// <value>Set of section postcondition steps that need to be executed after completing the work item steps</value>
         [DataMember(Name = "sectionPostconditionSteps", IsRequired = true, EmitDefaultValue = true)]
         public List<StepModel> SectionPostconditionSteps { get; set; }
 
         /// <summary>
-        /// Gets or Sets PreconditionSteps
+        /// Set of precondition steps that need to be executed before starting the main steps
         /// </summary>
+        /// <value>Set of precondition steps that need to be executed before starting the main steps</value>
         [DataMember(Name = "preconditionSteps", IsRequired = true, EmitDefaultValue = true)]
         public List<StepModel> PreconditionSteps { get; set; }
 
         /// <summary>
-        /// Gets or Sets Steps
+        /// Main steps or actions defined for the work item
         /// </summary>
+        /// <value>Main steps or actions defined for the work item</value>
         [DataMember(Name = "steps", IsRequired = true, EmitDefaultValue = true)]
         public List<StepModel> Steps { get; set; }
 
         /// <summary>
-        /// Gets or Sets PostconditionSteps
+        /// Set of postcondition steps that are executed after completing the main steps
         /// </summary>
+        /// <value>Set of postcondition steps that are executed after completing the main steps</value>
         [DataMember(Name = "postconditionSteps", IsRequired = true, EmitDefaultValue = true)]
         public List<StepModel> PostconditionSteps { get; set; }
 
         /// <summary>
-        /// Gets or Sets Iterations
+        /// Associated iterations linked to the work item
         /// </summary>
+        /// <value>Associated iterations linked to the work item</value>
         [DataMember(Name = "iterations", IsRequired = true, EmitDefaultValue = true)]
         public List<IterationModel> Iterations { get; set; }
 
         /// <summary>
-        /// Gets or Sets AutoTests
+        /// Automated tests associated with the work item
         /// </summary>
+        /// <value>Automated tests associated with the work item</value>
         [DataMember(Name = "autoTests", IsRequired = true, EmitDefaultValue = true)]
         public List<AutoTestModel> AutoTests { get; set; }
 
         /// <summary>
-        /// Gets or Sets Attachments
+        /// Files attached to the work item
         /// </summary>
+        /// <value>Files attached to the work item</value>
         [DataMember(Name = "attachments", IsRequired = true, EmitDefaultValue = true)]
         public List<AttachmentModel> Attachments { get; set; }
 
         /// <summary>
-        /// Gets or Sets Links
+        /// Set of links related to the work item
         /// </summary>
+        /// <value>Set of links related to the work item</value>
         [DataMember(Name = "links", IsRequired = true, EmitDefaultValue = true)]
         public List<LinkModel> Links { get; set; }
 
         /// <summary>
-        /// Gets or Sets Parameters
+        /// Set of parameters related to the work item
         /// </summary>
+        /// <value>Set of parameters related to the work item</value>
         [DataMember(Name = "parameters", IsRequired = true, EmitDefaultValue = true)]
         public List<WorkItemParameterKeyApiResult> Parameters { get; set; }
 
         /// <summary>
-        /// Gets or Sets IsDeleted
+        /// Indicates whether the work item is marked as deleted
         /// </summary>
+        /// <value>Indicates whether the work item is marked as deleted</value>
         [DataMember(Name = "isDeleted", IsRequired = true, EmitDefaultValue = true)]
         public bool IsDeleted { get; set; }
 

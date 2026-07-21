@@ -38,7 +38,7 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
 
         logger.LogDebug("Creating test run {@TestRun}", testRunV2PostShortModel);
 
-        var testRun = await testRunsApi.ApiAdaptersTestRunsPostAsync(testRunV2PostShortModel).ConfigureAwait(false) 
+        var testRun = await testRunsApi.AdaptersTestRunsPostAsync(testRunV2PostShortModel).ConfigureAwait(false) 
                       ?? throw new ArgumentException($"Could not find project with id: {settings.ProjectId}");
         logger.LogDebug("Created test run {@TestRun}", testRun);
 
@@ -49,7 +49,7 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
     {
         logger.LogDebug("Getting test run {@TestRunId}", settings.TestRunId);
         
-        return await testRunsApi.ApiAdaptersTestRunsIdGetAsync(new Guid(settings.TestRunId ?? string.Empty)).ConfigureAwait(false);
+        return await testRunsApi.AdaptersTestRunsIdGetAsync(new Guid(settings.TestRunId ?? string.Empty)).ConfigureAwait(false);
     }
 
     public async Task UpdateTestRunAsync(TestRunApiResult testRun)
@@ -58,7 +58,7 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
 
         var model = Converter.BuildUpdateEmptyTestRunApiModel(testRun);
 
-        await testRunsApi.ApiAdaptersTestRunsPutAsync(model).ConfigureAwait(false);
+        await testRunsApi.AdaptersTestRunsPutAsync(model).ConfigureAwait(false);
     }
 
     public async Task<List<string>> GetExternalIdsForRunAsync()
@@ -100,7 +100,7 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
 
         while (true)
         {
-            var page = await testResultsApi.ApiAdaptersTestResultsSearchPostAsync(skip, TESTS_LIMIT, null!, null!, null!, filter)
+            var page = await testResultsApi.AdaptersTestResultsSearchPostAsync(skip, TESTS_LIMIT, null!, null!, null!, filter)
                 .ConfigureAwait(false);
 
             if (page.Count == 0)
@@ -115,7 +115,7 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
         var fullResults = new List<TestResultResponse>(shortResults.Count);
         foreach (var shortResult in shortResults)
         {
-            var full = await testResultsApi.ApiAdaptersTestResultsIdGetAsync(shortResult.Id).ConfigureAwait(false);
+            var full = await testResultsApi.AdaptersTestResultsIdGetAsync(shortResult.Id).ConfigureAwait(false);
             fullResults.Add(full);
         }
 
@@ -125,7 +125,7 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
 
     private async Task<List<TestResultShortResponse>> GetTestResults(int skip, TestResultsFilterApiModel model)
     {
-        return await testResultsApi.ApiAdaptersTestResultsSearchPostAsync(skip, TESTS_LIMIT, null!, null!, null!, model);
+        return await testResultsApi.AdaptersTestResultsSearchPostAsync(skip, TESTS_LIMIT, null!, null!, null!, model);
     }
 
     public async Task SubmitResultToTestRunAsync(string? id, AutoTestResult result, bool forceInProgressStatus = false)
@@ -138,7 +138,7 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
 
         if (forceInProgressStatus)
         {
-            await testRunsApi.ApiAdaptersTestRunsIdTestResultsPostAsync(testRunId, [model]).ConfigureAwait(false);
+            await testRunsApi.AdaptersTestRunsIdTestResultsPostAsync(testRunId, [model]).ConfigureAwait(false);
             logger.LogDebug("Submitted InProgress test result to test run {Id}", id);
             return;
         }
@@ -165,12 +165,12 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
 
             var update = CoreConverter.ConvertResultToUpdateModel(model);
             Utils.HtmlEscapeUtils.EscapeHtmlInObject(update);
-            await testResultsApi.ApiAdaptersTestResultsIdPutAsync(existing.Id, update).ConfigureAwait(false);
+            await testResultsApi.AdaptersTestResultsIdPutAsync(existing.Id, update).ConfigureAwait(false);
             logger.LogDebug("Updated test result {TestResultId} for {ExternalId}", existing.Id, externalId);
             return;
         }
 
-        await testRunsApi.ApiAdaptersTestRunsIdTestResultsPostAsync(testRunId, [model]).ConfigureAwait(false);
+        await testRunsApi.AdaptersTestRunsIdTestResultsPostAsync(testRunId, [model]).ConfigureAwait(false);
         logger.LogDebug("Submitted test result to test run {TestRunId} for {ExternalId}", testRunId, externalId);
     }
 
@@ -205,14 +205,14 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
 
             if (IsInProgress(matchingResult) && model.StatusType != TestStatusType.InProgress)
             {
-                await testRunsApi.ApiAdaptersTestRunsIdTestResultsPostAsync(testRunId, [model]).ConfigureAwait(false);
+                await testRunsApi.AdaptersTestRunsIdTestResultsPostAsync(testRunId, [model]).ConfigureAwait(false);
                 logger.LogDebug("Submitted final result for test point with parameters: {@Parameters}", matchingResult.Parameters);
                 continue;
             }
 
             var update = CoreConverter.ConvertResultToUpdateModel(model);
             Utils.HtmlEscapeUtils.EscapeHtmlInObject(update);
-            await testResultsApi.ApiAdaptersTestResultsIdPutAsync(matchingResult.Id, update).ConfigureAwait(false);
+            await testResultsApi.AdaptersTestResultsIdPutAsync(matchingResult.Id, update).ConfigureAwait(false);
             logger.LogDebug("Updated test result {TestResultId} with parameters: {@Parameters}", matchingResult.Id, matchingResult.Parameters);
         }
     }
@@ -230,7 +230,7 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
             ConfigurationIds = settings.ConfigurationId == null ? null : [new Guid(settings.ConfigurationId)],
         };
 
-        var results = await testResultsApi.ApiAdaptersTestResultsSearchPostAsync(0, TESTS_LIMIT, null!, null!, null!, filter)
+        var results = await testResultsApi.AdaptersTestResultsSearchPostAsync(0, TESTS_LIMIT, null!, null!, null!, filter)
             .ConfigureAwait(false);
 
         return results.FirstOrDefault(r => r.AutotestExternalId == externalId);
@@ -249,7 +249,7 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
     {
         logger.LogDebug("Uploading attachment {Name}", fileName);
 
-        var response = await attachmentsApi.ApiAdaptersAttachmentsPostAsync(
+        var response = await attachmentsApi.AdaptersAttachmentsPostAsync(
             new FileParameter(
                 filename: Path.GetFileName(fileName),
                 content: content,
@@ -275,7 +275,7 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
             includes: new AutoTestSearchIncludeApiModel()
         );
 
-        var autotests = await autoTestsApi.ApiAdaptersAutoTestsSearchPostAsync(autoTestSearchApiModel: model).ConfigureAwait(false);
+        var autotests = await autoTestsApi.AdaptersAutoTestsSearchPostAsync(autoTestSearchApiModel: model).ConfigureAwait(false);
         var autotest = autotests.FirstOrDefault();
 
         logger.LogDebug(
@@ -292,7 +292,7 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
 
         var model = Converter.ConvertAutoTestDtoToPostModel(dto, settings.ProjectId);
         model.ShouldCreateWorkItem = settings.AutomaticCreationTestCases;
-        var response = await autoTestsApi.ApiAdaptersAutoTestsPostAsync(model).ConfigureAwait(false);
+        var response = await autoTestsApi.AdaptersAutoTestsPostAsync(model).ConfigureAwait(false);
 
         logger.LogDebug("Create autotest {@Autotest} is successfully", response);
 
@@ -304,7 +304,7 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
         logger.LogDebug("Updating autotest {@Autotest}", dto);
 
         var model = Converter.ConvertAutoTestDtoToPutModel(dto, settings.ProjectId);
-        await autoTestsApi.ApiAdaptersAutoTestsPutAsync(model).ConfigureAwait(false);
+        await autoTestsApi.AdaptersAutoTestsPutAsync(model).ConfigureAwait(false);
 
         logger.LogDebug("Update autotest {@Autotest} is successfully", model);
     }
@@ -350,7 +350,7 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
         {
             try
             {
-                await autoTestsApi.ApiAdaptersAutoTestsIdWorkItemsPostAsync(
+                await autoTestsApi.AdaptersAutoTestsIdWorkItemsPostAsync(
                         autotestId,
                         new WorkItemIdApiModel(workItemId))
                     .ConfigureAwait(false);
@@ -410,7 +410,7 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
         {
             try
             {
-                await autoTestsApi.ApiAdaptersAutoTestsIdWorkItemsDeleteAsync(autotestId, workItemId);
+                await autoTestsApi.AdaptersAutoTestsIdWorkItemsDeleteAsync(autotestId, workItemId);
                 logger.LogDebug(
                     "Unlink autotest {AutotestId} from workitem {WorkitemId} is successfully",
                     autotestId,
@@ -433,11 +433,11 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
 
     public async Task<List<AutoTestWorkItemIdentifierApiResult>> GetWorkItemsLinkedToAutoTestAsync(string autotestId)
     {
-        return await autoTestsApi.ApiAdaptersAutoTestsIdWorkItemsGetAsync(autotestId);
+        return await autoTestsApi.AdaptersAutoTestsIdWorkItemsGetAsync(autotestId);
     }
 
     public async Task<DetailedProjectApiResult> GetProjectByIdAsync()
     {
-        return await projectsApi.ApiAdaptersProjectsIdGetAsync(new Guid(settings.ProjectId!)).ConfigureAwait(false);
+        return await projectsApi.AdaptersProjectsIdGetAsync(new Guid(settings.ProjectId!)).ConfigureAwait(false);
     }
 }

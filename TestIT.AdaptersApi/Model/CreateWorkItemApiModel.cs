@@ -34,20 +34,23 @@ namespace TestIT.AdaptersApi.Model
     {
 
         /// <summary>
-        /// Gets or Sets EntityTypeName
+        /// Type of entity associated with this work item
         /// </summary>
+        /// <value>Type of entity associated with this work item</value>
         [DataMember(Name = "entityTypeName", IsRequired = true, EmitDefaultValue = true)]
         public WorkItemEntityTypeApiModel EntityTypeName { get; set; }
 
         /// <summary>
-        /// Gets or Sets State
+        /// Current state of the work item
         /// </summary>
+        /// <value>Current state of the work item</value>
         [DataMember(Name = "state", IsRequired = true, EmitDefaultValue = true)]
         public WorkItemStateApiModel State { get; set; }
 
         /// <summary>
-        /// Gets or Sets Priority
+        /// Priority level assigned to the work item
         /// </summary>
+        /// <value>Priority level assigned to the work item</value>
         [DataMember(Name = "priority", IsRequired = true, EmitDefaultValue = true)]
         public WorkItemPriorityApiModel Priority { get; set; }
         /// <summary>
@@ -58,24 +61,24 @@ namespace TestIT.AdaptersApi.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="CreateWorkItemApiModel" /> class.
         /// </summary>
-        /// <param name="projectId">projectId (required).</param>
-        /// <param name="sectionId">sectionId.</param>
-        /// <param name="name">name (required).</param>
-        /// <param name="description">description.</param>
-        /// <param name="entityTypeName">entityTypeName (required).</param>
-        /// <param name="duration">duration (required).</param>
-        /// <param name="state">state (required).</param>
-        /// <param name="priority">priority (required).</param>
-        /// <param name="attributes">attributes.</param>
-        /// <param name="tags">tags.</param>
-        /// <param name="preconditionSteps">preconditionSteps.</param>
-        /// <param name="steps">steps.</param>
-        /// <param name="postconditionSteps">postconditionSteps.</param>
-        /// <param name="iterations">iterations.</param>
-        /// <param name="autoTests">autoTests.</param>
-        /// <param name="attachments">attachments.</param>
-        /// <param name="links">links.</param>
-        /// <param name="parameters">parameters.</param>
+        /// <param name="projectId">Unique identifier of the project (required).</param>
+        /// <param name="sectionId">Unique identifier of the section within a project.</param>
+        /// <param name="name">Name of the work item (required).</param>
+        /// <param name="description">Description of the work item.</param>
+        /// <param name="entityTypeName">Type of entity associated with this work item (required).</param>
+        /// <param name="duration">Duration of the work item in milliseconds (required).</param>
+        /// <param name="state">Current state of the work item (required).</param>
+        /// <param name="priority">Priority level assigned to the work item (required).</param>
+        /// <param name="attributes">Set of custom attributes associated with the work item.</param>
+        /// <param name="tags">Set of tags applied to the work item.</param>
+        /// <param name="preconditionSteps">Set of precondition steps that must be executed before the main steps.</param>
+        /// <param name="steps">Set of main steps or actions defined for the work item.</param>
+        /// <param name="postconditionSteps">Set of postcondition steps that are executed after completing the main steps.</param>
+        /// <param name="iterations">Set of iterations associated with the work item.</param>
+        /// <param name="autoTests">Set of automated tests linked to the work item.</param>
+        /// <param name="attachments">Set of files attached to the work item.</param>
+        /// <param name="links">Set of links related to the work item.</param>
+        /// <param name="parameters">Set of parameter keys associated with the work item.</param>
         public CreateWorkItemApiModel(Guid projectId = default, Guid? sectionId = default, string name = default, string description = default, WorkItemEntityTypeApiModel entityTypeName = default, long duration = default, WorkItemStateApiModel state = default, WorkItemPriorityApiModel priority = default, Dictionary<string, Object> attributes = default, List<TagModel> tags = default, List<CreateStepApiModel> preconditionSteps = default, List<CreateStepApiModel> steps = default, List<CreateStepApiModel> postconditionSteps = default, List<AssignIterationApiModel> iterations = default, List<AutoTestIdModel> autoTests = default, List<AssignAttachmentApiModel> attachments = default, List<CreateLinkApiModel> links = default, List<WorkItemParameterKeyApiModel> parameters = default)
         {
             this.ProjectId = projectId;
@@ -104,92 +107,107 @@ namespace TestIT.AdaptersApi.Model
         }
 
         /// <summary>
-        /// Gets or Sets ProjectId
+        /// Unique identifier of the project
         /// </summary>
+        /// <value>Unique identifier of the project</value>
         [DataMember(Name = "projectId", IsRequired = true, EmitDefaultValue = true)]
         public Guid ProjectId { get; set; }
 
         /// <summary>
-        /// Gets or Sets SectionId
+        /// Unique identifier of the section within a project
         /// </summary>
+        /// <value>Unique identifier of the section within a project</value>
         [DataMember(Name = "sectionId", EmitDefaultValue = true)]
         public Guid? SectionId { get; set; }
 
         /// <summary>
-        /// Gets or Sets Name
+        /// Name of the work item
         /// </summary>
+        /// <value>Name of the work item</value>
         [DataMember(Name = "name", IsRequired = true, EmitDefaultValue = true)]
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or Sets Description
+        /// Description of the work item
         /// </summary>
+        /// <value>Description of the work item</value>
         [DataMember(Name = "description", EmitDefaultValue = true)]
         public string Description { get; set; }
 
         /// <summary>
-        /// Gets or Sets Duration
+        /// Duration of the work item in milliseconds
         /// </summary>
+        /// <value>Duration of the work item in milliseconds</value>
         [DataMember(Name = "duration", IsRequired = true, EmitDefaultValue = true)]
         public long Duration { get; set; }
 
         /// <summary>
-        /// Gets or Sets Attributes
+        /// Set of custom attributes associated with the work item
         /// </summary>
+        /// <value>Set of custom attributes associated with the work item</value>
         [DataMember(Name = "attributes", EmitDefaultValue = true)]
         public Dictionary<string, Object> Attributes { get; set; }
 
         /// <summary>
-        /// Gets or Sets Tags
+        /// Set of tags applied to the work item
         /// </summary>
+        /// <value>Set of tags applied to the work item</value>
         [DataMember(Name = "tags", EmitDefaultValue = true)]
         public List<TagModel> Tags { get; set; }
 
         /// <summary>
-        /// Gets or Sets PreconditionSteps
+        /// Set of precondition steps that must be executed before the main steps
         /// </summary>
+        /// <value>Set of precondition steps that must be executed before the main steps</value>
         [DataMember(Name = "preconditionSteps", EmitDefaultValue = true)]
         public List<CreateStepApiModel> PreconditionSteps { get; set; }
 
         /// <summary>
-        /// Gets or Sets Steps
+        /// Set of main steps or actions defined for the work item
         /// </summary>
+        /// <value>Set of main steps or actions defined for the work item</value>
         [DataMember(Name = "steps", EmitDefaultValue = true)]
         public List<CreateStepApiModel> Steps { get; set; }
 
         /// <summary>
-        /// Gets or Sets PostconditionSteps
+        /// Set of postcondition steps that are executed after completing the main steps
         /// </summary>
+        /// <value>Set of postcondition steps that are executed after completing the main steps</value>
         [DataMember(Name = "postconditionSteps", EmitDefaultValue = true)]
         public List<CreateStepApiModel> PostconditionSteps { get; set; }
 
         /// <summary>
-        /// Gets or Sets Iterations
+        /// Set of iterations associated with the work item
         /// </summary>
+        /// <value>Set of iterations associated with the work item</value>
         [DataMember(Name = "iterations", EmitDefaultValue = true)]
         public List<AssignIterationApiModel> Iterations { get; set; }
 
         /// <summary>
-        /// Gets or Sets AutoTests
+        /// Set of automated tests linked to the work item
         /// </summary>
+        /// <value>Set of automated tests linked to the work item</value>
         [DataMember(Name = "autoTests", EmitDefaultValue = true)]
         public List<AutoTestIdModel> AutoTests { get; set; }
 
         /// <summary>
-        /// Gets or Sets Attachments
+        /// Set of files attached to the work item
         /// </summary>
+        /// <value>Set of files attached to the work item</value>
         [DataMember(Name = "attachments", EmitDefaultValue = true)]
         public List<AssignAttachmentApiModel> Attachments { get; set; }
 
         /// <summary>
-        /// Gets or Sets Links
+        /// Set of links related to the work item
         /// </summary>
+        /// <value>Set of links related to the work item</value>
         [DataMember(Name = "links", EmitDefaultValue = true)]
         public List<CreateLinkApiModel> Links { get; set; }
 
         /// <summary>
-        /// Gets or Sets Parameters
+        /// Set of parameter keys associated with the work item
         /// </summary>
+        /// <value>Set of parameter keys associated with the work item</value>
         [DataMember(Name = "parameters", EmitDefaultValue = true)]
         public List<WorkItemParameterKeyApiModel> Parameters { get; set; }
 

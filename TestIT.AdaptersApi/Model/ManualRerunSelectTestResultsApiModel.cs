@@ -35,9 +35,9 @@ namespace TestIT.AdaptersApi.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="ManualRerunSelectTestResultsApiModel" /> class.
         /// </summary>
-        /// <param name="filter">filter.</param>
-        /// <param name="extractionModel">extractionModel.</param>
-        /// <param name="webhookIds">webhookIds.</param>
+        /// <param name="filter">Test results filter..</param>
+        /// <param name="extractionModel">Test results extraction model..</param>
+        /// <param name="webhookIds">Webhook ids to rerun..</param>
         public ManualRerunSelectTestResultsApiModel(TestResultsFilterApiModel filter = default, ManualRerunTestResultApiModel extractionModel = default, List<Guid> webhookIds = default)
         {
             this.Filter = filter;
@@ -46,20 +46,23 @@ namespace TestIT.AdaptersApi.Model
         }
 
         /// <summary>
-        /// Gets or Sets Filter
+        /// Test results filter.
         /// </summary>
+        /// <value>Test results filter.</value>
         [DataMember(Name = "filter", EmitDefaultValue = true)]
         public TestResultsFilterApiModel Filter { get; set; }
 
         /// <summary>
-        /// Gets or Sets ExtractionModel
+        /// Test results extraction model.
         /// </summary>
+        /// <value>Test results extraction model.</value>
         [DataMember(Name = "extractionModel", EmitDefaultValue = true)]
         public ManualRerunTestResultApiModel ExtractionModel { get; set; }
 
         /// <summary>
-        /// Gets or Sets WebhookIds
+        /// Webhook ids to rerun.
         /// </summary>
+        /// <value>Webhook ids to rerun.</value>
         [DataMember(Name = "webhookIds", EmitDefaultValue = true)]
         public List<Guid> WebhookIds { get; set; }
 

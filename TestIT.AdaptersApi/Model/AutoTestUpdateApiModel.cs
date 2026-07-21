@@ -40,22 +40,22 @@ namespace TestIT.AdaptersApi.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="AutoTestUpdateApiModel" /> class.
         /// </summary>
-        /// <param name="id">id.</param>
-        /// <param name="projectId">projectId (required).</param>
-        /// <param name="externalId">externalId (required).</param>
-        /// <param name="externalKey">externalKey.</param>
-        /// <param name="name">name (required).</param>
-        /// <param name="varNamespace">varNamespace.</param>
-        /// <param name="classname">classname.</param>
-        /// <param name="title">title.</param>
-        /// <param name="description">description.</param>
-        /// <param name="isFlaky">isFlaky.</param>
-        /// <param name="steps">steps.</param>
-        /// <param name="setup">setup.</param>
-        /// <param name="teardown">teardown.</param>
-        /// <param name="labels">labels.</param>
-        /// <param name="links">links.</param>
-        /// <param name="tags">tags.</param>
+        /// <param name="id">Autotest unique internal identifier.</param>
+        /// <param name="projectId">Unique ID of the autotest project (required).</param>
+        /// <param name="externalId">External ID of the autotest (required).</param>
+        /// <param name="externalKey">External key of the autotest.</param>
+        /// <param name="name">Name of the autotest (required).</param>
+        /// <param name="varNamespace">Name of the autotest namespace.</param>
+        /// <param name="classname">Name of the autotest class.</param>
+        /// <param name="title">Name of the autotest in autotest&#39;s card.</param>
+        /// <param name="description">Description of the autotest in autotest&#39;s card.</param>
+        /// <param name="isFlaky">Indicates if the autotest is marked as flaky.</param>
+        /// <param name="steps">Collection of the autotest steps.</param>
+        /// <param name="setup">Collection of the autotest setup steps.</param>
+        /// <param name="teardown">Collection of the autotest teardown steps.</param>
+        /// <param name="labels">Collection of the autotest labels.</param>
+        /// <param name="links">Collection of the autotest links.</param>
+        /// <param name="tags">Collection of the autotest tags.</param>
         public AutoTestUpdateApiModel(Guid? id = default, Guid projectId = default, string externalId = default, string externalKey = default, string name = default, string varNamespace = default, string classname = default, string title = default, string description = default, bool? isFlaky = default, List<AutoTestStepApiModel> steps = default, List<AutoTestStepApiModel> setup = default, List<AutoTestStepApiModel> teardown = default, List<LabelApiModel> labels = default, List<LinkUpdateApiModel> links = default, List<string> tags = default)
         {
             this.ProjectId = projectId;
@@ -87,98 +87,114 @@ namespace TestIT.AdaptersApi.Model
         }
 
         /// <summary>
-        /// Gets or Sets Id
+        /// Autotest unique internal identifier
         /// </summary>
+        /// <value>Autotest unique internal identifier</value>
         [DataMember(Name = "id", EmitDefaultValue = true)]
         public Guid? Id { get; set; }
 
         /// <summary>
-        /// Gets or Sets ProjectId
+        /// Unique ID of the autotest project
         /// </summary>
+        /// <value>Unique ID of the autotest project</value>
         [DataMember(Name = "projectId", IsRequired = true, EmitDefaultValue = true)]
         public Guid ProjectId { get; set; }
 
         /// <summary>
-        /// Gets or Sets ExternalId
+        /// External ID of the autotest
         /// </summary>
+        /// <value>External ID of the autotest</value>
         [DataMember(Name = "externalId", IsRequired = true, EmitDefaultValue = true)]
         public string ExternalId { get; set; }
 
         /// <summary>
-        /// Gets or Sets ExternalKey
+        /// External key of the autotest
         /// </summary>
+        /// <value>External key of the autotest</value>
         [DataMember(Name = "externalKey", EmitDefaultValue = true)]
         public string ExternalKey { get; set; }
 
         /// <summary>
-        /// Gets or Sets Name
+        /// Name of the autotest
         /// </summary>
+        /// <value>Name of the autotest</value>
         [DataMember(Name = "name", IsRequired = true, EmitDefaultValue = true)]
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or Sets Namespace
+        /// Name of the autotest namespace
         /// </summary>
+        /// <value>Name of the autotest namespace</value>
         [DataMember(Name = "namespace", EmitDefaultValue = true)]
         public string Namespace { get; set; }
 
         /// <summary>
-        /// Gets or Sets Classname
+        /// Name of the autotest class
         /// </summary>
+        /// <value>Name of the autotest class</value>
         [DataMember(Name = "classname", EmitDefaultValue = true)]
         public string Classname { get; set; }
 
         /// <summary>
-        /// Gets or Sets Title
+        /// Name of the autotest in autotest&#39;s card
         /// </summary>
+        /// <value>Name of the autotest in autotest&#39;s card</value>
         [DataMember(Name = "title", EmitDefaultValue = true)]
         public string Title { get; set; }
 
         /// <summary>
-        /// Gets or Sets Description
+        /// Description of the autotest in autotest&#39;s card
         /// </summary>
+        /// <value>Description of the autotest in autotest&#39;s card</value>
         [DataMember(Name = "description", EmitDefaultValue = true)]
         public string Description { get; set; }
 
         /// <summary>
-        /// Gets or Sets IsFlaky
+        /// Indicates if the autotest is marked as flaky
         /// </summary>
+        /// <value>Indicates if the autotest is marked as flaky</value>
         [DataMember(Name = "isFlaky", EmitDefaultValue = true)]
         public bool? IsFlaky { get; set; }
 
         /// <summary>
-        /// Gets or Sets Steps
+        /// Collection of the autotest steps
         /// </summary>
+        /// <value>Collection of the autotest steps</value>
         [DataMember(Name = "steps", EmitDefaultValue = true)]
         public List<AutoTestStepApiModel> Steps { get; set; }
 
         /// <summary>
-        /// Gets or Sets Setup
+        /// Collection of the autotest setup steps
         /// </summary>
+        /// <value>Collection of the autotest setup steps</value>
         [DataMember(Name = "setup", EmitDefaultValue = true)]
         public List<AutoTestStepApiModel> Setup { get; set; }
 
         /// <summary>
-        /// Gets or Sets Teardown
+        /// Collection of the autotest teardown steps
         /// </summary>
+        /// <value>Collection of the autotest teardown steps</value>
         [DataMember(Name = "teardown", EmitDefaultValue = true)]
         public List<AutoTestStepApiModel> Teardown { get; set; }
 
         /// <summary>
-        /// Gets or Sets Labels
+        /// Collection of the autotest labels
         /// </summary>
+        /// <value>Collection of the autotest labels</value>
         [DataMember(Name = "labels", EmitDefaultValue = true)]
         public List<LabelApiModel> Labels { get; set; }
 
         /// <summary>
-        /// Gets or Sets Links
+        /// Collection of the autotest links
         /// </summary>
+        /// <value>Collection of the autotest links</value>
         [DataMember(Name = "links", EmitDefaultValue = true)]
         public List<LinkUpdateApiModel> Links { get; set; }
 
         /// <summary>
-        /// Gets or Sets Tags
+        /// Collection of the autotest tags
         /// </summary>
+        /// <value>Collection of the autotest tags</value>
         [DataMember(Name = "tags", EmitDefaultValue = true)]
         public List<string> Tags { get; set; }
 

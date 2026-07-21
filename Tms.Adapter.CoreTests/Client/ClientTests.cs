@@ -169,6 +169,8 @@ public class ClientTests
         var client = new TmsClient(_logger.Object, _settings);
 
         // Act & Assert
-        await client.CompleteTestRun().ConfigureAwait(false);
+        await Assert
+            .ThrowsExceptionAsync<ApiException>(async () =>
+                await client.CompleteTestRun().ConfigureAwait(false)).ConfigureAwait(false);
     }
 }

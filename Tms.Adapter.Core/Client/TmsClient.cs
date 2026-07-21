@@ -58,7 +58,7 @@ public sealed class TmsClient : ITmsClient, IDisposable
 
         HtmlEscapeUtils.EscapeHtmlInObject(model);
 
-        await _autoTests.ApiAdaptersAutoTestsPostAsync(model).ConfigureAwait(false);
+        await _autoTests.AdaptersAutoTestsPostAsync(model).ConfigureAwait(false);
 
         if (_logger.IsEnabled(LogLevel.Debug))
         {
@@ -79,7 +79,7 @@ public sealed class TmsClient : ITmsClient, IDisposable
 
         HtmlEscapeUtils.EscapeHtmlInObject(model);
 
-        await _autoTests.ApiAdaptersAutoTestsPutAsync(model).ConfigureAwait(false);
+        await _autoTests.AdaptersAutoTestsPutAsync(model).ConfigureAwait(false);
 
         if (_logger.IsEnabled(LogLevel.Debug))
         {
@@ -130,7 +130,7 @@ public sealed class TmsClient : ITmsClient, IDisposable
             }
         };
 
-        await _autoTests.ApiAdaptersAutoTestsIdPatchAsync(autotest.Id, operations).ConfigureAwait(false);
+        await _autoTests.AdaptersAutoTestsIdPatchAsync(autotest.Id, operations).ConfigureAwait(false);
 
         if (_logger.IsEnabled(LogLevel.Debug))
         {
@@ -162,7 +162,7 @@ public sealed class TmsClient : ITmsClient, IDisposable
                     var workItemModel = new WorkItemIdApiModel(workItemId);
                     HtmlEscapeUtils.EscapeHtmlInObject(workItemModel);
 
-                    await _autoTests.ApiAdaptersAutoTestsIdWorkItemsPostAsync(autotestId, workItemModel).ConfigureAwait(false);
+                    await _autoTests.AdaptersAutoTestsIdWorkItemsPostAsync(autotestId, workItemModel).ConfigureAwait(false);
                     if (_logger.IsEnabled(LogLevel.Debug))
                     {
                         _logger.LogDebug(
@@ -214,7 +214,7 @@ public sealed class TmsClient : ITmsClient, IDisposable
         {
             try
             {
-                await _autoTests.ApiAdaptersAutoTestsIdWorkItemsDeleteAsync(autotestId, workItemId).ConfigureAwait(false);
+                await _autoTests.AdaptersAutoTestsIdWorkItemsDeleteAsync(autotestId, workItemId).ConfigureAwait(false);
                 _logger.LogDebug(
                     "Unlink autotest {AutotestId} from workitem {WorkitemId} is successfully",
                     autotestId,
@@ -237,7 +237,7 @@ public sealed class TmsClient : ITmsClient, IDisposable
 
     public async Task<List<AutoTestWorkItemIdentifierApiResult>> GetWorkItemsLinkedToAutoTest(string autotestId)
     {
-        return await _autoTests.ApiAdaptersAutoTestsIdWorkItemsGetAsync(autotestId).ConfigureAwait(false);
+        return await _autoTests.AdaptersAutoTestsIdWorkItemsGetAsync(autotestId).ConfigureAwait(false);
     }
 
     public async Task SubmitTestCaseResult(TestContainer result, ClassContainer container)
@@ -251,7 +251,7 @@ public sealed class TmsClient : ITmsClient, IDisposable
 
         if (model.StatusType == TestStatusType.InProgress)
         {
-            await _testRuns.ApiAdaptersTestRunsIdTestResultsPostAsync(testRunId, [model]).ConfigureAwait(false);
+            await _testRuns.AdaptersTestRunsIdTestResultsPostAsync(testRunId, [model]).ConfigureAwait(false);
             _logger.LogDebug("Submitted InProgress test result to test run {Id} for {ExternalId}", _settings.TestRunId, result.ExternalId);
             return;
         }
@@ -262,12 +262,12 @@ public sealed class TmsClient : ITmsClient, IDisposable
         {
             var update = Converter.ConvertResultToUpdateModel(model);
             HtmlEscapeUtils.EscapeHtmlInObject(update);
-            await _testResults.ApiAdaptersTestResultsIdPutAsync(existing.Id, update).ConfigureAwait(false);
+            await _testResults.AdaptersTestResultsIdPutAsync(existing.Id, update).ConfigureAwait(false);
             _logger.LogDebug("Updated existing test result {TestResultId} for {ExternalId}", existing.Id, result.ExternalId);
             return;
         }
 
-        await _testRuns.ApiAdaptersTestRunsIdTestResultsPostAsync(testRunId, [model]).ConfigureAwait(false);
+        await _testRuns.AdaptersTestRunsIdTestResultsPostAsync(testRunId, [model]).ConfigureAwait(false);
         _logger.LogDebug("Submitted test result to test run {Id} for {ExternalId}", _settings.TestRunId, result.ExternalId);
     }
 
@@ -279,7 +279,7 @@ public sealed class TmsClient : ITmsClient, IDisposable
             ConfigurationIds = [new Guid(_settings.ConfigurationId)],
         };
 
-        var results = await _testResults.ApiAdaptersTestResultsSearchPostAsync(0, 100, null!, null!, null!, filter)
+        var results = await _testResults.AdaptersTestResultsSearchPostAsync(0, 100, null!, null!, null!, filter)
             .ConfigureAwait(false);
 
         return results.FirstOrDefault(r => r.AutotestExternalId == externalId);
@@ -295,7 +295,7 @@ public sealed class TmsClient : ITmsClient, IDisposable
     {
         _logger.LogDebug("Uploading attachment {Name}", fileName);
 
-        var response = await _attachments.ApiAdaptersAttachmentsPostAsync(
+        var response = await _attachments.AdaptersAttachmentsPostAsync(
             new FileParameter(
                 filename: Path.GetFileName(fileName),
                 content: content,
@@ -326,7 +326,7 @@ public sealed class TmsClient : ITmsClient, IDisposable
         
         HtmlEscapeUtils.EscapeHtmlInObject(createEmptyTestRunApiModel);
         
-        var testRun = await _testRuns.ApiAdaptersTestRunsPostAsync(createEmptyTestRunApiModel).ConfigureAwait(false);
+        var testRun = await _testRuns.AdaptersTestRunsPostAsync(createEmptyTestRunApiModel).ConfigureAwait(false);
 
         _settings.TestRunId = testRun.Id.ToString();
 
@@ -342,7 +342,7 @@ public sealed class TmsClient : ITmsClient, IDisposable
             return;
         }
 
-        var testRun = await _testRuns.ApiAdaptersTestRunsIdGetAsync(new Guid(_settings.TestRunId)).ConfigureAwait(false);
+        var testRun = await _testRuns.AdaptersTestRunsIdGetAsync(new Guid(_settings.TestRunId)).ConfigureAwait(false);
 
         if (testRun.Name.Equals(_settings.TestRunName, StringComparison.Ordinal))
         {
@@ -363,7 +363,7 @@ public sealed class TmsClient : ITmsClient, IDisposable
 
         HtmlEscapeUtils.EscapeHtmlInObject(updateEmptyTestRunApiModel);
 
-        await _testRuns.ApiAdaptersTestRunsPutAsync(updateEmptyTestRunApiModel).ConfigureAwait(false);
+        await _testRuns.AdaptersTestRunsPutAsync(updateEmptyTestRunApiModel).ConfigureAwait(false);
 
         _logger.LogDebug("Test run updated");
     }
@@ -377,11 +377,11 @@ public sealed class TmsClient : ITmsClient, IDisposable
             return;
         }
 
-        var testRun = await _testRuns.ApiAdaptersTestRunsIdGetAsync(new Guid(_settings.TestRunId)).ConfigureAwait(false);
+        var testRun = await _testRuns.AdaptersTestRunsIdGetAsync(new Guid(_settings.TestRunId)).ConfigureAwait(false);
 
         if (testRun.Status.Type != TestStatusApiType.Succeeded)
         {
-            await _testRuns.ApiAdaptersTestRunsIdCompletePostAsync(new Guid(_settings.TestRunId)).ConfigureAwait(false);
+            await _testRuns.AdaptersTestRunsIdCompletePostAsync(new Guid(_settings.TestRunId)).ConfigureAwait(false);
         }
 
         _logger.LogDebug("Complete test run is successfully");
@@ -409,7 +409,7 @@ public sealed class TmsClient : ITmsClient, IDisposable
 
         HtmlEscapeUtils.EscapeHtmlInObject(filter);
 
-        var autotests = await _autoTests.ApiAdaptersAutoTestsSearchPostAsync(autoTestSearchApiModel: filter).ConfigureAwait(false);
+        var autotests = await _autoTests.AdaptersAutoTestsSearchPostAsync(autoTestSearchApiModel: filter).ConfigureAwait(false);
         var autotest = autotests.FirstOrDefault();
 
         _logger.LogDebug(

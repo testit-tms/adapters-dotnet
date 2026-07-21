@@ -40,8 +40,8 @@ namespace TestIT.AdaptersApi.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="AutoTestWorkItemIdentifierApiResult" /> class.
         /// </summary>
-        /// <param name="id">id (required).</param>
-        /// <param name="globalId">globalId (required).</param>
+        /// <param name="id">WorkItem unique internal identifier (required).</param>
+        /// <param name="globalId">WorkItem Global unique identifier (required).</param>
         public AutoTestWorkItemIdentifierApiResult(Guid id = default, long globalId = default)
         {
             this.Id = id;
@@ -49,14 +49,16 @@ namespace TestIT.AdaptersApi.Model
         }
 
         /// <summary>
-        /// Gets or Sets Id
+        /// WorkItem unique internal identifier
         /// </summary>
+        /// <value>WorkItem unique internal identifier</value>
         [DataMember(Name = "id", IsRequired = true, EmitDefaultValue = true)]
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Gets or Sets GlobalId
+        /// WorkItem Global unique identifier
         /// </summary>
+        /// <value>WorkItem Global unique identifier</value>
         [DataMember(Name = "globalId", IsRequired = true, EmitDefaultValue = true)]
         public long GlobalId { get; set; }
 

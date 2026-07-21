@@ -35,15 +35,16 @@ namespace TestIT.AdaptersApi.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="ManualRerunTestResultApiModel" /> class.
         /// </summary>
-        /// <param name="testResultIds">testResultIds.</param>
+        /// <param name="testResultIds">Set of extracted test result IDs.</param>
         public ManualRerunTestResultApiModel(GuidExtractionModel testResultIds = default)
         {
             this.TestResultIds = testResultIds;
         }
 
         /// <summary>
-        /// Gets or Sets TestResultIds
+        /// Set of extracted test result IDs
         /// </summary>
+        /// <value>Set of extracted test result IDs</value>
         [DataMember(Name = "testResultIds", EmitDefaultValue = true)]
         public GuidExtractionModel TestResultIds { get; set; }
 

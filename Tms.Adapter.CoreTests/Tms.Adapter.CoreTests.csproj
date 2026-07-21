@@ -33,6 +33,8 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\SyncStorage.ApiClient\SyncStorage.ApiClient.csproj" />
+        <ProjectReference Include="..\TestIT.AdaptersApi\TestIT.AdaptersApi.csproj" />
         <ProjectReference Include="..\Tms.Adapter.Core\Tms.Adapter.Core.csproj"/>
     </ItemGroup>
 

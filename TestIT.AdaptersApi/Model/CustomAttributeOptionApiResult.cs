@@ -40,10 +40,10 @@ namespace TestIT.AdaptersApi.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomAttributeOptionApiResult" /> class.
         /// </summary>
-        /// <param name="id">id (required).</param>
-        /// <param name="isDeleted">isDeleted (required).</param>
-        /// <param name="value">value.</param>
-        /// <param name="isDefault">isDefault (required).</param>
+        /// <param name="id">Unique ID of the attribute option (required).</param>
+        /// <param name="isDeleted">Indicates if the attributes option is deleted (required).</param>
+        /// <param name="value">Value of the attribute option.</param>
+        /// <param name="isDefault">Indicates if the attribute option is used by default (required).</param>
         public CustomAttributeOptionApiResult(Guid id = default, bool isDeleted = default, string value = default, bool isDefault = default)
         {
             this.Id = id;
@@ -53,26 +53,30 @@ namespace TestIT.AdaptersApi.Model
         }
 
         /// <summary>
-        /// Gets or Sets Id
+        /// Unique ID of the attribute option
         /// </summary>
+        /// <value>Unique ID of the attribute option</value>
         [DataMember(Name = "id", IsRequired = true, EmitDefaultValue = true)]
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Gets or Sets IsDeleted
+        /// Indicates if the attributes option is deleted
         /// </summary>
+        /// <value>Indicates if the attributes option is deleted</value>
         [DataMember(Name = "isDeleted", IsRequired = true, EmitDefaultValue = true)]
         public bool IsDeleted { get; set; }
 
         /// <summary>
-        /// Gets or Sets Value
+        /// Value of the attribute option
         /// </summary>
+        /// <value>Value of the attribute option</value>
         [DataMember(Name = "value", EmitDefaultValue = true)]
         public string Value { get; set; }
 
         /// <summary>
-        /// Gets or Sets IsDefault
+        /// Indicates if the attribute option is used by default
         /// </summary>
+        /// <value>Indicates if the attribute option is used by default</value>
         [DataMember(Name = "isDefault", IsRequired = true, EmitDefaultValue = true)]
         public bool IsDefault { get; set; }
 

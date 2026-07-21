@@ -35,17 +35,17 @@ namespace TestIT.AdaptersApi.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="AutoTestFilterApiModel" /> class.
         /// </summary>
-        /// <param name="projectIds">projectIds.</param>
-        /// <param name="externalIds">externalIds.</param>
-        /// <param name="globalIds">globalIds.</param>
-        /// <param name="name">name.</param>
-        /// <param name="isFlaky">isFlaky.</param>
-        /// <param name="isDeleted">isDeleted.</param>
-        /// <param name="varNamespace">varNamespace.</param>
-        /// <param name="className">className.</param>
-        /// <param name="externalKey">externalKey.</param>
-        /// <param name="tags">tags.</param>
-        /// <param name="excludeTags">excludeTags.</param>
+        /// <param name="projectIds">Specifies an autotest projects IDs to search for.</param>
+        /// <param name="externalIds">Specifies an autotest external IDs to search for.</param>
+        /// <param name="globalIds">Specifies an autotest global IDs to search for.</param>
+        /// <param name="name">Specifies an autotest name to search for.</param>
+        /// <param name="isFlaky">Specifies an autotest flaky status to search for.</param>
+        /// <param name="isDeleted">Specifies an autotest deleted status to search for.</param>
+        /// <param name="varNamespace">Specifies an autotest namespace to search for.</param>
+        /// <param name="className">Specifies an autotest class name to search for.</param>
+        /// <param name="externalKey">Specifies an autotest external key to search for.</param>
+        /// <param name="tags">Specifies an autotest tags to search for.</param>
+        /// <param name="excludeTags">Specifies an autotest tags to exclude.</param>
         public AutoTestFilterApiModel(List<Guid> projectIds = default, List<string> externalIds = default, List<long> globalIds = default, string name = default, bool? isFlaky = default, bool? isDeleted = default, string varNamespace = default, string className = default, string externalKey = default, List<string> tags = default, List<string> excludeTags = default)
         {
             this.ProjectIds = projectIds;
@@ -62,68 +62,79 @@ namespace TestIT.AdaptersApi.Model
         }
 
         /// <summary>
-        /// Gets or Sets ProjectIds
+        /// Specifies an autotest projects IDs to search for
         /// </summary>
+        /// <value>Specifies an autotest projects IDs to search for</value>
         [DataMember(Name = "projectIds", EmitDefaultValue = true)]
         public List<Guid> ProjectIds { get; set; }
 
         /// <summary>
-        /// Gets or Sets ExternalIds
+        /// Specifies an autotest external IDs to search for
         /// </summary>
+        /// <value>Specifies an autotest external IDs to search for</value>
         [DataMember(Name = "externalIds", EmitDefaultValue = true)]
         public List<string> ExternalIds { get; set; }
 
         /// <summary>
-        /// Gets or Sets GlobalIds
+        /// Specifies an autotest global IDs to search for
         /// </summary>
+        /// <value>Specifies an autotest global IDs to search for</value>
         [DataMember(Name = "globalIds", EmitDefaultValue = true)]
         public List<long> GlobalIds { get; set; }
 
         /// <summary>
-        /// Gets or Sets Name
+        /// Specifies an autotest name to search for
         /// </summary>
+        /// <value>Specifies an autotest name to search for</value>
         [DataMember(Name = "name", EmitDefaultValue = true)]
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or Sets IsFlaky
+        /// Specifies an autotest flaky status to search for
         /// </summary>
+        /// <value>Specifies an autotest flaky status to search for</value>
         [DataMember(Name = "isFlaky", EmitDefaultValue = true)]
         public bool? IsFlaky { get; set; }
 
         /// <summary>
-        /// Gets or Sets IsDeleted
+        /// Specifies an autotest deleted status to search for
         /// </summary>
+        /// <value>Specifies an autotest deleted status to search for</value>
         [DataMember(Name = "isDeleted", EmitDefaultValue = true)]
         public bool? IsDeleted { get; set; }
 
         /// <summary>
-        /// Gets or Sets Namespace
+        /// Specifies an autotest namespace to search for
         /// </summary>
+        /// <value>Specifies an autotest namespace to search for</value>
         [DataMember(Name = "namespace", EmitDefaultValue = true)]
         public string Namespace { get; set; }
 
         /// <summary>
-        /// Gets or Sets ClassName
+        /// Specifies an autotest class name to search for
         /// </summary>
+        /// <value>Specifies an autotest class name to search for</value>
         [DataMember(Name = "className", EmitDefaultValue = true)]
         public string ClassName { get; set; }
 
         /// <summary>
-        /// Gets or Sets ExternalKey
+        /// Specifies an autotest external key to search for
         /// </summary>
+        /// <value>Specifies an autotest external key to search for</value>
         [DataMember(Name = "externalKey", EmitDefaultValue = true)]
         public string ExternalKey { get; set; }
 
         /// <summary>
-        /// Gets or Sets Tags
+        /// Specifies an autotest tags to search for
         /// </summary>
+        /// <value>Specifies an autotest tags to search for</value>
         [DataMember(Name = "tags", EmitDefaultValue = true)]
         public List<string> Tags { get; set; }
 
         /// <summary>
-        /// Gets or Sets ExcludeTags
+        /// Specifies an autotest tags to exclude
         /// </summary>
+        /// <value>Specifies an autotest tags to exclude</value>
         [DataMember(Name = "excludeTags", EmitDefaultValue = true)]
         public List<string> ExcludeTags { get; set; }
 

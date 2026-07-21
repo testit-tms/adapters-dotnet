@@ -42,8 +42,8 @@ namespace TestIT.AdaptersApi.Model
         /// </summary>
         /// <param name="id">id (required).</param>
         /// <param name="parameterKeyId">parameterKeyId (required).</param>
-        /// <param name="value">value (required).</param>
-        /// <param name="name">name (required).</param>
+        /// <param name="value">Value of the parameter (required).</param>
+        /// <param name="name">Key of the parameter (required).</param>
         public ParameterShortApiResult(Guid id = default, Guid parameterKeyId = default, string value = default, string name = default)
         {
             this.Id = id;
@@ -75,14 +75,16 @@ namespace TestIT.AdaptersApi.Model
         public Guid ParameterKeyId { get; set; }
 
         /// <summary>
-        /// Gets or Sets Value
+        /// Value of the parameter
         /// </summary>
+        /// <value>Value of the parameter</value>
         [DataMember(Name = "value", IsRequired = true, EmitDefaultValue = true)]
         public string Value { get; set; }
 
         /// <summary>
-        /// Gets or Sets Name
+        /// Key of the parameter
         /// </summary>
+        /// <value>Key of the parameter</value>
         [DataMember(Name = "name", IsRequired = true, EmitDefaultValue = true)]
         public string Name { get; set; }
 

@@ -40,13 +40,13 @@ namespace TestIT.AdaptersApi.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="CreateEmptyTestRunApiModel" /> class.
         /// </summary>
-        /// <param name="projectId">projectId (required).</param>
-        /// <param name="name">name.</param>
-        /// <param name="description">description.</param>
-        /// <param name="launchSource">launchSource.</param>
-        /// <param name="attachments">attachments.</param>
-        /// <param name="links">links.</param>
-        /// <param name="tags">tags.</param>
+        /// <param name="projectId">Project unique identifier                This property is to link test run with a project (required).</param>
+        /// <param name="name">Test run name.</param>
+        /// <param name="description">Test run description.</param>
+        /// <param name="launchSource">Test run launch source.</param>
+        /// <param name="attachments">Collection of attachments to relate to the test run.</param>
+        /// <param name="links">Collection of links to relate to the test run.</param>
+        /// <param name="tags">Collection of tags to assign to the test run.</param>
         public CreateEmptyTestRunApiModel(Guid projectId = default, string name = default, string description = default, string launchSource = default, List<AssignAttachmentApiModel> attachments = default, List<CreateLinkApiModel> links = default, List<string> tags = default)
         {
             this.ProjectId = projectId;
@@ -59,44 +59,51 @@ namespace TestIT.AdaptersApi.Model
         }
 
         /// <summary>
-        /// Gets or Sets ProjectId
+        /// Project unique identifier                This property is to link test run with a project
         /// </summary>
+        /// <value>Project unique identifier                This property is to link test run with a project</value>
         [DataMember(Name = "projectId", IsRequired = true, EmitDefaultValue = true)]
         public Guid ProjectId { get; set; }
 
         /// <summary>
-        /// Gets or Sets Name
+        /// Test run name
         /// </summary>
+        /// <value>Test run name</value>
         [DataMember(Name = "name", EmitDefaultValue = true)]
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or Sets Description
+        /// Test run description
         /// </summary>
+        /// <value>Test run description</value>
         [DataMember(Name = "description", EmitDefaultValue = true)]
         public string Description { get; set; }
 
         /// <summary>
-        /// Gets or Sets LaunchSource
+        /// Test run launch source
         /// </summary>
+        /// <value>Test run launch source</value>
         [DataMember(Name = "launchSource", EmitDefaultValue = true)]
         public string LaunchSource { get; set; }
 
         /// <summary>
-        /// Gets or Sets Attachments
+        /// Collection of attachments to relate to the test run
         /// </summary>
+        /// <value>Collection of attachments to relate to the test run</value>
         [DataMember(Name = "attachments", EmitDefaultValue = true)]
         public List<AssignAttachmentApiModel> Attachments { get; set; }
 
         /// <summary>
-        /// Gets or Sets Links
+        /// Collection of links to relate to the test run
         /// </summary>
+        /// <value>Collection of links to relate to the test run</value>
         [DataMember(Name = "links", EmitDefaultValue = true)]
         public List<CreateLinkApiModel> Links { get; set; }
 
         /// <summary>
-        /// Gets or Sets Tags
+        /// Collection of tags to assign to the test run
         /// </summary>
+        /// <value>Collection of tags to assign to the test run</value>
         [DataMember(Name = "tags", EmitDefaultValue = true)]
         public List<string> Tags { get; set; }
 

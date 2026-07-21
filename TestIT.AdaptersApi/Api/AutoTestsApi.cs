@@ -28,15 +28,15 @@ namespace TestIT.AdaptersApi.Api
     {
         #region Synchronous Operations
         /// <summary>
-        /// 
+        /// Create multiple autotests
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="autoTestCreateApiModel"> (optional)</param>
         /// <returns>List&lt;AutoTestApiResult&gt;</returns>
-        List<AutoTestApiResult> ApiAdaptersAutoTestsBulkPost(List<AutoTestCreateApiModel> autoTestCreateApiModel = default);
+        List<AutoTestApiResult> AdaptersAutoTestsBulkPost(List<AutoTestCreateApiModel> autoTestCreateApiModel = default);
 
         /// <summary>
-        /// 
+        /// Create multiple autotests
         /// </summary>
         /// <remarks>
         /// 
@@ -44,17 +44,17 @@ namespace TestIT.AdaptersApi.Api
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="autoTestCreateApiModel"> (optional)</param>
         /// <returns>ApiResponse of List&lt;AutoTestApiResult&gt;</returns>
-        ApiResponse<List<AutoTestApiResult>> ApiAdaptersAutoTestsBulkPostWithHttpInfo(List<AutoTestCreateApiModel> autoTestCreateApiModel = default);
+        ApiResponse<List<AutoTestApiResult>> AdaptersAutoTestsBulkPostWithHttpInfo(List<AutoTestCreateApiModel> autoTestCreateApiModel = default);
         /// <summary>
-        /// 
+        /// Update multiple autotests
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="autoTestUpdateApiModel"> (optional)</param>
         /// <returns></returns>
-        void ApiAdaptersAutoTestsBulkPut(List<AutoTestUpdateApiModel> autoTestUpdateApiModel = default);
+        void AdaptersAutoTestsBulkPut(List<AutoTestUpdateApiModel> autoTestUpdateApiModel = default);
 
         /// <summary>
-        /// 
+        /// Update multiple autotests
         /// </summary>
         /// <remarks>
         /// 
@@ -62,7 +62,7 @@ namespace TestIT.AdaptersApi.Api
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="autoTestUpdateApiModel"> (optional)</param>
         /// <returns>ApiResponse of Object(void)</returns>
-        ApiResponse<Object> ApiAdaptersAutoTestsBulkPutWithHttpInfo(List<AutoTestUpdateApiModel> autoTestUpdateApiModel = default);
+        ApiResponse<Object> AdaptersAutoTestsBulkPutWithHttpInfo(List<AutoTestUpdateApiModel> autoTestUpdateApiModel = default);
         /// <summary>
         /// 
         /// </summary>
@@ -95,7 +95,7 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="searchValue">Value for searching (optional)</param>
         /// <returns>List&lt;AutoTestModel&gt;</returns>
         [Obsolete]
-        List<AutoTestModel> ApiAdaptersAutoTestsGet(Guid? projectId = default, string externalId = default, long? globalId = default, string varNamespace = default, bool? isNamespaceNull = default, bool? includeEmptyNamespaces = default, string className = default, bool? isClassnameNull = default, bool? includeEmptyClassNames = default, bool? isDeleted = default, bool? deleted = default, List<string> labels = default, int? stabilityMinimal = default, int? minStability = default, int? stabilityMaximal = default, int? maxStability = default, bool? isFlaky = default, bool? flaky = default, bool? includeSteps = default, bool? includeLabels = default, string externalKey = default, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default);
+        List<AutoTestModel> AdaptersAutoTestsGet(Guid? projectId = default, string externalId = default, long? globalId = default, string varNamespace = default, bool? isNamespaceNull = default, bool? includeEmptyNamespaces = default, string className = default, bool? isClassnameNull = default, bool? includeEmptyClassNames = default, bool? isDeleted = default, bool? deleted = default, List<string> labels = default, int? stabilityMinimal = default, int? minStability = default, int? stabilityMaximal = default, int? maxStability = default, bool? isFlaky = default, bool? flaky = default, bool? includeSteps = default, bool? includeLabels = default, string externalKey = default, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default);
 
         /// <summary>
         /// 
@@ -132,17 +132,17 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="searchValue">Value for searching (optional)</param>
         /// <returns>ApiResponse of List&lt;AutoTestModel&gt;</returns>
         [Obsolete]
-        ApiResponse<List<AutoTestModel>> ApiAdaptersAutoTestsGetWithHttpInfo(Guid? projectId = default, string externalId = default, long? globalId = default, string varNamespace = default, bool? isNamespaceNull = default, bool? includeEmptyNamespaces = default, string className = default, bool? isClassnameNull = default, bool? includeEmptyClassNames = default, bool? isDeleted = default, bool? deleted = default, List<string> labels = default, int? stabilityMinimal = default, int? minStability = default, int? stabilityMaximal = default, int? maxStability = default, bool? isFlaky = default, bool? flaky = default, bool? includeSteps = default, bool? includeLabels = default, string externalKey = default, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default);
+        ApiResponse<List<AutoTestModel>> AdaptersAutoTestsGetWithHttpInfo(Guid? projectId = default, string externalId = default, long? globalId = default, string varNamespace = default, bool? isNamespaceNull = default, bool? includeEmptyNamespaces = default, string className = default, bool? isClassnameNull = default, bool? includeEmptyClassNames = default, bool? isDeleted = default, bool? deleted = default, List<string> labels = default, int? stabilityMinimal = default, int? minStability = default, int? stabilityMaximal = default, int? maxStability = default, bool? isFlaky = default, bool? flaky = default, bool? includeSteps = default, bool? includeLabels = default, string externalKey = default, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default);
         /// <summary>
-        /// 
+        /// Get autotest by internal or global ID
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id">Internal (UUID) or global (integer) identifier</param>
         /// <returns>AutoTestApiResult</returns>
-        AutoTestApiResult ApiAdaptersAutoTestsIdGet(string id);
+        AutoTestApiResult AdaptersAutoTestsIdGet(string id);
 
         /// <summary>
-        /// 
+        /// Get autotest by internal or global ID
         /// </summary>
         /// <remarks>
         /// 
@@ -150,9 +150,9 @@ namespace TestIT.AdaptersApi.Api
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id">Internal (UUID) or global (integer) identifier</param>
         /// <returns>ApiResponse of AutoTestApiResult</returns>
-        ApiResponse<AutoTestApiResult> ApiAdaptersAutoTestsIdGetWithHttpInfo(string id);
+        ApiResponse<AutoTestApiResult> AdaptersAutoTestsIdGetWithHttpInfo(string id);
         /// <summary>
-        /// 
+        /// Patch auto test
         /// </summary>
         /// <remarks>
         /// See &lt;a href&#x3D;\&quot;https://www.rfc-editor.org/rfc/rfc6902\&quot; target&#x3D;\&quot;_blank\&quot;&gt;RFC 6902: JavaScript Object Notation (JSON) Patch&lt;/a&gt; for details
@@ -161,10 +161,10 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="id"></param>
         /// <param name="operation"> (optional)</param>
         /// <returns></returns>
-        void ApiAdaptersAutoTestsIdPatch(Guid id, List<Operation> operation = default);
+        void AdaptersAutoTestsIdPatch(Guid id, List<Operation> operation = default);
 
         /// <summary>
-        /// 
+        /// Patch auto test
         /// </summary>
         /// <remarks>
         /// See &lt;a href&#x3D;\&quot;https://www.rfc-editor.org/rfc/rfc6902\&quot; target&#x3D;\&quot;_blank\&quot;&gt;RFC 6902: JavaScript Object Notation (JSON) Patch&lt;/a&gt; for details
@@ -173,18 +173,18 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="id"></param>
         /// <param name="operation"> (optional)</param>
         /// <returns>ApiResponse of Object(void)</returns>
-        ApiResponse<Object> ApiAdaptersAutoTestsIdPatchWithHttpInfo(Guid id, List<Operation> operation = default);
+        ApiResponse<Object> AdaptersAutoTestsIdPatchWithHttpInfo(Guid id, List<Operation> operation = default);
         /// <summary>
-        /// 
+        /// Unlink autotest from work item
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id">Internal (UUID) or global (integer) identifier</param>
         /// <param name="workItemId">Internal (UUID) or global (integer) identifier (optional)</param>
         /// <returns></returns>
-        void ApiAdaptersAutoTestsIdWorkItemsDelete(string id, string workItemId = default);
+        void AdaptersAutoTestsIdWorkItemsDelete(string id, string workItemId = default);
 
         /// <summary>
-        /// 
+        /// Unlink autotest from work item
         /// </summary>
         /// <remarks>
         /// 
@@ -193,19 +193,19 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="id">Internal (UUID) or global (integer) identifier</param>
         /// <param name="workItemId">Internal (UUID) or global (integer) identifier (optional)</param>
         /// <returns>ApiResponse of Object(void)</returns>
-        ApiResponse<Object> ApiAdaptersAutoTestsIdWorkItemsDeleteWithHttpInfo(string id, string workItemId = default);
+        ApiResponse<Object> AdaptersAutoTestsIdWorkItemsDeleteWithHttpInfo(string id, string workItemId = default);
         /// <summary>
-        /// 
+        /// Get work items linked to autotest
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id">Internal (UUID) or global (integer) identifier</param>
         /// <param name="isDeleted"> (optional)</param>
         /// <param name="isWorkItemDeleted"> (optional, default to false)</param>
         /// <returns>List&lt;AutoTestWorkItemIdentifierApiResult&gt;</returns>
-        List<AutoTestWorkItemIdentifierApiResult> ApiAdaptersAutoTestsIdWorkItemsGet(string id, bool? isDeleted = default, bool? isWorkItemDeleted = default);
+        List<AutoTestWorkItemIdentifierApiResult> AdaptersAutoTestsIdWorkItemsGet(string id, bool? isDeleted = default, bool? isWorkItemDeleted = default);
 
         /// <summary>
-        /// 
+        /// Get work items linked to autotest
         /// </summary>
         /// <remarks>
         /// 
@@ -215,18 +215,18 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="isDeleted"> (optional)</param>
         /// <param name="isWorkItemDeleted"> (optional, default to false)</param>
         /// <returns>ApiResponse of List&lt;AutoTestWorkItemIdentifierApiResult&gt;</returns>
-        ApiResponse<List<AutoTestWorkItemIdentifierApiResult>> ApiAdaptersAutoTestsIdWorkItemsGetWithHttpInfo(string id, bool? isDeleted = default, bool? isWorkItemDeleted = default);
+        ApiResponse<List<AutoTestWorkItemIdentifierApiResult>> AdaptersAutoTestsIdWorkItemsGetWithHttpInfo(string id, bool? isDeleted = default, bool? isWorkItemDeleted = default);
         /// <summary>
-        /// 
+        /// Link autotest with work items
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id">Internal (UUID) or global (integer) identifier</param>
         /// <param name="workItemIdApiModel"> (optional)</param>
         /// <returns></returns>
-        void ApiAdaptersAutoTestsIdWorkItemsPost(string id, WorkItemIdApiModel workItemIdApiModel = default);
+        void AdaptersAutoTestsIdWorkItemsPost(string id, WorkItemIdApiModel workItemIdApiModel = default);
 
         /// <summary>
-        /// 
+        /// Link autotest with work items
         /// </summary>
         /// <remarks>
         /// 
@@ -235,17 +235,17 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="id">Internal (UUID) or global (integer) identifier</param>
         /// <param name="workItemIdApiModel"> (optional)</param>
         /// <returns>ApiResponse of Object(void)</returns>
-        ApiResponse<Object> ApiAdaptersAutoTestsIdWorkItemsPostWithHttpInfo(string id, WorkItemIdApiModel workItemIdApiModel = default);
+        ApiResponse<Object> AdaptersAutoTestsIdWorkItemsPostWithHttpInfo(string id, WorkItemIdApiModel workItemIdApiModel = default);
         /// <summary>
-        /// 
+        /// Create autotest
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="autoTestCreateApiModel"> (optional)</param>
         /// <returns>AutoTestApiResult</returns>
-        AutoTestApiResult ApiAdaptersAutoTestsPost(AutoTestCreateApiModel autoTestCreateApiModel = default);
+        AutoTestApiResult AdaptersAutoTestsPost(AutoTestCreateApiModel autoTestCreateApiModel = default);
 
         /// <summary>
-        /// 
+        /// Create autotest
         /// </summary>
         /// <remarks>
         /// 
@@ -253,17 +253,17 @@ namespace TestIT.AdaptersApi.Api
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="autoTestCreateApiModel"> (optional)</param>
         /// <returns>ApiResponse of AutoTestApiResult</returns>
-        ApiResponse<AutoTestApiResult> ApiAdaptersAutoTestsPostWithHttpInfo(AutoTestCreateApiModel autoTestCreateApiModel = default);
+        ApiResponse<AutoTestApiResult> AdaptersAutoTestsPostWithHttpInfo(AutoTestCreateApiModel autoTestCreateApiModel = default);
         /// <summary>
-        /// 
+        /// Update autotest
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="autoTestUpdateApiModel"> (optional)</param>
         /// <returns></returns>
-        void ApiAdaptersAutoTestsPut(AutoTestUpdateApiModel autoTestUpdateApiModel = default);
+        void AdaptersAutoTestsPut(AutoTestUpdateApiModel autoTestUpdateApiModel = default);
 
         /// <summary>
-        /// 
+        /// Update autotest
         /// </summary>
         /// <remarks>
         /// 
@@ -271,9 +271,9 @@ namespace TestIT.AdaptersApi.Api
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="autoTestUpdateApiModel"> (optional)</param>
         /// <returns>ApiResponse of Object(void)</returns>
-        ApiResponse<Object> ApiAdaptersAutoTestsPutWithHttpInfo(AutoTestUpdateApiModel autoTestUpdateApiModel = default);
+        ApiResponse<Object> AdaptersAutoTestsPutWithHttpInfo(AutoTestUpdateApiModel autoTestUpdateApiModel = default);
         /// <summary>
-        /// 
+        /// Search for autotests
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="skip">Amount of items to be skipped (offset) (optional)</param>
@@ -283,10 +283,10 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="searchValue">Value for searching (optional)</param>
         /// <param name="autoTestSearchApiModel"> (optional)</param>
         /// <returns>List&lt;AutoTestApiResult&gt;</returns>
-        List<AutoTestApiResult> ApiAdaptersAutoTestsSearchPost(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, AutoTestSearchApiModel autoTestSearchApiModel = default);
+        List<AutoTestApiResult> AdaptersAutoTestsSearchPost(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, AutoTestSearchApiModel autoTestSearchApiModel = default);
 
         /// <summary>
-        /// 
+        /// Search for autotests
         /// </summary>
         /// <remarks>
         /// 
@@ -299,7 +299,7 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="searchValue">Value for searching (optional)</param>
         /// <param name="autoTestSearchApiModel"> (optional)</param>
         /// <returns>ApiResponse of List&lt;AutoTestApiResult&gt;</returns>
-        ApiResponse<List<AutoTestApiResult>> ApiAdaptersAutoTestsSearchPostWithHttpInfo(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, AutoTestSearchApiModel autoTestSearchApiModel = default);
+        ApiResponse<List<AutoTestApiResult>> AdaptersAutoTestsSearchPostWithHttpInfo(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, AutoTestSearchApiModel autoTestSearchApiModel = default);
         #endregion Synchronous Operations
     }
 
@@ -310,7 +310,7 @@ namespace TestIT.AdaptersApi.Api
     {
         #region Asynchronous Operations
         /// <summary>
-        /// 
+        /// Create multiple autotests
         /// </summary>
         /// <remarks>
         /// 
@@ -319,10 +319,10 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="autoTestCreateApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;AutoTestApiResult&gt;</returns>
-        System.Threading.Tasks.Task<List<AutoTestApiResult>> ApiAdaptersAutoTestsBulkPostAsync(List<AutoTestCreateApiModel> autoTestCreateApiModel = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<List<AutoTestApiResult>> AdaptersAutoTestsBulkPostAsync(List<AutoTestCreateApiModel> autoTestCreateApiModel = default, System.Threading.CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// 
+        /// Create multiple autotests
         /// </summary>
         /// <remarks>
         /// 
@@ -331,9 +331,9 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="autoTestCreateApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;AutoTestApiResult&gt;)</returns>
-        System.Threading.Tasks.Task<ApiResponse<List<AutoTestApiResult>>> ApiAdaptersAutoTestsBulkPostWithHttpInfoAsync(List<AutoTestCreateApiModel> autoTestCreateApiModel = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<ApiResponse<List<AutoTestApiResult>>> AdaptersAutoTestsBulkPostWithHttpInfoAsync(List<AutoTestCreateApiModel> autoTestCreateApiModel = default, System.Threading.CancellationToken cancellationToken = default);
         /// <summary>
-        /// 
+        /// Update multiple autotests
         /// </summary>
         /// <remarks>
         /// 
@@ -342,10 +342,10 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="autoTestUpdateApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of void</returns>
-        System.Threading.Tasks.Task ApiAdaptersAutoTestsBulkPutAsync(List<AutoTestUpdateApiModel> autoTestUpdateApiModel = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task AdaptersAutoTestsBulkPutAsync(List<AutoTestUpdateApiModel> autoTestUpdateApiModel = default, System.Threading.CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// 
+        /// Update multiple autotests
         /// </summary>
         /// <remarks>
         /// 
@@ -354,7 +354,7 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="autoTestUpdateApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse</returns>
-        System.Threading.Tasks.Task<ApiResponse<Object>> ApiAdaptersAutoTestsBulkPutWithHttpInfoAsync(List<AutoTestUpdateApiModel> autoTestUpdateApiModel = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<ApiResponse<Object>> AdaptersAutoTestsBulkPutWithHttpInfoAsync(List<AutoTestUpdateApiModel> autoTestUpdateApiModel = default, System.Threading.CancellationToken cancellationToken = default);
         /// <summary>
         /// 
         /// </summary>
@@ -391,7 +391,7 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;AutoTestModel&gt;</returns>
         [Obsolete]
-        System.Threading.Tasks.Task<List<AutoTestModel>> ApiAdaptersAutoTestsGetAsync(Guid? projectId = default, string externalId = default, long? globalId = default, string varNamespace = default, bool? isNamespaceNull = default, bool? includeEmptyNamespaces = default, string className = default, bool? isClassnameNull = default, bool? includeEmptyClassNames = default, bool? isDeleted = default, bool? deleted = default, List<string> labels = default, int? stabilityMinimal = default, int? minStability = default, int? stabilityMaximal = default, int? maxStability = default, bool? isFlaky = default, bool? flaky = default, bool? includeSteps = default, bool? includeLabels = default, string externalKey = default, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<List<AutoTestModel>> AdaptersAutoTestsGetAsync(Guid? projectId = default, string externalId = default, long? globalId = default, string varNamespace = default, bool? isNamespaceNull = default, bool? includeEmptyNamespaces = default, string className = default, bool? isClassnameNull = default, bool? includeEmptyClassNames = default, bool? isDeleted = default, bool? deleted = default, List<string> labels = default, int? stabilityMinimal = default, int? minStability = default, int? stabilityMaximal = default, int? maxStability = default, bool? isFlaky = default, bool? flaky = default, bool? includeSteps = default, bool? includeLabels = default, string externalKey = default, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, System.Threading.CancellationToken cancellationToken = default);
 
         /// <summary>
         /// 
@@ -429,9 +429,9 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;AutoTestModel&gt;)</returns>
         [Obsolete]
-        System.Threading.Tasks.Task<ApiResponse<List<AutoTestModel>>> ApiAdaptersAutoTestsGetWithHttpInfoAsync(Guid? projectId = default, string externalId = default, long? globalId = default, string varNamespace = default, bool? isNamespaceNull = default, bool? includeEmptyNamespaces = default, string className = default, bool? isClassnameNull = default, bool? includeEmptyClassNames = default, bool? isDeleted = default, bool? deleted = default, List<string> labels = default, int? stabilityMinimal = default, int? minStability = default, int? stabilityMaximal = default, int? maxStability = default, bool? isFlaky = default, bool? flaky = default, bool? includeSteps = default, bool? includeLabels = default, string externalKey = default, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<ApiResponse<List<AutoTestModel>>> AdaptersAutoTestsGetWithHttpInfoAsync(Guid? projectId = default, string externalId = default, long? globalId = default, string varNamespace = default, bool? isNamespaceNull = default, bool? includeEmptyNamespaces = default, string className = default, bool? isClassnameNull = default, bool? includeEmptyClassNames = default, bool? isDeleted = default, bool? deleted = default, List<string> labels = default, int? stabilityMinimal = default, int? minStability = default, int? stabilityMaximal = default, int? maxStability = default, bool? isFlaky = default, bool? flaky = default, bool? includeSteps = default, bool? includeLabels = default, string externalKey = default, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, System.Threading.CancellationToken cancellationToken = default);
         /// <summary>
-        /// 
+        /// Get autotest by internal or global ID
         /// </summary>
         /// <remarks>
         /// 
@@ -440,10 +440,10 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="id">Internal (UUID) or global (integer) identifier</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of AutoTestApiResult</returns>
-        System.Threading.Tasks.Task<AutoTestApiResult> ApiAdaptersAutoTestsIdGetAsync(string id, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<AutoTestApiResult> AdaptersAutoTestsIdGetAsync(string id, System.Threading.CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// 
+        /// Get autotest by internal or global ID
         /// </summary>
         /// <remarks>
         /// 
@@ -452,9 +452,9 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="id">Internal (UUID) or global (integer) identifier</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (AutoTestApiResult)</returns>
-        System.Threading.Tasks.Task<ApiResponse<AutoTestApiResult>> ApiAdaptersAutoTestsIdGetWithHttpInfoAsync(string id, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<ApiResponse<AutoTestApiResult>> AdaptersAutoTestsIdGetWithHttpInfoAsync(string id, System.Threading.CancellationToken cancellationToken = default);
         /// <summary>
-        /// 
+        /// Patch auto test
         /// </summary>
         /// <remarks>
         /// See &lt;a href&#x3D;\&quot;https://www.rfc-editor.org/rfc/rfc6902\&quot; target&#x3D;\&quot;_blank\&quot;&gt;RFC 6902: JavaScript Object Notation (JSON) Patch&lt;/a&gt; for details
@@ -464,10 +464,10 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="operation"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of void</returns>
-        System.Threading.Tasks.Task ApiAdaptersAutoTestsIdPatchAsync(Guid id, List<Operation> operation = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task AdaptersAutoTestsIdPatchAsync(Guid id, List<Operation> operation = default, System.Threading.CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// 
+        /// Patch auto test
         /// </summary>
         /// <remarks>
         /// See &lt;a href&#x3D;\&quot;https://www.rfc-editor.org/rfc/rfc6902\&quot; target&#x3D;\&quot;_blank\&quot;&gt;RFC 6902: JavaScript Object Notation (JSON) Patch&lt;/a&gt; for details
@@ -477,9 +477,9 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="operation"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse</returns>
-        System.Threading.Tasks.Task<ApiResponse<Object>> ApiAdaptersAutoTestsIdPatchWithHttpInfoAsync(Guid id, List<Operation> operation = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<ApiResponse<Object>> AdaptersAutoTestsIdPatchWithHttpInfoAsync(Guid id, List<Operation> operation = default, System.Threading.CancellationToken cancellationToken = default);
         /// <summary>
-        /// 
+        /// Unlink autotest from work item
         /// </summary>
         /// <remarks>
         /// 
@@ -489,10 +489,10 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="workItemId">Internal (UUID) or global (integer) identifier (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of void</returns>
-        System.Threading.Tasks.Task ApiAdaptersAutoTestsIdWorkItemsDeleteAsync(string id, string workItemId = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task AdaptersAutoTestsIdWorkItemsDeleteAsync(string id, string workItemId = default, System.Threading.CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// 
+        /// Unlink autotest from work item
         /// </summary>
         /// <remarks>
         /// 
@@ -502,9 +502,9 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="workItemId">Internal (UUID) or global (integer) identifier (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse</returns>
-        System.Threading.Tasks.Task<ApiResponse<Object>> ApiAdaptersAutoTestsIdWorkItemsDeleteWithHttpInfoAsync(string id, string workItemId = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<ApiResponse<Object>> AdaptersAutoTestsIdWorkItemsDeleteWithHttpInfoAsync(string id, string workItemId = default, System.Threading.CancellationToken cancellationToken = default);
         /// <summary>
-        /// 
+        /// Get work items linked to autotest
         /// </summary>
         /// <remarks>
         /// 
@@ -515,10 +515,10 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="isWorkItemDeleted"> (optional, default to false)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;AutoTestWorkItemIdentifierApiResult&gt;</returns>
-        System.Threading.Tasks.Task<List<AutoTestWorkItemIdentifierApiResult>> ApiAdaptersAutoTestsIdWorkItemsGetAsync(string id, bool? isDeleted = default, bool? isWorkItemDeleted = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<List<AutoTestWorkItemIdentifierApiResult>> AdaptersAutoTestsIdWorkItemsGetAsync(string id, bool? isDeleted = default, bool? isWorkItemDeleted = default, System.Threading.CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// 
+        /// Get work items linked to autotest
         /// </summary>
         /// <remarks>
         /// 
@@ -529,9 +529,9 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="isWorkItemDeleted"> (optional, default to false)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;AutoTestWorkItemIdentifierApiResult&gt;)</returns>
-        System.Threading.Tasks.Task<ApiResponse<List<AutoTestWorkItemIdentifierApiResult>>> ApiAdaptersAutoTestsIdWorkItemsGetWithHttpInfoAsync(string id, bool? isDeleted = default, bool? isWorkItemDeleted = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<ApiResponse<List<AutoTestWorkItemIdentifierApiResult>>> AdaptersAutoTestsIdWorkItemsGetWithHttpInfoAsync(string id, bool? isDeleted = default, bool? isWorkItemDeleted = default, System.Threading.CancellationToken cancellationToken = default);
         /// <summary>
-        /// 
+        /// Link autotest with work items
         /// </summary>
         /// <remarks>
         /// 
@@ -541,10 +541,10 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="workItemIdApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of void</returns>
-        System.Threading.Tasks.Task ApiAdaptersAutoTestsIdWorkItemsPostAsync(string id, WorkItemIdApiModel workItemIdApiModel = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task AdaptersAutoTestsIdWorkItemsPostAsync(string id, WorkItemIdApiModel workItemIdApiModel = default, System.Threading.CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// 
+        /// Link autotest with work items
         /// </summary>
         /// <remarks>
         /// 
@@ -554,9 +554,9 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="workItemIdApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse</returns>
-        System.Threading.Tasks.Task<ApiResponse<Object>> ApiAdaptersAutoTestsIdWorkItemsPostWithHttpInfoAsync(string id, WorkItemIdApiModel workItemIdApiModel = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<ApiResponse<Object>> AdaptersAutoTestsIdWorkItemsPostWithHttpInfoAsync(string id, WorkItemIdApiModel workItemIdApiModel = default, System.Threading.CancellationToken cancellationToken = default);
         /// <summary>
-        /// 
+        /// Create autotest
         /// </summary>
         /// <remarks>
         /// 
@@ -565,10 +565,10 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="autoTestCreateApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of AutoTestApiResult</returns>
-        System.Threading.Tasks.Task<AutoTestApiResult> ApiAdaptersAutoTestsPostAsync(AutoTestCreateApiModel autoTestCreateApiModel = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<AutoTestApiResult> AdaptersAutoTestsPostAsync(AutoTestCreateApiModel autoTestCreateApiModel = default, System.Threading.CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// 
+        /// Create autotest
         /// </summary>
         /// <remarks>
         /// 
@@ -577,9 +577,9 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="autoTestCreateApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (AutoTestApiResult)</returns>
-        System.Threading.Tasks.Task<ApiResponse<AutoTestApiResult>> ApiAdaptersAutoTestsPostWithHttpInfoAsync(AutoTestCreateApiModel autoTestCreateApiModel = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<ApiResponse<AutoTestApiResult>> AdaptersAutoTestsPostWithHttpInfoAsync(AutoTestCreateApiModel autoTestCreateApiModel = default, System.Threading.CancellationToken cancellationToken = default);
         /// <summary>
-        /// 
+        /// Update autotest
         /// </summary>
         /// <remarks>
         /// 
@@ -588,10 +588,10 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="autoTestUpdateApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of void</returns>
-        System.Threading.Tasks.Task ApiAdaptersAutoTestsPutAsync(AutoTestUpdateApiModel autoTestUpdateApiModel = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task AdaptersAutoTestsPutAsync(AutoTestUpdateApiModel autoTestUpdateApiModel = default, System.Threading.CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// 
+        /// Update autotest
         /// </summary>
         /// <remarks>
         /// 
@@ -600,9 +600,9 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="autoTestUpdateApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse</returns>
-        System.Threading.Tasks.Task<ApiResponse<Object>> ApiAdaptersAutoTestsPutWithHttpInfoAsync(AutoTestUpdateApiModel autoTestUpdateApiModel = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<ApiResponse<Object>> AdaptersAutoTestsPutWithHttpInfoAsync(AutoTestUpdateApiModel autoTestUpdateApiModel = default, System.Threading.CancellationToken cancellationToken = default);
         /// <summary>
-        /// 
+        /// Search for autotests
         /// </summary>
         /// <remarks>
         /// 
@@ -616,10 +616,10 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="autoTestSearchApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;AutoTestApiResult&gt;</returns>
-        System.Threading.Tasks.Task<List<AutoTestApiResult>> ApiAdaptersAutoTestsSearchPostAsync(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, AutoTestSearchApiModel autoTestSearchApiModel = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<List<AutoTestApiResult>> AdaptersAutoTestsSearchPostAsync(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, AutoTestSearchApiModel autoTestSearchApiModel = default, System.Threading.CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// 
+        /// Search for autotests
         /// </summary>
         /// <remarks>
         /// 
@@ -633,7 +633,7 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="autoTestSearchApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;AutoTestApiResult&gt;)</returns>
-        System.Threading.Tasks.Task<ApiResponse<List<AutoTestApiResult>>> ApiAdaptersAutoTestsSearchPostWithHttpInfoAsync(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, AutoTestSearchApiModel autoTestSearchApiModel = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<ApiResponse<List<AutoTestApiResult>>> AdaptersAutoTestsSearchPostWithHttpInfoAsync(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, AutoTestSearchApiModel autoTestSearchApiModel = default, System.Threading.CancellationToken cancellationToken = default);
         #endregion Asynchronous Operations
     }
 
@@ -848,24 +848,24 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Create multiple autotests 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="autoTestCreateApiModel"> (optional)</param>
         /// <returns>List&lt;AutoTestApiResult&gt;</returns>
-        public List<AutoTestApiResult> ApiAdaptersAutoTestsBulkPost(List<AutoTestCreateApiModel> autoTestCreateApiModel = default)
+        public List<AutoTestApiResult> AdaptersAutoTestsBulkPost(List<AutoTestCreateApiModel> autoTestCreateApiModel = default)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<List<AutoTestApiResult>> localVarResponse = ApiAdaptersAutoTestsBulkPostWithHttpInfo(autoTestCreateApiModel);
+            TestIT.AdaptersApi.Client.ApiResponse<List<AutoTestApiResult>> localVarResponse = AdaptersAutoTestsBulkPostWithHttpInfo(autoTestCreateApiModel);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        ///  
+        /// Create multiple autotests 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="autoTestCreateApiModel"> (optional)</param>
         /// <returns>ApiResponse of List&lt;AutoTestApiResult&gt;</returns>
-        public TestIT.AdaptersApi.Client.ApiResponse<List<AutoTestApiResult>> ApiAdaptersAutoTestsBulkPostWithHttpInfo(List<AutoTestCreateApiModel> autoTestCreateApiModel = default)
+        public TestIT.AdaptersApi.Client.ApiResponse<List<AutoTestApiResult>> AdaptersAutoTestsBulkPostWithHttpInfo(List<AutoTestCreateApiModel> autoTestCreateApiModel = default)
         {
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
 
@@ -899,11 +899,11 @@ namespace TestIT.AdaptersApi.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Post<List<AutoTestApiResult>>("/api/adapters/autoTests/bulk", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Post<List<AutoTestApiResult>>("/adapters/autoTests/bulk", localVarRequestOptions, this.Configuration);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersAutoTestsBulkPost", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersAutoTestsBulkPost", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -911,26 +911,26 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Create multiple autotests 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="autoTestCreateApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;AutoTestApiResult&gt;</returns>
-        public async System.Threading.Tasks.Task<List<AutoTestApiResult>> ApiAdaptersAutoTestsBulkPostAsync(List<AutoTestCreateApiModel> autoTestCreateApiModel = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<List<AutoTestApiResult>> AdaptersAutoTestsBulkPostAsync(List<AutoTestCreateApiModel> autoTestCreateApiModel = default, System.Threading.CancellationToken cancellationToken = default)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<List<AutoTestApiResult>> localVarResponse = await ApiAdaptersAutoTestsBulkPostWithHttpInfoAsync(autoTestCreateApiModel, cancellationToken).ConfigureAwait(false);
+            TestIT.AdaptersApi.Client.ApiResponse<List<AutoTestApiResult>> localVarResponse = await AdaptersAutoTestsBulkPostWithHttpInfoAsync(autoTestCreateApiModel, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        ///  
+        /// Create multiple autotests 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="autoTestCreateApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;AutoTestApiResult&gt;)</returns>
-        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<List<AutoTestApiResult>>> ApiAdaptersAutoTestsBulkPostWithHttpInfoAsync(List<AutoTestCreateApiModel> autoTestCreateApiModel = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<List<AutoTestApiResult>>> AdaptersAutoTestsBulkPostWithHttpInfoAsync(List<AutoTestCreateApiModel> autoTestCreateApiModel = default, System.Threading.CancellationToken cancellationToken = default)
         {
 
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
@@ -967,11 +967,11 @@ namespace TestIT.AdaptersApi.Api
 
             // make the HTTP request
 
-            var localVarResponse = await this.AsynchronousClient.PostAsync<List<AutoTestApiResult>>("/api/adapters/autoTests/bulk", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.PostAsync<List<AutoTestApiResult>>("/adapters/autoTests/bulk", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersAutoTestsBulkPost", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersAutoTestsBulkPost", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -979,23 +979,23 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Update multiple autotests 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="autoTestUpdateApiModel"> (optional)</param>
         /// <returns></returns>
-        public void ApiAdaptersAutoTestsBulkPut(List<AutoTestUpdateApiModel> autoTestUpdateApiModel = default)
+        public void AdaptersAutoTestsBulkPut(List<AutoTestUpdateApiModel> autoTestUpdateApiModel = default)
         {
-            ApiAdaptersAutoTestsBulkPutWithHttpInfo(autoTestUpdateApiModel);
+            AdaptersAutoTestsBulkPutWithHttpInfo(autoTestUpdateApiModel);
         }
 
         /// <summary>
-        ///  
+        /// Update multiple autotests 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="autoTestUpdateApiModel"> (optional)</param>
         /// <returns>ApiResponse of Object(void)</returns>
-        public TestIT.AdaptersApi.Client.ApiResponse<Object> ApiAdaptersAutoTestsBulkPutWithHttpInfo(List<AutoTestUpdateApiModel> autoTestUpdateApiModel = default)
+        public TestIT.AdaptersApi.Client.ApiResponse<Object> AdaptersAutoTestsBulkPutWithHttpInfo(List<AutoTestUpdateApiModel> autoTestUpdateApiModel = default)
         {
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
 
@@ -1029,11 +1029,11 @@ namespace TestIT.AdaptersApi.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Put<Object>("/api/adapters/autoTests/bulk", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Put<Object>("/adapters/autoTests/bulk", localVarRequestOptions, this.Configuration);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersAutoTestsBulkPut", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersAutoTestsBulkPut", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -1041,25 +1041,25 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Update multiple autotests 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="autoTestUpdateApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of void</returns>
-        public async System.Threading.Tasks.Task ApiAdaptersAutoTestsBulkPutAsync(List<AutoTestUpdateApiModel> autoTestUpdateApiModel = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task AdaptersAutoTestsBulkPutAsync(List<AutoTestUpdateApiModel> autoTestUpdateApiModel = default, System.Threading.CancellationToken cancellationToken = default)
         {
-            await ApiAdaptersAutoTestsBulkPutWithHttpInfoAsync(autoTestUpdateApiModel, cancellationToken).ConfigureAwait(false);
+            await AdaptersAutoTestsBulkPutWithHttpInfoAsync(autoTestUpdateApiModel, cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
-        ///  
+        /// Update multiple autotests 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="autoTestUpdateApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse</returns>
-        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<Object>> ApiAdaptersAutoTestsBulkPutWithHttpInfoAsync(List<AutoTestUpdateApiModel> autoTestUpdateApiModel = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<Object>> AdaptersAutoTestsBulkPutWithHttpInfoAsync(List<AutoTestUpdateApiModel> autoTestUpdateApiModel = default, System.Threading.CancellationToken cancellationToken = default)
         {
 
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
@@ -1096,11 +1096,11 @@ namespace TestIT.AdaptersApi.Api
 
             // make the HTTP request
 
-            var localVarResponse = await this.AsynchronousClient.PutAsync<Object>("/api/adapters/autoTests/bulk", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.PutAsync<Object>("/adapters/autoTests/bulk", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersAutoTestsBulkPut", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersAutoTestsBulkPut", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -1139,9 +1139,9 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="searchValue">Value for searching (optional)</param>
         /// <returns>List&lt;AutoTestModel&gt;</returns>
         [Obsolete]
-        public List<AutoTestModel> ApiAdaptersAutoTestsGet(Guid? projectId = default, string externalId = default, long? globalId = default, string varNamespace = default, bool? isNamespaceNull = default, bool? includeEmptyNamespaces = default, string className = default, bool? isClassnameNull = default, bool? includeEmptyClassNames = default, bool? isDeleted = default, bool? deleted = default, List<string> labels = default, int? stabilityMinimal = default, int? minStability = default, int? stabilityMaximal = default, int? maxStability = default, bool? isFlaky = default, bool? flaky = default, bool? includeSteps = default, bool? includeLabels = default, string externalKey = default, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default)
+        public List<AutoTestModel> AdaptersAutoTestsGet(Guid? projectId = default, string externalId = default, long? globalId = default, string varNamespace = default, bool? isNamespaceNull = default, bool? includeEmptyNamespaces = default, string className = default, bool? isClassnameNull = default, bool? includeEmptyClassNames = default, bool? isDeleted = default, bool? deleted = default, List<string> labels = default, int? stabilityMinimal = default, int? minStability = default, int? stabilityMaximal = default, int? maxStability = default, bool? isFlaky = default, bool? flaky = default, bool? includeSteps = default, bool? includeLabels = default, string externalKey = default, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<List<AutoTestModel>> localVarResponse = ApiAdaptersAutoTestsGetWithHttpInfo(projectId, externalId, globalId, varNamespace, isNamespaceNull, includeEmptyNamespaces, className, isClassnameNull, includeEmptyClassNames, isDeleted, deleted, labels, stabilityMinimal, minStability, stabilityMaximal, maxStability, isFlaky, flaky, includeSteps, includeLabels, externalKey, skip, take, orderBy, searchField, searchValue);
+            TestIT.AdaptersApi.Client.ApiResponse<List<AutoTestModel>> localVarResponse = AdaptersAutoTestsGetWithHttpInfo(projectId, externalId, globalId, varNamespace, isNamespaceNull, includeEmptyNamespaces, className, isClassnameNull, includeEmptyClassNames, isDeleted, deleted, labels, stabilityMinimal, minStability, stabilityMaximal, maxStability, isFlaky, flaky, includeSteps, includeLabels, externalKey, skip, take, orderBy, searchField, searchValue);
             return localVarResponse.Data;
         }
 
@@ -1177,7 +1177,7 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="searchValue">Value for searching (optional)</param>
         /// <returns>ApiResponse of List&lt;AutoTestModel&gt;</returns>
         [Obsolete]
-        public TestIT.AdaptersApi.Client.ApiResponse<List<AutoTestModel>> ApiAdaptersAutoTestsGetWithHttpInfo(Guid? projectId = default, string externalId = default, long? globalId = default, string varNamespace = default, bool? isNamespaceNull = default, bool? includeEmptyNamespaces = default, string className = default, bool? isClassnameNull = default, bool? includeEmptyClassNames = default, bool? isDeleted = default, bool? deleted = default, List<string> labels = default, int? stabilityMinimal = default, int? minStability = default, int? stabilityMaximal = default, int? maxStability = default, bool? isFlaky = default, bool? flaky = default, bool? includeSteps = default, bool? includeLabels = default, string externalKey = default, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default)
+        public TestIT.AdaptersApi.Client.ApiResponse<List<AutoTestModel>> AdaptersAutoTestsGetWithHttpInfo(Guid? projectId = default, string externalId = default, long? globalId = default, string varNamespace = default, bool? isNamespaceNull = default, bool? includeEmptyNamespaces = default, string className = default, bool? isClassnameNull = default, bool? includeEmptyClassNames = default, bool? isDeleted = default, bool? deleted = default, List<string> labels = default, int? stabilityMinimal = default, int? minStability = default, int? stabilityMaximal = default, int? maxStability = default, bool? isFlaky = default, bool? flaky = default, bool? includeSteps = default, bool? includeLabels = default, string externalKey = default, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default)
         {
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
 
@@ -1313,11 +1313,11 @@ namespace TestIT.AdaptersApi.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Get<List<AutoTestModel>>("/api/adapters/autoTests", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Get<List<AutoTestModel>>("/adapters/autoTests", localVarRequestOptions, this.Configuration);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersAutoTestsGet", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersAutoTestsGet", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -1357,9 +1357,9 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;AutoTestModel&gt;</returns>
         [Obsolete]
-        public async System.Threading.Tasks.Task<List<AutoTestModel>> ApiAdaptersAutoTestsGetAsync(Guid? projectId = default, string externalId = default, long? globalId = default, string varNamespace = default, bool? isNamespaceNull = default, bool? includeEmptyNamespaces = default, string className = default, bool? isClassnameNull = default, bool? includeEmptyClassNames = default, bool? isDeleted = default, bool? deleted = default, List<string> labels = default, int? stabilityMinimal = default, int? minStability = default, int? stabilityMaximal = default, int? maxStability = default, bool? isFlaky = default, bool? flaky = default, bool? includeSteps = default, bool? includeLabels = default, string externalKey = default, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<List<AutoTestModel>> AdaptersAutoTestsGetAsync(Guid? projectId = default, string externalId = default, long? globalId = default, string varNamespace = default, bool? isNamespaceNull = default, bool? includeEmptyNamespaces = default, string className = default, bool? isClassnameNull = default, bool? includeEmptyClassNames = default, bool? isDeleted = default, bool? deleted = default, List<string> labels = default, int? stabilityMinimal = default, int? minStability = default, int? stabilityMaximal = default, int? maxStability = default, bool? isFlaky = default, bool? flaky = default, bool? includeSteps = default, bool? includeLabels = default, string externalKey = default, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, System.Threading.CancellationToken cancellationToken = default)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<List<AutoTestModel>> localVarResponse = await ApiAdaptersAutoTestsGetWithHttpInfoAsync(projectId, externalId, globalId, varNamespace, isNamespaceNull, includeEmptyNamespaces, className, isClassnameNull, includeEmptyClassNames, isDeleted, deleted, labels, stabilityMinimal, minStability, stabilityMaximal, maxStability, isFlaky, flaky, includeSteps, includeLabels, externalKey, skip, take, orderBy, searchField, searchValue, cancellationToken).ConfigureAwait(false);
+            TestIT.AdaptersApi.Client.ApiResponse<List<AutoTestModel>> localVarResponse = await AdaptersAutoTestsGetWithHttpInfoAsync(projectId, externalId, globalId, varNamespace, isNamespaceNull, includeEmptyNamespaces, className, isClassnameNull, includeEmptyClassNames, isDeleted, deleted, labels, stabilityMinimal, minStability, stabilityMaximal, maxStability, isFlaky, flaky, includeSteps, includeLabels, externalKey, skip, take, orderBy, searchField, searchValue, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
@@ -1396,7 +1396,7 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;AutoTestModel&gt;)</returns>
         [Obsolete]
-        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<List<AutoTestModel>>> ApiAdaptersAutoTestsGetWithHttpInfoAsync(Guid? projectId = default, string externalId = default, long? globalId = default, string varNamespace = default, bool? isNamespaceNull = default, bool? includeEmptyNamespaces = default, string className = default, bool? isClassnameNull = default, bool? includeEmptyClassNames = default, bool? isDeleted = default, bool? deleted = default, List<string> labels = default, int? stabilityMinimal = default, int? minStability = default, int? stabilityMaximal = default, int? maxStability = default, bool? isFlaky = default, bool? flaky = default, bool? includeSteps = default, bool? includeLabels = default, string externalKey = default, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<List<AutoTestModel>>> AdaptersAutoTestsGetWithHttpInfoAsync(Guid? projectId = default, string externalId = default, long? globalId = default, string varNamespace = default, bool? isNamespaceNull = default, bool? includeEmptyNamespaces = default, string className = default, bool? isClassnameNull = default, bool? includeEmptyClassNames = default, bool? isDeleted = default, bool? deleted = default, List<string> labels = default, int? stabilityMinimal = default, int? minStability = default, int? stabilityMaximal = default, int? maxStability = default, bool? isFlaky = default, bool? flaky = default, bool? includeSteps = default, bool? includeLabels = default, string externalKey = default, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, System.Threading.CancellationToken cancellationToken = default)
         {
 
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
@@ -1535,11 +1535,11 @@ namespace TestIT.AdaptersApi.Api
 
             // make the HTTP request
 
-            var localVarResponse = await this.AsynchronousClient.GetAsync<List<AutoTestModel>>("/api/adapters/autoTests", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.GetAsync<List<AutoTestModel>>("/adapters/autoTests", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersAutoTestsGet", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersAutoTestsGet", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -1547,28 +1547,28 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Get autotest by internal or global ID 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id">Internal (UUID) or global (integer) identifier</param>
         /// <returns>AutoTestApiResult</returns>
-        public AutoTestApiResult ApiAdaptersAutoTestsIdGet(string id)
+        public AutoTestApiResult AdaptersAutoTestsIdGet(string id)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<AutoTestApiResult> localVarResponse = ApiAdaptersAutoTestsIdGetWithHttpInfo(id);
+            TestIT.AdaptersApi.Client.ApiResponse<AutoTestApiResult> localVarResponse = AdaptersAutoTestsIdGetWithHttpInfo(id);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        ///  
+        /// Get autotest by internal or global ID 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id">Internal (UUID) or global (integer) identifier</param>
         /// <returns>ApiResponse of AutoTestApiResult</returns>
-        public TestIT.AdaptersApi.Client.ApiResponse<AutoTestApiResult> ApiAdaptersAutoTestsIdGetWithHttpInfo(string id)
+        public TestIT.AdaptersApi.Client.ApiResponse<AutoTestApiResult> AdaptersAutoTestsIdGetWithHttpInfo(string id)
         {
             // verify the required parameter 'id' is set
             if (id == null)
-                throw new TestIT.AdaptersApi.Client.ApiException(400, "Missing required parameter 'id' when calling AutoTestsApi->ApiAdaptersAutoTestsIdGet");
+                throw new TestIT.AdaptersApi.Client.ApiException(400, "Missing required parameter 'id' when calling AutoTestsApi->AdaptersAutoTestsIdGet");
 
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
 
@@ -1601,11 +1601,11 @@ namespace TestIT.AdaptersApi.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Get<AutoTestApiResult>("/api/adapters/autoTests/{id}", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Get<AutoTestApiResult>("/adapters/autoTests/{id}", localVarRequestOptions, this.Configuration);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersAutoTestsIdGet", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersAutoTestsIdGet", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -1613,30 +1613,30 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Get autotest by internal or global ID 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id">Internal (UUID) or global (integer) identifier</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of AutoTestApiResult</returns>
-        public async System.Threading.Tasks.Task<AutoTestApiResult> ApiAdaptersAutoTestsIdGetAsync(string id, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<AutoTestApiResult> AdaptersAutoTestsIdGetAsync(string id, System.Threading.CancellationToken cancellationToken = default)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<AutoTestApiResult> localVarResponse = await ApiAdaptersAutoTestsIdGetWithHttpInfoAsync(id, cancellationToken).ConfigureAwait(false);
+            TestIT.AdaptersApi.Client.ApiResponse<AutoTestApiResult> localVarResponse = await AdaptersAutoTestsIdGetWithHttpInfoAsync(id, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        ///  
+        /// Get autotest by internal or global ID 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id">Internal (UUID) or global (integer) identifier</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (AutoTestApiResult)</returns>
-        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<AutoTestApiResult>> ApiAdaptersAutoTestsIdGetWithHttpInfoAsync(string id, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<AutoTestApiResult>> AdaptersAutoTestsIdGetWithHttpInfoAsync(string id, System.Threading.CancellationToken cancellationToken = default)
         {
             // verify the required parameter 'id' is set
             if (id == null)
-                throw new TestIT.AdaptersApi.Client.ApiException(400, "Missing required parameter 'id' when calling AutoTestsApi->ApiAdaptersAutoTestsIdGet");
+                throw new TestIT.AdaptersApi.Client.ApiException(400, "Missing required parameter 'id' when calling AutoTestsApi->AdaptersAutoTestsIdGet");
 
 
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
@@ -1672,11 +1672,11 @@ namespace TestIT.AdaptersApi.Api
 
             // make the HTTP request
 
-            var localVarResponse = await this.AsynchronousClient.GetAsync<AutoTestApiResult>("/api/adapters/autoTests/{id}", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.GetAsync<AutoTestApiResult>("/adapters/autoTests/{id}", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersAutoTestsIdGet", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersAutoTestsIdGet", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -1684,25 +1684,25 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  See &lt;a href&#x3D;\&quot;https://www.rfc-editor.org/rfc/rfc6902\&quot; target&#x3D;\&quot;_blank\&quot;&gt;RFC 6902: JavaScript Object Notation (JSON) Patch&lt;/a&gt; for details
+        /// Patch auto test See &lt;a href&#x3D;\&quot;https://www.rfc-editor.org/rfc/rfc6902\&quot; target&#x3D;\&quot;_blank\&quot;&gt;RFC 6902: JavaScript Object Notation (JSON) Patch&lt;/a&gt; for details
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <param name="operation"> (optional)</param>
         /// <returns></returns>
-        public void ApiAdaptersAutoTestsIdPatch(Guid id, List<Operation> operation = default)
+        public void AdaptersAutoTestsIdPatch(Guid id, List<Operation> operation = default)
         {
-            ApiAdaptersAutoTestsIdPatchWithHttpInfo(id, operation);
+            AdaptersAutoTestsIdPatchWithHttpInfo(id, operation);
         }
 
         /// <summary>
-        ///  See &lt;a href&#x3D;\&quot;https://www.rfc-editor.org/rfc/rfc6902\&quot; target&#x3D;\&quot;_blank\&quot;&gt;RFC 6902: JavaScript Object Notation (JSON) Patch&lt;/a&gt; for details
+        /// Patch auto test See &lt;a href&#x3D;\&quot;https://www.rfc-editor.org/rfc/rfc6902\&quot; target&#x3D;\&quot;_blank\&quot;&gt;RFC 6902: JavaScript Object Notation (JSON) Patch&lt;/a&gt; for details
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <param name="operation"> (optional)</param>
         /// <returns>ApiResponse of Object(void)</returns>
-        public TestIT.AdaptersApi.Client.ApiResponse<Object> ApiAdaptersAutoTestsIdPatchWithHttpInfo(Guid id, List<Operation> operation = default)
+        public TestIT.AdaptersApi.Client.ApiResponse<Object> AdaptersAutoTestsIdPatchWithHttpInfo(Guid id, List<Operation> operation = default)
         {
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
 
@@ -1737,11 +1737,11 @@ namespace TestIT.AdaptersApi.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Patch<Object>("/api/adapters/autoTests/{id}", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Patch<Object>("/adapters/autoTests/{id}", localVarRequestOptions, this.Configuration);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersAutoTestsIdPatch", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersAutoTestsIdPatch", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -1749,27 +1749,27 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  See &lt;a href&#x3D;\&quot;https://www.rfc-editor.org/rfc/rfc6902\&quot; target&#x3D;\&quot;_blank\&quot;&gt;RFC 6902: JavaScript Object Notation (JSON) Patch&lt;/a&gt; for details
+        /// Patch auto test See &lt;a href&#x3D;\&quot;https://www.rfc-editor.org/rfc/rfc6902\&quot; target&#x3D;\&quot;_blank\&quot;&gt;RFC 6902: JavaScript Object Notation (JSON) Patch&lt;/a&gt; for details
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <param name="operation"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of void</returns>
-        public async System.Threading.Tasks.Task ApiAdaptersAutoTestsIdPatchAsync(Guid id, List<Operation> operation = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task AdaptersAutoTestsIdPatchAsync(Guid id, List<Operation> operation = default, System.Threading.CancellationToken cancellationToken = default)
         {
-            await ApiAdaptersAutoTestsIdPatchWithHttpInfoAsync(id, operation, cancellationToken).ConfigureAwait(false);
+            await AdaptersAutoTestsIdPatchWithHttpInfoAsync(id, operation, cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
-        ///  See &lt;a href&#x3D;\&quot;https://www.rfc-editor.org/rfc/rfc6902\&quot; target&#x3D;\&quot;_blank\&quot;&gt;RFC 6902: JavaScript Object Notation (JSON) Patch&lt;/a&gt; for details
+        /// Patch auto test See &lt;a href&#x3D;\&quot;https://www.rfc-editor.org/rfc/rfc6902\&quot; target&#x3D;\&quot;_blank\&quot;&gt;RFC 6902: JavaScript Object Notation (JSON) Patch&lt;/a&gt; for details
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <param name="operation"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse</returns>
-        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<Object>> ApiAdaptersAutoTestsIdPatchWithHttpInfoAsync(Guid id, List<Operation> operation = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<Object>> AdaptersAutoTestsIdPatchWithHttpInfoAsync(Guid id, List<Operation> operation = default, System.Threading.CancellationToken cancellationToken = default)
         {
 
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
@@ -1807,11 +1807,11 @@ namespace TestIT.AdaptersApi.Api
 
             // make the HTTP request
 
-            var localVarResponse = await this.AsynchronousClient.PatchAsync<Object>("/api/adapters/autoTests/{id}", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.PatchAsync<Object>("/adapters/autoTests/{id}", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersAutoTestsIdPatch", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersAutoTestsIdPatch", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -1819,29 +1819,29 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Unlink autotest from work item 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id">Internal (UUID) or global (integer) identifier</param>
         /// <param name="workItemId">Internal (UUID) or global (integer) identifier (optional)</param>
         /// <returns></returns>
-        public void ApiAdaptersAutoTestsIdWorkItemsDelete(string id, string workItemId = default)
+        public void AdaptersAutoTestsIdWorkItemsDelete(string id, string workItemId = default)
         {
-            ApiAdaptersAutoTestsIdWorkItemsDeleteWithHttpInfo(id, workItemId);
+            AdaptersAutoTestsIdWorkItemsDeleteWithHttpInfo(id, workItemId);
         }
 
         /// <summary>
-        ///  
+        /// Unlink autotest from work item 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id">Internal (UUID) or global (integer) identifier</param>
         /// <param name="workItemId">Internal (UUID) or global (integer) identifier (optional)</param>
         /// <returns>ApiResponse of Object(void)</returns>
-        public TestIT.AdaptersApi.Client.ApiResponse<Object> ApiAdaptersAutoTestsIdWorkItemsDeleteWithHttpInfo(string id, string workItemId = default)
+        public TestIT.AdaptersApi.Client.ApiResponse<Object> AdaptersAutoTestsIdWorkItemsDeleteWithHttpInfo(string id, string workItemId = default)
         {
             // verify the required parameter 'id' is set
             if (id == null)
-                throw new TestIT.AdaptersApi.Client.ApiException(400, "Missing required parameter 'id' when calling AutoTestsApi->ApiAdaptersAutoTestsIdWorkItemsDelete");
+                throw new TestIT.AdaptersApi.Client.ApiException(400, "Missing required parameter 'id' when calling AutoTestsApi->AdaptersAutoTestsIdWorkItemsDelete");
 
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
 
@@ -1878,11 +1878,11 @@ namespace TestIT.AdaptersApi.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Delete<Object>("/api/adapters/autoTests/{id}/work-items", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Delete<Object>("/adapters/autoTests/{id}/work-items", localVarRequestOptions, this.Configuration);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersAutoTestsIdWorkItemsDelete", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersAutoTestsIdWorkItemsDelete", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -1890,31 +1890,31 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Unlink autotest from work item 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id">Internal (UUID) or global (integer) identifier</param>
         /// <param name="workItemId">Internal (UUID) or global (integer) identifier (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of void</returns>
-        public async System.Threading.Tasks.Task ApiAdaptersAutoTestsIdWorkItemsDeleteAsync(string id, string workItemId = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task AdaptersAutoTestsIdWorkItemsDeleteAsync(string id, string workItemId = default, System.Threading.CancellationToken cancellationToken = default)
         {
-            await ApiAdaptersAutoTestsIdWorkItemsDeleteWithHttpInfoAsync(id, workItemId, cancellationToken).ConfigureAwait(false);
+            await AdaptersAutoTestsIdWorkItemsDeleteWithHttpInfoAsync(id, workItemId, cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
-        ///  
+        /// Unlink autotest from work item 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id">Internal (UUID) or global (integer) identifier</param>
         /// <param name="workItemId">Internal (UUID) or global (integer) identifier (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse</returns>
-        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<Object>> ApiAdaptersAutoTestsIdWorkItemsDeleteWithHttpInfoAsync(string id, string workItemId = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<Object>> AdaptersAutoTestsIdWorkItemsDeleteWithHttpInfoAsync(string id, string workItemId = default, System.Threading.CancellationToken cancellationToken = default)
         {
             // verify the required parameter 'id' is set
             if (id == null)
-                throw new TestIT.AdaptersApi.Client.ApiException(400, "Missing required parameter 'id' when calling AutoTestsApi->ApiAdaptersAutoTestsIdWorkItemsDelete");
+                throw new TestIT.AdaptersApi.Client.ApiException(400, "Missing required parameter 'id' when calling AutoTestsApi->AdaptersAutoTestsIdWorkItemsDelete");
 
 
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
@@ -1954,11 +1954,11 @@ namespace TestIT.AdaptersApi.Api
 
             // make the HTTP request
 
-            var localVarResponse = await this.AsynchronousClient.DeleteAsync<Object>("/api/adapters/autoTests/{id}/work-items", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.DeleteAsync<Object>("/adapters/autoTests/{id}/work-items", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersAutoTestsIdWorkItemsDelete", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersAutoTestsIdWorkItemsDelete", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -1966,32 +1966,32 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Get work items linked to autotest 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id">Internal (UUID) or global (integer) identifier</param>
         /// <param name="isDeleted"> (optional)</param>
         /// <param name="isWorkItemDeleted"> (optional, default to false)</param>
         /// <returns>List&lt;AutoTestWorkItemIdentifierApiResult&gt;</returns>
-        public List<AutoTestWorkItemIdentifierApiResult> ApiAdaptersAutoTestsIdWorkItemsGet(string id, bool? isDeleted = default, bool? isWorkItemDeleted = default)
+        public List<AutoTestWorkItemIdentifierApiResult> AdaptersAutoTestsIdWorkItemsGet(string id, bool? isDeleted = default, bool? isWorkItemDeleted = default)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<List<AutoTestWorkItemIdentifierApiResult>> localVarResponse = ApiAdaptersAutoTestsIdWorkItemsGetWithHttpInfo(id, isDeleted, isWorkItemDeleted);
+            TestIT.AdaptersApi.Client.ApiResponse<List<AutoTestWorkItemIdentifierApiResult>> localVarResponse = AdaptersAutoTestsIdWorkItemsGetWithHttpInfo(id, isDeleted, isWorkItemDeleted);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        ///  
+        /// Get work items linked to autotest 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id">Internal (UUID) or global (integer) identifier</param>
         /// <param name="isDeleted"> (optional)</param>
         /// <param name="isWorkItemDeleted"> (optional, default to false)</param>
         /// <returns>ApiResponse of List&lt;AutoTestWorkItemIdentifierApiResult&gt;</returns>
-        public TestIT.AdaptersApi.Client.ApiResponse<List<AutoTestWorkItemIdentifierApiResult>> ApiAdaptersAutoTestsIdWorkItemsGetWithHttpInfo(string id, bool? isDeleted = default, bool? isWorkItemDeleted = default)
+        public TestIT.AdaptersApi.Client.ApiResponse<List<AutoTestWorkItemIdentifierApiResult>> AdaptersAutoTestsIdWorkItemsGetWithHttpInfo(string id, bool? isDeleted = default, bool? isWorkItemDeleted = default)
         {
             // verify the required parameter 'id' is set
             if (id == null)
-                throw new TestIT.AdaptersApi.Client.ApiException(400, "Missing required parameter 'id' when calling AutoTestsApi->ApiAdaptersAutoTestsIdWorkItemsGet");
+                throw new TestIT.AdaptersApi.Client.ApiException(400, "Missing required parameter 'id' when calling AutoTestsApi->AdaptersAutoTestsIdWorkItemsGet");
 
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
 
@@ -2032,11 +2032,11 @@ namespace TestIT.AdaptersApi.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Get<List<AutoTestWorkItemIdentifierApiResult>>("/api/adapters/autoTests/{id}/work-items", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Get<List<AutoTestWorkItemIdentifierApiResult>>("/adapters/autoTests/{id}/work-items", localVarRequestOptions, this.Configuration);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersAutoTestsIdWorkItemsGet", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersAutoTestsIdWorkItemsGet", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -2044,7 +2044,7 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Get work items linked to autotest 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id">Internal (UUID) or global (integer) identifier</param>
@@ -2052,14 +2052,14 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="isWorkItemDeleted"> (optional, default to false)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;AutoTestWorkItemIdentifierApiResult&gt;</returns>
-        public async System.Threading.Tasks.Task<List<AutoTestWorkItemIdentifierApiResult>> ApiAdaptersAutoTestsIdWorkItemsGetAsync(string id, bool? isDeleted = default, bool? isWorkItemDeleted = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<List<AutoTestWorkItemIdentifierApiResult>> AdaptersAutoTestsIdWorkItemsGetAsync(string id, bool? isDeleted = default, bool? isWorkItemDeleted = default, System.Threading.CancellationToken cancellationToken = default)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<List<AutoTestWorkItemIdentifierApiResult>> localVarResponse = await ApiAdaptersAutoTestsIdWorkItemsGetWithHttpInfoAsync(id, isDeleted, isWorkItemDeleted, cancellationToken).ConfigureAwait(false);
+            TestIT.AdaptersApi.Client.ApiResponse<List<AutoTestWorkItemIdentifierApiResult>> localVarResponse = await AdaptersAutoTestsIdWorkItemsGetWithHttpInfoAsync(id, isDeleted, isWorkItemDeleted, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        ///  
+        /// Get work items linked to autotest 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id">Internal (UUID) or global (integer) identifier</param>
@@ -2067,11 +2067,11 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="isWorkItemDeleted"> (optional, default to false)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;AutoTestWorkItemIdentifierApiResult&gt;)</returns>
-        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<List<AutoTestWorkItemIdentifierApiResult>>> ApiAdaptersAutoTestsIdWorkItemsGetWithHttpInfoAsync(string id, bool? isDeleted = default, bool? isWorkItemDeleted = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<List<AutoTestWorkItemIdentifierApiResult>>> AdaptersAutoTestsIdWorkItemsGetWithHttpInfoAsync(string id, bool? isDeleted = default, bool? isWorkItemDeleted = default, System.Threading.CancellationToken cancellationToken = default)
         {
             // verify the required parameter 'id' is set
             if (id == null)
-                throw new TestIT.AdaptersApi.Client.ApiException(400, "Missing required parameter 'id' when calling AutoTestsApi->ApiAdaptersAutoTestsIdWorkItemsGet");
+                throw new TestIT.AdaptersApi.Client.ApiException(400, "Missing required parameter 'id' when calling AutoTestsApi->AdaptersAutoTestsIdWorkItemsGet");
 
 
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
@@ -2115,11 +2115,11 @@ namespace TestIT.AdaptersApi.Api
 
             // make the HTTP request
 
-            var localVarResponse = await this.AsynchronousClient.GetAsync<List<AutoTestWorkItemIdentifierApiResult>>("/api/adapters/autoTests/{id}/work-items", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.GetAsync<List<AutoTestWorkItemIdentifierApiResult>>("/adapters/autoTests/{id}/work-items", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersAutoTestsIdWorkItemsGet", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersAutoTestsIdWorkItemsGet", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -2127,29 +2127,29 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Link autotest with work items 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id">Internal (UUID) or global (integer) identifier</param>
         /// <param name="workItemIdApiModel"> (optional)</param>
         /// <returns></returns>
-        public void ApiAdaptersAutoTestsIdWorkItemsPost(string id, WorkItemIdApiModel workItemIdApiModel = default)
+        public void AdaptersAutoTestsIdWorkItemsPost(string id, WorkItemIdApiModel workItemIdApiModel = default)
         {
-            ApiAdaptersAutoTestsIdWorkItemsPostWithHttpInfo(id, workItemIdApiModel);
+            AdaptersAutoTestsIdWorkItemsPostWithHttpInfo(id, workItemIdApiModel);
         }
 
         /// <summary>
-        ///  
+        /// Link autotest with work items 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id">Internal (UUID) or global (integer) identifier</param>
         /// <param name="workItemIdApiModel"> (optional)</param>
         /// <returns>ApiResponse of Object(void)</returns>
-        public TestIT.AdaptersApi.Client.ApiResponse<Object> ApiAdaptersAutoTestsIdWorkItemsPostWithHttpInfo(string id, WorkItemIdApiModel workItemIdApiModel = default)
+        public TestIT.AdaptersApi.Client.ApiResponse<Object> AdaptersAutoTestsIdWorkItemsPostWithHttpInfo(string id, WorkItemIdApiModel workItemIdApiModel = default)
         {
             // verify the required parameter 'id' is set
             if (id == null)
-                throw new TestIT.AdaptersApi.Client.ApiException(400, "Missing required parameter 'id' when calling AutoTestsApi->ApiAdaptersAutoTestsIdWorkItemsPost");
+                throw new TestIT.AdaptersApi.Client.ApiException(400, "Missing required parameter 'id' when calling AutoTestsApi->AdaptersAutoTestsIdWorkItemsPost");
 
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
 
@@ -2184,11 +2184,11 @@ namespace TestIT.AdaptersApi.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Post<Object>("/api/adapters/autoTests/{id}/work-items", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Post<Object>("/adapters/autoTests/{id}/work-items", localVarRequestOptions, this.Configuration);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersAutoTestsIdWorkItemsPost", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersAutoTestsIdWorkItemsPost", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -2196,31 +2196,31 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Link autotest with work items 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id">Internal (UUID) or global (integer) identifier</param>
         /// <param name="workItemIdApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of void</returns>
-        public async System.Threading.Tasks.Task ApiAdaptersAutoTestsIdWorkItemsPostAsync(string id, WorkItemIdApiModel workItemIdApiModel = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task AdaptersAutoTestsIdWorkItemsPostAsync(string id, WorkItemIdApiModel workItemIdApiModel = default, System.Threading.CancellationToken cancellationToken = default)
         {
-            await ApiAdaptersAutoTestsIdWorkItemsPostWithHttpInfoAsync(id, workItemIdApiModel, cancellationToken).ConfigureAwait(false);
+            await AdaptersAutoTestsIdWorkItemsPostWithHttpInfoAsync(id, workItemIdApiModel, cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
-        ///  
+        /// Link autotest with work items 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id">Internal (UUID) or global (integer) identifier</param>
         /// <param name="workItemIdApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse</returns>
-        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<Object>> ApiAdaptersAutoTestsIdWorkItemsPostWithHttpInfoAsync(string id, WorkItemIdApiModel workItemIdApiModel = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<Object>> AdaptersAutoTestsIdWorkItemsPostWithHttpInfoAsync(string id, WorkItemIdApiModel workItemIdApiModel = default, System.Threading.CancellationToken cancellationToken = default)
         {
             // verify the required parameter 'id' is set
             if (id == null)
-                throw new TestIT.AdaptersApi.Client.ApiException(400, "Missing required parameter 'id' when calling AutoTestsApi->ApiAdaptersAutoTestsIdWorkItemsPost");
+                throw new TestIT.AdaptersApi.Client.ApiException(400, "Missing required parameter 'id' when calling AutoTestsApi->AdaptersAutoTestsIdWorkItemsPost");
 
 
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
@@ -2258,11 +2258,11 @@ namespace TestIT.AdaptersApi.Api
 
             // make the HTTP request
 
-            var localVarResponse = await this.AsynchronousClient.PostAsync<Object>("/api/adapters/autoTests/{id}/work-items", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.PostAsync<Object>("/adapters/autoTests/{id}/work-items", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersAutoTestsIdWorkItemsPost", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersAutoTestsIdWorkItemsPost", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -2270,24 +2270,24 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Create autotest 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="autoTestCreateApiModel"> (optional)</param>
         /// <returns>AutoTestApiResult</returns>
-        public AutoTestApiResult ApiAdaptersAutoTestsPost(AutoTestCreateApiModel autoTestCreateApiModel = default)
+        public AutoTestApiResult AdaptersAutoTestsPost(AutoTestCreateApiModel autoTestCreateApiModel = default)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<AutoTestApiResult> localVarResponse = ApiAdaptersAutoTestsPostWithHttpInfo(autoTestCreateApiModel);
+            TestIT.AdaptersApi.Client.ApiResponse<AutoTestApiResult> localVarResponse = AdaptersAutoTestsPostWithHttpInfo(autoTestCreateApiModel);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        ///  
+        /// Create autotest 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="autoTestCreateApiModel"> (optional)</param>
         /// <returns>ApiResponse of AutoTestApiResult</returns>
-        public TestIT.AdaptersApi.Client.ApiResponse<AutoTestApiResult> ApiAdaptersAutoTestsPostWithHttpInfo(AutoTestCreateApiModel autoTestCreateApiModel = default)
+        public TestIT.AdaptersApi.Client.ApiResponse<AutoTestApiResult> AdaptersAutoTestsPostWithHttpInfo(AutoTestCreateApiModel autoTestCreateApiModel = default)
         {
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
 
@@ -2321,11 +2321,11 @@ namespace TestIT.AdaptersApi.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Post<AutoTestApiResult>("/api/adapters/autoTests", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Post<AutoTestApiResult>("/adapters/autoTests", localVarRequestOptions, this.Configuration);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersAutoTestsPost", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersAutoTestsPost", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -2333,26 +2333,26 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Create autotest 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="autoTestCreateApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of AutoTestApiResult</returns>
-        public async System.Threading.Tasks.Task<AutoTestApiResult> ApiAdaptersAutoTestsPostAsync(AutoTestCreateApiModel autoTestCreateApiModel = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<AutoTestApiResult> AdaptersAutoTestsPostAsync(AutoTestCreateApiModel autoTestCreateApiModel = default, System.Threading.CancellationToken cancellationToken = default)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<AutoTestApiResult> localVarResponse = await ApiAdaptersAutoTestsPostWithHttpInfoAsync(autoTestCreateApiModel, cancellationToken).ConfigureAwait(false);
+            TestIT.AdaptersApi.Client.ApiResponse<AutoTestApiResult> localVarResponse = await AdaptersAutoTestsPostWithHttpInfoAsync(autoTestCreateApiModel, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        ///  
+        /// Create autotest 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="autoTestCreateApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (AutoTestApiResult)</returns>
-        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<AutoTestApiResult>> ApiAdaptersAutoTestsPostWithHttpInfoAsync(AutoTestCreateApiModel autoTestCreateApiModel = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<AutoTestApiResult>> AdaptersAutoTestsPostWithHttpInfoAsync(AutoTestCreateApiModel autoTestCreateApiModel = default, System.Threading.CancellationToken cancellationToken = default)
         {
 
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
@@ -2389,11 +2389,11 @@ namespace TestIT.AdaptersApi.Api
 
             // make the HTTP request
 
-            var localVarResponse = await this.AsynchronousClient.PostAsync<AutoTestApiResult>("/api/adapters/autoTests", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.PostAsync<AutoTestApiResult>("/adapters/autoTests", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersAutoTestsPost", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersAutoTestsPost", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -2401,23 +2401,23 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Update autotest 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="autoTestUpdateApiModel"> (optional)</param>
         /// <returns></returns>
-        public void ApiAdaptersAutoTestsPut(AutoTestUpdateApiModel autoTestUpdateApiModel = default)
+        public void AdaptersAutoTestsPut(AutoTestUpdateApiModel autoTestUpdateApiModel = default)
         {
-            ApiAdaptersAutoTestsPutWithHttpInfo(autoTestUpdateApiModel);
+            AdaptersAutoTestsPutWithHttpInfo(autoTestUpdateApiModel);
         }
 
         /// <summary>
-        ///  
+        /// Update autotest 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="autoTestUpdateApiModel"> (optional)</param>
         /// <returns>ApiResponse of Object(void)</returns>
-        public TestIT.AdaptersApi.Client.ApiResponse<Object> ApiAdaptersAutoTestsPutWithHttpInfo(AutoTestUpdateApiModel autoTestUpdateApiModel = default)
+        public TestIT.AdaptersApi.Client.ApiResponse<Object> AdaptersAutoTestsPutWithHttpInfo(AutoTestUpdateApiModel autoTestUpdateApiModel = default)
         {
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
 
@@ -2451,11 +2451,11 @@ namespace TestIT.AdaptersApi.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Put<Object>("/api/adapters/autoTests", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Put<Object>("/adapters/autoTests", localVarRequestOptions, this.Configuration);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersAutoTestsPut", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersAutoTestsPut", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -2463,25 +2463,25 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Update autotest 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="autoTestUpdateApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of void</returns>
-        public async System.Threading.Tasks.Task ApiAdaptersAutoTestsPutAsync(AutoTestUpdateApiModel autoTestUpdateApiModel = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task AdaptersAutoTestsPutAsync(AutoTestUpdateApiModel autoTestUpdateApiModel = default, System.Threading.CancellationToken cancellationToken = default)
         {
-            await ApiAdaptersAutoTestsPutWithHttpInfoAsync(autoTestUpdateApiModel, cancellationToken).ConfigureAwait(false);
+            await AdaptersAutoTestsPutWithHttpInfoAsync(autoTestUpdateApiModel, cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
-        ///  
+        /// Update autotest 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="autoTestUpdateApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse</returns>
-        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<Object>> ApiAdaptersAutoTestsPutWithHttpInfoAsync(AutoTestUpdateApiModel autoTestUpdateApiModel = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<Object>> AdaptersAutoTestsPutWithHttpInfoAsync(AutoTestUpdateApiModel autoTestUpdateApiModel = default, System.Threading.CancellationToken cancellationToken = default)
         {
 
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
@@ -2518,11 +2518,11 @@ namespace TestIT.AdaptersApi.Api
 
             // make the HTTP request
 
-            var localVarResponse = await this.AsynchronousClient.PutAsync<Object>("/api/adapters/autoTests", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.PutAsync<Object>("/adapters/autoTests", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersAutoTestsPut", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersAutoTestsPut", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -2530,7 +2530,7 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Search for autotests 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="skip">Amount of items to be skipped (offset) (optional)</param>
@@ -2540,14 +2540,14 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="searchValue">Value for searching (optional)</param>
         /// <param name="autoTestSearchApiModel"> (optional)</param>
         /// <returns>List&lt;AutoTestApiResult&gt;</returns>
-        public List<AutoTestApiResult> ApiAdaptersAutoTestsSearchPost(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, AutoTestSearchApiModel autoTestSearchApiModel = default)
+        public List<AutoTestApiResult> AdaptersAutoTestsSearchPost(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, AutoTestSearchApiModel autoTestSearchApiModel = default)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<List<AutoTestApiResult>> localVarResponse = ApiAdaptersAutoTestsSearchPostWithHttpInfo(skip, take, orderBy, searchField, searchValue, autoTestSearchApiModel);
+            TestIT.AdaptersApi.Client.ApiResponse<List<AutoTestApiResult>> localVarResponse = AdaptersAutoTestsSearchPostWithHttpInfo(skip, take, orderBy, searchField, searchValue, autoTestSearchApiModel);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        ///  
+        /// Search for autotests 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="skip">Amount of items to be skipped (offset) (optional)</param>
@@ -2557,7 +2557,7 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="searchValue">Value for searching (optional)</param>
         /// <param name="autoTestSearchApiModel"> (optional)</param>
         /// <returns>ApiResponse of List&lt;AutoTestApiResult&gt;</returns>
-        public TestIT.AdaptersApi.Client.ApiResponse<List<AutoTestApiResult>> ApiAdaptersAutoTestsSearchPostWithHttpInfo(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, AutoTestSearchApiModel autoTestSearchApiModel = default)
+        public TestIT.AdaptersApi.Client.ApiResponse<List<AutoTestApiResult>> AdaptersAutoTestsSearchPostWithHttpInfo(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, AutoTestSearchApiModel autoTestSearchApiModel = default)
         {
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
 
@@ -2611,11 +2611,11 @@ namespace TestIT.AdaptersApi.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Post<List<AutoTestApiResult>>("/api/adapters/autoTests/search", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Post<List<AutoTestApiResult>>("/adapters/autoTests/search", localVarRequestOptions, this.Configuration);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersAutoTestsSearchPost", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersAutoTestsSearchPost", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -2623,7 +2623,7 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Search for autotests 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="skip">Amount of items to be skipped (offset) (optional)</param>
@@ -2634,14 +2634,14 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="autoTestSearchApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;AutoTestApiResult&gt;</returns>
-        public async System.Threading.Tasks.Task<List<AutoTestApiResult>> ApiAdaptersAutoTestsSearchPostAsync(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, AutoTestSearchApiModel autoTestSearchApiModel = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<List<AutoTestApiResult>> AdaptersAutoTestsSearchPostAsync(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, AutoTestSearchApiModel autoTestSearchApiModel = default, System.Threading.CancellationToken cancellationToken = default)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<List<AutoTestApiResult>> localVarResponse = await ApiAdaptersAutoTestsSearchPostWithHttpInfoAsync(skip, take, orderBy, searchField, searchValue, autoTestSearchApiModel, cancellationToken).ConfigureAwait(false);
+            TestIT.AdaptersApi.Client.ApiResponse<List<AutoTestApiResult>> localVarResponse = await AdaptersAutoTestsSearchPostWithHttpInfoAsync(skip, take, orderBy, searchField, searchValue, autoTestSearchApiModel, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        ///  
+        /// Search for autotests 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="skip">Amount of items to be skipped (offset) (optional)</param>
@@ -2652,7 +2652,7 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="autoTestSearchApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;AutoTestApiResult&gt;)</returns>
-        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<List<AutoTestApiResult>>> ApiAdaptersAutoTestsSearchPostWithHttpInfoAsync(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, AutoTestSearchApiModel autoTestSearchApiModel = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<List<AutoTestApiResult>>> AdaptersAutoTestsSearchPostWithHttpInfoAsync(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, AutoTestSearchApiModel autoTestSearchApiModel = default, System.Threading.CancellationToken cancellationToken = default)
         {
 
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
@@ -2709,11 +2709,11 @@ namespace TestIT.AdaptersApi.Api
 
             // make the HTTP request
 
-            var localVarResponse = await this.AsynchronousClient.PostAsync<List<AutoTestApiResult>>("/api/adapters/autoTests/search", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.PostAsync<List<AutoTestApiResult>>("/adapters/autoTests/search", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersAutoTestsSearchPost", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersAutoTestsSearchPost", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 

@@ -34,8 +34,9 @@ namespace TestIT.AdaptersApi.Model
     {
 
         /// <summary>
-        /// Gets or Sets Type
+        /// Collection of possible status types
         /// </summary>
+        /// <value>Collection of possible status types</value>
         [DataMember(Name = "type", IsRequired = true, EmitDefaultValue = true)]
         public TestStatusApiType Type { get; set; }
         /// <summary>
@@ -47,7 +48,7 @@ namespace TestIT.AdaptersApi.Model
         /// Initializes a new instance of the <see cref="TestStatusApiResult" /> class.
         /// </summary>
         /// <param name="id">id (required).</param>
-        /// <param name="type">type (required).</param>
+        /// <param name="type">Collection of possible status types (required).</param>
         /// <param name="code">code (required).</param>
         public TestStatusApiResult(Guid id = default, TestStatusApiType type = default, string code = default)
         {

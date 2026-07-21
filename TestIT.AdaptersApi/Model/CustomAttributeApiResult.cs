@@ -34,8 +34,9 @@ namespace TestIT.AdaptersApi.Model
     {
 
         /// <summary>
-        /// Gets or Sets Type
+        /// Type of the attribute
         /// </summary>
+        /// <value>Type of the attribute</value>
         [DataMember(Name = "type", IsRequired = true, EmitDefaultValue = true)]
         public CustomAttributeType Type { get; set; }
         /// <summary>
@@ -46,14 +47,14 @@ namespace TestIT.AdaptersApi.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="CustomAttributeApiResult" /> class.
         /// </summary>
-        /// <param name="id">id (required).</param>
-        /// <param name="options">options (required).</param>
-        /// <param name="type">type (required).</param>
-        /// <param name="isDeleted">isDeleted (required).</param>
-        /// <param name="name">name (required).</param>
-        /// <param name="isEnabled">isEnabled (required).</param>
-        /// <param name="isRequired">isRequired (required).</param>
-        /// <param name="isGlobal">isGlobal (required).</param>
+        /// <param name="id">Unique ID of the attribute (required).</param>
+        /// <param name="options">Collection of the attribute options      Available for attributes of type &#x60;options&#x60; and &#x60;multiple options&#x60; only (required).</param>
+        /// <param name="type">Type of the attribute (required).</param>
+        /// <param name="isDeleted">Indicates if the attribute is deleted (required).</param>
+        /// <param name="name">Name of the attribute (required).</param>
+        /// <param name="isEnabled">Indicates if the attribute is enabled (required).</param>
+        /// <param name="isRequired">Indicates if the attribute value is mandatory to specify (required).</param>
+        /// <param name="isGlobal">Indicates if the attribute is available across all projects (required).</param>
         public CustomAttributeApiResult(Guid id = default, List<CustomAttributeOptionApiResult> options = default, CustomAttributeType type = default, bool isDeleted = default, string name = default, bool isEnabled = default, bool isRequired = default, bool isGlobal = default)
         {
             this.Id = id;
@@ -77,44 +78,51 @@ namespace TestIT.AdaptersApi.Model
         }
 
         /// <summary>
-        /// Gets or Sets Id
+        /// Unique ID of the attribute
         /// </summary>
+        /// <value>Unique ID of the attribute</value>
         [DataMember(Name = "id", IsRequired = true, EmitDefaultValue = true)]
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Gets or Sets Options
+        /// Collection of the attribute options      Available for attributes of type &#x60;options&#x60; and &#x60;multiple options&#x60; only
         /// </summary>
+        /// <value>Collection of the attribute options      Available for attributes of type &#x60;options&#x60; and &#x60;multiple options&#x60; only</value>
         [DataMember(Name = "options", IsRequired = true, EmitDefaultValue = true)]
         public List<CustomAttributeOptionApiResult> Options { get; set; }
 
         /// <summary>
-        /// Gets or Sets IsDeleted
+        /// Indicates if the attribute is deleted
         /// </summary>
+        /// <value>Indicates if the attribute is deleted</value>
         [DataMember(Name = "isDeleted", IsRequired = true, EmitDefaultValue = true)]
         public bool IsDeleted { get; set; }
 
         /// <summary>
-        /// Gets or Sets Name
+        /// Name of the attribute
         /// </summary>
+        /// <value>Name of the attribute</value>
         [DataMember(Name = "name", IsRequired = true, EmitDefaultValue = true)]
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or Sets IsEnabled
+        /// Indicates if the attribute is enabled
         /// </summary>
+        /// <value>Indicates if the attribute is enabled</value>
         [DataMember(Name = "isEnabled", IsRequired = true, EmitDefaultValue = true)]
         public bool IsEnabled { get; set; }
 
         /// <summary>
-        /// Gets or Sets IsRequired
+        /// Indicates if the attribute value is mandatory to specify
         /// </summary>
+        /// <value>Indicates if the attribute value is mandatory to specify</value>
         [DataMember(Name = "isRequired", IsRequired = true, EmitDefaultValue = true)]
         public bool IsRequired { get; set; }
 
         /// <summary>
-        /// Gets or Sets IsGlobal
+        /// Indicates if the attribute is available across all projects
         /// </summary>
+        /// <value>Indicates if the attribute is available across all projects</value>
         [DataMember(Name = "isGlobal", IsRequired = true, EmitDefaultValue = true)]
         public bool IsGlobal { get; set; }
 

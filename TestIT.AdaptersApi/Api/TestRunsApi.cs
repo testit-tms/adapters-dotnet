@@ -28,15 +28,15 @@ namespace TestIT.AdaptersApi.Api
     {
         #region Synchronous Operations
         /// <summary>
-        /// 
+        /// Complete TestRun
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <returns></returns>
-        void ApiAdaptersTestRunsIdCompletePost(Guid id);
+        void AdaptersTestRunsIdCompletePost(Guid id);
 
         /// <summary>
-        /// 
+        /// Complete TestRun
         /// </summary>
         /// <remarks>
         /// 
@@ -44,17 +44,17 @@ namespace TestIT.AdaptersApi.Api
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <returns>ApiResponse of Object(void)</returns>
-        ApiResponse<Object> ApiAdaptersTestRunsIdCompletePostWithHttpInfo(Guid id);
+        ApiResponse<Object> AdaptersTestRunsIdCompletePostWithHttpInfo(Guid id);
         /// <summary>
-        /// 
+        /// Get TestRun by Id
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <returns>TestRunApiResult</returns>
-        TestRunApiResult ApiAdaptersTestRunsIdGet(Guid id);
+        TestRunApiResult AdaptersTestRunsIdGet(Guid id);
 
         /// <summary>
-        /// 
+        /// Get TestRun by Id
         /// </summary>
         /// <remarks>
         /// 
@@ -62,18 +62,18 @@ namespace TestIT.AdaptersApi.Api
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <returns>ApiResponse of TestRunApiResult</returns>
-        ApiResponse<TestRunApiResult> ApiAdaptersTestRunsIdGetWithHttpInfo(Guid id);
+        ApiResponse<TestRunApiResult> AdaptersTestRunsIdGetWithHttpInfo(Guid id);
         /// <summary>
-        /// 
+        /// Manual autotests rerun in test run
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <param name="manualRerunSelectTestResultsApiModel"> (optional)</param>
         /// <returns>ManualRerunApiResult</returns>
-        ManualRerunApiResult ApiAdaptersTestRunsIdRerunsPost(Guid id, ManualRerunSelectTestResultsApiModel manualRerunSelectTestResultsApiModel = default);
+        ManualRerunApiResult AdaptersTestRunsIdRerunsPost(Guid id, ManualRerunSelectTestResultsApiModel manualRerunSelectTestResultsApiModel = default);
 
         /// <summary>
-        /// 
+        /// Manual autotests rerun in test run
         /// </summary>
         /// <remarks>
         /// 
@@ -82,17 +82,17 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="id"></param>
         /// <param name="manualRerunSelectTestResultsApiModel"> (optional)</param>
         /// <returns>ApiResponse of ManualRerunApiResult</returns>
-        ApiResponse<ManualRerunApiResult> ApiAdaptersTestRunsIdRerunsPostWithHttpInfo(Guid id, ManualRerunSelectTestResultsApiModel manualRerunSelectTestResultsApiModel = default);
+        ApiResponse<ManualRerunApiResult> AdaptersTestRunsIdRerunsPostWithHttpInfo(Guid id, ManualRerunSelectTestResultsApiModel manualRerunSelectTestResultsApiModel = default);
         /// <summary>
-        /// 
+        /// Start TestRun
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <returns></returns>
-        void ApiAdaptersTestRunsIdStartPost(Guid id);
+        void AdaptersTestRunsIdStartPost(Guid id);
 
         /// <summary>
-        /// 
+        /// Start TestRun
         /// </summary>
         /// <remarks>
         /// 
@@ -100,17 +100,17 @@ namespace TestIT.AdaptersApi.Api
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <returns>ApiResponse of Object(void)</returns>
-        ApiResponse<Object> ApiAdaptersTestRunsIdStartPostWithHttpInfo(Guid id);
+        ApiResponse<Object> AdaptersTestRunsIdStartPostWithHttpInfo(Guid id);
         /// <summary>
-        /// 
+        /// Stop TestRun
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <returns></returns>
-        void ApiAdaptersTestRunsIdStopPost(Guid id);
+        void AdaptersTestRunsIdStopPost(Guid id);
 
         /// <summary>
-        /// 
+        /// Stop TestRun
         /// </summary>
         /// <remarks>
         /// 
@@ -118,18 +118,18 @@ namespace TestIT.AdaptersApi.Api
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <returns>ApiResponse of Object(void)</returns>
-        ApiResponse<Object> ApiAdaptersTestRunsIdStopPostWithHttpInfo(Guid id);
+        ApiResponse<Object> AdaptersTestRunsIdStopPostWithHttpInfo(Guid id);
         /// <summary>
-        /// 
+        /// Send test results to the test runs in the system
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <param name="autoTestResultsForTestRunModel"> (optional)</param>
         /// <returns>List&lt;Guid&gt;</returns>
-        List<Guid> ApiAdaptersTestRunsIdTestResultsPost(Guid id, List<AutoTestResultsForTestRunModel> autoTestResultsForTestRunModel = default);
+        List<Guid> AdaptersTestRunsIdTestResultsPost(Guid id, List<AutoTestResultsForTestRunModel> autoTestResultsForTestRunModel = default);
 
         /// <summary>
-        /// 
+        /// Send test results to the test runs in the system
         /// </summary>
         /// <remarks>
         /// 
@@ -138,17 +138,17 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="id"></param>
         /// <param name="autoTestResultsForTestRunModel"> (optional)</param>
         /// <returns>ApiResponse of List&lt;Guid&gt;</returns>
-        ApiResponse<List<Guid>> ApiAdaptersTestRunsIdTestResultsPostWithHttpInfo(Guid id, List<AutoTestResultsForTestRunModel> autoTestResultsForTestRunModel = default);
+        ApiResponse<List<Guid>> AdaptersTestRunsIdTestResultsPostWithHttpInfo(Guid id, List<AutoTestResultsForTestRunModel> autoTestResultsForTestRunModel = default);
         /// <summary>
-        /// 
+        /// Create empty TestRun
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="createEmptyTestRunApiModel"> (optional)</param>
         /// <returns>TestRunApiResult</returns>
-        TestRunApiResult ApiAdaptersTestRunsPost(CreateEmptyTestRunApiModel createEmptyTestRunApiModel = default);
+        TestRunApiResult AdaptersTestRunsPost(CreateEmptyTestRunApiModel createEmptyTestRunApiModel = default);
 
         /// <summary>
-        /// 
+        /// Create empty TestRun
         /// </summary>
         /// <remarks>
         /// 
@@ -156,17 +156,17 @@ namespace TestIT.AdaptersApi.Api
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="createEmptyTestRunApiModel"> (optional)</param>
         /// <returns>ApiResponse of TestRunApiResult</returns>
-        ApiResponse<TestRunApiResult> ApiAdaptersTestRunsPostWithHttpInfo(CreateEmptyTestRunApiModel createEmptyTestRunApiModel = default);
+        ApiResponse<TestRunApiResult> AdaptersTestRunsPostWithHttpInfo(CreateEmptyTestRunApiModel createEmptyTestRunApiModel = default);
         /// <summary>
-        /// 
+        /// Update empty TestRun
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="updateEmptyTestRunApiModel"> (optional)</param>
         /// <returns></returns>
-        void ApiAdaptersTestRunsPut(UpdateEmptyTestRunApiModel updateEmptyTestRunApiModel = default);
+        void AdaptersTestRunsPut(UpdateEmptyTestRunApiModel updateEmptyTestRunApiModel = default);
 
         /// <summary>
-        /// 
+        /// Update empty TestRun
         /// </summary>
         /// <remarks>
         /// 
@@ -174,7 +174,7 @@ namespace TestIT.AdaptersApi.Api
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="updateEmptyTestRunApiModel"> (optional)</param>
         /// <returns>ApiResponse of Object(void)</returns>
-        ApiResponse<Object> ApiAdaptersTestRunsPutWithHttpInfo(UpdateEmptyTestRunApiModel updateEmptyTestRunApiModel = default);
+        ApiResponse<Object> AdaptersTestRunsPutWithHttpInfo(UpdateEmptyTestRunApiModel updateEmptyTestRunApiModel = default);
         #endregion Synchronous Operations
     }
 
@@ -185,7 +185,7 @@ namespace TestIT.AdaptersApi.Api
     {
         #region Asynchronous Operations
         /// <summary>
-        /// 
+        /// Complete TestRun
         /// </summary>
         /// <remarks>
         /// 
@@ -194,10 +194,10 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="id"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of void</returns>
-        System.Threading.Tasks.Task ApiAdaptersTestRunsIdCompletePostAsync(Guid id, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task AdaptersTestRunsIdCompletePostAsync(Guid id, System.Threading.CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// 
+        /// Complete TestRun
         /// </summary>
         /// <remarks>
         /// 
@@ -206,9 +206,9 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="id"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse</returns>
-        System.Threading.Tasks.Task<ApiResponse<Object>> ApiAdaptersTestRunsIdCompletePostWithHttpInfoAsync(Guid id, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<ApiResponse<Object>> AdaptersTestRunsIdCompletePostWithHttpInfoAsync(Guid id, System.Threading.CancellationToken cancellationToken = default);
         /// <summary>
-        /// 
+        /// Get TestRun by Id
         /// </summary>
         /// <remarks>
         /// 
@@ -217,10 +217,10 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="id"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of TestRunApiResult</returns>
-        System.Threading.Tasks.Task<TestRunApiResult> ApiAdaptersTestRunsIdGetAsync(Guid id, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<TestRunApiResult> AdaptersTestRunsIdGetAsync(Guid id, System.Threading.CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// 
+        /// Get TestRun by Id
         /// </summary>
         /// <remarks>
         /// 
@@ -229,9 +229,9 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="id"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (TestRunApiResult)</returns>
-        System.Threading.Tasks.Task<ApiResponse<TestRunApiResult>> ApiAdaptersTestRunsIdGetWithHttpInfoAsync(Guid id, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<ApiResponse<TestRunApiResult>> AdaptersTestRunsIdGetWithHttpInfoAsync(Guid id, System.Threading.CancellationToken cancellationToken = default);
         /// <summary>
-        /// 
+        /// Manual autotests rerun in test run
         /// </summary>
         /// <remarks>
         /// 
@@ -241,10 +241,10 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="manualRerunSelectTestResultsApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ManualRerunApiResult</returns>
-        System.Threading.Tasks.Task<ManualRerunApiResult> ApiAdaptersTestRunsIdRerunsPostAsync(Guid id, ManualRerunSelectTestResultsApiModel manualRerunSelectTestResultsApiModel = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<ManualRerunApiResult> AdaptersTestRunsIdRerunsPostAsync(Guid id, ManualRerunSelectTestResultsApiModel manualRerunSelectTestResultsApiModel = default, System.Threading.CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// 
+        /// Manual autotests rerun in test run
         /// </summary>
         /// <remarks>
         /// 
@@ -254,9 +254,9 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="manualRerunSelectTestResultsApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (ManualRerunApiResult)</returns>
-        System.Threading.Tasks.Task<ApiResponse<ManualRerunApiResult>> ApiAdaptersTestRunsIdRerunsPostWithHttpInfoAsync(Guid id, ManualRerunSelectTestResultsApiModel manualRerunSelectTestResultsApiModel = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<ApiResponse<ManualRerunApiResult>> AdaptersTestRunsIdRerunsPostWithHttpInfoAsync(Guid id, ManualRerunSelectTestResultsApiModel manualRerunSelectTestResultsApiModel = default, System.Threading.CancellationToken cancellationToken = default);
         /// <summary>
-        /// 
+        /// Start TestRun
         /// </summary>
         /// <remarks>
         /// 
@@ -265,10 +265,10 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="id"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of void</returns>
-        System.Threading.Tasks.Task ApiAdaptersTestRunsIdStartPostAsync(Guid id, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task AdaptersTestRunsIdStartPostAsync(Guid id, System.Threading.CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// 
+        /// Start TestRun
         /// </summary>
         /// <remarks>
         /// 
@@ -277,9 +277,9 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="id"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse</returns>
-        System.Threading.Tasks.Task<ApiResponse<Object>> ApiAdaptersTestRunsIdStartPostWithHttpInfoAsync(Guid id, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<ApiResponse<Object>> AdaptersTestRunsIdStartPostWithHttpInfoAsync(Guid id, System.Threading.CancellationToken cancellationToken = default);
         /// <summary>
-        /// 
+        /// Stop TestRun
         /// </summary>
         /// <remarks>
         /// 
@@ -288,10 +288,10 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="id"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of void</returns>
-        System.Threading.Tasks.Task ApiAdaptersTestRunsIdStopPostAsync(Guid id, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task AdaptersTestRunsIdStopPostAsync(Guid id, System.Threading.CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// 
+        /// Stop TestRun
         /// </summary>
         /// <remarks>
         /// 
@@ -300,9 +300,9 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="id"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse</returns>
-        System.Threading.Tasks.Task<ApiResponse<Object>> ApiAdaptersTestRunsIdStopPostWithHttpInfoAsync(Guid id, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<ApiResponse<Object>> AdaptersTestRunsIdStopPostWithHttpInfoAsync(Guid id, System.Threading.CancellationToken cancellationToken = default);
         /// <summary>
-        /// 
+        /// Send test results to the test runs in the system
         /// </summary>
         /// <remarks>
         /// 
@@ -312,10 +312,10 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="autoTestResultsForTestRunModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;Guid&gt;</returns>
-        System.Threading.Tasks.Task<List<Guid>> ApiAdaptersTestRunsIdTestResultsPostAsync(Guid id, List<AutoTestResultsForTestRunModel> autoTestResultsForTestRunModel = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<List<Guid>> AdaptersTestRunsIdTestResultsPostAsync(Guid id, List<AutoTestResultsForTestRunModel> autoTestResultsForTestRunModel = default, System.Threading.CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// 
+        /// Send test results to the test runs in the system
         /// </summary>
         /// <remarks>
         /// 
@@ -325,9 +325,9 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="autoTestResultsForTestRunModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;Guid&gt;)</returns>
-        System.Threading.Tasks.Task<ApiResponse<List<Guid>>> ApiAdaptersTestRunsIdTestResultsPostWithHttpInfoAsync(Guid id, List<AutoTestResultsForTestRunModel> autoTestResultsForTestRunModel = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<ApiResponse<List<Guid>>> AdaptersTestRunsIdTestResultsPostWithHttpInfoAsync(Guid id, List<AutoTestResultsForTestRunModel> autoTestResultsForTestRunModel = default, System.Threading.CancellationToken cancellationToken = default);
         /// <summary>
-        /// 
+        /// Create empty TestRun
         /// </summary>
         /// <remarks>
         /// 
@@ -336,10 +336,10 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="createEmptyTestRunApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of TestRunApiResult</returns>
-        System.Threading.Tasks.Task<TestRunApiResult> ApiAdaptersTestRunsPostAsync(CreateEmptyTestRunApiModel createEmptyTestRunApiModel = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<TestRunApiResult> AdaptersTestRunsPostAsync(CreateEmptyTestRunApiModel createEmptyTestRunApiModel = default, System.Threading.CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// 
+        /// Create empty TestRun
         /// </summary>
         /// <remarks>
         /// 
@@ -348,9 +348,9 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="createEmptyTestRunApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (TestRunApiResult)</returns>
-        System.Threading.Tasks.Task<ApiResponse<TestRunApiResult>> ApiAdaptersTestRunsPostWithHttpInfoAsync(CreateEmptyTestRunApiModel createEmptyTestRunApiModel = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<ApiResponse<TestRunApiResult>> AdaptersTestRunsPostWithHttpInfoAsync(CreateEmptyTestRunApiModel createEmptyTestRunApiModel = default, System.Threading.CancellationToken cancellationToken = default);
         /// <summary>
-        /// 
+        /// Update empty TestRun
         /// </summary>
         /// <remarks>
         /// 
@@ -359,10 +359,10 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="updateEmptyTestRunApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of void</returns>
-        System.Threading.Tasks.Task ApiAdaptersTestRunsPutAsync(UpdateEmptyTestRunApiModel updateEmptyTestRunApiModel = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task AdaptersTestRunsPutAsync(UpdateEmptyTestRunApiModel updateEmptyTestRunApiModel = default, System.Threading.CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// 
+        /// Update empty TestRun
         /// </summary>
         /// <remarks>
         /// 
@@ -371,7 +371,7 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="updateEmptyTestRunApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse</returns>
-        System.Threading.Tasks.Task<ApiResponse<Object>> ApiAdaptersTestRunsPutWithHttpInfoAsync(UpdateEmptyTestRunApiModel updateEmptyTestRunApiModel = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<ApiResponse<Object>> AdaptersTestRunsPutWithHttpInfoAsync(UpdateEmptyTestRunApiModel updateEmptyTestRunApiModel = default, System.Threading.CancellationToken cancellationToken = default);
         #endregion Asynchronous Operations
     }
 
@@ -586,23 +586,23 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Complete TestRun 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <returns></returns>
-        public void ApiAdaptersTestRunsIdCompletePost(Guid id)
+        public void AdaptersTestRunsIdCompletePost(Guid id)
         {
-            ApiAdaptersTestRunsIdCompletePostWithHttpInfo(id);
+            AdaptersTestRunsIdCompletePostWithHttpInfo(id);
         }
 
         /// <summary>
-        ///  
+        /// Complete TestRun 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <returns>ApiResponse of Object(void)</returns>
-        public TestIT.AdaptersApi.Client.ApiResponse<Object> ApiAdaptersTestRunsIdCompletePostWithHttpInfo(Guid id)
+        public TestIT.AdaptersApi.Client.ApiResponse<Object> AdaptersTestRunsIdCompletePostWithHttpInfo(Guid id)
         {
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
 
@@ -635,11 +635,11 @@ namespace TestIT.AdaptersApi.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Post<Object>("/api/adapters/testRuns/{id}/complete", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Post<Object>("/adapters/testRuns/{id}/complete", localVarRequestOptions, this.Configuration);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersTestRunsIdCompletePost", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersTestRunsIdCompletePost", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -647,25 +647,25 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Complete TestRun 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of void</returns>
-        public async System.Threading.Tasks.Task ApiAdaptersTestRunsIdCompletePostAsync(Guid id, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task AdaptersTestRunsIdCompletePostAsync(Guid id, System.Threading.CancellationToken cancellationToken = default)
         {
-            await ApiAdaptersTestRunsIdCompletePostWithHttpInfoAsync(id, cancellationToken).ConfigureAwait(false);
+            await AdaptersTestRunsIdCompletePostWithHttpInfoAsync(id, cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
-        ///  
+        /// Complete TestRun 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse</returns>
-        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<Object>> ApiAdaptersTestRunsIdCompletePostWithHttpInfoAsync(Guid id, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<Object>> AdaptersTestRunsIdCompletePostWithHttpInfoAsync(Guid id, System.Threading.CancellationToken cancellationToken = default)
         {
 
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
@@ -701,11 +701,11 @@ namespace TestIT.AdaptersApi.Api
 
             // make the HTTP request
 
-            var localVarResponse = await this.AsynchronousClient.PostAsync<Object>("/api/adapters/testRuns/{id}/complete", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.PostAsync<Object>("/adapters/testRuns/{id}/complete", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersTestRunsIdCompletePost", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersTestRunsIdCompletePost", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -713,24 +713,24 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Get TestRun by Id 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <returns>TestRunApiResult</returns>
-        public TestRunApiResult ApiAdaptersTestRunsIdGet(Guid id)
+        public TestRunApiResult AdaptersTestRunsIdGet(Guid id)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<TestRunApiResult> localVarResponse = ApiAdaptersTestRunsIdGetWithHttpInfo(id);
+            TestIT.AdaptersApi.Client.ApiResponse<TestRunApiResult> localVarResponse = AdaptersTestRunsIdGetWithHttpInfo(id);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        ///  
+        /// Get TestRun by Id 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <returns>ApiResponse of TestRunApiResult</returns>
-        public TestIT.AdaptersApi.Client.ApiResponse<TestRunApiResult> ApiAdaptersTestRunsIdGetWithHttpInfo(Guid id)
+        public TestIT.AdaptersApi.Client.ApiResponse<TestRunApiResult> AdaptersTestRunsIdGetWithHttpInfo(Guid id)
         {
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
 
@@ -763,11 +763,11 @@ namespace TestIT.AdaptersApi.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Get<TestRunApiResult>("/api/adapters/testRuns/{id}", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Get<TestRunApiResult>("/adapters/testRuns/{id}", localVarRequestOptions, this.Configuration);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersTestRunsIdGet", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersTestRunsIdGet", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -775,26 +775,26 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Get TestRun by Id 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of TestRunApiResult</returns>
-        public async System.Threading.Tasks.Task<TestRunApiResult> ApiAdaptersTestRunsIdGetAsync(Guid id, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<TestRunApiResult> AdaptersTestRunsIdGetAsync(Guid id, System.Threading.CancellationToken cancellationToken = default)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<TestRunApiResult> localVarResponse = await ApiAdaptersTestRunsIdGetWithHttpInfoAsync(id, cancellationToken).ConfigureAwait(false);
+            TestIT.AdaptersApi.Client.ApiResponse<TestRunApiResult> localVarResponse = await AdaptersTestRunsIdGetWithHttpInfoAsync(id, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        ///  
+        /// Get TestRun by Id 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (TestRunApiResult)</returns>
-        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<TestRunApiResult>> ApiAdaptersTestRunsIdGetWithHttpInfoAsync(Guid id, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<TestRunApiResult>> AdaptersTestRunsIdGetWithHttpInfoAsync(Guid id, System.Threading.CancellationToken cancellationToken = default)
         {
 
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
@@ -830,11 +830,11 @@ namespace TestIT.AdaptersApi.Api
 
             // make the HTTP request
 
-            var localVarResponse = await this.AsynchronousClient.GetAsync<TestRunApiResult>("/api/adapters/testRuns/{id}", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.GetAsync<TestRunApiResult>("/adapters/testRuns/{id}", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersTestRunsIdGet", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersTestRunsIdGet", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -842,26 +842,26 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Manual autotests rerun in test run 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <param name="manualRerunSelectTestResultsApiModel"> (optional)</param>
         /// <returns>ManualRerunApiResult</returns>
-        public ManualRerunApiResult ApiAdaptersTestRunsIdRerunsPost(Guid id, ManualRerunSelectTestResultsApiModel manualRerunSelectTestResultsApiModel = default)
+        public ManualRerunApiResult AdaptersTestRunsIdRerunsPost(Guid id, ManualRerunSelectTestResultsApiModel manualRerunSelectTestResultsApiModel = default)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<ManualRerunApiResult> localVarResponse = ApiAdaptersTestRunsIdRerunsPostWithHttpInfo(id, manualRerunSelectTestResultsApiModel);
+            TestIT.AdaptersApi.Client.ApiResponse<ManualRerunApiResult> localVarResponse = AdaptersTestRunsIdRerunsPostWithHttpInfo(id, manualRerunSelectTestResultsApiModel);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        ///  
+        /// Manual autotests rerun in test run 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <param name="manualRerunSelectTestResultsApiModel"> (optional)</param>
         /// <returns>ApiResponse of ManualRerunApiResult</returns>
-        public TestIT.AdaptersApi.Client.ApiResponse<ManualRerunApiResult> ApiAdaptersTestRunsIdRerunsPostWithHttpInfo(Guid id, ManualRerunSelectTestResultsApiModel manualRerunSelectTestResultsApiModel = default)
+        public TestIT.AdaptersApi.Client.ApiResponse<ManualRerunApiResult> AdaptersTestRunsIdRerunsPostWithHttpInfo(Guid id, ManualRerunSelectTestResultsApiModel manualRerunSelectTestResultsApiModel = default)
         {
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
 
@@ -896,11 +896,11 @@ namespace TestIT.AdaptersApi.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Post<ManualRerunApiResult>("/api/adapters/testRuns/{id}/reruns", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Post<ManualRerunApiResult>("/adapters/testRuns/{id}/reruns", localVarRequestOptions, this.Configuration);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersTestRunsIdRerunsPost", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersTestRunsIdRerunsPost", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -908,28 +908,28 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Manual autotests rerun in test run 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <param name="manualRerunSelectTestResultsApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ManualRerunApiResult</returns>
-        public async System.Threading.Tasks.Task<ManualRerunApiResult> ApiAdaptersTestRunsIdRerunsPostAsync(Guid id, ManualRerunSelectTestResultsApiModel manualRerunSelectTestResultsApiModel = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<ManualRerunApiResult> AdaptersTestRunsIdRerunsPostAsync(Guid id, ManualRerunSelectTestResultsApiModel manualRerunSelectTestResultsApiModel = default, System.Threading.CancellationToken cancellationToken = default)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<ManualRerunApiResult> localVarResponse = await ApiAdaptersTestRunsIdRerunsPostWithHttpInfoAsync(id, manualRerunSelectTestResultsApiModel, cancellationToken).ConfigureAwait(false);
+            TestIT.AdaptersApi.Client.ApiResponse<ManualRerunApiResult> localVarResponse = await AdaptersTestRunsIdRerunsPostWithHttpInfoAsync(id, manualRerunSelectTestResultsApiModel, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        ///  
+        /// Manual autotests rerun in test run 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <param name="manualRerunSelectTestResultsApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (ManualRerunApiResult)</returns>
-        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<ManualRerunApiResult>> ApiAdaptersTestRunsIdRerunsPostWithHttpInfoAsync(Guid id, ManualRerunSelectTestResultsApiModel manualRerunSelectTestResultsApiModel = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<ManualRerunApiResult>> AdaptersTestRunsIdRerunsPostWithHttpInfoAsync(Guid id, ManualRerunSelectTestResultsApiModel manualRerunSelectTestResultsApiModel = default, System.Threading.CancellationToken cancellationToken = default)
         {
 
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
@@ -967,11 +967,11 @@ namespace TestIT.AdaptersApi.Api
 
             // make the HTTP request
 
-            var localVarResponse = await this.AsynchronousClient.PostAsync<ManualRerunApiResult>("/api/adapters/testRuns/{id}/reruns", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.PostAsync<ManualRerunApiResult>("/adapters/testRuns/{id}/reruns", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersTestRunsIdRerunsPost", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersTestRunsIdRerunsPost", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -979,23 +979,23 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Start TestRun 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <returns></returns>
-        public void ApiAdaptersTestRunsIdStartPost(Guid id)
+        public void AdaptersTestRunsIdStartPost(Guid id)
         {
-            ApiAdaptersTestRunsIdStartPostWithHttpInfo(id);
+            AdaptersTestRunsIdStartPostWithHttpInfo(id);
         }
 
         /// <summary>
-        ///  
+        /// Start TestRun 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <returns>ApiResponse of Object(void)</returns>
-        public TestIT.AdaptersApi.Client.ApiResponse<Object> ApiAdaptersTestRunsIdStartPostWithHttpInfo(Guid id)
+        public TestIT.AdaptersApi.Client.ApiResponse<Object> AdaptersTestRunsIdStartPostWithHttpInfo(Guid id)
         {
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
 
@@ -1028,11 +1028,11 @@ namespace TestIT.AdaptersApi.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Post<Object>("/api/adapters/testRuns/{id}/start", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Post<Object>("/adapters/testRuns/{id}/start", localVarRequestOptions, this.Configuration);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersTestRunsIdStartPost", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersTestRunsIdStartPost", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -1040,25 +1040,25 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Start TestRun 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of void</returns>
-        public async System.Threading.Tasks.Task ApiAdaptersTestRunsIdStartPostAsync(Guid id, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task AdaptersTestRunsIdStartPostAsync(Guid id, System.Threading.CancellationToken cancellationToken = default)
         {
-            await ApiAdaptersTestRunsIdStartPostWithHttpInfoAsync(id, cancellationToken).ConfigureAwait(false);
+            await AdaptersTestRunsIdStartPostWithHttpInfoAsync(id, cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
-        ///  
+        /// Start TestRun 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse</returns>
-        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<Object>> ApiAdaptersTestRunsIdStartPostWithHttpInfoAsync(Guid id, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<Object>> AdaptersTestRunsIdStartPostWithHttpInfoAsync(Guid id, System.Threading.CancellationToken cancellationToken = default)
         {
 
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
@@ -1094,11 +1094,11 @@ namespace TestIT.AdaptersApi.Api
 
             // make the HTTP request
 
-            var localVarResponse = await this.AsynchronousClient.PostAsync<Object>("/api/adapters/testRuns/{id}/start", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.PostAsync<Object>("/adapters/testRuns/{id}/start", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersTestRunsIdStartPost", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersTestRunsIdStartPost", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -1106,23 +1106,23 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Stop TestRun 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <returns></returns>
-        public void ApiAdaptersTestRunsIdStopPost(Guid id)
+        public void AdaptersTestRunsIdStopPost(Guid id)
         {
-            ApiAdaptersTestRunsIdStopPostWithHttpInfo(id);
+            AdaptersTestRunsIdStopPostWithHttpInfo(id);
         }
 
         /// <summary>
-        ///  
+        /// Stop TestRun 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <returns>ApiResponse of Object(void)</returns>
-        public TestIT.AdaptersApi.Client.ApiResponse<Object> ApiAdaptersTestRunsIdStopPostWithHttpInfo(Guid id)
+        public TestIT.AdaptersApi.Client.ApiResponse<Object> AdaptersTestRunsIdStopPostWithHttpInfo(Guid id)
         {
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
 
@@ -1155,11 +1155,11 @@ namespace TestIT.AdaptersApi.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Post<Object>("/api/adapters/testRuns/{id}/stop", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Post<Object>("/adapters/testRuns/{id}/stop", localVarRequestOptions, this.Configuration);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersTestRunsIdStopPost", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersTestRunsIdStopPost", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -1167,25 +1167,25 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Stop TestRun 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of void</returns>
-        public async System.Threading.Tasks.Task ApiAdaptersTestRunsIdStopPostAsync(Guid id, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task AdaptersTestRunsIdStopPostAsync(Guid id, System.Threading.CancellationToken cancellationToken = default)
         {
-            await ApiAdaptersTestRunsIdStopPostWithHttpInfoAsync(id, cancellationToken).ConfigureAwait(false);
+            await AdaptersTestRunsIdStopPostWithHttpInfoAsync(id, cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
-        ///  
+        /// Stop TestRun 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse</returns>
-        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<Object>> ApiAdaptersTestRunsIdStopPostWithHttpInfoAsync(Guid id, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<Object>> AdaptersTestRunsIdStopPostWithHttpInfoAsync(Guid id, System.Threading.CancellationToken cancellationToken = default)
         {
 
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
@@ -1221,11 +1221,11 @@ namespace TestIT.AdaptersApi.Api
 
             // make the HTTP request
 
-            var localVarResponse = await this.AsynchronousClient.PostAsync<Object>("/api/adapters/testRuns/{id}/stop", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.PostAsync<Object>("/adapters/testRuns/{id}/stop", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersTestRunsIdStopPost", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersTestRunsIdStopPost", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -1233,26 +1233,26 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Send test results to the test runs in the system 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <param name="autoTestResultsForTestRunModel"> (optional)</param>
         /// <returns>List&lt;Guid&gt;</returns>
-        public List<Guid> ApiAdaptersTestRunsIdTestResultsPost(Guid id, List<AutoTestResultsForTestRunModel> autoTestResultsForTestRunModel = default)
+        public List<Guid> AdaptersTestRunsIdTestResultsPost(Guid id, List<AutoTestResultsForTestRunModel> autoTestResultsForTestRunModel = default)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<List<Guid>> localVarResponse = ApiAdaptersTestRunsIdTestResultsPostWithHttpInfo(id, autoTestResultsForTestRunModel);
+            TestIT.AdaptersApi.Client.ApiResponse<List<Guid>> localVarResponse = AdaptersTestRunsIdTestResultsPostWithHttpInfo(id, autoTestResultsForTestRunModel);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        ///  
+        /// Send test results to the test runs in the system 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <param name="autoTestResultsForTestRunModel"> (optional)</param>
         /// <returns>ApiResponse of List&lt;Guid&gt;</returns>
-        public TestIT.AdaptersApi.Client.ApiResponse<List<Guid>> ApiAdaptersTestRunsIdTestResultsPostWithHttpInfo(Guid id, List<AutoTestResultsForTestRunModel> autoTestResultsForTestRunModel = default)
+        public TestIT.AdaptersApi.Client.ApiResponse<List<Guid>> AdaptersTestRunsIdTestResultsPostWithHttpInfo(Guid id, List<AutoTestResultsForTestRunModel> autoTestResultsForTestRunModel = default)
         {
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
 
@@ -1287,11 +1287,11 @@ namespace TestIT.AdaptersApi.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Post<List<Guid>>("/api/adapters/testRuns/{id}/test-results", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Post<List<Guid>>("/adapters/testRuns/{id}/test-results", localVarRequestOptions, this.Configuration);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersTestRunsIdTestResultsPost", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersTestRunsIdTestResultsPost", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -1299,28 +1299,28 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Send test results to the test runs in the system 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <param name="autoTestResultsForTestRunModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;Guid&gt;</returns>
-        public async System.Threading.Tasks.Task<List<Guid>> ApiAdaptersTestRunsIdTestResultsPostAsync(Guid id, List<AutoTestResultsForTestRunModel> autoTestResultsForTestRunModel = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<List<Guid>> AdaptersTestRunsIdTestResultsPostAsync(Guid id, List<AutoTestResultsForTestRunModel> autoTestResultsForTestRunModel = default, System.Threading.CancellationToken cancellationToken = default)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<List<Guid>> localVarResponse = await ApiAdaptersTestRunsIdTestResultsPostWithHttpInfoAsync(id, autoTestResultsForTestRunModel, cancellationToken).ConfigureAwait(false);
+            TestIT.AdaptersApi.Client.ApiResponse<List<Guid>> localVarResponse = await AdaptersTestRunsIdTestResultsPostWithHttpInfoAsync(id, autoTestResultsForTestRunModel, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        ///  
+        /// Send test results to the test runs in the system 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <param name="autoTestResultsForTestRunModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;Guid&gt;)</returns>
-        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<List<Guid>>> ApiAdaptersTestRunsIdTestResultsPostWithHttpInfoAsync(Guid id, List<AutoTestResultsForTestRunModel> autoTestResultsForTestRunModel = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<List<Guid>>> AdaptersTestRunsIdTestResultsPostWithHttpInfoAsync(Guid id, List<AutoTestResultsForTestRunModel> autoTestResultsForTestRunModel = default, System.Threading.CancellationToken cancellationToken = default)
         {
 
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
@@ -1358,11 +1358,11 @@ namespace TestIT.AdaptersApi.Api
 
             // make the HTTP request
 
-            var localVarResponse = await this.AsynchronousClient.PostAsync<List<Guid>>("/api/adapters/testRuns/{id}/test-results", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.PostAsync<List<Guid>>("/adapters/testRuns/{id}/test-results", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersTestRunsIdTestResultsPost", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersTestRunsIdTestResultsPost", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -1370,24 +1370,24 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Create empty TestRun 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="createEmptyTestRunApiModel"> (optional)</param>
         /// <returns>TestRunApiResult</returns>
-        public TestRunApiResult ApiAdaptersTestRunsPost(CreateEmptyTestRunApiModel createEmptyTestRunApiModel = default)
+        public TestRunApiResult AdaptersTestRunsPost(CreateEmptyTestRunApiModel createEmptyTestRunApiModel = default)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<TestRunApiResult> localVarResponse = ApiAdaptersTestRunsPostWithHttpInfo(createEmptyTestRunApiModel);
+            TestIT.AdaptersApi.Client.ApiResponse<TestRunApiResult> localVarResponse = AdaptersTestRunsPostWithHttpInfo(createEmptyTestRunApiModel);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        ///  
+        /// Create empty TestRun 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="createEmptyTestRunApiModel"> (optional)</param>
         /// <returns>ApiResponse of TestRunApiResult</returns>
-        public TestIT.AdaptersApi.Client.ApiResponse<TestRunApiResult> ApiAdaptersTestRunsPostWithHttpInfo(CreateEmptyTestRunApiModel createEmptyTestRunApiModel = default)
+        public TestIT.AdaptersApi.Client.ApiResponse<TestRunApiResult> AdaptersTestRunsPostWithHttpInfo(CreateEmptyTestRunApiModel createEmptyTestRunApiModel = default)
         {
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
 
@@ -1421,11 +1421,11 @@ namespace TestIT.AdaptersApi.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Post<TestRunApiResult>("/api/adapters/testRuns", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Post<TestRunApiResult>("/adapters/testRuns", localVarRequestOptions, this.Configuration);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersTestRunsPost", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersTestRunsPost", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -1433,26 +1433,26 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Create empty TestRun 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="createEmptyTestRunApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of TestRunApiResult</returns>
-        public async System.Threading.Tasks.Task<TestRunApiResult> ApiAdaptersTestRunsPostAsync(CreateEmptyTestRunApiModel createEmptyTestRunApiModel = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<TestRunApiResult> AdaptersTestRunsPostAsync(CreateEmptyTestRunApiModel createEmptyTestRunApiModel = default, System.Threading.CancellationToken cancellationToken = default)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<TestRunApiResult> localVarResponse = await ApiAdaptersTestRunsPostWithHttpInfoAsync(createEmptyTestRunApiModel, cancellationToken).ConfigureAwait(false);
+            TestIT.AdaptersApi.Client.ApiResponse<TestRunApiResult> localVarResponse = await AdaptersTestRunsPostWithHttpInfoAsync(createEmptyTestRunApiModel, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        ///  
+        /// Create empty TestRun 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="createEmptyTestRunApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (TestRunApiResult)</returns>
-        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<TestRunApiResult>> ApiAdaptersTestRunsPostWithHttpInfoAsync(CreateEmptyTestRunApiModel createEmptyTestRunApiModel = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<TestRunApiResult>> AdaptersTestRunsPostWithHttpInfoAsync(CreateEmptyTestRunApiModel createEmptyTestRunApiModel = default, System.Threading.CancellationToken cancellationToken = default)
         {
 
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
@@ -1489,11 +1489,11 @@ namespace TestIT.AdaptersApi.Api
 
             // make the HTTP request
 
-            var localVarResponse = await this.AsynchronousClient.PostAsync<TestRunApiResult>("/api/adapters/testRuns", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.PostAsync<TestRunApiResult>("/adapters/testRuns", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersTestRunsPost", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersTestRunsPost", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -1501,23 +1501,23 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Update empty TestRun 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="updateEmptyTestRunApiModel"> (optional)</param>
         /// <returns></returns>
-        public void ApiAdaptersTestRunsPut(UpdateEmptyTestRunApiModel updateEmptyTestRunApiModel = default)
+        public void AdaptersTestRunsPut(UpdateEmptyTestRunApiModel updateEmptyTestRunApiModel = default)
         {
-            ApiAdaptersTestRunsPutWithHttpInfo(updateEmptyTestRunApiModel);
+            AdaptersTestRunsPutWithHttpInfo(updateEmptyTestRunApiModel);
         }
 
         /// <summary>
-        ///  
+        /// Update empty TestRun 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="updateEmptyTestRunApiModel"> (optional)</param>
         /// <returns>ApiResponse of Object(void)</returns>
-        public TestIT.AdaptersApi.Client.ApiResponse<Object> ApiAdaptersTestRunsPutWithHttpInfo(UpdateEmptyTestRunApiModel updateEmptyTestRunApiModel = default)
+        public TestIT.AdaptersApi.Client.ApiResponse<Object> AdaptersTestRunsPutWithHttpInfo(UpdateEmptyTestRunApiModel updateEmptyTestRunApiModel = default)
         {
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
 
@@ -1551,11 +1551,11 @@ namespace TestIT.AdaptersApi.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Put<Object>("/api/adapters/testRuns", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Put<Object>("/adapters/testRuns", localVarRequestOptions, this.Configuration);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersTestRunsPut", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersTestRunsPut", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -1563,25 +1563,25 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Update empty TestRun 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="updateEmptyTestRunApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of void</returns>
-        public async System.Threading.Tasks.Task ApiAdaptersTestRunsPutAsync(UpdateEmptyTestRunApiModel updateEmptyTestRunApiModel = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task AdaptersTestRunsPutAsync(UpdateEmptyTestRunApiModel updateEmptyTestRunApiModel = default, System.Threading.CancellationToken cancellationToken = default)
         {
-            await ApiAdaptersTestRunsPutWithHttpInfoAsync(updateEmptyTestRunApiModel, cancellationToken).ConfigureAwait(false);
+            await AdaptersTestRunsPutWithHttpInfoAsync(updateEmptyTestRunApiModel, cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
-        ///  
+        /// Update empty TestRun 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="updateEmptyTestRunApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse</returns>
-        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<Object>> ApiAdaptersTestRunsPutWithHttpInfoAsync(UpdateEmptyTestRunApiModel updateEmptyTestRunApiModel = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<Object>> AdaptersTestRunsPutWithHttpInfoAsync(UpdateEmptyTestRunApiModel updateEmptyTestRunApiModel = default, System.Threading.CancellationToken cancellationToken = default)
         {
 
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
@@ -1618,11 +1618,11 @@ namespace TestIT.AdaptersApi.Api
 
             // make the HTTP request
 
-            var localVarResponse = await this.AsynchronousClient.PutAsync<Object>("/api/adapters/testRuns", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.PutAsync<Object>("/adapters/testRuns", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersTestRunsPut", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersTestRunsPut", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 

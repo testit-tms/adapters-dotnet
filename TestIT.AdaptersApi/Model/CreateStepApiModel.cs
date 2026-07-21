@@ -35,11 +35,11 @@ namespace TestIT.AdaptersApi.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="CreateStepApiModel" /> class.
         /// </summary>
-        /// <param name="action">action.</param>
-        /// <param name="expected">expected.</param>
-        /// <param name="testData">testData.</param>
-        /// <param name="comments">comments.</param>
-        /// <param name="workItemId">workItemId.</param>
+        /// <param name="action">Action applied by user.</param>
+        /// <param name="expected">Expected system reaction.</param>
+        /// <param name="testData">Test data for step.</param>
+        /// <param name="comments">Comments for step.</param>
+        /// <param name="workItemId">Unique identifier of workitem which relates to the step.</param>
         public CreateStepApiModel(string action = default, string expected = default, string testData = default, string comments = default, Guid? workItemId = default)
         {
             this.Action = action;
@@ -50,32 +50,37 @@ namespace TestIT.AdaptersApi.Model
         }
 
         /// <summary>
-        /// Gets or Sets Action
+        /// Action applied by user
         /// </summary>
+        /// <value>Action applied by user</value>
         [DataMember(Name = "action", EmitDefaultValue = true)]
         public string Action { get; set; }
 
         /// <summary>
-        /// Gets or Sets Expected
+        /// Expected system reaction
         /// </summary>
+        /// <value>Expected system reaction</value>
         [DataMember(Name = "expected", EmitDefaultValue = true)]
         public string Expected { get; set; }
 
         /// <summary>
-        /// Gets or Sets TestData
+        /// Test data for step
         /// </summary>
+        /// <value>Test data for step</value>
         [DataMember(Name = "testData", EmitDefaultValue = true)]
         public string TestData { get; set; }
 
         /// <summary>
-        /// Gets or Sets Comments
+        /// Comments for step
         /// </summary>
+        /// <value>Comments for step</value>
         [DataMember(Name = "comments", EmitDefaultValue = true)]
         public string Comments { get; set; }
 
         /// <summary>
-        /// Gets or Sets WorkItemId
+        /// Unique identifier of workitem which relates to the step
         /// </summary>
+        /// <value>Unique identifier of workitem which relates to the step</value>
         [DataMember(Name = "workItemId", EmitDefaultValue = true)]
         public Guid? WorkItemId { get; set; }
 

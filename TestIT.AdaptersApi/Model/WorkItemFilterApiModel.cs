@@ -35,25 +35,25 @@ namespace TestIT.AdaptersApi.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="WorkItemFilterApiModel" /> class.
         /// </summary>
-        /// <param name="nameOrId">nameOrId.</param>
-        /// <param name="includeIds">includeIds.</param>
-        /// <param name="excludeIds">excludeIds.</param>
-        /// <param name="projectIds">projectIds.</param>
-        /// <param name="name">name.</param>
-        /// <param name="ids">ids.</param>
-        /// <param name="globalIds">globalIds.</param>
-        /// <param name="attributes">attributes.</param>
-        /// <param name="isDeleted">isDeleted.</param>
-        /// <param name="sectionIds">sectionIds.</param>
-        /// <param name="states">states.</param>
-        /// <param name="priorities">priorities.</param>
-        /// <param name="sourceTypes">sourceTypes.</param>
-        /// <param name="types">types.</param>
-        /// <param name="duration">duration.</param>
-        /// <param name="isAutomated">isAutomated.</param>
-        /// <param name="tags">tags.</param>
-        /// <param name="excludeTags">excludeTags.</param>
-        /// <param name="autoTestIds">autoTestIds.</param>
+        /// <param name="nameOrId">Name or identifier (UUID) of work item.</param>
+        /// <param name="includeIds">Collection of identifiers of work items which need to be included in result regardless of filtering.</param>
+        /// <param name="excludeIds">Collection of identifiers of work items which need to be excluded from result regardless of filtering.</param>
+        /// <param name="projectIds">Collection of project identifiers.</param>
+        /// <param name="name">Name of work item.</param>
+        /// <param name="ids">Specifies a work item unique IDs to search for.</param>
+        /// <param name="globalIds">Collection of global (integer) identifiers.</param>
+        /// <param name="attributes">Custom attributes of work item.</param>
+        /// <param name="isDeleted">Is result must consist of only actual/deleted work items.</param>
+        /// <param name="sectionIds">Collection of section identifiers.</param>
+        /// <param name="states">Collection of states of work item.</param>
+        /// <param name="priorities">Collection of priorities of work item.</param>
+        /// <param name="sourceTypes">Source type of work item (manual creation or AI generated).</param>
+        /// <param name="types">Collection of types of work item.</param>
+        /// <param name="duration">Specifies a work item duration range to search for.</param>
+        /// <param name="isAutomated">Is result must consist of only manual/automated work items.</param>
+        /// <param name="tags">Collection of tags.</param>
+        /// <param name="excludeTags">Collection of tags to exclude.</param>
+        /// <param name="autoTestIds">Collection of identifiers of linked autotests.</param>
         public WorkItemFilterApiModel(string nameOrId = default, List<Guid> includeIds = default, List<Guid> excludeIds = default, List<Guid> projectIds = default, string name = default, List<Guid> ids = default, List<long> globalIds = default, Dictionary<string, List<string>> attributes = default, bool? isDeleted = default, List<Guid> sectionIds = default, List<WorkItemStates> states = default, List<WorkItemPriorityModel> priorities = default, List<WorkItemSourceTypeModel> sourceTypes = default, List<WorkItemTypeModel> types = default, Int32RangeSelectorModel duration = default, bool? isAutomated = default, List<string> tags = default, List<string> excludeTags = default, List<Guid> autoTestIds = default)
         {
             this.NameOrId = nameOrId;
@@ -78,116 +78,135 @@ namespace TestIT.AdaptersApi.Model
         }
 
         /// <summary>
-        /// Gets or Sets NameOrId
+        /// Name or identifier (UUID) of work item
         /// </summary>
+        /// <value>Name or identifier (UUID) of work item</value>
         [DataMember(Name = "nameOrId", EmitDefaultValue = true)]
         public string NameOrId { get; set; }
 
         /// <summary>
-        /// Gets or Sets IncludeIds
+        /// Collection of identifiers of work items which need to be included in result regardless of filtering
         /// </summary>
+        /// <value>Collection of identifiers of work items which need to be included in result regardless of filtering</value>
         [DataMember(Name = "includeIds", EmitDefaultValue = true)]
         public List<Guid> IncludeIds { get; set; }
 
         /// <summary>
-        /// Gets or Sets ExcludeIds
+        /// Collection of identifiers of work items which need to be excluded from result regardless of filtering
         /// </summary>
+        /// <value>Collection of identifiers of work items which need to be excluded from result regardless of filtering</value>
         [DataMember(Name = "excludeIds", EmitDefaultValue = true)]
         public List<Guid> ExcludeIds { get; set; }
 
         /// <summary>
-        /// Gets or Sets ProjectIds
+        /// Collection of project identifiers
         /// </summary>
+        /// <value>Collection of project identifiers</value>
         [DataMember(Name = "projectIds", EmitDefaultValue = true)]
         public List<Guid> ProjectIds { get; set; }
 
         /// <summary>
-        /// Gets or Sets Name
+        /// Name of work item
         /// </summary>
+        /// <value>Name of work item</value>
         [DataMember(Name = "name", EmitDefaultValue = true)]
         public string Name { get; set; }
 
         /// <summary>
-        /// Gets or Sets Ids
+        /// Specifies a work item unique IDs to search for
         /// </summary>
+        /// <value>Specifies a work item unique IDs to search for</value>
         [DataMember(Name = "ids", EmitDefaultValue = true)]
         public List<Guid> Ids { get; set; }
 
         /// <summary>
-        /// Gets or Sets GlobalIds
+        /// Collection of global (integer) identifiers
         /// </summary>
+        /// <value>Collection of global (integer) identifiers</value>
         [DataMember(Name = "globalIds", EmitDefaultValue = true)]
         public List<long> GlobalIds { get; set; }
 
         /// <summary>
-        /// Gets or Sets Attributes
+        /// Custom attributes of work item
         /// </summary>
+        /// <value>Custom attributes of work item</value>
         [DataMember(Name = "attributes", EmitDefaultValue = true)]
         public Dictionary<string, List<string>> Attributes { get; set; }
 
         /// <summary>
-        /// Gets or Sets IsDeleted
+        /// Is result must consist of only actual/deleted work items
         /// </summary>
+        /// <value>Is result must consist of only actual/deleted work items</value>
         [DataMember(Name = "isDeleted", EmitDefaultValue = true)]
         public bool? IsDeleted { get; set; }
 
         /// <summary>
-        /// Gets or Sets SectionIds
+        /// Collection of section identifiers
         /// </summary>
+        /// <value>Collection of section identifiers</value>
         [DataMember(Name = "sectionIds", EmitDefaultValue = true)]
         public List<Guid> SectionIds { get; set; }
 
         /// <summary>
-        /// Gets or Sets States
+        /// Collection of states of work item
         /// </summary>
+        /// <value>Collection of states of work item</value>
         [DataMember(Name = "states", EmitDefaultValue = true)]
         public List<WorkItemStates> States { get; set; }
 
         /// <summary>
-        /// Gets or Sets Priorities
+        /// Collection of priorities of work item
         /// </summary>
+        /// <value>Collection of priorities of work item</value>
         [DataMember(Name = "priorities", EmitDefaultValue = true)]
         public List<WorkItemPriorityModel> Priorities { get; set; }
 
         /// <summary>
-        /// Gets or Sets SourceTypes
+        /// Source type of work item (manual creation or AI generated)
         /// </summary>
+        /// <value>Source type of work item (manual creation or AI generated)</value>
         [DataMember(Name = "sourceTypes", EmitDefaultValue = true)]
         public List<WorkItemSourceTypeModel> SourceTypes { get; set; }
 
         /// <summary>
-        /// Gets or Sets Types
+        /// Collection of types of work item
         /// </summary>
+        /// <value>Collection of types of work item</value>
         [DataMember(Name = "types", EmitDefaultValue = true)]
         public List<WorkItemTypeModel> Types { get; set; }
 
         /// <summary>
-        /// Gets or Sets Duration
+        /// Specifies a work item duration range to search for
         /// </summary>
+        /// <value>Specifies a work item duration range to search for</value>
         [DataMember(Name = "duration", EmitDefaultValue = true)]
         public Int32RangeSelectorModel Duration { get; set; }
 
         /// <summary>
-        /// Gets or Sets IsAutomated
+        /// Is result must consist of only manual/automated work items
         /// </summary>
+        /// <value>Is result must consist of only manual/automated work items</value>
         [DataMember(Name = "isAutomated", EmitDefaultValue = true)]
         public bool? IsAutomated { get; set; }
 
         /// <summary>
-        /// Gets or Sets Tags
+        /// Collection of tags
         /// </summary>
+        /// <value>Collection of tags</value>
         [DataMember(Name = "tags", EmitDefaultValue = true)]
         public List<string> Tags { get; set; }
 
         /// <summary>
-        /// Gets or Sets ExcludeTags
+        /// Collection of tags to exclude
         /// </summary>
+        /// <value>Collection of tags to exclude</value>
         [DataMember(Name = "excludeTags", EmitDefaultValue = true)]
         public List<string> ExcludeTags { get; set; }
 
         /// <summary>
-        /// Gets or Sets AutoTestIds
+        /// Collection of identifiers of linked autotests
         /// </summary>
+        /// <value>Collection of identifiers of linked autotests</value>
         [DataMember(Name = "autoTestIds", EmitDefaultValue = true)]
         public List<Guid> AutoTestIds { get; set; }
 

@@ -40,15 +40,16 @@ namespace TestIT.AdaptersApi.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="AutoTestCaseApiModel" /> class.
         /// </summary>
-        /// <param name="id">id (required).</param>
+        /// <param name="id">Unique identifier of the automated test case (required).</param>
         public AutoTestCaseApiModel(Guid id = default)
         {
             this.Id = id;
         }
 
         /// <summary>
-        /// Gets or Sets Id
+        /// Unique identifier of the automated test case
         /// </summary>
+        /// <value>Unique identifier of the automated test case</value>
         [DataMember(Name = "id", IsRequired = true, EmitDefaultValue = true)]
         public Guid Id { get; set; }
 

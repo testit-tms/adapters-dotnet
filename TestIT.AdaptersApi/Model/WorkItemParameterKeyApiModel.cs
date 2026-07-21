@@ -40,15 +40,16 @@ namespace TestIT.AdaptersApi.Model
         /// <summary>
         /// Initializes a new instance of the <see cref="WorkItemParameterKeyApiModel" /> class.
         /// </summary>
-        /// <param name="id">id (required).</param>
+        /// <param name="id">ID of the parameter key to assign (required).</param>
         public WorkItemParameterKeyApiModel(Guid id = default)
         {
             this.Id = id;
         }
 
         /// <summary>
-        /// Gets or Sets Id
+        /// ID of the parameter key to assign
         /// </summary>
+        /// <value>ID of the parameter key to assign</value>
         [DataMember(Name = "id", IsRequired = true, EmitDefaultValue = true)]
         public Guid Id { get; set; }
 

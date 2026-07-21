@@ -28,15 +28,15 @@ namespace TestIT.AdaptersApi.Api
     {
         #region Synchronous Operations
         /// <summary>
-        /// 
+        /// Get test result by ID
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <returns>TestResultResponse</returns>
-        TestResultResponse ApiAdaptersTestResultsIdGet(Guid id);
+        TestResultResponse AdaptersTestResultsIdGet(Guid id);
 
         /// <summary>
-        /// 
+        /// Get test result by ID
         /// </summary>
         /// <remarks>
         /// 
@@ -44,18 +44,18 @@ namespace TestIT.AdaptersApi.Api
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <returns>ApiResponse of TestResultResponse</returns>
-        ApiResponse<TestResultResponse> ApiAdaptersTestResultsIdGetWithHttpInfo(Guid id);
+        ApiResponse<TestResultResponse> AdaptersTestResultsIdGetWithHttpInfo(Guid id);
         /// <summary>
-        /// 
+        /// Edit test result by ID
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <param name="testResultUpdateRequest"> (optional)</param>
         /// <returns></returns>
-        void ApiAdaptersTestResultsIdPut(Guid id, TestResultUpdateRequest testResultUpdateRequest = default);
+        void AdaptersTestResultsIdPut(Guid id, TestResultUpdateRequest testResultUpdateRequest = default);
 
         /// <summary>
-        /// 
+        /// Edit test result by ID
         /// </summary>
         /// <remarks>
         /// 
@@ -64,9 +64,9 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="id"></param>
         /// <param name="testResultUpdateRequest"> (optional)</param>
         /// <returns>ApiResponse of Object(void)</returns>
-        ApiResponse<Object> ApiAdaptersTestResultsIdPutWithHttpInfo(Guid id, TestResultUpdateRequest testResultUpdateRequest = default);
+        ApiResponse<Object> AdaptersTestResultsIdPutWithHttpInfo(Guid id, TestResultUpdateRequest testResultUpdateRequest = default);
         /// <summary>
-        /// 
+        /// Search for test results
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="skip">Amount of items to be skipped (offset) (optional)</param>
@@ -76,10 +76,10 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="searchValue">Value for searching (optional)</param>
         /// <param name="testResultsFilterApiModel"> (optional)</param>
         /// <returns>List&lt;TestResultShortResponse&gt;</returns>
-        List<TestResultShortResponse> ApiAdaptersTestResultsSearchPost(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, TestResultsFilterApiModel testResultsFilterApiModel = default);
+        List<TestResultShortResponse> AdaptersTestResultsSearchPost(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, TestResultsFilterApiModel testResultsFilterApiModel = default);
 
         /// <summary>
-        /// 
+        /// Search for test results
         /// </summary>
         /// <remarks>
         /// 
@@ -92,7 +92,7 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="searchValue">Value for searching (optional)</param>
         /// <param name="testResultsFilterApiModel"> (optional)</param>
         /// <returns>ApiResponse of List&lt;TestResultShortResponse&gt;</returns>
-        ApiResponse<List<TestResultShortResponse>> ApiAdaptersTestResultsSearchPostWithHttpInfo(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, TestResultsFilterApiModel testResultsFilterApiModel = default);
+        ApiResponse<List<TestResultShortResponse>> AdaptersTestResultsSearchPostWithHttpInfo(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, TestResultsFilterApiModel testResultsFilterApiModel = default);
         #endregion Synchronous Operations
     }
 
@@ -103,7 +103,7 @@ namespace TestIT.AdaptersApi.Api
     {
         #region Asynchronous Operations
         /// <summary>
-        /// 
+        /// Get test result by ID
         /// </summary>
         /// <remarks>
         /// 
@@ -112,10 +112,10 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="id"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of TestResultResponse</returns>
-        System.Threading.Tasks.Task<TestResultResponse> ApiAdaptersTestResultsIdGetAsync(Guid id, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<TestResultResponse> AdaptersTestResultsIdGetAsync(Guid id, System.Threading.CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// 
+        /// Get test result by ID
         /// </summary>
         /// <remarks>
         /// 
@@ -124,9 +124,9 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="id"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (TestResultResponse)</returns>
-        System.Threading.Tasks.Task<ApiResponse<TestResultResponse>> ApiAdaptersTestResultsIdGetWithHttpInfoAsync(Guid id, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<ApiResponse<TestResultResponse>> AdaptersTestResultsIdGetWithHttpInfoAsync(Guid id, System.Threading.CancellationToken cancellationToken = default);
         /// <summary>
-        /// 
+        /// Edit test result by ID
         /// </summary>
         /// <remarks>
         /// 
@@ -136,10 +136,10 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="testResultUpdateRequest"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of void</returns>
-        System.Threading.Tasks.Task ApiAdaptersTestResultsIdPutAsync(Guid id, TestResultUpdateRequest testResultUpdateRequest = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task AdaptersTestResultsIdPutAsync(Guid id, TestResultUpdateRequest testResultUpdateRequest = default, System.Threading.CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// 
+        /// Edit test result by ID
         /// </summary>
         /// <remarks>
         /// 
@@ -149,9 +149,9 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="testResultUpdateRequest"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse</returns>
-        System.Threading.Tasks.Task<ApiResponse<Object>> ApiAdaptersTestResultsIdPutWithHttpInfoAsync(Guid id, TestResultUpdateRequest testResultUpdateRequest = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<ApiResponse<Object>> AdaptersTestResultsIdPutWithHttpInfoAsync(Guid id, TestResultUpdateRequest testResultUpdateRequest = default, System.Threading.CancellationToken cancellationToken = default);
         /// <summary>
-        /// 
+        /// Search for test results
         /// </summary>
         /// <remarks>
         /// 
@@ -165,10 +165,10 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="testResultsFilterApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;TestResultShortResponse&gt;</returns>
-        System.Threading.Tasks.Task<List<TestResultShortResponse>> ApiAdaptersTestResultsSearchPostAsync(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, TestResultsFilterApiModel testResultsFilterApiModel = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<List<TestResultShortResponse>> AdaptersTestResultsSearchPostAsync(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, TestResultsFilterApiModel testResultsFilterApiModel = default, System.Threading.CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// 
+        /// Search for test results
         /// </summary>
         /// <remarks>
         /// 
@@ -182,7 +182,7 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="testResultsFilterApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;TestResultShortResponse&gt;)</returns>
-        System.Threading.Tasks.Task<ApiResponse<List<TestResultShortResponse>>> ApiAdaptersTestResultsSearchPostWithHttpInfoAsync(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, TestResultsFilterApiModel testResultsFilterApiModel = default, System.Threading.CancellationToken cancellationToken = default);
+        System.Threading.Tasks.Task<ApiResponse<List<TestResultShortResponse>>> AdaptersTestResultsSearchPostWithHttpInfoAsync(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, TestResultsFilterApiModel testResultsFilterApiModel = default, System.Threading.CancellationToken cancellationToken = default);
         #endregion Asynchronous Operations
     }
 
@@ -397,24 +397,24 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Get test result by ID 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <returns>TestResultResponse</returns>
-        public TestResultResponse ApiAdaptersTestResultsIdGet(Guid id)
+        public TestResultResponse AdaptersTestResultsIdGet(Guid id)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<TestResultResponse> localVarResponse = ApiAdaptersTestResultsIdGetWithHttpInfo(id);
+            TestIT.AdaptersApi.Client.ApiResponse<TestResultResponse> localVarResponse = AdaptersTestResultsIdGetWithHttpInfo(id);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        ///  
+        /// Get test result by ID 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <returns>ApiResponse of TestResultResponse</returns>
-        public TestIT.AdaptersApi.Client.ApiResponse<TestResultResponse> ApiAdaptersTestResultsIdGetWithHttpInfo(Guid id)
+        public TestIT.AdaptersApi.Client.ApiResponse<TestResultResponse> AdaptersTestResultsIdGetWithHttpInfo(Guid id)
         {
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
 
@@ -447,11 +447,11 @@ namespace TestIT.AdaptersApi.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Get<TestResultResponse>("/api/adapters/testResults/{id}", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Get<TestResultResponse>("/adapters/testResults/{id}", localVarRequestOptions, this.Configuration);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersTestResultsIdGet", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersTestResultsIdGet", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -459,26 +459,26 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Get test result by ID 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of TestResultResponse</returns>
-        public async System.Threading.Tasks.Task<TestResultResponse> ApiAdaptersTestResultsIdGetAsync(Guid id, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<TestResultResponse> AdaptersTestResultsIdGetAsync(Guid id, System.Threading.CancellationToken cancellationToken = default)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<TestResultResponse> localVarResponse = await ApiAdaptersTestResultsIdGetWithHttpInfoAsync(id, cancellationToken).ConfigureAwait(false);
+            TestIT.AdaptersApi.Client.ApiResponse<TestResultResponse> localVarResponse = await AdaptersTestResultsIdGetWithHttpInfoAsync(id, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        ///  
+        /// Get test result by ID 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (TestResultResponse)</returns>
-        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<TestResultResponse>> ApiAdaptersTestResultsIdGetWithHttpInfoAsync(Guid id, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<TestResultResponse>> AdaptersTestResultsIdGetWithHttpInfoAsync(Guid id, System.Threading.CancellationToken cancellationToken = default)
         {
 
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
@@ -514,11 +514,11 @@ namespace TestIT.AdaptersApi.Api
 
             // make the HTTP request
 
-            var localVarResponse = await this.AsynchronousClient.GetAsync<TestResultResponse>("/api/adapters/testResults/{id}", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.GetAsync<TestResultResponse>("/adapters/testResults/{id}", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersTestResultsIdGet", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersTestResultsIdGet", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -526,25 +526,25 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Edit test result by ID 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <param name="testResultUpdateRequest"> (optional)</param>
         /// <returns></returns>
-        public void ApiAdaptersTestResultsIdPut(Guid id, TestResultUpdateRequest testResultUpdateRequest = default)
+        public void AdaptersTestResultsIdPut(Guid id, TestResultUpdateRequest testResultUpdateRequest = default)
         {
-            ApiAdaptersTestResultsIdPutWithHttpInfo(id, testResultUpdateRequest);
+            AdaptersTestResultsIdPutWithHttpInfo(id, testResultUpdateRequest);
         }
 
         /// <summary>
-        ///  
+        /// Edit test result by ID 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <param name="testResultUpdateRequest"> (optional)</param>
         /// <returns>ApiResponse of Object(void)</returns>
-        public TestIT.AdaptersApi.Client.ApiResponse<Object> ApiAdaptersTestResultsIdPutWithHttpInfo(Guid id, TestResultUpdateRequest testResultUpdateRequest = default)
+        public TestIT.AdaptersApi.Client.ApiResponse<Object> AdaptersTestResultsIdPutWithHttpInfo(Guid id, TestResultUpdateRequest testResultUpdateRequest = default)
         {
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
 
@@ -579,11 +579,11 @@ namespace TestIT.AdaptersApi.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Put<Object>("/api/adapters/testResults/{id}", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Put<Object>("/adapters/testResults/{id}", localVarRequestOptions, this.Configuration);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersTestResultsIdPut", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersTestResultsIdPut", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -591,27 +591,27 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Edit test result by ID 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <param name="testResultUpdateRequest"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of void</returns>
-        public async System.Threading.Tasks.Task ApiAdaptersTestResultsIdPutAsync(Guid id, TestResultUpdateRequest testResultUpdateRequest = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task AdaptersTestResultsIdPutAsync(Guid id, TestResultUpdateRequest testResultUpdateRequest = default, System.Threading.CancellationToken cancellationToken = default)
         {
-            await ApiAdaptersTestResultsIdPutWithHttpInfoAsync(id, testResultUpdateRequest, cancellationToken).ConfigureAwait(false);
+            await AdaptersTestResultsIdPutWithHttpInfoAsync(id, testResultUpdateRequest, cancellationToken).ConfigureAwait(false);
         }
 
         /// <summary>
-        ///  
+        /// Edit test result by ID 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="id"></param>
         /// <param name="testResultUpdateRequest"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse</returns>
-        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<Object>> ApiAdaptersTestResultsIdPutWithHttpInfoAsync(Guid id, TestResultUpdateRequest testResultUpdateRequest = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<Object>> AdaptersTestResultsIdPutWithHttpInfoAsync(Guid id, TestResultUpdateRequest testResultUpdateRequest = default, System.Threading.CancellationToken cancellationToken = default)
         {
 
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
@@ -649,11 +649,11 @@ namespace TestIT.AdaptersApi.Api
 
             // make the HTTP request
 
-            var localVarResponse = await this.AsynchronousClient.PutAsync<Object>("/api/adapters/testResults/{id}", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.PutAsync<Object>("/adapters/testResults/{id}", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersTestResultsIdPut", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersTestResultsIdPut", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -661,7 +661,7 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Search for test results 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="skip">Amount of items to be skipped (offset) (optional)</param>
@@ -671,14 +671,14 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="searchValue">Value for searching (optional)</param>
         /// <param name="testResultsFilterApiModel"> (optional)</param>
         /// <returns>List&lt;TestResultShortResponse&gt;</returns>
-        public List<TestResultShortResponse> ApiAdaptersTestResultsSearchPost(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, TestResultsFilterApiModel testResultsFilterApiModel = default)
+        public List<TestResultShortResponse> AdaptersTestResultsSearchPost(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, TestResultsFilterApiModel testResultsFilterApiModel = default)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<List<TestResultShortResponse>> localVarResponse = ApiAdaptersTestResultsSearchPostWithHttpInfo(skip, take, orderBy, searchField, searchValue, testResultsFilterApiModel);
+            TestIT.AdaptersApi.Client.ApiResponse<List<TestResultShortResponse>> localVarResponse = AdaptersTestResultsSearchPostWithHttpInfo(skip, take, orderBy, searchField, searchValue, testResultsFilterApiModel);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        ///  
+        /// Search for test results 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="skip">Amount of items to be skipped (offset) (optional)</param>
@@ -688,7 +688,7 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="searchValue">Value for searching (optional)</param>
         /// <param name="testResultsFilterApiModel"> (optional)</param>
         /// <returns>ApiResponse of List&lt;TestResultShortResponse&gt;</returns>
-        public TestIT.AdaptersApi.Client.ApiResponse<List<TestResultShortResponse>> ApiAdaptersTestResultsSearchPostWithHttpInfo(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, TestResultsFilterApiModel testResultsFilterApiModel = default)
+        public TestIT.AdaptersApi.Client.ApiResponse<List<TestResultShortResponse>> AdaptersTestResultsSearchPostWithHttpInfo(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, TestResultsFilterApiModel testResultsFilterApiModel = default)
         {
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
 
@@ -742,11 +742,11 @@ namespace TestIT.AdaptersApi.Api
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Post<List<TestResultShortResponse>>("/api/adapters/testResults/search", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Post<List<TestResultShortResponse>>("/adapters/testResults/search", localVarRequestOptions, this.Configuration);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersTestResultsSearchPost", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersTestResultsSearchPost", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
@@ -754,7 +754,7 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        ///  
+        /// Search for test results 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="skip">Amount of items to be skipped (offset) (optional)</param>
@@ -765,14 +765,14 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="testResultsFilterApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of List&lt;TestResultShortResponse&gt;</returns>
-        public async System.Threading.Tasks.Task<List<TestResultShortResponse>> ApiAdaptersTestResultsSearchPostAsync(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, TestResultsFilterApiModel testResultsFilterApiModel = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<List<TestResultShortResponse>> AdaptersTestResultsSearchPostAsync(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, TestResultsFilterApiModel testResultsFilterApiModel = default, System.Threading.CancellationToken cancellationToken = default)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<List<TestResultShortResponse>> localVarResponse = await ApiAdaptersTestResultsSearchPostWithHttpInfoAsync(skip, take, orderBy, searchField, searchValue, testResultsFilterApiModel, cancellationToken).ConfigureAwait(false);
+            TestIT.AdaptersApi.Client.ApiResponse<List<TestResultShortResponse>> localVarResponse = await AdaptersTestResultsSearchPostWithHttpInfoAsync(skip, take, orderBy, searchField, searchValue, testResultsFilterApiModel, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
         /// <summary>
-        ///  
+        /// Search for test results 
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="skip">Amount of items to be skipped (offset) (optional)</param>
@@ -783,7 +783,7 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="testResultsFilterApiModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
         /// <returns>Task of ApiResponse (List&lt;TestResultShortResponse&gt;)</returns>
-        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<List<TestResultShortResponse>>> ApiAdaptersTestResultsSearchPostWithHttpInfoAsync(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, TestResultsFilterApiModel testResultsFilterApiModel = default, System.Threading.CancellationToken cancellationToken = default)
+        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<List<TestResultShortResponse>>> AdaptersTestResultsSearchPostWithHttpInfoAsync(int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, TestResultsFilterApiModel testResultsFilterApiModel = default, System.Threading.CancellationToken cancellationToken = default)
         {
 
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
@@ -840,11 +840,11 @@ namespace TestIT.AdaptersApi.Api
 
             // make the HTTP request
 
-            var localVarResponse = await this.AsynchronousClient.PostAsync<List<TestResultShortResponse>>("/api/adapters/testResults/search", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.PostAsync<List<TestResultShortResponse>>("/adapters/testResults/search", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {
-                Exception _exception = this.ExceptionFactory("ApiAdaptersTestResultsSearchPost", localVarResponse);
+                Exception _exception = this.ExceptionFactory("AdaptersTestResultsSearchPost", localVarResponse);
                 if (_exception != null) throw _exception;
             }
 
