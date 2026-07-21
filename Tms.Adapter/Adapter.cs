@@ -2,6 +2,7 @@ using System.Diagnostics;
 
 using Newtonsoft.Json;
 
+using Tms.Adapter.Attributes;
 using Tms.Adapter.Models;
 
 namespace Tms.Adapter;
@@ -38,7 +39,11 @@ public static class Adapter
 
         Console.WriteLine($"{MessageType.TmsStepAttachment}: " +
                           JsonConvert.SerializeObject(new Models.File
-                              { PathToFile = fullPath, CallerMemberName = memberName }));
+                              {
+                                  PathToFile = fullPath,
+                                  CallerMemberName = memberName,
+                                  StepGuid = StepExecutionContext.Current?.Guid
+                              }));
     }
 
     public static void AddAttachments(IEnumerable<string> pathToFile)
@@ -57,7 +62,12 @@ public static class Adapter
 
         Console.WriteLine($"{MessageType.TmsStepAttachmentAsText}: " +
                           JsonConvert.SerializeObject(new Models.File
-                              { Name = name, Content = content, CallerMemberName = memberName }));
+                              {
+                                  Name = name,
+                                  Content = content,
+                                  CallerMemberName = memberName,
+                                  StepGuid = StepExecutionContext.Current?.Guid
+                              }));
     }
 
     public static void AddMessage(string message)

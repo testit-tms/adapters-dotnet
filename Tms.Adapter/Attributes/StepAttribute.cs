@@ -13,120 +13,244 @@ namespace Tms.Adapter.Attributes;
 [AttributeUsage(AttributeTargets.Method)]
 public class StepAttribute : OnMethodBoundaryAspect
 {
-    private MethodBase? _callerMethod;
-    private string? _title;
-    private string? _description;
-    private CallerMethodType? _callerMethodType;
-    private CallerMethodType? _currentMethodType;
-    private DateTime? _startedAt;
-    private Guid _guid;
+    private static readonly MethodInfo WrapGenericTaskMethod = typeof(StepAttribute)
+        .GetMethod(nameof(WrapGenericTaskAsync), BindingFlags.NonPublic | BindingFlags.Static)!;
+
+    private static readonly MethodInfo WrapGenericValueTaskMethod = typeof(StepAttribute)
+        .GetMethod(nameof(WrapGenericValueTaskAsync), BindingFlags.NonPublic | BindingFlags.Static)!;
 
     public override void OnEntry(MethodExecutionArgs arg)
     {
-        _startedAt = DateTime.UtcNow;
-        _guid = Guid.NewGuid();
-
         var currentMethod = arg.Method;
-        _callerMethod = GetCallerMethod(currentMethod);
+        var callerMethod = GetCallerMethod(currentMethod);
+        var parent = StepExecutionContext.Current;
+        var currentMethodType = GetFixtureType(currentMethod);
+        var phase = currentMethodType
+            ?? parent?.Phase
+            ?? GetCallerType(callerMethod)
+            ?? CallerMethodType.TestMethod;
+
+        var invocation = new StepInvocation
+        {
+            Guid = Guid.NewGuid(),
+            StartedOn = DateTime.UtcNow,
+            Parent = parent,
+            Phase = phase
+        };
+
+        arg.MethodExecutionTag = invocation;
+        StepExecutionContext.Current = invocation;
 
         var arguments = arg.Arguments
             .Select(Convert.ToString)
             .ToList();
         var parameters = arg.Method.GetParameters()
-            .Select(x => x.Name.ToString())
-            .Zip(arguments, (k, v) => new { k, v })
-            .ToDictionary(x => x.k, x => x.v);
+            .Select(x => x.Name ?? string.Empty)
+            .Zip(arguments, (key, value) => new { key, value })
+            .ToDictionary(x => x.key, x => x.value);
 
-        var currentMethodAttributes = currentMethod.GetCustomAttributes(false);
-
-        if (currentMethodAttributes is not null)
-        {
-            foreach (var attribute in currentMethodAttributes)
-            {
-                switch (attribute)
-                {
-                    case TitleAttribute title:
-                        _title = title.Value;
-                        break;
-                    case DescriptionAttribute description:
-                        _description = description.Value;
-                        break;
-                }
-
-                var name = attribute.GetType().Name;
-                switch (name)
-                {
-                    case "TestInitializeAttribute" or "SetUpAttribute" or "ClassInitializeAttribute":
-                        _currentMethodType = CallerMethodType.Setup;
-                        _callerMethodType = CallerMethodType.Setup;
-                        break;
-                    case "TestCleanupAttribute" or "TearDownAttribute" or "ClassCleanupAttribute":
-                        _currentMethodType = CallerMethodType.Teardown;
-                        _callerMethodType = CallerMethodType.Teardown;
-                        break;
-                }
-            }
-        }
-
-        if (_callerMethodType == default)
-        {
-            if (_callerMethod == null)
-            {
-                _callerMethodType = CallerMethodType.TestMethod;
-            }
-            else
-            {
-                var callerMethodAttributes = _callerMethod.GetCustomAttributes(false);
-                if (callerMethodAttributes is not null)
-                {
-                    foreach (var attribute in callerMethodAttributes)
-                    {
-                        var name = attribute.GetType().Name;
-                        _callerMethodType = name switch
-                        {
-                            "TestInitializeAttribute" or "SetUpAttribute" or "ClassInitializeAttribute" =>
-                                CallerMethodType.Setup,
-                            "TestMethodAttribute" or "FactAttribute" or "TestCaseAttribute" or "TestAttribute" =>
-                                CallerMethodType.TestMethod,
-                            "TestCleanupAttribute" or "TearDownAttribute" or "ClassCleanupAttribute" =>
-                                CallerMethodType.Teardown,
-                            _ => _callerMethodType
-                        };
-                    }
-                }
-            }
-        }
-        
-        var newTitle = string.IsNullOrEmpty(_title) ? currentMethod.Name : _title;
-        var newDescription = string.IsNullOrEmpty(_description)
-            ? null
-            : Replacer.ReplaceParameters(_description, parameters);
+        var title = currentMethod.GetCustomAttributes(false)
+            .OfType<TitleAttribute>()
+            .Select(x => x.Value)
+            .FirstOrDefault();
+        var description = currentMethod.GetCustomAttributes(false)
+            .OfType<DescriptionAttribute>()
+            .Select(x => x.Value)
+            .FirstOrDefault();
 
         var step = new StepDto
         {
-            Guid = _guid,
-            StartedOn = _startedAt,
-            Title = Replacer.ReplaceParameters(newTitle, parameters),
-            Description = newDescription,
+            Guid = invocation.Guid,
+            StartedOn = invocation.StartedOn,
+            Title = Replacer.ReplaceParameters(string.IsNullOrEmpty(title) ? currentMethod.Name : title, parameters),
+            Description = string.IsNullOrEmpty(description) ? null : Replacer.ReplaceParameters(description, parameters),
             CurrentMethod = currentMethod.Name,
-            CallerMethod = GetCallerDisplayName(_callerMethod),
+            CallerMethod = GetCallerDisplayName(callerMethod),
             Instance = arg.Instance?.GetType().Name,
             Args = parameters,
-            CallerMethodType = _callerMethodType,
-            CurrentMethodType = _currentMethodType
+            CallerMethodType = phase,
+            CurrentMethodType = currentMethodType,
+            ProtocolVersion = StepDto.CurrentProtocolVersion,
+            ParentGuid = parent?.Guid,
+            Phase = phase
         };
 
         Console.WriteLine($"{MessageType.TmsStep}: " + JsonConvert.SerializeObject(step));
     }
 
+#pragma warning disable CA2012 // The aspect must replace and return the intercepted ValueTask.
     public override void OnExit(MethodExecutionArgs arg)
     {
-        WriteData("Passed", arg.ReturnValue);
+        if (arg.MethodExecutionTag is not StepInvocation invocation)
+        {
+            return;
+        }
+
+        RestoreParent(invocation);
+
+        if (arg.ReturnValue is Task task)
+        {
+            arg.ReturnValue = WrapTask(task, invocation);
+            return;
+        }
+
+        if (arg.ReturnValue is ValueTask valueTask)
+        {
+            arg.ReturnValue = WrapValueTaskAsync(valueTask, invocation);
+            return;
+        }
+
+        var returnType = arg.ReturnValue?.GetType();
+        if (returnType?.IsGenericType == true &&
+            returnType.GetGenericTypeDefinition() == typeof(ValueTask<>))
+        {
+            arg.ReturnValue = WrapGenericValueTaskMethod
+                .MakeGenericMethod(returnType.GetGenericArguments()[0])
+                .Invoke(null, [arg.ReturnValue, invocation]);
+            return;
+        }
+
+        WriteResult(invocation, "Passed", arg.ReturnValue);
     }
+#pragma warning restore CA2012
 
     public override void OnException(MethodExecutionArgs arg)
     {
-        WriteData("Failed");
+        if (arg.MethodExecutionTag is not StepInvocation invocation)
+        {
+            return;
+        }
+
+        RestoreParent(invocation);
+        WriteResult(invocation, "Failed");
+    }
+
+    private static object WrapTask(Task task, StepInvocation invocation)
+    {
+        var taskResultType = GetTaskResultType(task.GetType());
+        if (taskResultType == null)
+        {
+            return WrapTaskAsync(task, invocation);
+        }
+
+        return WrapGenericTaskMethod
+            .MakeGenericMethod(taskResultType)
+            .Invoke(null, [task, invocation])!;
+    }
+
+    private static Type? GetTaskResultType(Type taskType)
+    {
+        for (var type = taskType; type != null; type = type.BaseType)
+        {
+            if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Task<>))
+            {
+                return type.GetGenericArguments()[0];
+            }
+        }
+
+        return null;
+    }
+
+    private static async Task WrapTaskAsync(Task task, StepInvocation invocation)
+    {
+        try
+        {
+            await task.ConfigureAwait(false);
+            WriteResult(invocation, "Passed");
+        }
+        catch
+        {
+            WriteResult(invocation, "Failed");
+            throw;
+        }
+    }
+
+    private static async Task<T> WrapGenericTaskAsync<T>(Task<T> task, StepInvocation invocation)
+    {
+        try
+        {
+            var result = await task.ConfigureAwait(false);
+            WriteResult(invocation, "Passed", result);
+            return result;
+        }
+        catch
+        {
+            WriteResult(invocation, "Failed");
+            throw;
+        }
+    }
+
+    private static async ValueTask WrapValueTaskAsync(ValueTask task, StepInvocation invocation)
+    {
+        try
+        {
+            await task.ConfigureAwait(false);
+            WriteResult(invocation, "Passed");
+        }
+        catch
+        {
+            WriteResult(invocation, "Failed");
+            throw;
+        }
+    }
+
+    private static async ValueTask<T> WrapGenericValueTaskAsync<T>(ValueTask<T> task, StepInvocation invocation)
+    {
+        try
+        {
+            var result = await task.ConfigureAwait(false);
+            WriteResult(invocation, "Passed", result);
+            return result;
+        }
+        catch
+        {
+            WriteResult(invocation, "Failed");
+            throw;
+        }
+    }
+
+    private static void RestoreParent(StepInvocation invocation)
+    {
+        if (ReferenceEquals(StepExecutionContext.Current, invocation))
+        {
+            StepExecutionContext.Current = invocation.Parent;
+        }
+    }
+
+    private static CallerMethodType? GetFixtureType(MethodBase method)
+    {
+        foreach (var attribute in method.GetCustomAttributes(false))
+        {
+            switch (attribute.GetType().Name)
+            {
+                case "TestInitializeAttribute" or "SetUpAttribute" or "ClassInitializeAttribute" or "OneTimeSetUpAttribute":
+                    return CallerMethodType.Setup;
+                case "TestCleanupAttribute" or "TearDownAttribute" or "ClassCleanupAttribute" or "OneTimeTearDownAttribute":
+                    return CallerMethodType.Teardown;
+            }
+        }
+
+        return null;
+    }
+
+    private static CallerMethodType? GetCallerType(MethodBase? method)
+    {
+        if (method == null)
+        {
+            return null;
+        }
+
+        var fixtureType = GetFixtureType(method);
+        if (fixtureType != null)
+        {
+            return fixtureType;
+        }
+
+        return method.GetCustomAttributes(false).Any(attribute => attribute.GetType().Name is
+            "TestMethodAttribute" or "FactAttribute" or "TheoryAttribute" or
+            "TestCaseAttribute" or "TestAttribute")
+            ? CallerMethodType.TestMethod
+            : null;
     }
 
     private static MethodBase? GetCallerMethod(MethodBase currentMethod)
@@ -141,23 +265,14 @@ public class StepAttribute : OnMethodBoundaryAspect
         foreach (var frame in frames)
         {
             var method = frame?.GetMethod();
-            if (method == null)
-            {
-                continue;
-            }
-
-            if (method.DeclaringType == aspectType)
-            {
-                continue;
-            }
-
-            if (method == currentMethod)
+            if (method == null || method.DeclaringType == aspectType || method == currentMethod)
             {
                 continue;
             }
 
             return method;
         }
+
         return null;
     }
 
@@ -168,21 +283,25 @@ public class StepAttribute : OnMethodBoundaryAspect
             return null;
         }
 
-        var name = method.Name.Replace("$_executor_", "");
-        var typeName = method.DeclaringType?.Name ?? "";
+        var name = method.Name.Replace("$_executor_", string.Empty);
+        var typeName = method.DeclaringType?.Name ?? string.Empty;
         var match = Regex.Match(typeName, @"^<(.+)>d__\d+$");
         return match.Success ? match.Groups[1].Value : name;
     }
 
-    private void WriteData(string outcome, object? result = null)
+    private static void WriteResult(StepInvocation invocation, string outcome, object? result = null)
     {
-        var completedAt = DateTime.UtcNow;
+        if (Interlocked.CompareExchange(ref invocation.CompletionWritten, 1, 0) != 0)
+        {
+            return;
+        }
 
+        var completedAt = DateTime.UtcNow;
         var stepResult = new StepResult
         {
-            Guid = _guid,
+            Guid = invocation.Guid,
             CompletedOn = completedAt,
-            Duration = (long)((TimeSpan)(completedAt! - _startedAt!)).TotalMilliseconds,
+            Duration = (long)(completedAt - invocation.StartedOn).TotalMilliseconds,
             Result = result?.ToString(),
             Outcome = outcome
         };
