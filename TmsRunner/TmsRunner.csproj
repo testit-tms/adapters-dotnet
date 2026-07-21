@@ -1,14 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	  <Version>2.1.2</Version>
+	  <Version>2.1.3</Version>
     <OutputType>Exe</OutputType>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <Title>Test IT runner</Title>
     <Authors>Integration team</Authors>
     <Description>Test IT runner</Description>
-    <Copyright>Copyright (c) 2019 - 2024 Test IT</Copyright>
+    <Copyright>Copyright (c) 2019 - 2026 Test IT</Copyright>
     <RepositoryUrl>https://github.com/testit-tms/adapters-dotnet</RepositoryUrl>
     <PackageProjectUrl>https://testit.software</PackageProjectUrl>
     <TargetFrameworks>$(TargetFrameworksForApp)</TargetFrameworks>
