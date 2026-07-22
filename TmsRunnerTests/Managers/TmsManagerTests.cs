@@ -50,15 +50,15 @@ public class TmsManagerTests
         await manager.SubmitResultToTestRunAsync(
             TestRunId.ToString(),
             initialResult,
-            forceInProgressStatus: true);
-        await manager.SubmitResultToTestRunAsync(TestRunId.ToString(), initialResult);
+            forceInProgressStatus: true).ConfigureAwait(false);
+        await manager.SubmitResultToTestRunAsync(TestRunId.ToString(), initialResult).ConfigureAwait(false);
 
         searchResults.Clear();
         searchResults.Add(CreateExistingResult(TestStatusApiType.Failed));
 
         await manager.SubmitResultToTestRunAsync(
             TestRunId.ToString(),
-            CreateResult(retryDuration));
+            CreateResult(retryDuration)).ConfigureAwait(false);
 
         var updates = GetUpdates(testResultsApi);
 
@@ -78,7 +78,7 @@ public class TmsManagerTests
 
         await manager.SubmitResultToTestRunAsync(
             TestRunId.ToString(),
-            CreateResult(RetryAttemptDuration));
+            CreateResult(RetryAttemptDuration)).ConfigureAwait(false);
 
         var updates = GetUpdates(testResultsApi);
 
