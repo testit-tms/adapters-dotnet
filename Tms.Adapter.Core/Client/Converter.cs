@@ -1,8 +1,8 @@
 using SyncStorage.ApiClient.Model;
-using TestIT.ApiClient.Model;
+using TestIT.AdaptersApi.Model;
 using Tms.Adapter.Core.Models;
 using Link = Tms.Adapter.Core.Models.Link;
-using LinkType = TestIT.ApiClient.Model.LinkType;
+using LinkType = TestIT.AdaptersApi.Model.LinkType;
 using StepResult = Tms.Adapter.Core.Models.StepResult;
 
 namespace Tms.Adapter.Core.Client;
@@ -235,7 +235,7 @@ public static class Converter
             startedOn: startedOn);
     }
 
-    public static TestResultUpdateV2Request ConvertResultToUpdateModel(AutoTestResultsForTestRunModel model) =>
+    public static TestResultUpdateRequest ConvertResultToUpdateModel(AutoTestResultsForTestRunModel model) =>
         new()
         {
             StatusType = model.StatusType,
@@ -243,13 +243,11 @@ public static class Converter
             Message = model.Message,
             Trace = model.Traces,
             Duration = model.Duration,
-            Links = model.Links?.Select(l => new TestIT.ApiClient.Model.Link(
-                id: null,
+            Links = model.Links?.Select(l => new CreateLinkApiModel(
                 title: l.Title ?? string.Empty,
                 url: l.Url ?? string.Empty,
                 description: l.Description ?? string.Empty,
-                type: l.Type,
-                hasInfo: l.HasInfo)).ToList(),
+                type: l.Type)).ToList(),
             Attachments = model.Attachments?.Select(a => new AttachmentUpdateRequest(a.Id)).ToList(),
             SetupResults = ConvertExecStepsToUpdate(model.SetupResults),
             TeardownResults = ConvertExecStepsToUpdate(model.TeardownResults),

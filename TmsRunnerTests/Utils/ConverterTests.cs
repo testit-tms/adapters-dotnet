@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestPlatform.ObjectModel;
-using TestIT.ApiClient.Model;
+using TestIT.AdaptersApi.Model;
 using TmsRunner.Utils;
 using AutoTest = TmsRunner.Entities.AutoTest.AutoTest;
 using AutoTestResult = TmsRunner.Entities.AutoTest.AutoTestResult;

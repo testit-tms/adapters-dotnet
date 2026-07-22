@@ -30,7 +30,7 @@ public class TmsBindings
     public static void AfterTestRun()
     {
         Adapter.OnBlockCompleted();
-        Adapter.CompleteTestRun().Wait();
+        //Adapter.CompleteTestRun().Wait();
     }
 
     [BeforeFeature(Order = int.MinValue)]

@@ -14,6 +14,7 @@ env:
   TMS_PRIVATE_TOKEN: ${{ secrets.TESTIT_PRIVATE_TOKEN }}
   TMS_URL: ${{ secrets.TESTIT_URL }}
   TMS_IMPORT_REALTIME: false
+  TMS_TRACE_HTTP: true
 jobs:
   test:
     name: ${{ matrix.project_name }} (.NET ${{ matrix.dotnet_version }})

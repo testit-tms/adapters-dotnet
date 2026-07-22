@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using Moq;
-using TestIT.ApiClient.Client;
+using TestIT.AdaptersApi.Client;
 using Tms.Adapter.Core.Client;
 using Tms.Adapter.Core.Configurator;
 using Tms.Adapter.Core.Models;
@@ -169,6 +169,8 @@ public class ClientTests
         var client = new TmsClient(_logger.Object, _settings);
 
         // Act & Assert
-        await client.CompleteTestRun().ConfigureAwait(false);
+        await Assert
+            .ThrowsExceptionAsync<ApiException>(async () =>
+                await client.CompleteTestRun().ConfigureAwait(false)).ConfigureAwait(false);
     }
 }

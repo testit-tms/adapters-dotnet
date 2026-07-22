@@ -1,4 +1,4 @@
-using TestIT.ApiClient.Model;
+using TestIT.AdaptersApi.Model;
 using TmsRunner.Entities.AutoTest;
 using AutoTest = TmsRunner.Entities.AutoTest.AutoTest;
 using AutoTestStep = TmsRunner.Entities.AutoTest.AutoTestStep;
@@ -157,22 +157,18 @@ public static class Converter
         };
     }
 
-    public static UpdateEmptyTestRunApiModel BuildUpdateEmptyTestRunApiModel(TestRunV2ApiResult testRun)
+    public static UpdateEmptyTestRunApiModel BuildUpdateEmptyTestRunApiModel(TestRunApiResult testRun)
     {
         return new UpdateEmptyTestRunApiModel(name: testRun.Name)
         {
             Id = testRun.Id,
-            Description = testRun.Description,
-            LaunchSource = testRun.LaunchSource,
             Attachments = testRun.Attachments.Select(attachment => new AssignAttachmentApiModel(id: attachment.Id)).ToList(),
             Links = testRun.Links.Select(link => new UpdateLinkApiModel(
                 id: link.Id,
                 title: link.Title,
                 url: link.Url,
                 description: link.Description,
-                type: link.Type,
-                hasInfo: link.HasInfo
-                )).ToList(),
+                type: link.Type)).ToList(),
         };
     }
 }
