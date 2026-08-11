@@ -68,6 +68,19 @@ public sealed class AdapterManager : IDisposable
         if (!IsNetworkDisabled())
         {
             InitializeSyncStorage(config, logger);
+
+            if (!string.IsNullOrEmpty(config.TestRunId)
+                && TestRunMetadata.HasAny(config.TestRunTags, config.TestRunLinks))
+            {
+                try
+                {
+                    _client.ApplyTestRunTagsAndLinks().GetAwaiter().GetResult();
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogWarning(ex, "Failed to apply test run tags/links");
+                }
+            }
         }
     }
 

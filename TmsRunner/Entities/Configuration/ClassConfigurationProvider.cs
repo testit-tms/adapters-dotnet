@@ -14,6 +14,8 @@ public sealed class ClassConfigurationProvider(Config config) : ConfigurationPro
             { "ConfigurationId", config.TmsConfigurationId },
             { "TestRunId", config.TmsTestRunId },
             { "TestRunName", config.TmsTestRunName },
+            { "TestRunTagsRaw", config.TmsTestRunTags },
+            { "TestRunLinksRaw", config.TmsTestRunLinks },
             { "AdapterMode", config.TmsAdapterMode },
             { "ConfigFile", config.TmsConfigFile },
             { "RunSettings", config.TmsRunSettings },

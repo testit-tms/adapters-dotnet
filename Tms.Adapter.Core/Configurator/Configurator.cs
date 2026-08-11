@@ -2,6 +2,8 @@ using System.Configuration;
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Tms.Adapter.Core.Models;
+using Tms.Adapter.Core.Utils;
 
 namespace Tms.Adapter.Core.Configurator;
 
@@ -14,6 +16,8 @@ public static class Configurator
     private const string TmsConfigurationId = "TMS_CONFIGURATION_ID";
     private const string TmsTestRunId = "TMS_TEST_RUN_ID";
     private const string TmsTestRunName = "TMS_TEST_RUN_NAME";
+    private const string TmsTestRunTags = "TMS_TEST_RUN_TAGS";
+    private const string TmsTestRunLinks = "TMS_TEST_RUN_LINKS";
     private const string TmsAutomaticCreationTestCases = "TMS_AUTOMATIC_CREATION_TEST_CASES";
     private const string TmsAutomaticUpdationLinksToTestCases = "TMS_AUTOMATIC_UPDATION_LINKS_TO_TEST_CASES";
     private const string TmsCertValidation = "TMS_CERT_VALIDATION";
@@ -41,11 +45,14 @@ public static class Configurator
             if (fileConfig != null)
             {
                 config = fileConfig;
+                var root = JObject.Parse(json);
 
-                if (JObject.Parse(json)["importRealtime"] == null)
+                if (root["importRealtime"] == null)
                 {
                     config.ImportRealtime = true;
                 }
+
+                NormalizeFileMetadata(config, root);
             }
         }
         else 
@@ -104,6 +111,18 @@ public static class Configurator
             settings.TestRunName = testRunName;
         }
 
+        var testRunTags = Environment.GetEnvironmentVariable(TmsTestRunTags);
+        if (!string.IsNullOrWhiteSpace(testRunTags))
+        {
+            settings.TestRunTags = TestRunMetadata.ParseTags(testRunTags);
+        }
+
+        var testRunLinks = Environment.GetEnvironmentVariable(TmsTestRunLinks);
+        if (!string.IsNullOrWhiteSpace(testRunLinks))
+        {
+            settings.TestRunLinks = TestRunMetadata.ParseLinks(testRunLinks);
+        }
+
         var createTestCase = Environment.GetEnvironmentVariable(TmsAutomaticCreationTestCases);
         if (bool.TryParse(createTestCase, out var value) && value)
         {
@@ -136,6 +155,36 @@ public static class Configurator
         if (bool.TryParse(Environment.GetEnvironmentVariable(TmsImportRealtime), out var importRealtime))
         {
             settings.ImportRealtime = importRealtime;
+        }
+    }
+
+    private static void NormalizeFileMetadata(TmsSettings settings, JObject root)
+    {
+        var tagsToken = root["testRunTags"];
+        if (tagsToken is { Type: JTokenType.String })
+        {
+            settings.TestRunTags = TestRunMetadata.ParseTags(tagsToken.Value<string>());
+        }
+        else if (tagsToken is JArray tagsArray)
+        {
+            settings.TestRunTags = tagsArray.Values<string>()
+                .Where(t => !string.IsNullOrWhiteSpace(t))
+                .Select(t => t!.Trim())
+                .Distinct(StringComparer.Ordinal)
+                .ToList();
+        }
+
+        var linksToken = root["testRunLinks"];
+        if (linksToken is { Type: JTokenType.String })
+        {
+            settings.TestRunLinks = TestRunMetadata.ParseLinks(linksToken.Value<string>());
+        }
+        else if (linksToken is JArray)
+        {
+            settings.TestRunLinks = linksToken.ToObject<List<TestRunLinkConfig>>() ?? [];
+            settings.TestRunLinks = settings.TestRunLinks
+                .Where(l => !string.IsNullOrWhiteSpace(l?.Url))
+                .ToList();
         }
     }
 

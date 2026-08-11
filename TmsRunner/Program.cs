@@ -56,6 +56,8 @@ public static class Program
                     TmsConfigurationId = ac.TmsConfigurationId,
                     TmsTestRunId = ac.TmsTestRunId,
                     TmsTestRunName = ac.TmsTestRunName,
+                    TmsTestRunTags = ac.TmsTestRunTags,
+                    TmsTestRunLinks = ac.TmsTestRunLinks,
                     TmsAdapterMode = ac.TmsAdapterMode,
                     TmsConfigFile = ac.TmsConfigFile,
                     TmsLabelsOfTestsToRun = ac.TmsLabelsOfTestsToRun,
