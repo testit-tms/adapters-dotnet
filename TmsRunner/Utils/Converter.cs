@@ -162,13 +162,16 @@ public static class Converter
         return new UpdateEmptyTestRunApiModel(name: testRun.Name)
         {
             Id = testRun.Id,
-            Attachments = testRun.Attachments.Select(attachment => new AssignAttachmentApiModel(id: attachment.Id)).ToList(),
-            Links = testRun.Links.Select(link => new UpdateLinkApiModel(
+            Attachments = (testRun.Attachments ?? [])
+                .Select(attachment => new AssignAttachmentApiModel(id: attachment.Id))
+                .ToList(),
+            Links = (testRun.Links ?? []).Select(link => new UpdateLinkApiModel(
                 id: link.Id,
                 title: link.Title,
                 url: link.Url,
                 description: link.Description,
                 type: link.Type)).ToList(),
+            Tags = testRun.Tags?.ToList() ?? []
         };
     }
 }

@@ -36,6 +36,8 @@ dotnet package add TestIt.Adapter
 | ID of configuration in TMS instance [How to getting configuration ID?](https://github.com/testit-tms/.github/tree/main/configuration#configurationid)                                                                                                                                                                                                                                  | configurationId                   | TMS_CONFIGURATION_ID                       | tmsConfigurationId                   |
 | ID of the created test run in TMS instance.<br/>It's necessary for **adapterMode** 0 or 1                                                                                                                                                                                                                                                                                              | testRunId                         | TMS_TEST_RUN_ID                            | tmsTestRunId                         |
 | Parameter for specifying the name of test run in TMS instance (**It's optional**). If it is not provided, it is created automatically                                                                                                                                                                                                                                                  | testRunName                       | TMS_TEST_RUN_NAME                          | tmsTestRunName                       |
+| Tags of the test run (**It's optional**). Comma-separated list or JSON array. Applied on create or merged into an existing run at startup                                                                                                                                                                                                                                            | testRunTags                       | TMS_TEST_RUN_TAGS                          | tmsTestRunTags                       |
+| Links of the test run (**It's optional**). JSON array of objects with required `url` and optional `title`, `description`, `type`. Applied on create or merged at startup (e.g. CI job URL while run is In progress)                                                                                                                                                                  | testRunLinks                      | TMS_TEST_RUN_LINKS                         | tmsTestRunLinks                      |
 | Adapter mode. Default value - 0. The adapter supports following modes:<br/>0 - in this mode, the adapter filters tests by test run ID and configuration ID, and sends the results to the test run<br/>1 - in this mode, the adapter sends all results to the test run without filtering<br/>2 - in this mode, the adapter creates a new test run and sends results to the new test run | adapterMode                       | TMS_ADAPTER_MODE                           | tmsAdapterMode                       |
 | It enables/disables certificate validation (**It's optional**). Default value - true                                                                                                                                                                                                                                                                                                   | certValidation                    | TMS_CERT_VALIDATION                        | tmsCertValidation                    |
 | It enables/disables parameters processing in autotests (**It's optional**). Default value - false. The adapter supports following modes:<br/>true - in this mode, the adapter will not process parameters<br/>false - in this mode, the adapter will process parameters                                                                                                                | ignoreParameters                  | TMS_IGNORE_PARAMETERS                      | tmsIgnoreParameters                  |
@@ -60,6 +62,14 @@ Create **Tms.config.json** file in the project directory:
   "configurationId": "CONFIGURATION_ID",
   "testRunId": "TEST_RUN_ID",
   "testRunName": "TEST_RUN_NAME",
+  "testRunTags": ["smoke", "nightly"],
+  "testRunLinks": [
+    {
+      "url": "https://gitlab.example.com/group/project/-/jobs/12345",
+      "title": "CI Job",
+      "type": "Related"
+    }
+  ],
   "adapterMode": ADAPTER_MODE,
   "automaticCreationTestCases": AUTOMATIC_CREATION_TEST_CASES,
   "automaticUpdationLinksToTestCases": AUTOMATIC_UPDATION_LINKS_TO_TEST_CASES,
@@ -84,6 +94,24 @@ TmsRunner --runner "/usr/local/share/dotnet/sdk/6.0.302/vstest.console.dll" --te
 * `runner` - path to vstest.console.dll or vstest.console.exe
 * `testassembly` - path to dll with tests
 * `debug` - enable debug logs
+
+#### Test run link types
+
+Supported values for `testRunLinks[].type` (default: `Related`):
+
+* `Related`
+* `BlockedBy`
+* `Defect`
+* `Issue`
+* `Requirement`
+* `Repository`
+
+Example with CI job URL:
+
+```bash
+export TMS_TEST_RUN_LINKS='[{"url":"'"$CI_JOB_URL"'","title":"CI Job","type":"Related"}]'
+export TMS_TEST_RUN_TAGS='smoke,nightly'
+```
 
 ### Attributes
 

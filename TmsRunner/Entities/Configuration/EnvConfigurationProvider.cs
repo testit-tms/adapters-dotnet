@@ -10,6 +10,8 @@ public sealed class EnvConfigurationProvider : ConfigurationProvider
     private const string EnvTmsConfigurationId = "TMS_CONFIGURATION_ID";
     private const string EnvTmsTestRunId = "TMS_TEST_RUN_ID";
     private const string EnvTmsTestRunName = "TMS_TEST_RUN_NAME";
+    private const string EnvTmsTestRunTags = "TMS_TEST_RUN_TAGS";
+    private const string EnvTmsTestRunLinks = "TMS_TEST_RUN_LINKS";
     private const string EnvTmsAdapterMode = "TMS_ADAPTER_MODE";
     private const string EnvTmsRunSettings = "TMS_RUN_SETTINGS";
     private const string EnvTmsAutomaticCreationTestCases = "TMS_AUTOMATIC_CREATION_TEST_CASES";
@@ -30,6 +32,8 @@ public sealed class EnvConfigurationProvider : ConfigurationProvider
             { "ConfigurationId", Environment.GetEnvironmentVariable(EnvTmsConfigurationId) },
             { "TestRunId", Environment.GetEnvironmentVariable(EnvTmsTestRunId) },
             { "TestRunName", Environment.GetEnvironmentVariable(EnvTmsTestRunName) },
+            { "TestRunTagsRaw", Environment.GetEnvironmentVariable(EnvTmsTestRunTags) },
+            { "TestRunLinksRaw", Environment.GetEnvironmentVariable(EnvTmsTestRunLinks) },
             { "AdapterMode", Environment.GetEnvironmentVariable(EnvTmsAdapterMode) },
             { "RunSettings", Environment.GetEnvironmentVariable(EnvTmsRunSettings) },
             { "AutomaticCreationTestCases", Environment.GetEnvironmentVariable(EnvTmsAutomaticCreationTestCases) },

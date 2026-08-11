@@ -314,7 +314,7 @@ public sealed class TmsClient : ITmsClient, IDisposable
         if (!string.IsNullOrEmpty(_settings.TestRunId))
         {
             _logger.LogDebug("Test run id : {ID}", _settings.TestRunId);
-
+            await ApplyTestRunTagsAndLinks().ConfigureAwait(false);
             return;
         }
 
@@ -323,6 +323,14 @@ public sealed class TmsClient : ITmsClient, IDisposable
             ProjectId = new Guid(_settings.ProjectId),
             Name = (string.IsNullOrEmpty(_settings.TestRunName) ? null : _settings.TestRunName)!
         };
+        if (_settings.TestRunTags.Count > 0)
+        {
+            createEmptyTestRunApiModel.Tags = _settings.TestRunTags;
+        }
+        if (TestRunMetadata.HasAny(null, _settings.TestRunLinks))
+        {
+            createEmptyTestRunApiModel.Links = TestRunMetadata.ToCreateLinks(_settings.TestRunLinks);
+        }
         
         HtmlEscapeUtils.EscapeHtmlInObject(createEmptyTestRunApiModel);
         
@@ -331,41 +339,118 @@ public sealed class TmsClient : ITmsClient, IDisposable
         _settings.TestRunId = testRun.Id.ToString();
 
         _logger.LogDebug("Test run id : {ID}", _settings.TestRunId);
+        if (TestRunMetadata.HasAny(_settings.TestRunTags, _settings.TestRunLinks))
+        {
+            _logger.LogInformation(
+                "Applied tags/links on create for test run {TestRunId}: tags={TagCount}, links={LinkCount}",
+                _settings.TestRunId,
+                _settings.TestRunTags.Count,
+                _settings.TestRunLinks.Count);
+        }
     }
 
     public async Task UpdateTestRun()
     {
         _logger.LogDebug("Updating test run");
 
-        if (string.IsNullOrEmpty(_settings.TestRunId) || string.IsNullOrEmpty(_settings.TestRunName))
+        if (string.IsNullOrEmpty(_settings.TestRunId))
         {
             return;
         }
 
-        var testRun = await _testRuns.AdaptersTestRunsIdGetAsync(new Guid(_settings.TestRunId)).ConfigureAwait(false);
-
-        if (testRun.Name.Equals(_settings.TestRunName, StringComparison.Ordinal))
+        var hasName = !string.IsNullOrEmpty(_settings.TestRunName);
+        var hasMeta = TestRunMetadata.HasAny(_settings.TestRunTags, _settings.TestRunLinks);
+        if (!hasName && !hasMeta)
         {
             return;
         }
 
-        var updateEmptyTestRunApiModel = new UpdateEmptyTestRunApiModel(name: _settings.TestRunName)
+        try
         {
-            Id = testRun.Id,
-            Attachments = testRun.Attachments.Select(attachment => new AssignAttachmentApiModel(id: attachment.Id)).ToList(),
-            Links = testRun.Links.Select(link => new UpdateLinkApiModel(
+            var testRun = await _testRuns.AdaptersTestRunsIdGetAsync(new Guid(_settings.TestRunId)).ConfigureAwait(false);
+            var nameChanged = hasName && !testRun.Name.Equals(_settings.TestRunName, StringComparison.Ordinal);
+            if (!nameChanged && !hasMeta)
+            {
+                return;
+            }
+
+            var updateEmptyTestRunApiModel = BuildUpdateModel(
+                testRun,
+                hasName ? _settings.TestRunName : testRun.Name,
+                mergeConfiguredMetadata: hasMeta);
+
+            HtmlEscapeUtils.EscapeHtmlInObject(updateEmptyTestRunApiModel);
+
+            await _testRuns.AdaptersTestRunsPutAsync(updateEmptyTestRunApiModel).ConfigureAwait(false);
+
+            _logger.LogDebug("Test run updated");
+            if (hasMeta)
+            {
+                _logger.LogInformation(
+                    "Applied tags/links for test run {TestRunId}: tags={TagCount}, links={LinkCount}",
+                    _settings.TestRunId,
+                    _settings.TestRunTags.Count,
+                    _settings.TestRunLinks.Count);
+            }
+        }
+        catch (Exception ex) when (hasMeta && !hasName)
+        {
+            _logger.LogWarning(ex, "Failed to apply test run tags/links for {TestRunId}", _settings.TestRunId);
+        }
+    }
+
+    public async Task ApplyTestRunTagsAndLinks()
+    {
+        if (string.IsNullOrEmpty(_settings.TestRunId)
+            || !TestRunMetadata.HasAny(_settings.TestRunTags, _settings.TestRunLinks))
+        {
+            return;
+        }
+
+        try
+        {
+            var testRun = await _testRuns.AdaptersTestRunsIdGetAsync(new Guid(_settings.TestRunId)).ConfigureAwait(false);
+            var updateEmptyTestRunApiModel = BuildUpdateModel(testRun, testRun.Name, mergeConfiguredMetadata: true);
+            HtmlEscapeUtils.EscapeHtmlInObject(updateEmptyTestRunApiModel);
+            await _testRuns.AdaptersTestRunsPutAsync(updateEmptyTestRunApiModel).ConfigureAwait(false);
+            _logger.LogInformation(
+                "Applied tags/links for test run {TestRunId}: tags={TagCount}, links={LinkCount}",
+                _settings.TestRunId,
+                _settings.TestRunTags.Count,
+                _settings.TestRunLinks.Count);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed to apply test run tags/links for {TestRunId}", _settings.TestRunId);
+        }
+    }
+
+    private UpdateEmptyTestRunApiModel BuildUpdateModel(
+        TestRunApiResult testRun,
+        string name,
+        bool mergeConfiguredMetadata)
+    {
+        var tags = mergeConfiguredMetadata
+            ? TestRunMetadata.MergeTags(testRun.Tags, _settings.TestRunTags)
+            : testRun.Tags?.ToList() ?? [];
+        var links = mergeConfiguredMetadata
+            ? TestRunMetadata.MergeLinks(testRun.Links, _settings.TestRunLinks)
+            : (testRun.Links ?? []).Select(link => new UpdateLinkApiModel(
                 id: link.Id,
                 title: link.Title,
                 url: link.Url,
                 description: link.Description,
-                type: link.Type)).ToList(),
+                type: link.Type)).ToList();
+
+        return new UpdateEmptyTestRunApiModel(name: name)
+        {
+            Id = testRun.Id,
+            Attachments = (testRun.Attachments ?? [])
+                .Select(attachment => new AssignAttachmentApiModel(id: attachment.Id))
+                .ToList(),
+            Links = links,
+            Tags = tags
         };
-
-        HtmlEscapeUtils.EscapeHtmlInObject(updateEmptyTestRunApiModel);
-
-        await _testRuns.AdaptersTestRunsPutAsync(updateEmptyTestRunApiModel).ConfigureAwait(false);
-
-        _logger.LogDebug("Test run updated");
     }
 
     public async Task CompleteTestRun()

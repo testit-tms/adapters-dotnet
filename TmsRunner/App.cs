@@ -52,13 +52,14 @@ public class App(ILogger<App> logger,
                     testCaseForRun);
 
                 testCases = filterService.FilterTestCases(adapterConfig.TestAssemblyPath, testCaseForRun, testCases);
+                await tmsManager.ApplyTestRunTagsAndLinksAsync(testRun!).ConfigureAwait(false);
                 testRunContext.SetCurrentTestRun(testRun!);
                 testRunContext.SetTestResults(await tmsManager.LoadTestRunTestResultsAsync().ConfigureAwait(false));
                 break;
             }
             case 1:
                 testRun = await tmsManager.GetTestRunAsync().ConfigureAwait(false);
-
+                await tmsManager.ApplyTestRunTagsAndLinksAsync(testRun!).ConfigureAwait(false);
                 testRunContext.SetCurrentTestRun(testRun!);
                 break;
             case 2:

@@ -1,3 +1,5 @@
+using Tms.Adapter.Core.Models;
+
 namespace Tms.Adapter.Core.Configurator;
 
 public class TmsSettings
@@ -15,6 +17,8 @@ public class TmsSettings
     public string ConfigurationId { get; set; } = string.Empty;
     public string TestRunId { get; set; } = string.Empty;
     public string TestRunName { get; set; } = string.Empty;
+    public List<string> TestRunTags { get; set; } = [];
+    public List<TestRunLinkConfig> TestRunLinks { get; set; } = [];
     public bool AutomaticCreationTestCases { get; set; }
     public bool AutomaticUpdationLinksToTestCases { get; set; }
     public bool CertValidation { get; set; }

@@ -61,6 +61,12 @@ public sealed class AdapterConfig
     [Option("tmsTestRunName", Required = false, HelpText = "Set test run name.")]
     public string? TmsTestRunName { get; init; }
 
+    [Option("tmsTestRunTags", Required = false, HelpText = "Test run tags (comma-separated or JSON array).")]
+    public string? TmsTestRunTags { get; init; }
+
+    [Option("tmsTestRunLinks", Required = false, HelpText = "Test run links as JSON array (url required; title/description/type optional).")]
+    public string? TmsTestRunLinks { get; init; }
+
     [Option("tmsAdapterMode", Required = false, HelpText = "Set adapter mode.")]
     public string? TmsAdapterMode { get; init; }
 
@@ -100,6 +106,8 @@ public sealed class AdapterConfig
             TmsConfigurationId = TmsConfigurationId,
             TmsTestRunId = TmsTestRunId,
             TmsTestRunName = TmsTestRunName,
+            TmsTestRunTags = TmsTestRunTags,
+            TmsTestRunLinks = TmsTestRunLinks,
             TmsAdapterMode = TmsAdapterMode,
             TmsConfigFile = TmsConfigFile,
             TmsRunSettings = TmsRunSettings,

@@ -5,6 +5,7 @@ using System.Runtime.CompilerServices;
 using TestIT.AdaptersApi.Api;
 using TestIT.AdaptersApi.Client;
 using TestIT.AdaptersApi.Model;
+using Tms.Adapter.Core.Utils;
 using TmsRunner.Entities;
 using TmsRunner.Entities.AutoTest;
 using TmsRunner.Services;
@@ -35,14 +36,57 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
             ProjectId = new Guid(settings.ProjectId ?? string.Empty),
             Name = (string.IsNullOrEmpty(settings.TestRunName) ? null : settings.TestRunName)!
         };
+        if (settings.TestRunTags.Count > 0)
+        {
+            testRunV2PostShortModel.Tags = settings.TestRunTags;
+        }
+        if (TestRunMetadata.HasAny(null, settings.TestRunLinks))
+        {
+            testRunV2PostShortModel.Links = TestRunMetadata.ToCreateLinks(settings.TestRunLinks);
+        }
 
         logger.LogDebug("Creating test run {@TestRun}", testRunV2PostShortModel);
 
         var testRun = await testRunsApi.AdaptersTestRunsPostAsync(testRunV2PostShortModel).ConfigureAwait(false) 
                       ?? throw new ArgumentException($"Could not find project with id: {settings.ProjectId}");
         logger.LogDebug("Created test run {@TestRun}", testRun);
+        if (TestRunMetadata.HasAny(settings.TestRunTags, settings.TestRunLinks))
+        {
+            logger.LogInformation(
+                "Applied tags/links on create for test run {TestRunId}: tags={TagCount}, links={LinkCount}",
+                testRun.Id,
+                settings.TestRunTags.Count,
+                settings.TestRunLinks.Count);
+        }
 
         return testRun;
+    }
+
+    public async Task ApplyTestRunTagsAndLinksAsync(TestRunApiResult testRun)
+    {
+        if (!TestRunMetadata.HasAny(settings.TestRunTags, settings.TestRunLinks))
+        {
+            return;
+        }
+
+        try
+        {
+            testRun.Tags = TestRunMetadata.MergeTags(testRun.Tags, settings.TestRunTags);
+            var model = Converter.BuildUpdateEmptyTestRunApiModel(testRun);
+            model.Links = TestRunMetadata.MergeLinks(testRun.Links, settings.TestRunLinks);
+            model.Tags = testRun.Tags;
+
+            await testRunsApi.AdaptersTestRunsPutAsync(model).ConfigureAwait(false);
+            logger.LogInformation(
+                "Applied tags/links for test run {TestRunId}: tags={TagCount}, links={LinkCount}",
+                testRun.Id,
+                settings.TestRunTags.Count,
+                settings.TestRunLinks.Count);
+        }
+        catch (Exception ex)
+        {
+            logger.LogWarning(ex, "Failed to apply test run tags/links for {TestRunId}", testRun.Id);
+        }
     }
 
     public async Task<TestRunApiResult?> GetTestRunAsync()
