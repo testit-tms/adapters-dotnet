@@ -8,6 +8,8 @@ public sealed record Config
     public string? TmsConfigurationId { get; init; }
     public string? TmsTestRunId { get; init; }
     public string? TmsTestRunName { get; init; }
+    public string? TmsTestRunTags { get; init; }
+    public string? TmsTestRunLinks { get; init; }
     public string? TmsAdapterMode { get; init; }
     public string? TmsConfigFile { get; init; }
     public string? TmsRunSettings { get; init; }

@@ -17,6 +17,7 @@ public interface ITmsClient
     Task<string> UploadAttachment(string fileName, Stream content);
     Task CreateTestRun();
     Task UpdateTestRun();
+    Task ApplyTestRunTagsAndLinks();
     Task CompleteTestRun();
     Task<AutoTestApiResult?> GetAutotestByExternalId(string externalId);
 }

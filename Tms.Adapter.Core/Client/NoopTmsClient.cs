@@ -19,6 +19,7 @@ internal sealed class NoopTmsClient : ITmsClient
     public Task<string> UploadAttachment(string fileName, Stream content) => Task.FromResult(string.Empty);
     public Task CreateTestRun() => Task.CompletedTask;
     public Task UpdateTestRun() => Task.CompletedTask;
+    public Task ApplyTestRunTagsAndLinks() => Task.CompletedTask;
     public Task CompleteTestRun() => Task.CompletedTask;
     public Task<AutoTestApiResult?> GetAutotestByExternalId(string externalId) => Task.FromResult<AutoTestApiResult?>(null);
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System.Configuration;
 using System.Xml;
+using Tms.Adapter.Core.Utils;
 using TmsRunner.Entities;
 using TmsRunner.Entities.Configuration;
 using TmsRunner.Extensions;
@@ -40,10 +41,50 @@ public static class ConfigurationManager
 
         var tmsSettings = new TmsSettings();
         config.Bind(tmsSettings);
+        ApplyRawTestRunMetadata(tmsSettings, config);
 
         Validate(tmsSettings);
 
         return tmsSettings;
+    }
+
+    private static void ApplyRawTestRunMetadata(TmsSettings settings, IConfiguration config)
+    {
+        var tagsRaw = config["TestRunTagsRaw"];
+        if (!string.IsNullOrWhiteSpace(tagsRaw))
+        {
+            settings.TestRunTags = TestRunMetadata.ParseTags(tagsRaw);
+        }
+        else if (settings.TestRunTags is { Count: > 0 })
+        {
+            settings.TestRunTags = settings.TestRunTags
+                .Where(t => !string.IsNullOrWhiteSpace(t))
+                .Select(t => t.Trim())
+                .Distinct(StringComparer.Ordinal)
+                .ToList();
+        }
+
+        // JSON file may bind array; env/CLI pass JSON string via TestRunLinksRaw
+        var linksRaw = config["TestRunLinksRaw"];
+        if (!string.IsNullOrWhiteSpace(linksRaw))
+        {
+            settings.TestRunLinks = TestRunMetadata.ParseLinks(linksRaw);
+        }
+        else if (settings.TestRunLinks is { Count: > 0 })
+        {
+            settings.TestRunLinks = settings.TestRunLinks
+                .Where(l => !string.IsNullOrWhiteSpace(l?.Url))
+                .ToList();
+        }
+
+        // Comma-separated / JSON tags from a string JSON property if binder left list empty
+        var tagsAsString = config["TestRunTags"];
+        if (settings.TestRunTags.Count == 0
+            && !string.IsNullOrWhiteSpace(tagsAsString)
+            && (tagsAsString.Contains(',') || tagsAsString.StartsWith('[')))
+        {
+            settings.TestRunTags = TestRunMetadata.ParseTags(tagsAsString);
+        }
     }
 
     private static string GetConfigFileName(string? path)

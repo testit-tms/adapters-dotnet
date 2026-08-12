@@ -1,3 +1,5 @@
+using Tms.Adapter.Core.Models;
+
 namespace TmsRunner.Entities;
 
 public sealed record TmsSettings
@@ -15,6 +17,8 @@ public sealed record TmsSettings
     public string? ConfigurationId { get; set; }
     public string? TestRunId { get; set; }
     public string? TestRunName { get; set; }
+    public List<string> TestRunTags { get; set; } = [];
+    public List<TestRunLinkConfig> TestRunLinks { get; set; } = [];
     public int AdapterMode { get; set; }
     public string? RunSettings { get; set; }
     public bool AutomaticCreationTestCases { get; set; }
