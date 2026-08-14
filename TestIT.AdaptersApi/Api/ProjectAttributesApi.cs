@@ -58,8 +58,8 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="searchField">Property name for searching (optional)</param>
         /// <param name="searchValue">Value for searching (optional)</param>
         /// <param name="projectAttributesFilterModel"> (optional)</param>
-        /// <returns>List&lt;CustomAttributeGetModel&gt;</returns>
-        List<CustomAttributeGetModel> AdaptersProjectsProjectIdAttributesSearchPost(Guid projectId, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ProjectAttributesFilterModel projectAttributesFilterModel = default);
+        /// <returns>List&lt;CustomAttributeModel&gt;</returns>
+        List<CustomAttributeModel> AdaptersProjectsProjectIdAttributesSearchPost(Guid projectId, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ProjectAttributesFilterModel projectAttributesFilterModel = default);
 
         /// <summary>
         /// Search for attributes used in the project
@@ -75,8 +75,8 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="searchField">Property name for searching (optional)</param>
         /// <param name="searchValue">Value for searching (optional)</param>
         /// <param name="projectAttributesFilterModel"> (optional)</param>
-        /// <returns>ApiResponse of List&lt;CustomAttributeGetModel&gt;</returns>
-        ApiResponse<List<CustomAttributeGetModel>> AdaptersProjectsProjectIdAttributesSearchPostWithHttpInfo(Guid projectId, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ProjectAttributesFilterModel projectAttributesFilterModel = default);
+        /// <returns>ApiResponse of List&lt;CustomAttributeModel&gt;</returns>
+        ApiResponse<List<CustomAttributeModel>> AdaptersProjectsProjectIdAttributesSearchPostWithHttpInfo(Guid projectId, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ProjectAttributesFilterModel projectAttributesFilterModel = default);
         #endregion Synchronous Operations
     }
 
@@ -126,8 +126,8 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="searchValue">Value for searching (optional)</param>
         /// <param name="projectAttributesFilterModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of List&lt;CustomAttributeGetModel&gt;</returns>
-        System.Threading.Tasks.Task<List<CustomAttributeGetModel>> AdaptersProjectsProjectIdAttributesSearchPostAsync(Guid projectId, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ProjectAttributesFilterModel projectAttributesFilterModel = default, System.Threading.CancellationToken cancellationToken = default);
+        /// <returns>Task of List&lt;CustomAttributeModel&gt;</returns>
+        System.Threading.Tasks.Task<List<CustomAttributeModel>> AdaptersProjectsProjectIdAttributesSearchPostAsync(Guid projectId, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ProjectAttributesFilterModel projectAttributesFilterModel = default, System.Threading.CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Search for attributes used in the project
@@ -144,8 +144,8 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="searchValue">Value for searching (optional)</param>
         /// <param name="projectAttributesFilterModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of ApiResponse (List&lt;CustomAttributeGetModel&gt;)</returns>
-        System.Threading.Tasks.Task<ApiResponse<List<CustomAttributeGetModel>>> AdaptersProjectsProjectIdAttributesSearchPostWithHttpInfoAsync(Guid projectId, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ProjectAttributesFilterModel projectAttributesFilterModel = default, System.Threading.CancellationToken cancellationToken = default);
+        /// <returns>Task of ApiResponse (List&lt;CustomAttributeModel&gt;)</returns>
+        System.Threading.Tasks.Task<ApiResponse<List<CustomAttributeModel>>> AdaptersProjectsProjectIdAttributesSearchPostWithHttpInfoAsync(Guid projectId, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ProjectAttributesFilterModel projectAttributesFilterModel = default, System.Threading.CancellationToken cancellationToken = default);
         #endregion Asynchronous Operations
     }
 
@@ -405,11 +405,11 @@ namespace TestIT.AdaptersApi.Api
             {
                 localVarRequestOptions.HeaderParameters.Add("Authorization", this.Configuration.GetApiKeyWithPrefix("Authorization"));
             }
-            // authentication (Cookies) required
+            // authentication (Identity.Application) required
             // cookie parameter support
-            if (!string.IsNullOrEmpty(this.Configuration.GetApiKeyWithPrefix("session")))
+            if (!string.IsNullOrEmpty(this.Configuration.GetApiKeyWithPrefix("backoffice")))
             {
-                localVarRequestOptions.Cookies.Add(new Cookie("session", this.Configuration.GetApiKeyWithPrefix("session")));
+                localVarRequestOptions.Cookies.Add(new Cookie("backoffice", this.Configuration.GetApiKeyWithPrefix("backoffice")));
             }
 
             // make the HTTP request
@@ -474,11 +474,11 @@ namespace TestIT.AdaptersApi.Api
             {
                 localVarRequestOptions.HeaderParameters.Add("Authorization", this.Configuration.GetApiKeyWithPrefix("Authorization"));
             }
-            // authentication (Cookies) required
+            // authentication (Identity.Application) required
             // cookie parameter support
-            if (!string.IsNullOrEmpty(this.Configuration.GetApiKeyWithPrefix("session")))
+            if (!string.IsNullOrEmpty(this.Configuration.GetApiKeyWithPrefix("backoffice")))
             {
-                localVarRequestOptions.Cookies.Add(new Cookie("session", this.Configuration.GetApiKeyWithPrefix("session")));
+                localVarRequestOptions.Cookies.Add(new Cookie("backoffice", this.Configuration.GetApiKeyWithPrefix("backoffice")));
             }
 
             // make the HTTP request
@@ -505,10 +505,10 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="searchField">Property name for searching (optional)</param>
         /// <param name="searchValue">Value for searching (optional)</param>
         /// <param name="projectAttributesFilterModel"> (optional)</param>
-        /// <returns>List&lt;CustomAttributeGetModel&gt;</returns>
-        public List<CustomAttributeGetModel> AdaptersProjectsProjectIdAttributesSearchPost(Guid projectId, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ProjectAttributesFilterModel projectAttributesFilterModel = default)
+        /// <returns>List&lt;CustomAttributeModel&gt;</returns>
+        public List<CustomAttributeModel> AdaptersProjectsProjectIdAttributesSearchPost(Guid projectId, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ProjectAttributesFilterModel projectAttributesFilterModel = default)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<List<CustomAttributeGetModel>> localVarResponse = AdaptersProjectsProjectIdAttributesSearchPostWithHttpInfo(projectId, skip, take, orderBy, searchField, searchValue, projectAttributesFilterModel);
+            TestIT.AdaptersApi.Client.ApiResponse<List<CustomAttributeModel>> localVarResponse = AdaptersProjectsProjectIdAttributesSearchPostWithHttpInfo(projectId, skip, take, orderBy, searchField, searchValue, projectAttributesFilterModel);
             return localVarResponse.Data;
         }
 
@@ -523,8 +523,8 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="searchField">Property name for searching (optional)</param>
         /// <param name="searchValue">Value for searching (optional)</param>
         /// <param name="projectAttributesFilterModel"> (optional)</param>
-        /// <returns>ApiResponse of List&lt;CustomAttributeGetModel&gt;</returns>
-        public TestIT.AdaptersApi.Client.ApiResponse<List<CustomAttributeGetModel>> AdaptersProjectsProjectIdAttributesSearchPostWithHttpInfo(Guid projectId, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ProjectAttributesFilterModel projectAttributesFilterModel = default)
+        /// <returns>ApiResponse of List&lt;CustomAttributeModel&gt;</returns>
+        public TestIT.AdaptersApi.Client.ApiResponse<List<CustomAttributeModel>> AdaptersProjectsProjectIdAttributesSearchPostWithHttpInfo(Guid projectId, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ProjectAttributesFilterModel projectAttributesFilterModel = default)
         {
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
 
@@ -571,15 +571,15 @@ namespace TestIT.AdaptersApi.Api
             {
                 localVarRequestOptions.HeaderParameters.Add("Authorization", this.Configuration.GetApiKeyWithPrefix("Authorization"));
             }
-            // authentication (Cookies) required
+            // authentication (Identity.Application) required
             // cookie parameter support
-            if (!string.IsNullOrEmpty(this.Configuration.GetApiKeyWithPrefix("session")))
+            if (!string.IsNullOrEmpty(this.Configuration.GetApiKeyWithPrefix("backoffice")))
             {
-                localVarRequestOptions.Cookies.Add(new Cookie("session", this.Configuration.GetApiKeyWithPrefix("session")));
+                localVarRequestOptions.Cookies.Add(new Cookie("backoffice", this.Configuration.GetApiKeyWithPrefix("backoffice")));
             }
 
             // make the HTTP request
-            var localVarResponse = this.Client.Post<List<CustomAttributeGetModel>>("/adapters/projects/{projectId}/attributes/search", localVarRequestOptions, this.Configuration);
+            var localVarResponse = this.Client.Post<List<CustomAttributeModel>>("/adapters/projects/{projectId}/attributes/search", localVarRequestOptions, this.Configuration);
 
             if (this.ExceptionFactory != null)
             {
@@ -602,10 +602,10 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="searchValue">Value for searching (optional)</param>
         /// <param name="projectAttributesFilterModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of List&lt;CustomAttributeGetModel&gt;</returns>
-        public async System.Threading.Tasks.Task<List<CustomAttributeGetModel>> AdaptersProjectsProjectIdAttributesSearchPostAsync(Guid projectId, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ProjectAttributesFilterModel projectAttributesFilterModel = default, System.Threading.CancellationToken cancellationToken = default)
+        /// <returns>Task of List&lt;CustomAttributeModel&gt;</returns>
+        public async System.Threading.Tasks.Task<List<CustomAttributeModel>> AdaptersProjectsProjectIdAttributesSearchPostAsync(Guid projectId, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ProjectAttributesFilterModel projectAttributesFilterModel = default, System.Threading.CancellationToken cancellationToken = default)
         {
-            TestIT.AdaptersApi.Client.ApiResponse<List<CustomAttributeGetModel>> localVarResponse = await AdaptersProjectsProjectIdAttributesSearchPostWithHttpInfoAsync(projectId, skip, take, orderBy, searchField, searchValue, projectAttributesFilterModel, cancellationToken).ConfigureAwait(false);
+            TestIT.AdaptersApi.Client.ApiResponse<List<CustomAttributeModel>> localVarResponse = await AdaptersProjectsProjectIdAttributesSearchPostWithHttpInfoAsync(projectId, skip, take, orderBy, searchField, searchValue, projectAttributesFilterModel, cancellationToken).ConfigureAwait(false);
             return localVarResponse.Data;
         }
 
@@ -621,8 +621,8 @@ namespace TestIT.AdaptersApi.Api
         /// <param name="searchValue">Value for searching (optional)</param>
         /// <param name="projectAttributesFilterModel"> (optional)</param>
         /// <param name="cancellationToken">Cancellation Token to cancel the request.</param>
-        /// <returns>Task of ApiResponse (List&lt;CustomAttributeGetModel&gt;)</returns>
-        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<List<CustomAttributeGetModel>>> AdaptersProjectsProjectIdAttributesSearchPostWithHttpInfoAsync(Guid projectId, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ProjectAttributesFilterModel projectAttributesFilterModel = default, System.Threading.CancellationToken cancellationToken = default)
+        /// <returns>Task of ApiResponse (List&lt;CustomAttributeModel&gt;)</returns>
+        public async System.Threading.Tasks.Task<TestIT.AdaptersApi.Client.ApiResponse<List<CustomAttributeModel>>> AdaptersProjectsProjectIdAttributesSearchPostWithHttpInfoAsync(Guid projectId, int? skip = default, int? take = default, string orderBy = default, string searchField = default, string searchValue = default, ProjectAttributesFilterModel projectAttributesFilterModel = default, System.Threading.CancellationToken cancellationToken = default)
         {
 
             TestIT.AdaptersApi.Client.RequestOptions localVarRequestOptions = new TestIT.AdaptersApi.Client.RequestOptions();
@@ -671,16 +671,16 @@ namespace TestIT.AdaptersApi.Api
             {
                 localVarRequestOptions.HeaderParameters.Add("Authorization", this.Configuration.GetApiKeyWithPrefix("Authorization"));
             }
-            // authentication (Cookies) required
+            // authentication (Identity.Application) required
             // cookie parameter support
-            if (!string.IsNullOrEmpty(this.Configuration.GetApiKeyWithPrefix("session")))
+            if (!string.IsNullOrEmpty(this.Configuration.GetApiKeyWithPrefix("backoffice")))
             {
-                localVarRequestOptions.Cookies.Add(new Cookie("session", this.Configuration.GetApiKeyWithPrefix("session")));
+                localVarRequestOptions.Cookies.Add(new Cookie("backoffice", this.Configuration.GetApiKeyWithPrefix("backoffice")));
             }
 
             // make the HTTP request
 
-            var localVarResponse = await this.AsynchronousClient.PostAsync<List<CustomAttributeGetModel>>("/adapters/projects/{projectId}/attributes/search", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
+            var localVarResponse = await this.AsynchronousClient.PostAsync<List<CustomAttributeModel>>("/adapters/projects/{projectId}/attributes/search", localVarRequestOptions, this.Configuration, cancellationToken).ConfigureAwait(false);
 
             if (this.ExceptionFactory != null)
             {

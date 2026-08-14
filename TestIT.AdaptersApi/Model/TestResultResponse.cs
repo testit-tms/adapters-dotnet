@@ -58,6 +58,7 @@ namespace TestIT.AdaptersApi.Model
         /// <param name="attachments">attachments.</param>
         /// <param name="autoTestId">autoTestId.</param>
         /// <param name="configurationId">configurationId (required).</param>
+        /// <param name="testPointId">testPointId (required).</param>
         /// <param name="durationInMs">durationInMs.</param>
         /// <param name="traces">traces.</param>
         /// <param name="failureType">failureType.</param>
@@ -69,7 +70,7 @@ namespace TestIT.AdaptersApi.Model
         /// <param name="teardownResults">teardownResults.</param>
         /// <param name="parameters">parameters.</param>
         /// <param name="properties">properties.</param>
-        public TestResultResponse(Guid id = default, List<StepCommentApiModel> stepComments = default, List<Guid> failureClassIds = default, TestResultOutcome? outcome = default, TestStatusApiResult status = default, string comment = default, List<LinkApiResult> links = default, List<StepResultApiModel> stepResults = default, List<AttachmentApiResult> attachments = default, Guid? autoTestId = default, Guid configurationId = default, long? durationInMs = default, string traces = default, string failureType = default, string message = default, Guid testRunId = default, AutoTest autoTest = default, List<AutoTestStepResult> autoTestStepResults = default, List<AutoTestStepResult> setupResults = default, List<AutoTestStepResult> teardownResults = default, Dictionary<string, string> parameters = default, Dictionary<string, string> properties = default)
+        public TestResultResponse(Guid id = default, List<StepCommentApiModel> stepComments = default, List<Guid> failureClassIds = default, TestResultOutcome? outcome = default, TestStatusApiResult status = default, string comment = default, List<LinkApiResult> links = default, List<StepResultApiModel> stepResults = default, List<AttachmentApiResult> attachments = default, Guid? autoTestId = default, Guid configurationId = default, Guid testPointId = default, long? durationInMs = default, string traces = default, string failureType = default, string message = default, Guid testRunId = default, AutoTest autoTest = default, List<AutoTestStepResult> autoTestStepResults = default, List<AutoTestStepResult> setupResults = default, List<AutoTestStepResult> teardownResults = default, Dictionary<string, string> parameters = default, Dictionary<string, string> properties = default)
         {
             this.Id = id;
             // to ensure "failureClassIds" is required (not null)
@@ -79,6 +80,7 @@ namespace TestIT.AdaptersApi.Model
             }
             this.FailureClassIds = failureClassIds;
             this.ConfigurationId = configurationId;
+            this.TestPointId = testPointId;
             this.TestRunId = testRunId;
             this.StepComments = stepComments;
             this.Outcome = outcome;
@@ -159,6 +161,12 @@ namespace TestIT.AdaptersApi.Model
         /// </summary>
         [DataMember(Name = "configurationId", IsRequired = true, EmitDefaultValue = true)]
         public Guid ConfigurationId { get; set; }
+
+        /// <summary>
+        /// Gets or Sets TestPointId
+        /// </summary>
+        [DataMember(Name = "testPointId", IsRequired = true, EmitDefaultValue = true)]
+        public Guid TestPointId { get; set; }
 
         /// <summary>
         /// Gets or Sets DurationInMs
@@ -245,6 +253,7 @@ namespace TestIT.AdaptersApi.Model
             sb.Append("  Attachments: ").Append(Attachments).Append("\n");
             sb.Append("  AutoTestId: ").Append(AutoTestId).Append("\n");
             sb.Append("  ConfigurationId: ").Append(ConfigurationId).Append("\n");
+            sb.Append("  TestPointId: ").Append(TestPointId).Append("\n");
             sb.Append("  DurationInMs: ").Append(DurationInMs).Append("\n");
             sb.Append("  Traces: ").Append(Traces).Append("\n");
             sb.Append("  FailureType: ").Append(FailureType).Append("\n");

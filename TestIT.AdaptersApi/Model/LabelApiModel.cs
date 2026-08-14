@@ -41,8 +41,7 @@ namespace TestIT.AdaptersApi.Model
         /// Initializes a new instance of the <see cref="LabelApiModel" /> class.
         /// </summary>
         /// <param name="name">Name of the label (required).</param>
-        /// <param name="globalId">Global ID of the label (required).</param>
-        public LabelApiModel(string name = default, long globalId = default)
+        public LabelApiModel(string name = default)
         {
             // to ensure "name" is required (not null)
             if (name == null)
@@ -50,7 +49,6 @@ namespace TestIT.AdaptersApi.Model
                 throw new ArgumentNullException("name is a required property for LabelApiModel and cannot be null");
             }
             this.Name = name;
-            this.GlobalId = globalId;
         }
 
         /// <summary>
@@ -61,13 +59,6 @@ namespace TestIT.AdaptersApi.Model
         public string Name { get; set; }
 
         /// <summary>
-        /// Global ID of the label
-        /// </summary>
-        /// <value>Global ID of the label</value>
-        [DataMember(Name = "globalId", IsRequired = true, EmitDefaultValue = true)]
-        public long GlobalId { get; set; }
-
-        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -76,7 +67,6 @@ namespace TestIT.AdaptersApi.Model
             StringBuilder sb = new StringBuilder();
             sb.Append("class LabelApiModel {\n");
             sb.Append("  Name: ").Append(Name).Append("\n");
-            sb.Append("  GlobalId: ").Append(GlobalId).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }
