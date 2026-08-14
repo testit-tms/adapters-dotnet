@@ -77,7 +77,7 @@ namespace TestIT.AdaptersApi.Api
         /// Upload new attachment file
         /// </summary>
         /// <remarks>
-        /// File size is restricted to 1 GB (1 073 741 824 bytes)
+        /// File size is restricted to 50 MB (52 428 800 bytes)
         /// </remarks>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="file"> (optional)</param>
@@ -88,7 +88,7 @@ namespace TestIT.AdaptersApi.Api
         /// Upload new attachment file
         /// </summary>
         /// <remarks>
-        /// File size is restricted to 1 GB (1 073 741 824 bytes)
+        /// File size is restricted to 50 MB (52 428 800 bytes)
         /// </remarks>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="file"> (optional)</param>
@@ -163,7 +163,7 @@ namespace TestIT.AdaptersApi.Api
         /// Upload new attachment file
         /// </summary>
         /// <remarks>
-        /// File size is restricted to 1 GB (1 073 741 824 bytes)
+        /// File size is restricted to 50 MB (52 428 800 bytes)
         /// </remarks>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="file"> (optional)</param>
@@ -175,7 +175,7 @@ namespace TestIT.AdaptersApi.Api
         /// Upload new attachment file
         /// </summary>
         /// <remarks>
-        /// File size is restricted to 1 GB (1 073 741 824 bytes)
+        /// File size is restricted to 50 MB (52 428 800 bytes)
         /// </remarks>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="file"> (optional)</param>
@@ -442,11 +442,11 @@ namespace TestIT.AdaptersApi.Api
             {
                 localVarRequestOptions.HeaderParameters.Add("Authorization", this.Configuration.GetApiKeyWithPrefix("Authorization"));
             }
-            // authentication (Cookies) required
+            // authentication (Identity.Application) required
             // cookie parameter support
-            if (!string.IsNullOrEmpty(this.Configuration.GetApiKeyWithPrefix("session")))
+            if (!string.IsNullOrEmpty(this.Configuration.GetApiKeyWithPrefix("backoffice")))
             {
-                localVarRequestOptions.Cookies.Add(new Cookie("session", this.Configuration.GetApiKeyWithPrefix("session")));
+                localVarRequestOptions.Cookies.Add(new Cookie("backoffice", this.Configuration.GetApiKeyWithPrefix("backoffice")));
             }
 
             // make the HTTP request
@@ -512,11 +512,11 @@ namespace TestIT.AdaptersApi.Api
             {
                 localVarRequestOptions.HeaderParameters.Add("Authorization", this.Configuration.GetApiKeyWithPrefix("Authorization"));
             }
-            // authentication (Cookies) required
+            // authentication (Identity.Application) required
             // cookie parameter support
-            if (!string.IsNullOrEmpty(this.Configuration.GetApiKeyWithPrefix("session")))
+            if (!string.IsNullOrEmpty(this.Configuration.GetApiKeyWithPrefix("backoffice")))
             {
-                localVarRequestOptions.Cookies.Add(new Cookie("session", this.Configuration.GetApiKeyWithPrefix("session")));
+                localVarRequestOptions.Cookies.Add(new Cookie("backoffice", this.Configuration.GetApiKeyWithPrefix("backoffice")));
             }
 
             // make the HTTP request
@@ -604,11 +604,11 @@ namespace TestIT.AdaptersApi.Api
             {
                 localVarRequestOptions.HeaderParameters.Add("Authorization", this.Configuration.GetApiKeyWithPrefix("Authorization"));
             }
-            // authentication (Cookies) required
+            // authentication (Identity.Application) required
             // cookie parameter support
-            if (!string.IsNullOrEmpty(this.Configuration.GetApiKeyWithPrefix("session")))
+            if (!string.IsNullOrEmpty(this.Configuration.GetApiKeyWithPrefix("backoffice")))
             {
-                localVarRequestOptions.Cookies.Add(new Cookie("session", this.Configuration.GetApiKeyWithPrefix("session")));
+                localVarRequestOptions.Cookies.Add(new Cookie("backoffice", this.Configuration.GetApiKeyWithPrefix("backoffice")));
             }
 
             // make the HTTP request
@@ -699,11 +699,11 @@ namespace TestIT.AdaptersApi.Api
             {
                 localVarRequestOptions.HeaderParameters.Add("Authorization", this.Configuration.GetApiKeyWithPrefix("Authorization"));
             }
-            // authentication (Cookies) required
+            // authentication (Identity.Application) required
             // cookie parameter support
-            if (!string.IsNullOrEmpty(this.Configuration.GetApiKeyWithPrefix("session")))
+            if (!string.IsNullOrEmpty(this.Configuration.GetApiKeyWithPrefix("backoffice")))
             {
-                localVarRequestOptions.Cookies.Add(new Cookie("session", this.Configuration.GetApiKeyWithPrefix("session")));
+                localVarRequestOptions.Cookies.Add(new Cookie("backoffice", this.Configuration.GetApiKeyWithPrefix("backoffice")));
             }
 
             // make the HTTP request
@@ -720,7 +720,7 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        /// Upload new attachment file File size is restricted to 1 GB (1 073 741 824 bytes)
+        /// Upload new attachment file File size is restricted to 50 MB (52 428 800 bytes)
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="file"> (optional)</param>
@@ -732,7 +732,7 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        /// Upload new attachment file File size is restricted to 1 GB (1 073 741 824 bytes)
+        /// Upload new attachment file File size is restricted to 50 MB (52 428 800 bytes)
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="file"> (optional)</param>
@@ -766,11 +766,11 @@ namespace TestIT.AdaptersApi.Api
             {
                 localVarRequestOptions.HeaderParameters.Add("Authorization", this.Configuration.GetApiKeyWithPrefix("Authorization"));
             }
-            // authentication (Cookies) required
+            // authentication (Identity.Application) required
             // cookie parameter support
-            if (!string.IsNullOrEmpty(this.Configuration.GetApiKeyWithPrefix("session")))
+            if (!string.IsNullOrEmpty(this.Configuration.GetApiKeyWithPrefix("backoffice")))
             {
-                localVarRequestOptions.Cookies.Add(new Cookie("session", this.Configuration.GetApiKeyWithPrefix("session")));
+                localVarRequestOptions.Cookies.Add(new Cookie("backoffice", this.Configuration.GetApiKeyWithPrefix("backoffice")));
             }
 
             // make the HTTP request
@@ -786,7 +786,7 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        /// Upload new attachment file File size is restricted to 1 GB (1 073 741 824 bytes)
+        /// Upload new attachment file File size is restricted to 50 MB (52 428 800 bytes)
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="file"> (optional)</param>
@@ -799,7 +799,7 @@ namespace TestIT.AdaptersApi.Api
         }
 
         /// <summary>
-        /// Upload new attachment file File size is restricted to 1 GB (1 073 741 824 bytes)
+        /// Upload new attachment file File size is restricted to 50 MB (52 428 800 bytes)
         /// </summary>
         /// <exception cref="TestIT.AdaptersApi.Client.ApiException">Thrown when fails to make API call</exception>
         /// <param name="file"> (optional)</param>
@@ -836,11 +836,11 @@ namespace TestIT.AdaptersApi.Api
             {
                 localVarRequestOptions.HeaderParameters.Add("Authorization", this.Configuration.GetApiKeyWithPrefix("Authorization"));
             }
-            // authentication (Cookies) required
+            // authentication (Identity.Application) required
             // cookie parameter support
-            if (!string.IsNullOrEmpty(this.Configuration.GetApiKeyWithPrefix("session")))
+            if (!string.IsNullOrEmpty(this.Configuration.GetApiKeyWithPrefix("backoffice")))
             {
-                localVarRequestOptions.Cookies.Add(new Cookie("session", this.Configuration.GetApiKeyWithPrefix("session")));
+                localVarRequestOptions.Cookies.Add(new Cookie("backoffice", this.Configuration.GetApiKeyWithPrefix("backoffice")));
             }
 
             // make the HTTP request
