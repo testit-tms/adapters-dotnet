@@ -10,7 +10,8 @@ internal sealed class NoopTmsClient : ITmsClient
     public Task<bool> IsAutotestExist(string externalId) => Task.FromResult(false);
     public Task CreateAutotest(TestContainer result, ClassContainer container) => Task.CompletedTask;
     public Task UpdateAutotest(TestContainer result, ClassContainer container) => Task.CompletedTask;
-    public Task UpdateAutotest(string externalId, List<Link> links, string externalKey) => Task.CompletedTask;
+    public Task UpdateAutotest(string externalId, List<Link> links, string externalKey, string? layer = null) =>
+        Task.CompletedTask;
     public Task LinkAutoTestToWorkItems(string autotestId, IEnumerable<string> workItemIds) => Task.CompletedTask;
     public Task DeleteAutoTestLinkFromWorkItem(string autotestId, string workItemId) => Task.CompletedTask;
     public Task<List<AutoTestWorkItemIdentifierApiResult>> GetWorkItemsLinkedToAutoTest(string autotestId) =>

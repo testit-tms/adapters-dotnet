@@ -195,6 +195,10 @@ public static class TmsXunitHelper
                 case LinksAttribute links:
                     testResult.Links.Add(links.Link);
                     break;
+
+                case LayerAttribute layer:
+                    testResult.Layer = ReplaceParameters(layer.Value, testResult.Parameters!);
+                    break;
             }
         }
 

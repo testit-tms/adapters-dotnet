@@ -119,6 +119,9 @@ public static partial class LogParser
                     autoTest.Tags = tags.Value;
                     break;
                 }
+                case LayerAttribute layer:
+                    autoTest.Layer = Replacer.ReplaceParameters(layer.Value!, parameters);
+                    break;
             }
         }
 

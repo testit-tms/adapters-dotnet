@@ -10,6 +10,7 @@ public class TestContainer : ExecutableItem
     public string? Namespace { get; set; }
     public List<string> Labels { get; set; } = [];
     public List<string> Tags { get; set; } = [];
+    public string? Layer { get; set; }
     public List<Link> Links { get; set; } = [];
     public List<Link> ResultLinks { get; set; } = [];
     public string? Message { get; set; }

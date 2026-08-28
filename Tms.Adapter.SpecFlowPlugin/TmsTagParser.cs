@@ -22,6 +22,7 @@ public static class TmsTagParser
     private const string Description = "DESCRIPTION";
     private const string Labels = "LABELS";
     private const string Tags = "TAGS";
+    private const string Layer = "LAYER";
     private const string Links = "LINKS";
     private const string WorkItemIds = "WORKITEMIDS";
 
@@ -73,6 +74,9 @@ public static class TmsTagParser
                     testContainer.Tags = parseSpaceInTag(tagValue)
                         .Split(TagValueDelimiter)
                         .ToList();
+                    break;
+                case Layer:
+                    testContainer.Layer = Replacer.ReplaceParameters(parseSpaceInTag(tagValue), parameters);
                     break;
                 case Links:
                     if (IsJson(tagValue))

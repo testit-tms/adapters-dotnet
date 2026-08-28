@@ -126,6 +126,7 @@ Description of attributes:
 * `Description` - autotest description specified in the autotest card
 * `Labels` - labels listed in the autotest card
 * `Tags` - tags listed in the autotest card
+* `Layer` - test pyramid layer on the autotest card (source **Run**). Use `TestLayers` constants or any custom string
 * `Links` - links listed in the autotest card
 * `Step` - the designation of the step
 
