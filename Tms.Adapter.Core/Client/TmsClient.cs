@@ -87,7 +87,7 @@ public sealed class TmsClient : ITmsClient, IDisposable
         }
     }
 
-    public async Task UpdateAutotest(string externalId, List<Link> links, string externalKey)
+    public async Task UpdateAutotest(string externalId, List<Link> links, string externalKey, string? layer = null)
     {
         if (_logger.IsEnabled(LogLevel.Debug))
         {
@@ -127,8 +127,26 @@ public sealed class TmsClient : ITmsClient, IDisposable
                 Path = nameof(AutoTestUpdateApiModel.ExternalKey),
                 Value = HtmlEscapeUtils.EscapeHtmlTags(externalKey)!,
                 Op = "Replace"
+            },
+            new()
+            {
+                Path = nameof(AutoTestUpdateApiModel.ResetLayer),
+                Value = false,
+                Op = "Replace"
             }
         };
+
+        var apiLayer = LayerMapper.ToApiModel(layer);
+        if (apiLayer != null)
+        {
+            HtmlEscapeUtils.EscapeHtmlInObject(apiLayer);
+            operations.Add(new Operation
+            {
+                Path = nameof(AutoTestUpdateApiModel.Layer),
+                Value = apiLayer,
+                Op = "Replace"
+            });
+        }
 
         await _autoTests.AdaptersAutoTestsIdPatchAsync(autotest.Id, operations).ConfigureAwait(false);
 

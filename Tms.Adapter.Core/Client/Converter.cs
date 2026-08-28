@@ -1,6 +1,7 @@
 using SyncStorage.ApiClient.Model;
 using TestIT.AdaptersApi.Model;
 using Tms.Adapter.Core.Models;
+using Tms.Adapter.Core.Utils;
 using Link = Tms.Adapter.Core.Models.Link;
 using LinkType = TestIT.AdaptersApi.Model.LinkType;
 using StepResult = Tms.Adapter.Core.Models.StepResult;
@@ -12,7 +13,7 @@ public static class Converter
     public static AutoTestCreateApiModel ConvertAutoTestDtoToPostModel(TestContainer result, ClassContainer container,
         string projectId)
     {
-        return new AutoTestCreateApiModel(externalId: result.ExternalId!, name: result.DisplayName!)
+        var model = new AutoTestCreateApiModel(externalId: result.ExternalId!, name: result.DisplayName!)
         {
             ExternalId = result.ExternalId!,
             Links = ConvertLinksToCreateApiModel(result.Links),
@@ -28,12 +29,14 @@ public static class Converter
             Tags = result.Tags,
             ExternalKey = result.ExternalKey!,
         };
+        LayerMapper.ApplyToCreate(model, result.Layer);
+        return model;
     }
 
     public static AutoTestUpdateApiModel ConvertAutoTestDtoToPutModel(TestContainer result, ClassContainer container,
         string projectId)
     {
-        return new AutoTestUpdateApiModel(externalId: result.ExternalId!, name: result.DisplayName!)
+        var model = new AutoTestUpdateApiModel(externalId: result.ExternalId!, name: result.DisplayName!)
         {
             ExternalId = result.ExternalId!,
             Links = ConvertLinksToPutModel(result.Links),
@@ -49,6 +52,8 @@ public static class Converter
             Tags = result.Tags,
             ExternalKey = result.ExternalKey!,
         };
+        LayerMapper.ApplyToUpdate(model, result.Layer);
+        return model;
     }
     
     // Undefined,

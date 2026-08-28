@@ -114,6 +114,11 @@ This repository contains several components:
 
 3. **TmsRunner** - A standalone test runner for MSTest/NUnit tests that can send results directly to Test IT
 
+## Internal documentation
+
+- [importRealtime](./docs/importRealtime.md) — buffered vs real-time result publish
+- [Autotest layer](./docs/autotest-layer.md) — test pyramid layer from `[Layer]` / `@Layer=`
+
 
 <a href='https://coveralls.io/github/testit-tms/adapters-dotnet?branch=main'>
 	<img src='https://coveralls.io/repos/github/testit-tms/adapters-dotnet/badge.svg?branch=main' alt='Coverage Status' />
