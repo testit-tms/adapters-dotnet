@@ -86,13 +86,22 @@ public static partial class LogParser
                 case DescriptionAttribute description:
                     autoTest.Description = Replacer.ReplaceParameters(description.Value, parameters);
                     break;
+                case WorkItemIdAttribute id:
+                    {
+                        autoTest.WorkItemIds = [Replacer.ReplaceParameters(id.Value, parameters)];
+                        break;
+                    }
                 case WorkItemIdsAttribute ids:
                     {
-                        var workItemIds = ids.Value?
-                            .Select(id => Replacer.ReplaceParameters(id, parameters))
-                            .ToList();
+                        Console.WriteLine("WorkItemIds is deprecated. Use WorkItemId with a single globalId instead.");
+                        if (autoTest.WorkItemIds.Count == 0)
+                        {
+                            var workItemIds = ids.Value?
+                                .Select(itemId => Replacer.ReplaceParameters(itemId, parameters))
+                                .ToList();
 
-                        autoTest.WorkItemIds = workItemIds ?? [];
+                            autoTest.WorkItemIds = workItemIds ?? [];
+                        }
                         break;
                     }
                 case LinksAttribute links:

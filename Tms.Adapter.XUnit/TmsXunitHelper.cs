@@ -188,8 +188,16 @@ public static class TmsXunitHelper
                     testResult.Title = ReplaceParameters(title.Value, testResult.Parameters!);
                     break;
 
+                case WorkItemIdAttribute workItemId:
+                    testResult.WorkItemIds = [ReplaceParameters(workItemId.Value, testResult.Parameters!)];
+                    break;
+
                 case WorkItemIdsAttribute workItemIds:
-                    testResult.WorkItemIds = workItemIds.Ids;
+                    Console.WriteLine("WorkItemIds is deprecated. Use WorkItemId with a single globalId instead.");
+                    if (testResult.WorkItemIds.Count == 0)
+                    {
+                        testResult.WorkItemIds = workItemIds.Ids;
+                    }
                     break;
 
                 case LinksAttribute links:

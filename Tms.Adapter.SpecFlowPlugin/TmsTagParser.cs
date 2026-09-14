@@ -25,6 +25,7 @@ public static class TmsTagParser
     private const string Layer = "LAYER";
     private const string Links = "LINKS";
     private const string WorkItemIds = "WORKITEMIDS";
+    private const string WorkItemId = "WORKITEMID";
 
     public static TestContainer AddTags(TestContainer testContainer, FeatureInfo featureInfo,
         ScenarioInfo scenarioInfo, Dictionary<string, string> parameters)
@@ -102,10 +103,17 @@ public static class TmsTagParser
                     }
 
                     break;
+                case WorkItemId:
+                    testContainer.WorkItemIds = [Replacer.ReplaceParameters(parseSpaceInTag(tagValue), parameters)];
+                    break;
                 case WorkItemIds:
-                    testContainer.WorkItemIds = parseSpaceInTag(tagValue)
-                        .Split(TagValueDelimiter)
-                        .ToList();
+                    Console.WriteLine("WorkItemIds is deprecated. Use WorkItemId with a single globalId instead.");
+                    if (testContainer.WorkItemIds.Count == 0)
+                    {
+                        testContainer.WorkItemIds = parseSpaceInTag(tagValue)
+                            .Split(TagValueDelimiter)
+                            .ToList();
+                    }
                     break;
             }
         }

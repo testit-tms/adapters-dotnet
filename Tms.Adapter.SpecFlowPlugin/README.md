@@ -106,7 +106,8 @@ Use attributes to specify information about autotest.
 
 Description of attributes:
 
-* `WorkItemIds` -  a method that links autotests with manual tests. Receives the array of manual tests' IDs
+* `WorkItemId` - a method that links an autotest with a manual test. Receives a single globalId
+* `WorkItemIds` - deprecated, use `WorkItemId` instead
 * `DisplayName` - internal autotest name (used in Test IT)
 * `ExternalId` - unique internal autotest ID (used in Test IT)
 * `Title` - autotest name specified in the autotest card. If not specified, the name from the displayName method is used
@@ -139,7 +140,7 @@ Feature: Simple
   @Layer=API
   @Links={"url":"https://test01.example","title":"Example01","description":"Example01_description","type":"Issue"}
   @Links={"url":"https://test02.example","title":"Example02","description":"Example02_description","type":"Issue"}
-  @WorkItemIds=123,321
+  @WorkItemId=123
   Scenario: With all annotations
     Then return true
 ```
