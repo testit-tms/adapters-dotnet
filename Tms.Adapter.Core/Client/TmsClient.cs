@@ -367,7 +367,7 @@ public sealed class TmsClient : ITmsClient, IDisposable
 
         try
         {
-            var testRun = await _testRuns.AdaptersTestRunsIdGetAsync(new Guid(_settings.TestRunId)).ConfigureAwait(false);
+            var testRun = await TestRunQuery.GetByIdAsync(_testRuns, new Guid(_settings.TestRunId)).ConfigureAwait(false);
             var nameChanged = hasName && !testRun.Name.Equals(_settings.TestRunName, StringComparison.Ordinal);
             if (!nameChanged && !hasMeta)
             {
@@ -409,7 +409,7 @@ public sealed class TmsClient : ITmsClient, IDisposable
 
         try
         {
-            var testRun = await _testRuns.AdaptersTestRunsIdGetAsync(new Guid(_settings.TestRunId)).ConfigureAwait(false);
+            var testRun = await TestRunQuery.GetByIdAsync(_testRuns, new Guid(_settings.TestRunId)).ConfigureAwait(false);
             var updateEmptyTestRunApiModel = BuildUpdateModel(testRun, testRun.Name, mergeConfiguredMetadata: true);
             HtmlEscapeUtils.EscapeHtmlInObject(updateEmptyTestRunApiModel);
             await _testRuns.AdaptersTestRunsPutAsync(updateEmptyTestRunApiModel).ConfigureAwait(false);
@@ -445,6 +445,8 @@ public sealed class TmsClient : ITmsClient, IDisposable
         return new UpdateEmptyTestRunApiModel(name: name)
         {
             Id = testRun.Id,
+            Description = testRun.Description,
+            LaunchSource = testRun.LaunchSource,
             Attachments = (testRun.Attachments ?? [])
                 .Select(attachment => new AssignAttachmentApiModel(id: attachment.Id))
                 .ToList(),
@@ -462,7 +464,7 @@ public sealed class TmsClient : ITmsClient, IDisposable
             return;
         }
 
-        var testRun = await _testRuns.AdaptersTestRunsIdGetAsync(new Guid(_settings.TestRunId)).ConfigureAwait(false);
+        var testRun = await TestRunQuery.GetByIdAsync(_testRuns, new Guid(_settings.TestRunId)).ConfigureAwait(false);
 
         if (testRun.Status.Type != TestStatusApiType.Succeeded)
         {

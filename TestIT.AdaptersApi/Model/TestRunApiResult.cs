@@ -133,6 +133,20 @@ namespace TestIT.AdaptersApi.Model
         [DataMember(Name = "tags", IsRequired = true, EmitDefaultValue = true)]
         public List<string> Tags { get; set; }
 
+        // Keep on OpenAPI regen: required so merge-on-update does not wipe these fields.
+        // TMS 5.8 adapters GET omits them; populated via GET /api/v2/testRuns/{id}.
+        /// <summary>
+        /// Test run description
+        /// </summary>
+        [DataMember(Name = "description", EmitDefaultValue = true)]
+        public string Description { get; set; }
+
+        /// <summary>
+        /// Test run launch source. Once specified it cannot be updated.
+        /// </summary>
+        [DataMember(Name = "launchSource", EmitDefaultValue = true)]
+        public string LaunchSource { get; set; }
+
         /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
@@ -148,6 +162,8 @@ namespace TestIT.AdaptersApi.Model
             sb.Append("  Attachments: ").Append(Attachments).Append("\n");
             sb.Append("  Links: ").Append(Links).Append("\n");
             sb.Append("  Tags: ").Append(Tags).Append("\n");
+            sb.Append("  Description: ").Append(Description).Append("\n");
+            sb.Append("  LaunchSource: ").Append(LaunchSource).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

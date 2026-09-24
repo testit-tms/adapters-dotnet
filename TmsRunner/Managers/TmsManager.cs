@@ -92,8 +92,12 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
     public async Task<TestRunApiResult?> GetTestRunAsync()
     {
         logger.LogDebug("Getting test run {@TestRunId}", settings.TestRunId);
-        
-        return await testRunsApi.AdaptersTestRunsIdGetAsync(new Guid(settings.TestRunId ?? string.Empty)).ConfigureAwait(false);
+
+        var id = new Guid(settings.TestRunId ?? string.Empty);
+        // TMS 5.8: adapters GET omits description/launchSource and returns empty links/attachments
+        return testRunsApi is TestRunsApi api
+            ? await Tms.Adapter.Core.Client.TestRunQuery.GetByIdAsync(api, id).ConfigureAwait(false)
+            : await testRunsApi.AdaptersTestRunsIdGetAsync(id).ConfigureAwait(false);
     }
 
     public async Task UpdateTestRunAsync(TestRunApiResult testRun)

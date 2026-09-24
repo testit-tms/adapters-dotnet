@@ -162,6 +162,8 @@ public static class Converter
         return new UpdateEmptyTestRunApiModel(name: testRun.Name)
         {
             Id = testRun.Id,
+            Description = testRun.Description,
+            LaunchSource = testRun.LaunchSource,
             Attachments = (testRun.Attachments ?? [])
                 .Select(attachment => new AssignAttachmentApiModel(id: attachment.Id))
                 .ToList(),
