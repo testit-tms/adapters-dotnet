@@ -109,71 +109,30 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
         await testRunsApi.AdaptersTestRunsPutAsync(model).ConfigureAwait(false);
     }
 
-    public async Task<List<string>> GetExternalIdsForRunAsync()
+    public async Task<List<TestResultShortResponse>> GetTestResultsInProgressForRunAsync()
     {
         logger.LogDebug("Getting test results for run from test run {TestRunId} with configuration {ConfigurationId}", settings.TestRunId, settings.ConfigurationId);
 
-        var externalIds = new List<string>();
+        var testResultsInProgress = new List<TestResultShortResponse>();
         var skip = 0;
         var model = Converter.BuildTestResultsFilterApiModel(settings.TestRunId!, settings.ConfigurationId!);
 
         while (true)
         {
-            var testResults = await GetTestResults(skip, model);
+            var testResults = await testResultsApi.AdaptersTestResultsSearchPostAsync(
+                skip, TESTS_LIMIT, nameof(TestResultShortResponse.AutotestExternalId), null!, null!, model)
+                .ConfigureAwait(false);
 
             if (testResults.Count != 0)
             {
-                externalIds.AddRange(testResults.Select(x => x.AutotestExternalId).ToList());
+                testResultsInProgress.AddRange(testResults);
                 skip += TESTS_LIMIT;
 
                 continue;
             }
 
-            return externalIds;
+            return testResultsInProgress;
         }
-    }
-
-    public async Task<List<TestResultResponse>> LoadTestRunTestResultsAsync()
-    {
-        logger.LogDebug("Loading full test results for run {TestRunId}", settings.TestRunId);
-
-        var filter = new TestResultsFilterApiModel
-        {
-            TestRunIds = [new Guid(settings.TestRunId!)],
-            ConfigurationIds = settings.ConfigurationId == null ? null : [new Guid(settings.ConfigurationId)],
-        };
-
-        var shortResults = new List<TestResultShortResponse>();
-        var skip = 0;
-
-        while (true)
-        {
-            var page = await testResultsApi.AdaptersTestResultsSearchPostAsync(skip, TESTS_LIMIT, null!, null!, null!, filter)
-                .ConfigureAwait(false);
-
-            if (page.Count == 0)
-            {
-                break;
-            }
-
-            shortResults.AddRange(page);
-            skip += TESTS_LIMIT;
-        }
-
-        var fullResults = new List<TestResultResponse>(shortResults.Count);
-        foreach (var shortResult in shortResults)
-        {
-            var full = await testResultsApi.AdaptersTestResultsIdGetAsync(shortResult.Id).ConfigureAwait(false);
-            fullResults.Add(full);
-        }
-
-        logger.LogDebug("Loaded {Count} test results for run {TestRunId}", fullResults.Count, settings.TestRunId);
-        return fullResults;
-    }
-
-    private async Task<List<TestResultShortResponse>> GetTestResults(int skip, TestResultsFilterApiModel model)
-    {
-        return await testResultsApi.AdaptersTestResultsSearchPostAsync(skip, TESTS_LIMIT, null!, null!, null!, model);
     }
 
     public async Task SubmitResultToTestRunAsync(string? id, AutoTestResult result, bool forceInProgressStatus = false)
@@ -239,7 +198,7 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
         Guid testRunId)
     {
         var matchingResults = testRunContext.GetTestResults()
-            .Where(x => x.AutoTest?.ExternalId == result.ExternalId)
+            .Where(x => x.AutotestExternalId == result.ExternalId)
             .ToList();
 
         if (matchingResults is { Count: 0 })
@@ -249,19 +208,20 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
 
         foreach (var matchingResult in matchingResults)
         {
-            model.Parameters = matchingResult.Parameters;
+            var fullModel = await testResultsApi.AdaptersTestResultsIdGetAsync(matchingResult.Id).ConfigureAwait(false);
+            model.Parameters = fullModel.Parameters;
 
             if (IsInProgress(matchingResult) && model.StatusType != TestStatusType.InProgress)
             {
                 await testRunsApi.AdaptersTestRunsIdTestResultsPostAsync(testRunId, [model]).ConfigureAwait(false);
-                logger.LogDebug("Submitted final result for test point with parameters: {@Parameters}", matchingResult.Parameters);
+                logger.LogDebug("Submitted final result for test point with parameters: {@Parameters}", fullModel.Parameters);
                 continue;
             }
 
             var update = CoreConverter.ConvertResultToUpdateModel(model);
             Utils.HtmlEscapeUtils.EscapeHtmlInObject(update);
             await testResultsApi.AdaptersTestResultsIdPutAsync(matchingResult.Id, update).ConfigureAwait(false);
-            logger.LogDebug("Updated test result {TestResultId} with parameters: {@Parameters}", matchingResult.Id, matchingResult.Parameters);
+            logger.LogDebug("Updated test result {TestResultId} with parameters: {@Parameters}", matchingResult.Id, fullModel.Parameters);
         }
     }
 
