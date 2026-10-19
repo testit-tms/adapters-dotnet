@@ -45,4 +45,22 @@ public class FilterServiceTests
         // Assert
         Assert.AreEqual(0, actual.Count);
     }
+
+    [TestMethod]
+    public void FilterTestCasesByTags()
+    {
+        // Arrange
+        var filterService = new FilterService(_logger.Object);
+        var config = new AdapterConfig
+        {
+            TestAssemblyPath = typeof(FilterServiceTests).Assembly.Location
+        };
+        var testcases = new[] { new TestCase { FullyQualifiedName = "test" } };
+
+        // Act
+        var actual = filterService.FilterTestCasesByTags(config, testcases);
+
+        // Assert
+        Assert.AreEqual(0, actual.Count);
+    }
 }

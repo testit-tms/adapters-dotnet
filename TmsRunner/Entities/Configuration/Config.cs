@@ -17,6 +17,7 @@ public sealed record Config
     public string? TmsAutomaticUpdationLinksToTestCases { get; init; }
     public string? TmsCertValidation { get; init; }
     public string? TmsLabelsOfTestsToRun { get; init; }
+    public string? TmsTagsOfTestsToRun { get; init; }
     public string? TmsIgnoreParameters { get; init; }
     public string? TmsRerunTestsCount { get; init; }
     public string? TmsSyncStoragePort { get; init; }

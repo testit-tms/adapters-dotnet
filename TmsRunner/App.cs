@@ -73,6 +73,11 @@ public class App(ILogger<App> logger,
                     testCases = filterService.FilterTestCasesByLabels(adapterConfig, testCases);
                 }
 
+                if (!string.IsNullOrEmpty(adapterConfig.TmsTagsOfTestsToRun))
+                {
+                    testCases = filterService.FilterTestCasesByTags(adapterConfig, testCases);
+                }
+
                 break;
             }
         }

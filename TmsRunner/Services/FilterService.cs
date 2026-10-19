@@ -101,9 +101,38 @@ public sealed partial class FilterService(ILogger<FilterService> logger)
                 {
                     testCasesToRun.Add(testCase);
                 }
-                
+            }
+        }
+
+        return testCasesToRun;
+    }
+
+    public List<TestCase> FilterTestCasesByTags(AdapterConfig config, IReadOnlyCollection<TestCase> testCases)
+    {
+        var tagsToRun = config.TmsTagsOfTestsToRun?.Split(',').Select(x => x.Trim()).ToList();
+        var testCasesToRun = new List<TestCase>();
+        var assembly = TestAssemblyLoadContext.LoadTestAssembly(config.TestAssemblyPath ?? string.Empty);
+        var allTestMethods = new List<MethodInfo>(assembly.GetExportedTypes().SelectMany(type => type.GetMethods()));
+
+        foreach (var testCase in testCases)
+        {
+            var testMethod = allTestMethods.FirstOrDefault(
+                m => (m.DeclaringType!.FullName + "." + m.Name)
+                    .Contains(ParametersRegex.Replace(testCase.FullyQualifiedName, string.Empty))
+            );
+
+            if (testMethod == null)
+            {
+                logger.LogError("TestMethod {@FullyQualifiedName} not found", testCase.FullyQualifiedName);
+                continue;
+            }
+
+            var customAttributes = testMethod.GetCustomAttributes(false);
+
+            foreach (var attribute in customAttributes)
+            {
                 if (attribute is not TagsAttribute tagsAttr) continue;
-                if (!(tagsAttr.Value?.Any(x => labelsToRun?.Contains(x) ?? false) ?? false)) continue;
+                if (!(tagsAttr.Value?.Any(x => tagsToRun?.Contains(x) ?? false) ?? false)) continue;
                 if (testCase != null)
                 {
                     testCasesToRun.Add(testCase);
