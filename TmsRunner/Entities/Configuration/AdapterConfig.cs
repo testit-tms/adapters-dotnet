@@ -40,6 +40,9 @@ public sealed class AdapterConfig
     [Option("tmsLabelsOfTestsToRun", Required = false, HelpText = "Set labels of autotests to run. Example: --tmsLabelsOfTestsToRun smoke OR --tmsLabelsOfTestsToRun smoke,prod,cloud")]
     public string? TmsLabelsOfTestsToRun { get; init; }
 
+    [Option("tmsTagsOfTestsToRun", Required = false, HelpText = "Set tags of autotests to run. Example: --tmsTagsOfTestsToRun smoke OR --tmsTagsOfTestsToRun smoke,prod,cloud")]
+    public string? TmsTagsOfTestsToRun { get; init; }
+
     [Option('d', "debug", Required = false, HelpText = "Set debug level for logging. Example: --debug")]
     public bool IsDebug { get; init; }
 
@@ -116,6 +119,7 @@ public sealed class AdapterConfig
             TmsCertValidation = TmsCertValidation,
             TmsRerunTestsCount = TmsRerunTestsCount,
             TmsLabelsOfTestsToRun = TmsLabelsOfTestsToRun,
+            TmsTagsOfTestsToRun = TmsTagsOfTestsToRun,
             TmsIgnoreParameters = TmsIgnoreParameters,
             TmsSyncStoragePort = TmsSyncStoragePort,
             TmsImportRealtime = TmsImportRealtime,

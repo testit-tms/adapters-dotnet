@@ -61,6 +61,7 @@ public static class Program
                     TmsAdapterMode = ac.TmsAdapterMode,
                     TmsConfigFile = ac.TmsConfigFile,
                     TmsLabelsOfTestsToRun = ac.TmsLabelsOfTestsToRun,
+                    TmsTagsOfTestsToRun = ac.TmsTagsOfTestsToRun,
                     TmsAutomaticCreationTestCases = ac.TmsAutomaticCreationTestCases,
                     TmsRunSettings = ac.TmsRunSettings,
                     TmsAutomaticUpdationLinksToTestCases = ac.TmsAutomaticUpdationLinksToTestCases,
