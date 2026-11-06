@@ -54,7 +54,10 @@ namespace TestIT.AdaptersApi.Model
         /// <param name="tags">Collection of tags.</param>
         /// <param name="excludeTags">Collection of tags to exclude.</param>
         /// <param name="autoTestIds">Collection of identifiers of linked autotests.</param>
-        public WorkItemFilterApiModel(string nameOrId = default, List<Guid> includeIds = default, List<Guid> excludeIds = default, List<Guid> projectIds = default, string name = default, List<Guid> ids = default, List<long> globalIds = default, Dictionary<string, List<string>> attributes = default, bool? isDeleted = default, List<Guid> sectionIds = default, List<WorkItemStates> states = default, List<WorkItemPriorityModel> priorities = default, List<WorkItemSourceTypeModel> sourceTypes = default, List<WorkItemTypeModel> types = default, Int32RangeSelectorModel duration = default, bool? isAutomated = default, List<string> tags = default, List<string> excludeTags = default, List<Guid> autoTestIds = default)
+        /// <param name="layers">Specifies auto test case layers to search for.</param>
+        /// <param name="layerSources">Specifies list of auto test case layer sources to search for.</param>
+        /// <param name="externalId">External identifier of the work item.</param>
+        public WorkItemFilterApiModel(string nameOrId = default, List<Guid> includeIds = default, List<Guid> excludeIds = default, List<Guid> projectIds = default, string name = default, List<Guid> ids = default, List<long> globalIds = default, Dictionary<string, List<string>> attributes = default, bool? isDeleted = default, List<Guid> sectionIds = default, List<WorkItemStates> states = default, List<WorkItemPriorityModel> priorities = default, List<WorkItemSourceTypeModel> sourceTypes = default, List<WorkItemTypeModel> types = default, Int32RangeSelectorModel duration = default, bool? isAutomated = default, List<string> tags = default, List<string> excludeTags = default, List<Guid> autoTestIds = default, List<string> layers = default, List<LayerSource> layerSources = default, string externalId = default)
         {
             this.NameOrId = nameOrId;
             this.IncludeIds = includeIds;
@@ -75,6 +78,9 @@ namespace TestIT.AdaptersApi.Model
             this.Tags = tags;
             this.ExcludeTags = excludeTags;
             this.AutoTestIds = autoTestIds;
+            this.Layers = layers;
+            this.LayerSources = layerSources;
+            this.ExternalId = externalId;
         }
 
         /// <summary>
@@ -211,6 +217,27 @@ namespace TestIT.AdaptersApi.Model
         public List<Guid> AutoTestIds { get; set; }
 
         /// <summary>
+        /// Specifies auto test case layers to search for
+        /// </summary>
+        /// <value>Specifies auto test case layers to search for</value>
+        [DataMember(Name = "layers", EmitDefaultValue = true)]
+        public List<string> Layers { get; set; }
+
+        /// <summary>
+        /// Specifies list of auto test case layer sources to search for
+        /// </summary>
+        /// <value>Specifies list of auto test case layer sources to search for</value>
+        [DataMember(Name = "layerSources", EmitDefaultValue = true)]
+        public List<LayerSource> LayerSources { get; set; }
+
+        /// <summary>
+        /// External identifier of the work item
+        /// </summary>
+        /// <value>External identifier of the work item</value>
+        [DataMember(Name = "externalId", EmitDefaultValue = true)]
+        public string ExternalId { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -237,6 +264,9 @@ namespace TestIT.AdaptersApi.Model
             sb.Append("  Tags: ").Append(Tags).Append("\n");
             sb.Append("  ExcludeTags: ").Append(ExcludeTags).Append("\n");
             sb.Append("  AutoTestIds: ").Append(AutoTestIds).Append("\n");
+            sb.Append("  Layers: ").Append(Layers).Append("\n");
+            sb.Append("  LayerSources: ").Append(LayerSources).Append("\n");
+            sb.Append("  ExternalId: ").Append(ExternalId).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

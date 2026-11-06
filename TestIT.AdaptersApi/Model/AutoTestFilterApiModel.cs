@@ -46,7 +46,9 @@ namespace TestIT.AdaptersApi.Model
         /// <param name="externalKey">Specifies an autotest external key to search for.</param>
         /// <param name="tags">Specifies an autotest tags to search for.</param>
         /// <param name="excludeTags">Specifies an autotest tags to exclude.</param>
-        public AutoTestFilterApiModel(List<Guid> projectIds = default, List<string> externalIds = default, List<long> globalIds = default, string name = default, bool? isFlaky = default, bool? isDeleted = default, string varNamespace = default, string className = default, string externalKey = default, List<string> tags = default, List<string> excludeTags = default)
+        /// <param name="layers">Specifies auto test layers to search for.</param>
+        /// <param name="layerSources">Specifies list of auto test layer sources to search for.</param>
+        public AutoTestFilterApiModel(List<Guid> projectIds = default, List<string> externalIds = default, List<long> globalIds = default, string name = default, bool? isFlaky = default, bool? isDeleted = default, string varNamespace = default, string className = default, string externalKey = default, List<string> tags = default, List<string> excludeTags = default, List<string> layers = default, List<LayerSource> layerSources = default)
         {
             this.ProjectIds = projectIds;
             this.ExternalIds = externalIds;
@@ -59,6 +61,8 @@ namespace TestIT.AdaptersApi.Model
             this.ExternalKey = externalKey;
             this.Tags = tags;
             this.ExcludeTags = excludeTags;
+            this.Layers = layers;
+            this.LayerSources = layerSources;
         }
 
         /// <summary>
@@ -139,6 +143,20 @@ namespace TestIT.AdaptersApi.Model
         public List<string> ExcludeTags { get; set; }
 
         /// <summary>
+        /// Specifies auto test layers to search for
+        /// </summary>
+        /// <value>Specifies auto test layers to search for</value>
+        [DataMember(Name = "layers", EmitDefaultValue = true)]
+        public List<string> Layers { get; set; }
+
+        /// <summary>
+        /// Specifies list of auto test layer sources to search for
+        /// </summary>
+        /// <value>Specifies list of auto test layer sources to search for</value>
+        [DataMember(Name = "layerSources", EmitDefaultValue = true)]
+        public List<LayerSource> LayerSources { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -157,6 +175,8 @@ namespace TestIT.AdaptersApi.Model
             sb.Append("  ExternalKey: ").Append(ExternalKey).Append("\n");
             sb.Append("  Tags: ").Append(Tags).Append("\n");
             sb.Append("  ExcludeTags: ").Append(ExcludeTags).Append("\n");
+            sb.Append("  Layers: ").Append(Layers).Append("\n");
+            sb.Append("  LayerSources: ").Append(LayerSources).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

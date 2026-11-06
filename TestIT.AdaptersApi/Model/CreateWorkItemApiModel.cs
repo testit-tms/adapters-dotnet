@@ -76,10 +76,11 @@ namespace TestIT.AdaptersApi.Model
         /// <param name="postconditionSteps">Set of postcondition steps that are executed after completing the main steps.</param>
         /// <param name="iterations">Set of iterations associated with the work item.</param>
         /// <param name="autoTests">Set of automated tests linked to the work item.</param>
+        /// <param name="autoTestCases">Set of automated test cases linked to the work item.</param>
         /// <param name="attachments">Set of files attached to the work item.</param>
         /// <param name="links">Set of links related to the work item.</param>
         /// <param name="parameters">Set of parameter keys associated with the work item.</param>
-        public CreateWorkItemApiModel(Guid projectId = default, Guid? sectionId = default, string name = default, string description = default, WorkItemEntityTypeApiModel entityTypeName = default, long duration = default, WorkItemStateApiModel state = default, WorkItemPriorityApiModel priority = default, Dictionary<string, Object> attributes = default, List<TagModel> tags = default, List<CreateStepApiModel> preconditionSteps = default, List<CreateStepApiModel> steps = default, List<CreateStepApiModel> postconditionSteps = default, List<AssignIterationApiModel> iterations = default, List<AutoTestIdModel> autoTests = default, List<AssignAttachmentApiModel> attachments = default, List<CreateLinkApiModel> links = default, List<WorkItemParameterKeyApiModel> parameters = default)
+        public CreateWorkItemApiModel(Guid projectId = default, Guid? sectionId = default, string name = default, string description = default, WorkItemEntityTypeApiModel entityTypeName = default, long duration = default, WorkItemStateApiModel state = default, WorkItemPriorityApiModel priority = default, Dictionary<string, Object> attributes = default, List<TagModel> tags = default, List<CreateStepApiModel> preconditionSteps = default, List<CreateStepApiModel> steps = default, List<CreateStepApiModel> postconditionSteps = default, List<AssignIterationApiModel> iterations = default, List<AutoTestIdModel> autoTests = default, List<AssignAutoTestCaseIdApiModel> autoTestCases = default, List<AssignAttachmentApiModel> attachments = default, List<CreateLinkApiModel> links = default, List<WorkItemParameterKeyApiModel> parameters = default)
         {
             this.ProjectId = projectId;
             // to ensure "name" is required (not null)
@@ -101,6 +102,7 @@ namespace TestIT.AdaptersApi.Model
             this.PostconditionSteps = postconditionSteps;
             this.Iterations = iterations;
             this.AutoTests = autoTests;
+            this.AutoTestCases = autoTestCases;
             this.Attachments = attachments;
             this.Links = links;
             this.Parameters = parameters;
@@ -191,6 +193,13 @@ namespace TestIT.AdaptersApi.Model
         public List<AutoTestIdModel> AutoTests { get; set; }
 
         /// <summary>
+        /// Set of automated test cases linked to the work item
+        /// </summary>
+        /// <value>Set of automated test cases linked to the work item</value>
+        [DataMember(Name = "autoTestCases", EmitDefaultValue = true)]
+        public List<AssignAutoTestCaseIdApiModel> AutoTestCases { get; set; }
+
+        /// <summary>
         /// Set of files attached to the work item
         /// </summary>
         /// <value>Set of files attached to the work item</value>
@@ -234,6 +243,7 @@ namespace TestIT.AdaptersApi.Model
             sb.Append("  PostconditionSteps: ").Append(PostconditionSteps).Append("\n");
             sb.Append("  Iterations: ").Append(Iterations).Append("\n");
             sb.Append("  AutoTests: ").Append(AutoTests).Append("\n");
+            sb.Append("  AutoTestCases: ").Append(AutoTestCases).Append("\n");
             sb.Append("  Attachments: ").Append(Attachments).Append("\n");
             sb.Append("  Links: ").Append(Links).Append("\n");
             sb.Append("  Parameters: ").Append(Parameters).Append("\n");

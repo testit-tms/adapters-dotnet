@@ -48,14 +48,18 @@ namespace TestIT.AdaptersApi.Model
         /// Initializes a new instance of the <see cref="CustomAttributeApiResult" /> class.
         /// </summary>
         /// <param name="id">Unique ID of the attribute (required).</param>
-        /// <param name="options">Collection of the attribute options      Available for attributes of type &#x60;options&#x60; and &#x60;multiple options&#x60; only (required).</param>
+        /// <param name="code">Optional code identifier for the attribute.</param>
+        /// <param name="options">Collection of the attribute options   Available for attributes of type &#x60;options&#x60; and &#x60;multiple options&#x60; only (required).</param>
         /// <param name="type">Type of the attribute (required).</param>
         /// <param name="isDeleted">Indicates if the attribute is deleted (required).</param>
         /// <param name="name">Name of the attribute (required).</param>
         /// <param name="isEnabled">Indicates if the attribute is enabled (required).</param>
         /// <param name="isRequired">Indicates if the attribute value is mandatory to specify (required).</param>
         /// <param name="isGlobal">Indicates if the attribute is available across all projects (required).</param>
-        public CustomAttributeApiResult(Guid id = default, List<CustomAttributeOptionApiResult> options = default, CustomAttributeType type = default, bool isDeleted = default, string name = default, bool isEnabled = default, bool isRequired = default, bool isGlobal = default)
+        /// <param name="isReadOnly">Indicates if the attribute is read-only (required).</param>
+        /// <param name="isSystem">Indicates if the attribute is system (required).</param>
+        /// <param name="targets">Collection of the attribute targets   Defines where the attribute can be used (e.g., TestCases, AutoTestCases, TestPlans) (required).</param>
+        public CustomAttributeApiResult(Guid id = default, string code = default, List<CustomAttributeOptionApiResult> options = default, CustomAttributeType type = default, bool isDeleted = default, string name = default, bool isEnabled = default, bool isRequired = default, bool isGlobal = default, bool isReadOnly = default, bool isSystem = default, List<string> targets = default)
         {
             this.Id = id;
             // to ensure "options" is required (not null)
@@ -75,6 +79,15 @@ namespace TestIT.AdaptersApi.Model
             this.IsEnabled = isEnabled;
             this.IsRequired = isRequired;
             this.IsGlobal = isGlobal;
+            this.IsReadOnly = isReadOnly;
+            this.IsSystem = isSystem;
+            // to ensure "targets" is required (not null)
+            if (targets == null)
+            {
+                throw new ArgumentNullException("targets is a required property for CustomAttributeApiResult and cannot be null");
+            }
+            this.Targets = targets;
+            this.Code = code;
         }
 
         /// <summary>
@@ -85,9 +98,16 @@ namespace TestIT.AdaptersApi.Model
         public Guid Id { get; set; }
 
         /// <summary>
-        /// Collection of the attribute options      Available for attributes of type &#x60;options&#x60; and &#x60;multiple options&#x60; only
+        /// Optional code identifier for the attribute
         /// </summary>
-        /// <value>Collection of the attribute options      Available for attributes of type &#x60;options&#x60; and &#x60;multiple options&#x60; only</value>
+        /// <value>Optional code identifier for the attribute</value>
+        [DataMember(Name = "code", EmitDefaultValue = true)]
+        public string Code { get; set; }
+
+        /// <summary>
+        /// Collection of the attribute options   Available for attributes of type &#x60;options&#x60; and &#x60;multiple options&#x60; only
+        /// </summary>
+        /// <value>Collection of the attribute options   Available for attributes of type &#x60;options&#x60; and &#x60;multiple options&#x60; only</value>
         [DataMember(Name = "options", IsRequired = true, EmitDefaultValue = true)]
         public List<CustomAttributeOptionApiResult> Options { get; set; }
 
@@ -127,6 +147,27 @@ namespace TestIT.AdaptersApi.Model
         public bool IsGlobal { get; set; }
 
         /// <summary>
+        /// Indicates if the attribute is read-only
+        /// </summary>
+        /// <value>Indicates if the attribute is read-only</value>
+        [DataMember(Name = "isReadOnly", IsRequired = true, EmitDefaultValue = true)]
+        public bool IsReadOnly { get; set; }
+
+        /// <summary>
+        /// Indicates if the attribute is system
+        /// </summary>
+        /// <value>Indicates if the attribute is system</value>
+        [DataMember(Name = "isSystem", IsRequired = true, EmitDefaultValue = true)]
+        public bool IsSystem { get; set; }
+
+        /// <summary>
+        /// Collection of the attribute targets   Defines where the attribute can be used (e.g., TestCases, AutoTestCases, TestPlans)
+        /// </summary>
+        /// <value>Collection of the attribute targets   Defines where the attribute can be used (e.g., TestCases, AutoTestCases, TestPlans)</value>
+        [DataMember(Name = "targets", IsRequired = true, EmitDefaultValue = true)]
+        public List<string> Targets { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -135,6 +176,7 @@ namespace TestIT.AdaptersApi.Model
             StringBuilder sb = new StringBuilder();
             sb.Append("class CustomAttributeApiResult {\n");
             sb.Append("  Id: ").Append(Id).Append("\n");
+            sb.Append("  Code: ").Append(Code).Append("\n");
             sb.Append("  Options: ").Append(Options).Append("\n");
             sb.Append("  Type: ").Append(Type).Append("\n");
             sb.Append("  IsDeleted: ").Append(IsDeleted).Append("\n");
@@ -142,6 +184,9 @@ namespace TestIT.AdaptersApi.Model
             sb.Append("  IsEnabled: ").Append(IsEnabled).Append("\n");
             sb.Append("  IsRequired: ").Append(IsRequired).Append("\n");
             sb.Append("  IsGlobal: ").Append(IsGlobal).Append("\n");
+            sb.Append("  IsReadOnly: ").Append(IsReadOnly).Append("\n");
+            sb.Append("  IsSystem: ").Append(IsSystem).Append("\n");
+            sb.Append("  Targets: ").Append(Targets).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

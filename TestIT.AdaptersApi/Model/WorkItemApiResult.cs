@@ -81,11 +81,12 @@ namespace TestIT.AdaptersApi.Model
         /// <param name="postconditionSteps">Set of postcondition steps that are executed after completing the main steps (required).</param>
         /// <param name="iterations">Associated iterations linked to the work item (required).</param>
         /// <param name="autoTests">Automated tests associated with the work item (required).</param>
+        /// <param name="autoTestCases">Set of automated test cases linked to the work item (required).</param>
         /// <param name="attachments">Files attached to the work item (required).</param>
         /// <param name="links">Set of links related to the work item (required).</param>
         /// <param name="parameters">Set of parameters related to the work item (required).</param>
         /// <param name="isDeleted">Indicates whether the work item is marked as deleted (required).</param>
-        public WorkItemApiResult(Guid id = default, long globalId = default, Guid projectId = default, Guid sectionId = default, string name = default, string description = default, WorkItemEntityTypeApiModel entityTypeName = default, int duration = default, WorkItemStateApiModel state = default, WorkItemPriorityApiModel priority = default, bool isAutomated = default, Dictionary<string, Object> attributes = default, List<TagModel> tags = default, List<StepModel> sectionPreconditionSteps = default, List<StepModel> sectionPostconditionSteps = default, List<StepModel> preconditionSteps = default, List<StepModel> steps = default, List<StepModel> postconditionSteps = default, List<IterationModel> iterations = default, List<AutoTestModel> autoTests = default, List<AttachmentModel> attachments = default, List<LinkModel> links = default, List<WorkItemParameterKeyApiResult> parameters = default, bool isDeleted = default)
+        public WorkItemApiResult(Guid id = default, long globalId = default, Guid projectId = default, Guid sectionId = default, string name = default, string description = default, WorkItemEntityTypeApiModel entityTypeName = default, int duration = default, WorkItemStateApiModel state = default, WorkItemPriorityApiModel priority = default, bool isAutomated = default, Dictionary<string, Object> attributes = default, List<TagModel> tags = default, List<StepModel> sectionPreconditionSteps = default, List<StepModel> sectionPostconditionSteps = default, List<StepModel> preconditionSteps = default, List<StepModel> steps = default, List<StepModel> postconditionSteps = default, List<IterationModel> iterations = default, List<AutoTestModel> autoTests = default, List<AutoTestCaseApiModel> autoTestCases = default, List<AttachmentModel> attachments = default, List<LinkModel> links = default, List<WorkItemParameterKeyApiResult> parameters = default, bool isDeleted = default)
         {
             this.Id = id;
             this.GlobalId = globalId;
@@ -156,6 +157,12 @@ namespace TestIT.AdaptersApi.Model
                 throw new ArgumentNullException("autoTests is a required property for WorkItemApiResult and cannot be null");
             }
             this.AutoTests = autoTests;
+            // to ensure "autoTestCases" is required (not null)
+            if (autoTestCases == null)
+            {
+                throw new ArgumentNullException("autoTestCases is a required property for WorkItemApiResult and cannot be null");
+            }
+            this.AutoTestCases = autoTestCases;
             // to ensure "attachments" is required (not null)
             if (attachments == null)
             {
@@ -297,6 +304,13 @@ namespace TestIT.AdaptersApi.Model
         public List<AutoTestModel> AutoTests { get; set; }
 
         /// <summary>
+        /// Set of automated test cases linked to the work item
+        /// </summary>
+        /// <value>Set of automated test cases linked to the work item</value>
+        [DataMember(Name = "autoTestCases", IsRequired = true, EmitDefaultValue = true)]
+        public List<AutoTestCaseApiModel> AutoTestCases { get; set; }
+
+        /// <summary>
         /// Files attached to the work item
         /// </summary>
         /// <value>Files attached to the work item</value>
@@ -352,6 +366,7 @@ namespace TestIT.AdaptersApi.Model
             sb.Append("  PostconditionSteps: ").Append(PostconditionSteps).Append("\n");
             sb.Append("  Iterations: ").Append(Iterations).Append("\n");
             sb.Append("  AutoTests: ").Append(AutoTests).Append("\n");
+            sb.Append("  AutoTestCases: ").Append(AutoTestCases).Append("\n");
             sb.Append("  Attachments: ").Append(Attachments).Append("\n");
             sb.Append("  Links: ").Append(Links).Append("\n");
             sb.Append("  Parameters: ").Append(Parameters).Append("\n");
