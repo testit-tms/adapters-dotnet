@@ -21,7 +21,7 @@ The repository contains adapters for .NET test frameworks that integrate automat
 
 1. For current versions, see the releases tab. 
 2. Starting with 5.2, we have added a TMS postscript, which means that the utility is compatible with a specific enterprise version. 
-3. If you are in doubt about which version to use, check with the support staff. support@yoonion.ru
+3. If you are in doubt about which version to use, check with the support staff: support@testit.software or https://help.testit.software/help
 
 
 ## What's new in 2.0.0?
@@ -113,6 +113,11 @@ This repository contains several components:
    - [SpecFlow](https://github.com/testit-tms/adapters-dotnet/tree/main/Tms.Adapter.SpecFlowPlugin) - Plugin for SpecFlow framework
 
 3. **TmsRunner** - A standalone test runner for MSTest/NUnit tests that can send results directly to Test IT
+
+## Internal documentation
+
+- [importRealtime](./docs/importRealtime.md) — buffered vs real-time result publish
+- [Autotest layer](./docs/autotest-layer.md) — test pyramid layer from `[Layer]` / `@Layer=`
 
 
 <a href='https://coveralls.io/github/testit-tms/adapters-dotnet?branch=main'>

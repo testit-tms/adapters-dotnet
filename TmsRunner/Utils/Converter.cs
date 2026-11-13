@@ -1,4 +1,5 @@
 using TestIT.AdaptersApi.Model;
+using Tms.Adapter.Core.Utils;
 using TmsRunner.Entities.AutoTest;
 using AutoTest = TmsRunner.Entities.AutoTest.AutoTest;
 using AutoTestStep = TmsRunner.Entities.AutoTest.AutoTestStep;
@@ -20,7 +21,7 @@ public static class Converter
                     : LinkType.Related)
         ).ToList();
 
-        return new AutoTestCreateApiModel(externalId: autotest.ExternalId ?? string.Empty, name: autotest.Name ?? string.Empty)
+        var model = new AutoTestCreateApiModel(externalId: autotest.ExternalId ?? string.Empty, name: autotest.Name ?? string.Empty)
         {
             ExternalId = autotest.ExternalId ?? string.Empty,
             Links = links!,
@@ -35,6 +36,8 @@ public static class Converter
             Labels = ConvertLabelsToModel(autotest.Labels) ?? [],
             Tags = autotest.Tags ?? []
         };
+        LayerMapper.ApplyToCreate(model, autotest.Layer);
+        return model;
     }
 
     public static AutoTestUpdateApiModel ConvertAutoTestDtoToPutModel(AutoTest autotest, string? projectId)
@@ -50,7 +53,7 @@ public static class Converter
         ).ToList();
 
 
-        return new AutoTestUpdateApiModel(externalId: autotest.ExternalId ?? string.Empty, name: autotest.Name ?? string.Empty)
+        var model = new AutoTestUpdateApiModel(externalId: autotest.ExternalId ?? string.Empty, name: autotest.Name ?? string.Empty)
         {
             Links = links ?? [],
             ProjectId = new Guid(projectId ?? string.Empty),
@@ -66,6 +69,8 @@ public static class Converter
             Tags = autotest.Tags ?? [],
             IsFlaky = autotest.IsFlaky
         };
+        LayerMapper.ApplyToUpdate(model, autotest.Layer);
+        return model;
     }
     
     // None = 0,

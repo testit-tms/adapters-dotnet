@@ -106,13 +106,15 @@ Use attributes to specify information about autotest.
 
 Description of attributes:
 
-* `WorkItemIds` -  a method that links autotests with manual tests. Receives the array of manual tests' IDs
+* `WorkItemId` - a method that links an autotest with a manual test. Receives a single globalId
+* `WorkItemIds` - deprecated, use `WorkItemId` instead
 * `DisplayName` - internal autotest name (used in Test IT)
 * `ExternalId` - unique internal autotest ID (used in Test IT)
 * `Title` - autotest name specified in the autotest card. If not specified, the name from the displayName method is used
 * `Description` - autotest description specified in the autotest card
 * `Labels` - labels listed in the autotest card
 * `Tags` - tags listed in the autotest card
+* `Layer` - test pyramid layer on the autotest card (source **Run**). Gherkin tag: `@Layer=API`
 * `Links` - links listed in the autotest card
 
 If you want to insert a space in the tags, use the "\\_" character combination.
@@ -135,9 +137,10 @@ Feature: Simple
   @Title=With_all_annotations_success_title
   @Description=With_all_annotations_success
   @Tags=Tag1,Tag2
+  @Layer=API
   @Links={"url":"https://test01.example","title":"Example01","description":"Example01_description","type":"Issue"}
   @Links={"url":"https://test02.example","title":"Example02","description":"Example02_description","type":"Issue"}
-  @WorkItemIds=123,321
+  @WorkItemId=123
   Scenario: With all annotations
     Then return true
 ```

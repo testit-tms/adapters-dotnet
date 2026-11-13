@@ -42,7 +42,7 @@ public class Writer : IWriter
                 }
                 else
                 {
-                    await _client.UpdateAutotest(result.ExternalId!, result.Links, result.ExternalKey!);
+                    await _client.UpdateAutotest(result.ExternalId!, result.Links, result.ExternalKey!, result.Layer);
                 }
             }
             else

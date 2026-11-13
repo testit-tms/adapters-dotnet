@@ -44,6 +44,7 @@ dotnet package add TestIt.Adapter
 | Mode of automatic creation test cases (**It's optional**). Default value - false. The adapter supports following modes:<br/>true - in this mode, the adapter will create a test case linked to the created autotest (not to the updated autotest)<br/>false - in this mode, the adapter will not create a test case                                                                    | automaticCreationTestCases        | TMS_AUTOMATIC_CREATION_TEST_CASES          | tmsAutomaticCreationTestCases        |
 | Mode of automatic updation links to test cases (**It's optional**). Default value - false. The adapter supports following modes:<br/>true - in this mode, the adapter will update links to test cases<br/>false - in this mode, the adapter will not update link to test cases                                                                                                         | automaticUpdationLinksToTestCases | TMS_AUTOMATIC_UPDATION_LINKS_TO_TEST_CASES | tmsAutomaticUpdationLinksToTestCases |
 | List of labels for filtering tests (**Optional**). It will only work with adapter mode 2.                                                                                                                                                                                                                                                                                              | -                                 | -                                          | tmsLabelsOfTestsToRun                |
+| List of tags for filtering tests (**Optional**). It will only work with adapter mode 2.                                                                                                                                                                                                                                                                                                | -                                 | -                                          | tmsTagsOfTestsToRun                  |
 | Number of times to rerun failed tests (**It's optional**). Default value - 0.                                                                                                                                                                                                                                                                                                          | rerunTestsCount                   | TMS_ADAPTER_AUTOTESTS_RERUN_COUNT          | tmsRerunTestsCount                   |
 | Mode of import type selection when launching autotests (**It's optional**). Default value - true. true — create/update each autotest in real time; false — buffer results and publish to the test run at the end (first result is still sent as InProgress via Sync Storage)                                                                                                          | importRealtime                    | TMS_IMPORT_REALTIME                        | tmsImportRealtime                    |
 | Sync Storage local port (**It's optional**, 49152 by default)                                                                                                                                                                                                                                                                                                                        | syncStoragePort                   | TMS_SYNC_STORAGE_PORT                      | tmsSyncStoragePort                   |
@@ -88,7 +89,7 @@ Create **Tms.config.json** file in the project directory:
 
 ```
 TmsRunner --runner "/usr/local/share/dotnet/sdk/6.0.302/vstest.console.dll" --testassembly "/tests/MsTest.dll" --tmsUrl=http://localhost:8080 --tmsPrivateToken=Token --tmsProjectId=f5da5bab-380a-4382-b36f-600083fdd795 --tmsConfigurationId=3a14fa45-b54e-4859-9998-cc502d4cc8c6
--tmsAdapterMode=0 --tmsTestRunId=a17269da-bc65-4671-90dd-d3e3da92af80 --tmsTestRunName=Regress --tmsAutomaticCreationTestCases=true --tmsAutomaticUpdationLinksToTestCases=true --tmsCertValidation=true --tmsLabelsOfTestsToRun smoke,regress --tmsIgnoreParameters=true --debug --tmsRerunTestsCount=2
+-tmsAdapterMode=0 --tmsTestRunId=a17269da-bc65-4671-90dd-d3e3da92af80 --tmsTestRunName=Regress --tmsAutomaticCreationTestCases=true --tmsAutomaticUpdationLinksToTestCases=true --tmsCertValidation=true --tmsLabelsOfTestsToRun smoke,regress --tmsTagsOfTestsToRun smoke,prod --tmsIgnoreParameters=true --debug --tmsRerunTestsCount=2
 ```
 
 * `runner` - path to vstest.console.dll or vstest.console.exe
@@ -119,13 +120,15 @@ Use attributes to specify information about autotest.
 
 Description of attributes:
 
-* `WorkItemIds` - a method that links autotests with manual tests. Receives the array of manual tests' IDs
+* `WorkItemId` - a method that links an autotest with a manual test. Receives a single globalId
+* `WorkItemIds` - deprecated, use `WorkItemId` instead
 * `DisplayName` -  internal autotest name (used in Test IT)
 * `ExternalId` - unique internal autotest ID (used in Test IT)
 * `Title` - autotest name specified in the autotest card. If not specified, the name from the displayName method is used
 * `Description` - autotest description specified in the autotest card
 * `Labels` - labels listed in the autotest card
 * `Tags` - tags listed in the autotest card
+* `Layer` - test pyramid layer on the autotest card (source **Run**). Use `TestLayers` constants or any custom string
 * `Links` - links listed in the autotest card
 * `Step` - the designation of the step
 
@@ -169,7 +172,7 @@ public class SampleTests {
     }
 
     [TestMethod]
-    [WorkItemIds("1523344")]
+    [WorkItemId("1523344")]
     [ExternalId("all_annotations_test")]
     [Title("All Annotations Test Title")]
     [DisplayName("All Annotations Test Display Name")]

@@ -1,5 +1,6 @@
 ﻿namespace Tms.Adapter.Attributes;
 
+[Obsolete("Use WorkItemId with a single globalId instead.")]
 [AttributeUsage(AttributeTargets.Method)]
 public class WorkItemIdsAttribute : BaseAttribute<List<string>>
 {

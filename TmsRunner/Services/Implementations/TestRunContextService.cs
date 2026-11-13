@@ -5,7 +5,7 @@ namespace TmsRunner.Services.Implementations;
 internal sealed class TestRunContextService : ITestRunContextService
 {
     private TestRunApiResult? _currentTestRun;
-    private IReadOnlyList<TestResultResponse> _testResults = [];
+    private IReadOnlyList<TestResultShortResponse> _testResults = [];
 
     public void SetCurrentTestRun(TestRunApiResult testRun)
     {
@@ -14,10 +14,10 @@ internal sealed class TestRunContextService : ITestRunContextService
 
     public TestRunApiResult? GetCurrentTestRun() => _currentTestRun;
 
-    public void SetTestResults(IReadOnlyList<TestResultResponse> testResults)
+    public void SetTestResults(IReadOnlyList<TestResultShortResponse> testResults)
     {
         _testResults = testResults;
     }
 
-    public IReadOnlyList<TestResultResponse> GetTestResults() => _testResults;
+    public IReadOnlyList<TestResultShortResponse> GetTestResults() => _testResults;
 }

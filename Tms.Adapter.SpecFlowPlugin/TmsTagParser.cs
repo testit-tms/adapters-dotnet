@@ -22,8 +22,10 @@ public static class TmsTagParser
     private const string Description = "DESCRIPTION";
     private const string Labels = "LABELS";
     private const string Tags = "TAGS";
+    private const string Layer = "LAYER";
     private const string Links = "LINKS";
     private const string WorkItemIds = "WORKITEMIDS";
+    private const string WorkItemId = "WORKITEMID";
 
     public static TestContainer AddTags(TestContainer testContainer, FeatureInfo featureInfo,
         ScenarioInfo scenarioInfo, Dictionary<string, string> parameters)
@@ -74,6 +76,9 @@ public static class TmsTagParser
                         .Split(TagValueDelimiter)
                         .ToList();
                     break;
+                case Layer:
+                    testContainer.Layer = Replacer.ReplaceParameters(parseSpaceInTag(tagValue), parameters);
+                    break;
                 case Links:
                     if (IsJson(tagValue))
                     {
@@ -98,10 +103,17 @@ public static class TmsTagParser
                     }
 
                     break;
+                case WorkItemId:
+                    testContainer.WorkItemIds = [Replacer.ReplaceParameters(parseSpaceInTag(tagValue), parameters)];
+                    break;
                 case WorkItemIds:
-                    testContainer.WorkItemIds = parseSpaceInTag(tagValue)
-                        .Split(TagValueDelimiter)
-                        .ToList();
+                    Console.WriteLine("WorkItemIds is deprecated. Use WorkItemId with a single globalId instead.");
+                    if (testContainer.WorkItemIds.Count == 0)
+                    {
+                        testContainer.WorkItemIds = parseSpaceInTag(tagValue)
+                            .Split(TagValueDelimiter)
+                            .ToList();
+                    }
                     break;
             }
         }

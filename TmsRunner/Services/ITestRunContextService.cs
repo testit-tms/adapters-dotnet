@@ -6,6 +6,6 @@ public interface ITestRunContextService
 {
     void SetCurrentTestRun(TestRunApiResult testRun);
     TestRunApiResult? GetCurrentTestRun();
-    void SetTestResults(IReadOnlyList<TestResultResponse> testResults);
-    IReadOnlyList<TestResultResponse> GetTestResults();
+    void SetTestResults(IReadOnlyList<TestResultShortResponse> testResults);
+    IReadOnlyList<TestResultShortResponse> GetTestResults();
 }

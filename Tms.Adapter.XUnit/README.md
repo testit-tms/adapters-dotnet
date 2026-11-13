@@ -117,13 +117,15 @@ Use attributes to specify information about autotest.
 
 Description of attributes:
 
-* `WorkItemIds` -  a method that links autotests with manual tests. Receives the array of manual tests' IDs
+* `WorkItemId` - a method that links an autotest with a manual test. Receives a single globalId
+* `WorkItemIds` - deprecated, use `WorkItemId` instead
 * `DisplayName` - internal autotest name (used in Test IT)
 * `ExternalId` - unique internal autotest ID (used in Test IT)
 * `Title` - autotest name specified in the autotest card. If not specified, the name from the displayName method is used
 * `Description` - autotest description specified in the autotest card
 * `Labels` - labels listed in the autotest card
 * `Tags` - tags listed in the autotest card
+* `Layer` - test pyramid layer on the autotest card (source **Run**). Use `TestLayers` constants or any custom string
 * `Links` - links listed in the autotest card
 * `Step` - the designation of the step
 
@@ -171,7 +173,7 @@ public class SampleTests : IDisposable {
     }
 
     [TmsFact]
-    [WorkItemIds("1523344", "54321")]
+    [WorkItemId("1523344")]
     [ExternalId("all_annotations_test")]
     [Title("All Annotations Test Title")]
     [DisplayName("All Annotations Test Display Name")]
