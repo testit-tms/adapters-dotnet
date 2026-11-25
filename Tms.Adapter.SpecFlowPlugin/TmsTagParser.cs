@@ -85,8 +85,7 @@ public static class TmsTagParser
                         var link = GetLink(parseSpaceInTag(tagValue));
                         if (link == null)
                             continue;
-                        testContainer.Links.Add(new Link(link.Url, link.Title, link.Description,
-                            Enum.Parse<LinkType>(link.Type)));
+                        testContainer.Links.Add(ToLink(link));
                     }
                     else if (IsJsonArray(tagValue))
                     {
@@ -95,10 +94,7 @@ public static class TmsTagParser
                         links?.ForEach(link =>
                         {
                             if (link != null)
-                            {
-                                testContainer.Links.Add(new Link(link.Url, link.Title, link.Description,
-                                    Enum.Parse<LinkType>(link.Type)));
-                            }
+                                testContainer.Links.Add(ToLink(link));
                         });
                     }
 
@@ -172,6 +168,14 @@ public static class TmsTagParser
     {
         return JsonConvert.DeserializeObject<List<LinkItem?>>(source);
     }
+
+    private static Link ToLink(LinkItem item) =>
+        new(
+            item.Url,
+            string.IsNullOrEmpty(item.Title) ? null : item.Title,
+            string.IsNullOrEmpty(item.Description) ? null : item.Description,
+            Enum.TryParse<LinkType>(item.Type, true, out var type) ? type : LinkType.Related);
+
 
     private static string parseSpaceInTag(string tag)
     {

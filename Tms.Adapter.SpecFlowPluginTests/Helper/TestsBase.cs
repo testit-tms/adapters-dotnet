@@ -63,5 +63,12 @@ namespace Tms.Adapter.SpecFlowPluginTests.Helper
             Environment.SetEnvironmentVariable("TMS_CONFIGURATION_ID", Guid.NewGuid().ToString());
             Environment.SetEnvironmentVariable("TMS_TEST_RUN_ID", Guid.NewGuid().ToString());
         }
+
+        [TestCleanup]
+        public virtual void TestCleanup()
+        {
+            AdapterManager.ClearInstance();
+            Environment.SetEnvironmentVariable("TMS_DISABLE_NETWORK", null);
+        }
     }
 }

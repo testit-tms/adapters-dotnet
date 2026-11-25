@@ -10,8 +10,9 @@ public class Link
     public Link(string url, string? title = null, string? description = null, LinkType? type = null)
     {
         Url = url;
-        Title = title;
-        Description = description;
+        // Optional fields: empty → null so POST/PUT store the same value in TMS.
+        Title = string.IsNullOrEmpty(title) ? null : title;
+        Description = string.IsNullOrEmpty(description) ? null : description;
         Type = type;
     }
 }

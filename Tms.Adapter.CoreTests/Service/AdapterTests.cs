@@ -1,4 +1,6 @@
-﻿namespace Tms.Adapter.CoreTests.Service;
+﻿using Tms.Adapter.Core.Service;
+
+namespace Tms.Adapter.CoreTests.Service;
 
 [TestClass]
 public class AdapterTests
@@ -6,6 +8,8 @@ public class AdapterTests
     [TestInitialize]
     public void InitializeTest()
     {
+        AdapterManager.ClearInstance();
+        Environment.SetEnvironmentVariable("TMS_DISABLE_NETWORK", "true");
         Environment.SetEnvironmentVariable("TMS_URL", "https://example.com");
         Environment.SetEnvironmentVariable("TMS_PRIVATE_TOKEN", "token");
         Environment.SetEnvironmentVariable("TMS_PROJECT_ID", Guid.NewGuid().ToString());
@@ -13,13 +17,18 @@ public class AdapterTests
         Environment.SetEnvironmentVariable("TMS_TEST_RUN_ID", Guid.NewGuid().ToString());
     }
 
+    [TestCleanup]
+    public void CleanupTest()
+    {
+        AdapterManager.ClearInstance();
+        Environment.SetEnvironmentVariable("TMS_DISABLE_NETWORK", null);
+    }
+
     [TestMethod]
     public void AddMessage()
     {
-        // Arrange
         const string message = "test";
 
-        // Act & Assert
         Core.Service.Adapter.AddMessage(message);
     }
 
@@ -30,11 +39,10 @@ public class AdapterTests
 
         try
         {
-            // Arrange
             File.Create(filename).Dispose();
 
-            // Act & Assert
-            Assert.ThrowsException<AggregateException>(() => Core.Service.Adapter.AddAttachments(filename));
+            // No step context → storage lookup fails; do not spin up SyncStorage in unit tests.
+            Assert.ThrowsException<ArgumentNullException>(() => Core.Service.Adapter.AddAttachments(filename));
         }
         finally
         {
@@ -45,10 +53,8 @@ public class AdapterTests
     [TestMethod]
     public void AddLinks()
     {
-        // Arrange
         const string url = "https://example.com";
 
-        // Act & Assert
         Core.Service.Adapter.AddLinks(url);
     }
 }
