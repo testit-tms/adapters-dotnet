@@ -93,11 +93,14 @@ public static class TestRunMetadata
         => (links ?? [])
             .Where(l => !string.IsNullOrWhiteSpace(l.Url))
             .Select(l => new CreateLinkApiModel(
-                title: l.Title,
+                title: NullIfEmpty(l.Title)!,
                 url: l.Url,
-                description: l.Description,
+                description: NullIfEmpty(l.Description)!,
                 type: ParseLinkType(l.Type)))
             .ToList();
+
+    private static string? NullIfEmpty(string? value) =>
+        string.IsNullOrEmpty(value) ? null : value;
 
     public static List<UpdateLinkApiModel> MergeLinks(
         IEnumerable<LinkApiResult>? existing,
@@ -106,9 +109,9 @@ public static class TestRunMetadata
         var result = (existing ?? [])
             .Select(link => new UpdateLinkApiModel(
                 id: link.Id,
-                title: link.Title,
+                title: NullIfEmpty(link.Title)!,
                 url: link.Url,
-                description: link.Description,
+                description: NullIfEmpty(link.Description)!,
                 type: link.Type))
             .ToList();
 
@@ -122,9 +125,9 @@ public static class TestRunMetadata
             }
 
             result.Add(new UpdateLinkApiModel(
-                title: link.Title,
+                title: NullIfEmpty(link.Title)!,
                 url: link.Url,
-                description: link.Description,
+                description: NullIfEmpty(link.Description)!,
                 type: ParseLinkType(link.Type)));
         }
 
