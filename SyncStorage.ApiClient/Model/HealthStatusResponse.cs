@@ -37,10 +37,12 @@ namespace SyncStorage.ApiClient.Model
         /// </summary>
         /// <param name="status">status.</param>
         /// <param name="lastUpdate">lastUpdate.</param>
-        public HealthStatusResponse(string status = default, DateTime lastUpdate = default)
+        /// <param name="testRunId">Primary test run id bound to this process (additive in sync-storage 0.4+).</param>
+        public HealthStatusResponse(string status = default, DateTime lastUpdate = default, string testRunId = default)
         {
             this.Status = status;
             this.LastUpdate = lastUpdate;
+            this.TestRunId = testRunId;
         }
 
         /// <summary>
@@ -62,6 +64,12 @@ namespace SyncStorage.ApiClient.Model
         public DateTime LastUpdate { get; set; }
 
         /// <summary>
+        /// Primary test run id for the running sync-storage process (0.4+).
+        /// </summary>
+        [DataMember(Name = "testRunId", EmitDefaultValue = false)]
+        public string TestRunId { get; set; }
+
+        /// <summary>
         /// Returns the string presentation of the object
         /// </summary>
         /// <returns>String presentation of the object</returns>
@@ -71,6 +79,7 @@ namespace SyncStorage.ApiClient.Model
             sb.Append("class HealthStatusResponse {\n");
             sb.Append("  Status: ").Append(Status).Append("\n");
             sb.Append("  LastUpdate: ").Append(LastUpdate).Append("\n");
+            sb.Append("  TestRunId: ").Append(TestRunId).Append("\n");
             sb.Append("}\n");
             return sb.ToString();
         }

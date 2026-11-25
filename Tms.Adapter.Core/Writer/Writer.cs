@@ -32,27 +32,36 @@ public class Writer : IWriter
 
         try
         {
-            var autotest = await _client.IsAutotestExist(externalId);
-
-            if (autotest)
+            try
             {
-                if (result.Status != Status.Failed)
+                var autotest = await _client.IsAutotestExist(externalId);
+
+                if (autotest)
                 {
-                    await _client.UpdateAutotest(result, resultContainer).ConfigureAwait(false);
+                    if (result.Status != Status.Failed)
+                    {
+                        await _client.UpdateAutotest(result, resultContainer).ConfigureAwait(false);
+                    }
+                    else
+                    {
+                        await _client.UpdateAutotest(result.ExternalId!, result.Links, result.ExternalKey!, result.Layer);
+                    }
                 }
                 else
                 {
-                    await _client.UpdateAutotest(result.ExternalId!, result.Links, result.ExternalKey!, result.Layer);
+                    await _client.CreateAutotest(result, resultContainer).ConfigureAwait(false);
+                }
+
+                if (result.WorkItemIds.Count > 0)
+                {
+                    await UpdateTestLinkToWorkItems(externalId, result.WorkItemIds).ConfigureAwait(false);
                 }
             }
-            else
+            catch (Exception e) when (IsAlreadyExistsOrConflict(e))
             {
-                await _client.CreateAutotest(result, resultContainer).ConfigureAwait(false);
-            }
-
-            if (result.WorkItemIds.Count > 0)
-            {
-                await UpdateTestLinkToWorkItems(externalId, result.WorkItemIds).ConfigureAwait(false);
+                // TMS 6.0 / concurrent update: do not block sendTestResults.
+                _logger.LogWarning(e, "Autotest metadata update failed with conflict for {ID}; still submitting result",
+                    externalId);
             }
 
             await _client.SubmitTestCaseResult(result, resultContainer).ConfigureAwait(false);
@@ -63,6 +72,27 @@ public class Writer : IWriter
         {
             _logger.LogError(e, "Can not write autotest with ID {ID}", externalId);
         }
+    }
+
+    private static bool IsAlreadyExistsOrConflict(Exception ex)
+    {
+        for (var current = ex; current != null; current = current.InnerException)
+        {
+            var message = current.Message ?? string.Empty;
+            if (message.Contains("AlreadyExists", StringComparison.OrdinalIgnoreCase)
+                || message.Contains("already exists", StringComparison.OrdinalIgnoreCase)
+                || message.Contains("HTTP 409", StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+
+            if (current.GetType().Name.Contains("AlreadyExists", StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private async Task UpdateTestLinkToWorkItems(string externalId, List<string> workItemIds)

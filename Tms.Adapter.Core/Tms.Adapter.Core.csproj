@@ -59,5 +59,9 @@
         <!-- Отключить предупреждения о делегатах LoggerMessage -->
         <NoWarn>$(NoWarn);CA1848</NoWarn>
     </PropertyGroup>
+
+    <ItemGroup>
+      <InternalsVisibleTo Include="Tms.Adapter.CoreTests" />
+    </ItemGroup>
     
 </Project>

@@ -64,6 +64,7 @@ You can see how we implement this [here.](https://github.com/testit-tms/adapters
 1. Create an empty test run using `testit-cli` or use an existing one, and save the `testRunId`.
 1.1 (alternative) You can use `curl + jq` to create empty test run, there is an example for github actions:
 
+
 ```bash
 mkdir -p "$(dirname "${{ env.TEMP_FILE }}")"
 BASE_URL="${{ env.TMS_URL }}"
