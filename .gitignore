@@ -38,3 +38,10 @@ msbuild.wrn
 SpecFlowTests/
 XUnitTests/
 .user/
+
+# Local CI runner artifacts
+.caches/
+service.log
+service2.log
+service-mode2.log
+/dotnet-examples/
