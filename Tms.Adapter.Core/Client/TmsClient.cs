@@ -104,8 +104,8 @@ public sealed class TmsClient : ITmsClient, IDisposable
         
         var putLinks = links.Select(l => new LinkUpdateApiModel(url: l.Url)
             {
-                Title = l.Title!,
-                Description = l.Description!,
+                Title = string.IsNullOrEmpty(l.Title) ? null! : l.Title,
+                Description = string.IsNullOrEmpty(l.Description) ? null! : l.Description,
                 Type = l.Type != null
                     ? Enum.Parse<LinkType>(l.Type.ToString())
                     : LinkType.Related

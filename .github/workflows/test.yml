@@ -124,7 +124,12 @@ jobs:
 
           sleep 1
 
-          curl -v http://127.0.0.1:49152/wait-completion?testRunId=${{ env.TMS_TEST_RUN_ID }} --max-time 100 || true
+          if curl -sf http://127.0.0.1:49152/health >/dev/null; then
+            curl -v "http://127.0.0.1:49152/wait-completion?testRunId=${{ env.TMS_TEST_RUN_ID }}" --max-time 100 || true
+          else
+            echo "sync-storage already stopped; checking Work X marker in service.log"
+            grep -q "Work X completed successfully" service.log || echo "WARNING: sync-storage stopped without Work X success marker"
+          fi
           
           cat service.log
 
@@ -158,7 +163,12 @@ jobs:
 
           sleep 1
 
-          curl -v http://127.0.0.1:49152/wait-completion?testRunId=${{ env.TMS_TEST_RUN_ID }} --max-time 100 || true
+          if curl -sf http://127.0.0.1:49152/health >/dev/null; then
+            curl -v "http://127.0.0.1:49152/wait-completion?testRunId=${{ env.TMS_TEST_RUN_ID }}" --max-time 100 || true
+          else
+            echo "sync-storage already stopped; checking Work X marker in service2.log"
+            grep -q "Work X completed successfully" service2.log || echo "WARNING: sync-storage stopped without Work X success marker"
+          fi
           
           cat service2.log || true
 
@@ -168,23 +178,45 @@ jobs:
 
 
 
+      - name: Create TestRun (Mode 2)
+        run: |
+          testit testrun create --token ${{ env.TMS_PRIVATE_TOKEN }} --output ${{ env.TEMP_FILE }}
+          echo "TMS_TEST_RUN_ID=$(<${{ env.TEMP_FILE }})" >> $GITHUB_ENV
+
       - name: Test Adapter Mode 2
         run: |
-
+          # Core XUnit/SpecFlow have no adapterMode=2; reuse would pollute the previous run (attachments x2).
+          # Fresh testRunId + restarted sync-storage keeps Validate Again on a clean run.
           export TMS_ADAPTER_MODE=2
 
-          # --verbosity diag --logger:"console;verbosity=detailed" 
+          pkill -TERM -f syncstorage-linux-amd64 || true
+          sleep 2
+          pkill -KILL -f syncstorage-linux-amd64 || true
+
+          test -x .caches/syncstorage-linux-amd64
+          nohup .caches/syncstorage-linux-amd64 --testRunId ${{ env.TMS_TEST_RUN_ID }} --port 49152 \
+          --baseURL ${{ env.TMS_URL }} --privateToken ${{ env.TMS_PRIVATE_TOKEN }} > service-mode2.log 2>&1 &
+
+          sleep 1
+          curl -v http://127.0.0.1:49152/health || true
+
           dotnet test --configuration Release --collect:"XPlat Code Coverage" --no-build dotnet-examples/${{ matrix.project_name }} || true
 
+          sleep 1
+          if curl -sf http://127.0.0.1:49152/health >/dev/null; then
+            curl -v "http://127.0.0.1:49152/wait-completion?testRunId=${{ env.TMS_TEST_RUN_ID }}" --max-time 100 || true
+          else
+            echo "sync-storage already stopped; checking Work X marker in service-mode2.log"
+            grep -q "Work X completed successfully" service-mode2.log || echo "WARNING: sync-storage stopped without Work X success marker"
+          fi
 
-          curl -v http://127.0.0.1:49152/wait-completion?testRunId=${{ env.TMS_TEST_RUN_ID }} --max-time 100 || true
-
+          cat service-mode2.log || true
           ls dotnet-examples/${{ matrix.project_name }}/${{ matrix.project_name }}/bin/Release/net8.0/ || true
           cat dotnet-examples/${{ matrix.project_name }}/${{ matrix.project_name }}/bin/Release/net8.0/build/.caches/shutdown.log || true
 
       - name: Validate Again
         run: |
-          export TMS_TEST_RUN_ID=skip
+          # Validate the Mode 2 test run created above (not an older completed run via skip).
           dotnet test --configuration Debug --no-build --logger:"console;verbosity=detailed" api-validator-dotnet
 
       # --- Mode 0: full suite, adapter filters by filled test run ---

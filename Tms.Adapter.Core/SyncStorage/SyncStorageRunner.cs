@@ -8,10 +8,14 @@ namespace Tms.Adapter.Core.SyncStorage;
 
 /// <summary>
 /// Manages the Sync Storage process lifecycle and worker coordination.
-/// Port of the Python SyncStorageRunner to .NET.
 /// </summary>
 public sealed class SyncStorageRunner : IDisposable
 {
+    /// <summary>
+    /// Floor + channel for Sync Storage auto-resolve.
+    /// <c>v0.4.3</c> → newest numeric <c>v0.4.*</c>.
+    /// CI may grep this constant as the minimum; runtime downloads the latest matching release.
+    /// </summary>
     private const string SyncStorageVersion = "v0.4.3";
 
     private const string SyncStorageRepoUrl =
@@ -29,6 +33,8 @@ public sealed class SyncStorageRunner : IDisposable
 
     private Process? _syncStorageProcess;
     private SyncStorageClient? _client;
+    private SyncStorageKeepAlive? _keepAlive;
+    private string? _resolvedVersion;
 
     private bool _isRunning;
     private bool _isExternal;
@@ -70,21 +76,25 @@ public sealed class SyncStorageRunner : IDisposable
         {
             _client = new SyncStorageClient($"http://localhost:{_port}", _logger);
 
-            // Check if already running externally
             if (await _client.HealthCheckAsync().ConfigureAwait(false))
             {
+                EnsureCompatibleExistingInstance();
                 _logger.LogInformation("SyncStorage already running on port {Port}, connecting to existing", _port);
                 _isRunning = true;
                 _isExternal = true;
-                await RegisterWorkerAsync().ConfigureAwait(false);
+                if (!await RegisterWorkerWithRetryAsync().ConfigureAwait(false))
+                {
+                    throw new InvalidOperationException(
+                        $"Port {_port} has sync-storage for testRunId {_testRunId}, " +
+                        "but worker registration failed. Check syncstorage.log.");
+                }
+
                 return true;
             }
 
-            // Download and start the process
             var executablePath = await PrepareExecutableAsync().ConfigureAwait(false);
             StartProcess(executablePath);
 
-            // Wait for startup
             if (!await WaitForStartupAsync(StartupTimeoutSeconds).ConfigureAwait(false))
             {
                 _logger.LogError("SyncStorage failed to start within {Timeout}s", StartupTimeoutSeconds);
@@ -94,11 +104,18 @@ public sealed class SyncStorageRunner : IDisposable
             _isRunning = true;
             _logger.LogInformation("SyncStorage started on port {Port}", _port);
 
-            // Small delay as in Python/Java implementations
             await Task.Delay(2000).ConfigureAwait(false);
 
-            await RegisterWorkerAsync().ConfigureAwait(false);
+            if (!await RegisterWorkerWithRetryAsync().ConfigureAwait(false))
+            {
+                _logger.LogWarning("Failed to register sync-storage worker after start");
+            }
+
             return true;
+        }
+        catch (InvalidOperationException)
+        {
+            throw;
         }
         catch (Exception ex)
         {
@@ -118,8 +135,6 @@ public sealed class SyncStorageRunner : IDisposable
             return false;
         }
 
-        // Reserve a single "in_progress" slot across threads/process messages.
-        // If the send fails, we release the reservation to allow retry on a later test.
         if (Interlocked.CompareExchange(ref _inProgressSent, 1, 0) != 0)
         {
             _logger.LogDebug("Test already in progress, skipping duplicate send");
@@ -154,17 +169,11 @@ public sealed class SyncStorageRunner : IDisposable
         }
     }
 
-    /// <summary>
-    /// Set the already-in-progress flag.
-    /// </summary>
     public void SetIsAlreadyInProgress(bool value)
     {
         Interlocked.Exchange(ref _inProgressSent, value ? 1 : 0);
     }
 
-    /// <summary>
-    /// Set worker status (in_progress or completed).
-    /// </summary>
     public async Task SetWorkerStatusAsync(string status)
     {
         if (_client == null)
@@ -177,6 +186,11 @@ public sealed class SyncStorageRunner : IDisposable
         {
             await _client.SetWorkerStatusAsync(_workerPid, status, _testRunId).ConfigureAwait(false);
             _logger.LogInformation("Worker {Pid} status set to {Status}", _workerPid, status);
+
+            if (string.Equals(status, "completed", StringComparison.OrdinalIgnoreCase))
+            {
+                StopKeepAlive();
+            }
         }
         catch (Exception ex)
         {
@@ -184,19 +198,59 @@ public sealed class SyncStorageRunner : IDisposable
         }
     }
 
-    /// <summary>
-    /// Convert a TestContainer to a cut model for SyncStorage.
-    /// </summary>
     public static TestResultCutApiModel ToTestResultCutModel(Models.TestContainer testContainer, string projectId)
     {
         return Converter.ToTestResultCutApiModel(testContainer, projectId);
     }
 
+    public void StopKeepAlive()
+    {
+        _keepAlive?.Stop();
+        _keepAlive = null;
+    }
+
     #region Private methods
 
-    private async Task RegisterWorkerAsync()
+    private void EnsureCompatibleExistingInstance()
     {
-        if (_client == null) return;
+        var health = _client!.GetHealthAsync().GetAwaiter().GetResult();
+        var runningId = health?.TestRunId;
+        if (string.IsNullOrEmpty(runningId))
+        {
+            _logger.LogWarning(
+                "Existing sync-storage on port {Port} does not report testRunId in /health; " +
+                "compatibility cannot be verified. Prefer a sync-storage build that exposes testRunId. " +
+                "Current testRunId: {TestRunId}",
+                _port,
+                _testRunId);
+            return;
+        }
+
+        if (!string.Equals(runningId, _testRunId, StringComparison.OrdinalIgnoreCase))
+        {
+            throw new InvalidOperationException(
+                $"Port {_port} is occupied by sync-storage with another testRunId ({runningId}). " +
+                "Stop that process or change SYNC_STORAGE_PORT / syncStoragePort. " +
+                $"Current testRunId: {_testRunId}");
+        }
+    }
+
+    private async Task<bool> RegisterWorkerWithRetryAsync()
+    {
+        for (var i = 0; i < 5; i++)
+        {
+            if (await TryRegisterWorkerAsync().ConfigureAwait(false))
+                return true;
+
+            await Task.Delay(500).ConfigureAwait(false);
+        }
+
+        return false;
+    }
+
+    private async Task<bool> TryRegisterWorkerAsync()
+    {
+        if (_client == null) return false;
 
         try
         {
@@ -208,10 +262,40 @@ public sealed class SyncStorageRunner : IDisposable
                     ? "Registered as MASTER worker, PID: {Pid}"
                     : "Registered as worker, PID: {Pid}",
                 _workerPid);
+
+            StartKeepAlive();
+            return true;
+        }
+        catch (InvalidOperationException)
+        {
+            throw;
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to register worker");
+            return false;
+        }
+    }
+
+    private void StartKeepAlive()
+    {
+        if (_client == null || string.IsNullOrEmpty(_workerPid))
+            return;
+
+        StopKeepAlive();
+        _keepAlive = new SyncStorageKeepAlive(_client, _workerPid, _testRunId, _logger);
+        _keepAlive.Start();
+    }
+
+    private string ResolvedVersion()
+    {
+        if (_resolvedVersion != null)
+            return _resolvedVersion;
+
+        lock (this)
+        {
+            _resolvedVersion ??= SyncStorageReleaseResolver.ResolveLatest(SyncStorageVersion, _logger);
+            return _resolvedVersion;
         }
     }
 
@@ -230,7 +314,8 @@ public sealed class SyncStorageRunner : IDisposable
             return targetPath;
         }
 
-        var downloadUrl = $"{SyncStorageRepoUrl}{SyncStorageVersion}/{fileName}";
+        var version = ResolvedVersion();
+        var downloadUrl = $"{SyncStorageRepoUrl}{version}/{fileName}";
         _logger.LogInformation("Downloading SyncStorage from {Url}", downloadUrl);
 
         using var httpClient = new HttpClient();
@@ -284,35 +369,6 @@ public sealed class SyncStorageRunner : IDisposable
         };
 
         _syncStorageProcess = Process.Start(psi);
-
-        // if (_syncStorageProcess != null)
-        // {
-        //     // Read output in background
-        //     Task.Run(() => ReadProcessOutput(_syncStorageProcess));
-        // }
-    }
-
-    private async Task ReadProcessOutput(Process process)
-    {
-        try
-        {
-            while (!process.HasExited)
-            {
-                var line = await process.StandardOutput.ReadLineAsync().ConfigureAwait(false);
-                if (line != null)
-                {
-                    _logger.LogDebug("SyncStorage: {Line}", line);
-                }
-            }
-        }
-        catch (InvalidOperationException)
-        {
-            _logger.LogDebug("SyncStorage process has already finished");
-        }
-        catch (Exception ex)
-        {
-            _logger.LogWarning(ex, "Error reading SyncStorage output");
-        }
     }
 
     private async Task<bool> WaitForStartupAsync(int timeoutSeconds)
@@ -334,7 +390,7 @@ public sealed class SyncStorageRunner : IDisposable
         return false;
     }
 
-    private static string GetExecutableFileName()
+    private string GetExecutableFileName()
     {
         string osPart;
         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -354,7 +410,7 @@ public sealed class SyncStorageRunner : IDisposable
             _ => throw new PlatformNotSupportedException($"Unsupported architecture: {arch}")
         };
 
-        var fileName = $"syncstorage-{SyncStorageVersion}-{osPart}_{archPart}";
+        var fileName = $"syncstorage-{ResolvedVersion()}-{osPart}_{archPart}";
         if (osPart == "windows")
             fileName += ".exe";
 
@@ -380,6 +436,7 @@ public sealed class SyncStorageRunner : IDisposable
 
     public void Dispose()
     {
+        StopKeepAlive();
         _client?.Dispose();
 
         if (_syncStorageProcess != null && !_syncStorageProcess.HasExited)

@@ -131,13 +131,19 @@ public static class Converter
             }).ToList();
     }
 
+    /// <summary>
+    /// Optional link fields: keep null (not "") so POST/PUT paths store the same value in TMS.
+    /// </summary>
+    private static string? NullIfEmpty(string? value) =>
+        string.IsNullOrEmpty(value) ? null : value;
+
     private static List<LinkCreateApiModel> ConvertLinksToCreateApiModel(IEnumerable<Link> links)
     {
         return links.Select(l =>
             new LinkCreateApiModel(url: l.Url)
             {
-                Title = l.Title!,
-                Description = l.Description!,
+                Title = NullIfEmpty(l.Title)!,
+                Description = NullIfEmpty(l.Description)!,
                 Type = l.Type != null
                     ? Enum.Parse<LinkType>(l.Type.ToString())
                     : LinkType.Related
@@ -150,8 +156,8 @@ public static class Converter
         return links.Select(l =>
             new LinkPostModel(url: l.Url)
             {
-                Title = l.Title!,
-                Description = l.Description!,
+                Title = NullIfEmpty(l.Title)!,
+                Description = NullIfEmpty(l.Description)!,
                 Type = l.Type != null
                     ? Enum.Parse<LinkType>(l.Type.ToString())
                     : LinkType.Related
@@ -164,8 +170,8 @@ public static class Converter
         return links.Select(l =>
             new LinkUpdateApiModel(url: l.Url)
             {
-                Title = l.Title!,
-                Description = l.Description!,
+                Title = NullIfEmpty(l.Title)!,
+                Description = NullIfEmpty(l.Description)!,
                 Type = l.Type != null
                     ? Enum.Parse<LinkType>(l.Type.ToString())
                     : LinkType.Related
@@ -249,9 +255,9 @@ public static class Converter
             Trace = model.Traces,
             Duration = model.Duration,
             Links = model.Links?.Select(l => new CreateLinkApiModel(
-                title: l.Title ?? string.Empty,
-                url: l.Url ?? string.Empty,
-                description: l.Description ?? string.Empty,
+                title: NullIfEmpty(l.Title)!,
+                url: l.Url!,
+                description: NullIfEmpty(l.Description)!,
                 type: l.Type)).ToList(),
             Attachments = model.Attachments?.Select(a => new AttachmentUpdateRequest(a.Id)).ToList(),
             SetupResults = ConvertExecStepsToUpdate(model.SetupResults),

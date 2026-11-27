@@ -135,7 +135,11 @@ public sealed partial class ProcessorService(ILogger<ProcessorService> logger,
             return;
         }
 
-        await TryPublishFirstTestInProgressAsync(testResult).ConfigureAwait(false);
+        // First test: cut → SS + TMS InProgress only; do not buffer final (Work X finalizes).
+        if (await TryPublishFirstTestInProgressAsync(testResult).ConfigureAwait(false))
+        {
+            return;
+        }
 
         _bufferedTestResults.Add(testResult);
         logger.LogDebug("Buffered test result for bulk import: {Name}", testResult.DisplayName);
@@ -194,9 +198,11 @@ public sealed partial class ProcessorService(ILogger<ProcessorService> logger,
     {
         var autoTestResultRequestBody = await BuildAutoTestResultRequestBodyAsync(testResult).ConfigureAwait(false);
 
-        if (allowInProgress)
+        if (allowInProgress
+            && await TryPublishFirstTestInProgressAsync(testResult, autoTestResultRequestBody).ConfigureAwait(false))
         {
-            await TryPublishFirstTestInProgressAsync(testResult, autoTestResultRequestBody).ConfigureAwait(false);
+            // First test already sent as InProgress; skip final submit.
+            return;
         }
 
         await apiClient.SubmitResultToTestRunAsync(tmsSettings.TestRunId, autoTestResultRequestBody)
@@ -238,7 +244,18 @@ public sealed partial class ProcessorService(ILogger<ProcessorService> logger,
         {
             autoTest.IsFlaky = existAutotestResult.IsFlaky;
             HtmlEscapeUtils.EscapeHtmlInObject(autoTest);
-            await apiClient.UpdateAutotestAsync(autoTest).ConfigureAwait(false);
+            try
+            {
+                await apiClient.UpdateAutotestAsync(autoTest).ConfigureAwait(false);
+            }
+            catch (Exception ex) when (
+                ex.Message.Contains("AlreadyExists", StringComparison.OrdinalIgnoreCase)
+                || ex.Message.Contains("already exists", StringComparison.OrdinalIgnoreCase)
+                || ex.Message.Contains("HTTP 409", StringComparison.OrdinalIgnoreCase))
+            {
+                logger.LogWarning(ex, "Autotest update conflict for {ExternalId}; continuing with result submit",
+                    autoTest.ExternalId);
+            }
         }
 
         if (autoTest.WorkItemIds.Count > 0)

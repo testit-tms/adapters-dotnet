@@ -129,6 +129,13 @@ public sealed class AdapterManager : IDisposable
                 _syncStorageRunner = null;
             }
         }
+        catch (InvalidOperationException)
+        {
+            // Port occupied by incompatible sync-storage — fail loudly for diagnostics.
+            _syncStorageRunner?.Dispose();
+            _syncStorageRunner = null;
+            throw;
+        }
         catch (Exception ex)
         {
             _logger.LogWarning(ex, "Failed to initialize SyncStorage");
@@ -328,6 +335,8 @@ public sealed class AdapterManager : IDisposable
                 && TrySendToSyncStorageAndWriteInProgress(testContainer, classContainer))
             {
                 _firstTestInProgressHandled = true;
+                // First test: cut final → SS, TMS InProgress only; Work X finalizes. Do not write/buffer final.
+                return this;
             }
 
             if (_importRealtime)

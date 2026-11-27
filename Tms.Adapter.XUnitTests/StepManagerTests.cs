@@ -30,6 +30,8 @@ public class StepManagerTests
     [TestInitialize]
     public void TestSetup()
     {
+        AdapterManager.ClearInstance();
+        Environment.SetEnvironmentVariable("TMS_DISABLE_NETWORK", "true");
         Environment.SetEnvironmentVariable("TMS_URL", "https://example.com");
         Environment.SetEnvironmentVariable("TMS_PRIVATE_TOKEN", "token");
         Environment.SetEnvironmentVariable("TMS_PROJECT_ID", Guid.NewGuid().ToString());
@@ -44,6 +46,7 @@ public class StepManagerTests
     public void TestCleanup()
     {
         AdapterManager.ClearInstance();
+        Environment.SetEnvironmentVariable("TMS_DISABLE_NETWORK", null);
     }
 
     [TestMethod]
