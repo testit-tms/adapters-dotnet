@@ -18,33 +18,16 @@ public class TmsManagerTests
     private const string ExternalId = "2009";
     private const long InitialAttemptDuration = 27_032;
     private const long RetryAttemptDuration = 26_539;
-    private const long ExpectedAccumulatedDuration = InitialAttemptDuration + RetryAttemptDuration;
-    private const long ExpectedDurationAfterZeroLengthRetry = InitialAttemptDuration + 1;
-    private const int NoCompletedReruns = 0;
-    private const string ConfigurationName = "configuration";
-    private const string FailedStatusCode = "FAILED";
-    private const string InProgressStatusCode = "IN_PROGRESS";
 
     private static readonly Guid TestRunId = Guid.NewGuid();
     private static readonly Guid ConfigurationId = Guid.NewGuid();
-    private static readonly Guid ExistingResultId = Guid.NewGuid();
-    private static readonly Guid StatusId = Guid.NewGuid();
 
-    [DataTestMethod]
-    [DataRow(RetryAttemptDuration, ExpectedAccumulatedDuration)]
-    [DataRow(0L, ExpectedDurationAfterZeroLengthRetry)]
-    public async Task SubmitResultToTestRunAsync_RerunAccumulatesDuration(
-        long retryDuration,
-        long expectedDuration)
+    [TestMethod]
+    public async Task SubmitResultToTestRunAsync_RerunCreatesSeparateAttemptInTestRun()
     {
+        var testRunsApi = new Mock<ITestRunsApiAsync>();
         var testResultsApi = new Mock<ITestResultsApiAsync>();
-        var searchResults = new List<TestResultShortResponse>
-        {
-            CreateExistingResult(TestStatusApiType.InProgress)
-        };
-        testResultsApi.SetReturnsDefault(Task.FromResult(searchResults));
-
-        var manager = CreateManager(testResultsApi.Object);
+        var manager = CreateManager(testRunsApi, testResultsApi);
         var initialResult = CreateResult(InitialAttemptDuration);
 
         await manager.SubmitResultToTestRunAsync(
@@ -52,46 +35,45 @@ public class TmsManagerTests
             initialResult,
             forceInProgressStatus: true).ConfigureAwait(false);
         await manager.SubmitResultToTestRunAsync(TestRunId.ToString(), initialResult).ConfigureAwait(false);
-
-        searchResults.Clear();
-        searchResults.Add(CreateExistingResult(TestStatusApiType.Failed));
-
         await manager.SubmitResultToTestRunAsync(
             TestRunId.ToString(),
-            CreateResult(retryDuration)).ConfigureAwait(false);
+            CreateResult(RetryAttemptDuration)).ConfigureAwait(false);
 
-        var updates = GetUpdates(testResultsApi);
+        var batches = GetPostedResultBatches(testRunsApi);
 
-        Assert.AreEqual(1, updates.Count);
-        Assert.AreEqual(expectedDuration, updates[0].Duration);
+        Assert.AreEqual(3, batches.Count);
+        Assert.AreEqual(InitialAttemptDuration, batches[1][0].Duration);
+        Assert.AreEqual(RetryAttemptDuration, batches[2][0].Duration);
+        Assert.AreEqual(0, testResultsApi.Invocations.Count);
     }
 
     [TestMethod]
-    public async Task SubmitResultToTestRunAsync_ExistingResultAccumulatesWithoutLocalState()
+    public async Task SubmitResultToTestRunAsync_FinalResultDoesNotLookupExistingResults()
     {
+        var testRunsApi = new Mock<ITestRunsApiAsync>();
         var testResultsApi = new Mock<ITestResultsApiAsync>();
-        testResultsApi.SetReturnsDefault(Task.FromResult(new List<TestResultShortResponse>
-        {
-            CreateExistingResult(TestStatusApiType.Failed)
-        }));
-        var manager = CreateManager(testResultsApi.Object);
+        testResultsApi.SetReturnsDefault(Task.FromResult(new List<TestResultShortResponse>()));
+        var manager = CreateManager(testRunsApi, testResultsApi);
 
         await manager.SubmitResultToTestRunAsync(
             TestRunId.ToString(),
             CreateResult(RetryAttemptDuration)).ConfigureAwait(false);
 
-        var updates = GetUpdates(testResultsApi);
+        var batches = GetPostedResultBatches(testRunsApi);
 
-        Assert.AreEqual(1, updates.Count);
-        Assert.AreEqual(ExpectedAccumulatedDuration, updates[0].Duration);
+        Assert.AreEqual(1, batches.Count);
+        Assert.AreEqual(RetryAttemptDuration, batches[0][0].Duration);
+        Assert.AreEqual(0, testResultsApi.Invocations.Count);
     }
 
-    private static TmsManager CreateManager(ITestResultsApiAsync testResultsApi) => new(
+    private static TmsManager CreateManager(
+        Mock<ITestRunsApiAsync>? testRunsApi = null,
+        Mock<ITestResultsApiAsync>? testResultsApi = null) => new(
         Mock.Of<ILogger<TmsManager>>(),
         Mock.Of<IAttachmentsApiAsync>(),
         Mock.Of<IAutoTestsApiAsync>(),
-        Mock.Of<ITestRunsApiAsync>(),
-        testResultsApi,
+        testRunsApi?.Object ?? Mock.Of<ITestRunsApiAsync>(),
+        testResultsApi?.Object ?? Mock.Of<ITestResultsApiAsync>(),
         Mock.Of<IProjectsApiAsync>(),
         new TmsSettings
         {
@@ -107,38 +89,11 @@ public class TmsManagerTests
         Duration = duration
     };
 
-    private static List<TestResultUpdateRequest> GetUpdates(Mock<ITestResultsApiAsync> testResultsApi) =>
-        testResultsApi.Invocations
-            .Where(x => x.Method.Name == nameof(ITestResultsApiAsync.AdaptersTestResultsIdPutAsync))
-            .Select(x => (TestResultUpdateRequest)x.Arguments[1])
+    private static List<List<AutoTestResultsForTestRunModel>> GetPostedResultBatches(Mock<ITestRunsApiAsync> testRunsApi) =>
+        testRunsApi.Invocations
+            .Where(x => x.Method.Name == nameof(ITestRunsApiAsync.AdaptersTestRunsIdTestResultsPostAsync))
+            .Select(x => (List<AutoTestResultsForTestRunModel>)x.Arguments[1])
             .ToList();
-
-    private static TestResultShortResponse CreateExistingResult(TestStatusApiType statusType)
-    {
-        var statusName = statusType == TestStatusApiType.InProgress
-            ? TestConstants.InProgressOutcome
-            : TestConstants.FailedOutcome;
-        var statusCode = statusType == TestStatusApiType.InProgress
-            ? InProgressStatusCode
-            : FailedStatusCode;
-
-        return new TestResultShortResponse(
-            id: ExistingResultId,
-            name: ExternalId,
-            autotestExternalId: ExternalId,
-            autoTestTags: [],
-            testRunId: TestRunId,
-            configurationId: ConfigurationId,
-            configurationName: ConfigurationName,
-            outcome: statusName,
-            status: new TestStatusApiResult(StatusId, statusType, statusCode),
-            resultReasons: [],
-            comment: string.Empty,
-            duration: InitialAttemptDuration,
-            links: [],
-            attachments: [],
-            rerunCompletedCount: NoCompletedReruns);
-    }
 }
 
 #pragma warning restore CA1707

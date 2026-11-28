@@ -152,39 +152,11 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
             return;
         }
 
-        await SubmitWithUpdateOrPostAsync(model, result.ExternalId, testRunId).ConfigureAwait(false);
-    }
-
-    private async Task SubmitWithUpdateOrPostAsync(
-        AutoTestResultsForTestRunModel model,
-        string? externalId,
-        Guid testRunId)
-    {
-        var existing = await FindTestResultByExternalIdAsync(externalId).ConfigureAwait(false);
-
-        if (existing != null && !ShouldSendFinalResult(model, existing))
-        {
-            model.Duration = GetAccumulatedDuration(existing.Duration, model.Duration);
-
-            var update = CoreConverter.ConvertResultToUpdateModel(model);
-            Utils.HtmlEscapeUtils.EscapeHtmlInObject(update);
-            await testResultsApi.AdaptersTestResultsIdPutAsync(existing.Id, update).ConfigureAwait(false);
-            logger.LogDebug("Updated test result {TestResultId} for {ExternalId}", existing.Id, externalId);
-            return;
-        }
-
+        // Every final result is posted as a new test-run result: a rerun attempt for an
+        // externalId that already has a final result must become a separate biathlon
+        // attempt (TmsRunner 2.0.3 behavior), not an in-place update of the first attempt.
         await testRunsApi.AdaptersTestRunsIdTestResultsPostAsync(testRunId, [model]).ConfigureAwait(false);
-        logger.LogDebug("Submitted test result to test run {TestRunId} for {ExternalId}", testRunId, externalId);
-    }
-
-    private static long? GetAccumulatedDuration(long? submittedDuration, long? currentDuration)
-    {
-        if (submittedDuration is null || currentDuration is null)
-        {
-            return currentDuration;
-        }
-
-        return checked(submittedDuration.Value + Math.Max(currentDuration.Value, 1));
+        logger.LogDebug("Submitted test result to test run {TestRunId} for {ExternalId}", testRunId, result.ExternalId);
     }
 
     [PerformanceSensitive]
@@ -220,28 +192,6 @@ public sealed class TmsManager(ILogger<TmsManager> logger,
             logger.LogDebug("Updated test result {TestResultId} with parameters: {@Parameters}", matchingResult.Id, fullModel.Parameters);
         }
     }
-
-    private async Task<TestResultShortResponse?> FindTestResultByExternalIdAsync(string? externalId)
-    {
-        if (string.IsNullOrWhiteSpace(externalId) || string.IsNullOrWhiteSpace(settings.TestRunId))
-        {
-            return null;
-        }
-
-        var filter = new TestResultsFilterApiModel
-        {
-            TestRunIds = [new Guid(settings.TestRunId)],
-            ConfigurationIds = settings.ConfigurationId == null ? null : [new Guid(settings.ConfigurationId)],
-        };
-
-        var results = await testResultsApi.AdaptersTestResultsSearchPostAsync(0, TESTS_LIMIT, null!, null!, null!, filter)
-            .ConfigureAwait(false);
-
-        return results.FirstOrDefault(r => r.AutotestExternalId == externalId);
-    }
-
-    private static bool ShouldSendFinalResult(AutoTestResultsForTestRunModel model, TestResultShortResponse existing) =>
-        IsInProgress(existing) && model.StatusType != TestStatusType.InProgress;
 
     private static bool IsInProgress(TestResultShortResponse result) =>
         result.Status?.Type == TestStatusApiType.InProgress;
